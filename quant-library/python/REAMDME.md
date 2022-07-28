@@ -1,6 +1,6 @@
 # Notes on Python Set-Up
 
-Creat virtual enviornment with venv module
+Create virtual environment with venv module
 
     python3 -m venv .venv
 
@@ -13,11 +13,11 @@ Activate virtual environment:
     source .venv/bin/activate
 
 <br>
-Make a file with required packagages for venv:
+Make a file with required packages for venv:
 
     pip3 freeze > requirements.txt
 
 <br>
-Install required packagages for venv from file:
+Install required packages for venv from file:
 
     pip3 install -r requirements.txt
