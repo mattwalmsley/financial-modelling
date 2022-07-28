@@ -1,0 +1,4 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/quant-library/python/.venv/bin/python3",
+    "python.envFile": "${workspaceFolder}/quant-library/python/.venv"
+}
