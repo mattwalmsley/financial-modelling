@@ -1,0 +1,7 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/quant-library/python/.venv/bin/python3",
+  "python.envFile": "${workspaceFolder}/quant-library/python/.venv",
+  "cmake.sourceDirectory": "${workspaceFolder}/quant-library/c++",
+  "cmake.buildDirectory": "${workspaceFolder}/quant-library/c++/build",
+  "sonarlint.pathToCompileCommands": "${workspaceFolder}/quant-library/c++/build/compile_commands.json"
+}
