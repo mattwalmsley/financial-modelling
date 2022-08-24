@@ -71,3 +71,5 @@ $$p(t)=(1 + r(t))^tP_0$$
 - The value of the investment after one period is $X + \frac{r_m(t)X}{m} \equiv \left(1 + \frac{r_m(t)}{m}\right)X$
 - The interest earned in the second period is calculated by applying the interest rate to the combined principal and interest earned so far: $\frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X$.
 - The value of the investment after two periods is $\left(1 + \frac{r_m(t)}{m}\right)X + \frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X \equiv \left(1 + \frac{r_m(t)}{m}\right)^2X$
+- The future value of an investment $X$ in $t$ years:
+$$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
