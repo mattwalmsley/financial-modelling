@@ -21,7 +21,7 @@
 - The structure and value of the derivative asset is defined by its relationship to the underlying.
 - Examples include
   - Forwards (OTC) and futures (exchange)
-    - Set a price that 2 parties will transact an asset for at a set future date. -
+    - Set a price that two parties will transact an asset for at a set future date. -
   - Swaps
     - Linked to interest rates, allows a floating interest rate to be switched to a fixed rate.
   - Options

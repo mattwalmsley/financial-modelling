@@ -14,11 +14,11 @@
   - The charge levied to borrow money is called **interest**.
   - **Principal** is the amount of money borrowed in a loan.
   - The **interest rate** is the fraction of the principal of a loan that will be charged as interest per unit time.
-  - An **annual interest rate** is an interest rate for which the implicit time unit is 1 year.
+  - An **annual interest rate** is an interest rate for which the implicit time unit is one year.
 - Simple formula:
   - Principal _X_ at annual interest rate $r$
-  - Total 1 year interest is $rX$
-  - Total debt after 1 year, assuming no payments and annual compounding, is $X + rX$
+  - Total one year interest is $rX$
+  - Total debt after one year, assuming no payments and annual compounding, is $X + rX$
   - This can be written as $(1 + r)X$
 - Interest rates are determined by market activity.
   - Prices are negotiated between borrowers and lenders of money.
@@ -48,11 +48,11 @@
 
 ## Annual Compounding
 
-- Interest is added to the current amount, rather than the principal at inception.
+- Interest earned is calculated on the current amount at the end of each year, rather than the principal at inception. This leads to an increase in the interest earned every year.
 - Example
-  - $X$ is invested for 2 years at interest rate $r(2)$ which is annually compounded.
-  - After 1 year, the total investment value is $(1 + r(2))X$ and this then becomes the principal on which interest is charged for the second year.
-  - Therefore, after 2 years, the investment value is $(1 + r(2))(1 + r(2))X$.
+  - $X$ is invested for two years at interest rate $r(2)$ which is annually compounded.
+  - After one year, the total investment value is $(1 + r(2))X$ and this then becomes the principal on which interest is charged for the second year.
+  - Therefore, after two years, the investment value is $(1 + r(2))(1 + r(2))X$.
   - This can be written as $(1 + r(2))^2X$
 
 ## Future Value
@@ -61,11 +61,13 @@
 - Let $r(t)$ be the annual interest rate which is componded for a loan term of $t$ years.
 - Let $P_0$ be the initial investment.
 - The future value of $P_0$, at time $t$ is:
-$$
-p(t)=(1 + r(t))^tP_0
-$$
+$$p(t)=(1 + r(t))^tP_0$$
 
 ## Periodic Compounding
 
 - Interest is compounded with frequency $m$ if the interest is reinvested with the principal $m$ times per year.
 - We denote $r_m(t)$ to be the interest rate compounded $m$ times per year with term $t$.
+- In each compounding period ($m$ times per year), the earned interest is $\frac{r_m(t)X}{m}$
+- The value of the investment after one period is $X + \frac{r_m(t)X}{m} \equiv \left(1 + \frac{r_m(t)}{m}\right)X$
+- The interest earned in the second period is calculated by applying the interest rate to the combined principal and interest earned so far: $\frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X$.
+- The value of the investment after two periods is $\left(1 + \frac{r_m(t)}{m}\right)X + \frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X \equiv \left(1 + \frac{r_m(t)}{m}\right)^2X$
