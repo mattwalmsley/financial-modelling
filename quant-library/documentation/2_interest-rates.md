@@ -58,7 +58,7 @@
 ## Future Value
 
 - The value of an investment after a term with a fixed interest rate, assuming all returns are reinvested at the same interest rate.
-- Let $r(t)$ be the annual interest rate which is componded for a loan term of $t$ years.
+- Let $r(t)$ be the annual interest rate which is compounded for a loan term of $t$ years.
 - Let $P_0$ be the initial investment.
 - The future value of $P_0$, at time $t$ is:
 $$p(t)=(1 + r(t))^tP_0$$
