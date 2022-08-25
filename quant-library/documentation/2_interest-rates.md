@@ -3,13 +3,15 @@
 - [Interest Rates](#interest-rates)
   - [Introduction](#introduction)
   - [Term Structure](#term-structure)
-  - [Annual Compounding](#annual-compounding)
-  - [Future Value](#future-value)
-  - [Periodic Compounding](#periodic-compounding)
   - [Investment Returns](#investment-returns)
     - [Gross Return](#gross-return)
     - [Net Return](#net-return)
+    - [Annual Compounding](#annual-compounding)
+    - [Future Value](#future-value)
+    - [Periodic Compounding](#periodic-compounding)
     - [Interest Rate Conversions](#interest-rate-conversions)
+    - [Continuous Compounding](#continuous-compounding)
+  - [Time Value of Money](#time-value-of-money)
 
 ## Introduction
 
@@ -50,34 +52,6 @@
   - The interest rate observed on market at time $t$, referred to as calendar time.
 - The notation $r(t, T)$ is used to denote the interest rate maturing at date $T$, observed at time $t$. This implies that the term to maturity is $T - t$.
 
-## Annual Compounding
-
-- Interest earned is calculated on the current amount at the end of each year, rather than the principal at inception. This leads to an increase in the interest earned every year.
-- Example
-  - $X$ is invested for two years at interest rate $r(2)$ which is annually compounded.
-  - After one year, the total investment value is $(1 + r(2))X$ and this then becomes the principal on which interest is charged for the second year.
-  - Therefore, after two years, the investment value is $(1 + r(2))(1 + r(2))X$.
-  - This can be written as $(1 + r(2))^2X$
-
-## Future Value
-
-- The value of an investment after a term with a fixed interest rate, assuming all returns are reinvested at the same interest rate.
-- Let $r(t)$ be the annual interest rate which is compounded for a loan term of $t$ years.
-- Let $P_0$ be the initial investment.
-- The future value of $P_0$, at time $t$ is:
-$$P(t)=(1 + r(t))^tP_0$$
-
-## Periodic Compounding
-
-- Interest is compounded with frequency $m$ if the interest is reinvested with the principal $m$ times per year.
-- We denote $r_m(t)$ to be the interest rate compounded $m$ times per year with term $t$.
-- In each compounding period ($m$ times per year), the earned interest is $\frac{r_m(t)X}{m}$
-- The value of the investment after one period is $X + \frac{r_m(t)X}{m} \equiv \left(1 + \frac{r_m(t)}{m}\right)X$
-- The interest earned in the second period is calculated by applying the interest rate to the combined principal and interest earned so far is $\frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X$.
-- The value of the investment after two periods is $\left(1 + \frac{r_m(t)}{m}\right)X + \frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X \equiv \left(1 + \frac{r_m(t)}{m}\right)^2X$
-- The future value of an investment $X$ in $t$ years:
-$$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
-
 ## Investment Returns
 
 - Interest rates quantify a return on an investment for an investor.
@@ -95,9 +69,51 @@ $$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
 - Measures the profit an investment has earned as a fraction of the initial investment.
 - Between time $t$ and time $t + \tau$, the net return is $\frac{V(t + \tau) - V(t)}{V(t)}$
 
+### Annual Compounding
+
+- Interest earned is calculated on the current amount at the end of each year, rather than the principal at inception. This leads to an increase in the interest earned every year.
+- Example
+  - $X$ is invested for two years at interest rate $r(2)$ which is annually compounded.
+  - After one year, the total investment value is $(1 + r(2))X$ and this then becomes the principal on which interest is charged for the second year.
+  - Therefore, after two years, the investment value is $(1 + r(2))(1 + r(2))X$.
+  - This can be written as $(1 + r(2))^2X$
+
+### Future Value
+
+- The value of an investment after a term with a fixed interest rate, assuming all returns are reinvested at the same interest rate.
+- Let $r(t)$ be the annual interest rate which is compounded for a loan term of $t$ years.
+- Let $P_0$ be the initial investment.
+- The future value of $P_0$, at time $t$ is:
+$$P(t)=(1 + r(t))^tP_0$$
+
+### Periodic Compounding
+
+- Interest is compounded with frequency $m$ if the interest is reinvested with the principal $m$ times per year.
+- We denote $r_m(t)$ to be the interest rate compounded $m$ times per year with term $t$.
+- In each compounding period ($m$ times per year), the earned interest is $\frac{r_m(t)X}{m}$
+- The value of the investment after one period is $X + \frac{r_m(t)X}{m} \equiv \left(1 + \frac{r_m(t)}{m}\right)X$
+- The interest earned in the second period is calculated by applying the interest rate to the combined principal and interest earned so far is $\frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X$.
+- The value of the investment after two periods is $\left(1 + \frac{r_m(t)}{m}\right)X + \frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X \equiv \left(1 + \frac{r_m(t)}{m}\right)^2X$
+- The future value of an investment $X$ in $t$ years:
+$$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
+
 ### Interest Rate Conversions
 
 - For an investment $X$ with future value $P(t)$ in $t$ years, we can define the gross return as $\frac{P(t)}{X} \equiv \frac{\left(1 + \frac{r_m(t)}{m}\right)^{mt}X}{X} \equiv \left(1 + \frac{r_m(t)}{m}\right)^{mt}$
 - Interest rates are considered to be _equivalent_ if they lead to the same total return, i.e the same gross or net return.
-- For two interest rates $r_m(t)$ and $r_k(t)$, we can equate the gross returns to express $r_m(t)$ in terms of $r_k(t)$:
+- For two interest rates $r_m(t)$ and $r_k(t)$, we can equate the gross returns of \$1 to express $r_m(t)$ in terms of $r_k(t)$:
 $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt} \Rightarrow r_m(t) = m\left(1 + \frac{r_k(t)}{k}\right)^{\frac{k}{m}} - m$$
+
+### Continuous Compounding
+
+- Instantaneous compounding of all interest income - as soon as interest is paid, new interest is paid on it.
+- Mathematically, this is the limit of periodic compounding as the period goes to 0 or the frequency goes to infinity.
+- This provides a useful approximation as the accuracy can be optimised by choosing the continuously compounded rate that corresponds to a prevailing periodically compounded rate.
+  - We can change from periodic compounding to continuous compounding by increasing the compounding frequency, $m$, to infinity:
+$$\lim_{m \to \infin}\left(1 + \frac{r}{m}\right)^{mt} = e^{rt} \Rightarrow P(t) = e^{rt}X$$
+  - With $r_c$ as the continuously compounded risk-free rate and $r_a$ as the annually compounded risk-free rate, we can equate the future values of \$1 in a similar approach to periodically compounded in interest rates:
+$$e^{r_ct} = (1 + r_a)^t \Rightarrow r_ct = log((1 + r_a)^t) \Rightarrow r_c = log(1 + r_a)$$
+
+## Time Value of Money
+
+- The price of \$1 today is worth more than \$1 in a year's time.
