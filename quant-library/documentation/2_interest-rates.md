@@ -12,6 +12,7 @@
     - [Interest Rate Conversions](#interest-rate-conversions)
     - [Continuous Compounding](#continuous-compounding)
   - [Time Value of Money](#time-value-of-money)
+    - [Present Value](#present-value)
 
 ## Introduction
 
@@ -99,7 +100,8 @@ $$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
 
 ### Interest Rate Conversions
 
-- For an investment $X$ with future value $P(t)$ in $t$ years, we can define the gross return as $\frac{P(t)}{X} \equiv \frac{\left(1 + \frac{r_m(t)}{m}\right)^{mt}X}{X} \equiv \left(1 + \frac{r_m(t)}{m}\right)^{mt}$
+- For an investment $X$ with future value $P(t)$ in $t$ years, we can define the gross return as:
+$$\frac{P(t)}{X} \equiv \frac{\left(1 + \frac{r_m(t)}{m}\right)^{mt}X}{X} \equiv \left(1 + \frac{r_m(t)}{m}\right)^{mt}$$
 - Interest rates are considered to be _equivalent_ if they lead to the same total return, i.e the same gross or net return.
 - For two interest rates $r_m(t)$ and $r_k(t)$, we can equate the gross returns of \$1 to express $r_m(t)$ in terms of $r_k(t)$:
 $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt} \Rightarrow r_m(t) = m\left(1 + \frac{r_k(t)}{k}\right)^{\frac{k}{m}} - m$$
@@ -116,4 +118,16 @@ $$e^{r_ct} = (1 + r_a)^t \Rightarrow r_ct = log((1 + r_a)^t) \Rightarrow r_c = l
 
 ## Time Value of Money
 
-- The price of \$1 today is worth more than \$1 in a year's time.
+- Concept that the value of \$1 today is more than the value of \$1 in a year's time.
+  - This because of the opportunity cost associated with not receiving the \$1 today.
+- Interest rates are closely linked to the time value of money as the annual interest received on \$1 can be viewed as a component of the opportunity cost.
+
+### Present Value
+
+- The present value $PV$ of an investment $X$, valued at time $t$, is the amount that should be invested today, accounting for prevailing interest rates, so that at time $t$, the investment of value $PV$ is worth $X$.
+- Assuming a prevailing risk-free, annually compounded interest rate $r$:
+$$(1 + r)^tPV = X \Rightarrow PV = \frac{X}{(1 + r)^t}$$
+- For a periodically compounded interest rate $r_m$, with compounding frequency $m$:
+$$\left(1 + \frac{r_m}{m}\right)^{mt}PV = X \Rightarrow PV = \frac{X}{\left(1 + \frac{r_m}{m}\right)^{mt}}$$
+- For a continuously compounded interest rate $r_c$:
+$$e^{r_ct}PV = X \Rightarrow PV = e^{-r_ct}X$$
