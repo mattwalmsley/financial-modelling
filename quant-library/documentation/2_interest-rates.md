@@ -6,6 +6,10 @@
   - [Annual Compounding](#annual-compounding)
   - [Future Value](#future-value)
   - [Periodic Compounding](#periodic-compounding)
+  - [Investment Returns](#investment-returns)
+    - [Gross Return](#gross-return)
+    - [Net Return](#net-return)
+    - [Interest Rate Conversions](#interest-rate-conversions)
 
 ## Introduction
 
@@ -61,7 +65,7 @@
 - Let $r(t)$ be the annual interest rate which is compounded for a loan term of $t$ years.
 - Let $P_0$ be the initial investment.
 - The future value of $P_0$, at time $t$ is:
-$$p(t)=(1 + r(t))^tP_0$$
+$$P(t)=(1 + r(t))^tP_0$$
 
 ## Periodic Compounding
 
@@ -73,3 +77,27 @@ $$p(t)=(1 + r(t))^tP_0$$
 - The value of the investment after two periods is $\left(1 + \frac{r_m(t)}{m}\right)X + \frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X \equiv \left(1 + \frac{r_m(t)}{m}\right)^2X$
 - The future value of an investment $X$ in $t$ years:
 $$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
+
+## Investment Returns
+
+- Interest rates quantify a return on an investment for an investor.
+- Let $V(t)$ represent the value of an investment at time $t$.
+- The return on the investment at time $t + \tau$ can be represented with the _gross return_ and the _net return_.
+  - $Net Return = Gross Return -1$
+
+### Gross Return
+
+- Measures what an investment returns as a fraction of the initial investment.
+- Between time $t$ and time $t + \tau$, the gross return is $\frac{V(t + \tau)}{V(t)}$
+
+### Net Return
+
+- Measures the profit an investment has earned as a fraction of the initial investment.
+- Between time $t$ and time $t + \tau$, the net return is $\frac{V(t + \tau) - V(t)}{V(t)}$
+
+### Interest Rate Conversions
+
+- For an investment $X$ with future value $P(t)$ in $t$ years, we can define the gross return as $\frac{P(t)}{X} \equiv \frac{\left(1 + \frac{r_m(t)}{m}\right)^{mt}X}{X} \equiv \left(1 + \frac{r_m(t)}{m}\right)^{mt}$
+- Interest rates are considered to be _equivalent_ if they lead to the same total return, i.e the same gross or net return.
+- For two interest rates $r_m(t)$ and $r_k(t)$, we can equate the gross returns to express $r_m(t)$ in terms of $r_k(t)$:
+$$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt} \Rightarrow r_m(t) = m\left(1 + \frac{r_k(t)}{k}\right)^{\frac{k}{m}} - m$$
