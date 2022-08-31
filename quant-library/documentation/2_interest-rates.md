@@ -14,6 +14,7 @@
   - [Time Value of Money](#time-value-of-money)
   - [Present Value](#present-value)
   - [Discount Factors](#discount-factors)
+  - [Discounted Cash Flow Analysis](#discounted-cash-flow-analysis)
 
 ## Introduction
 
@@ -104,7 +105,7 @@ $$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
 - For an investment $X$ with future value $P(t)$ in $t$ years, the gross return is defined as:
 $$\frac{P(t)}{X} \equiv \frac{\left(1 + \frac{r_m(t)}{m}\right)^{mt}X}{X} \equiv \left(1 + \frac{r_m(t)}{m}\right)^{mt}$$
 - Interest rates are considered to be _equivalent_ if they lead to the same total return, i.e the same gross or net return.
-- For two interest rates $r_m(t)$ and $r_k(t)$, equate the gross returns of \$1 to express $r_m(t)$ in terms of $r_k(t)$:
+- For two interest rates $r_m(t)$ and $r_k(t)$, equate the gross returns of 1 USD to express $r_m(t)$ in terms of $r_k(t)$:
 $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt} \Rightarrow r_m(t) = m\left(1 + \frac{r_k(t)}{k}\right)^{\frac{k}{m}} - m$$
 
 ### Continuous Compounding
@@ -114,14 +115,14 @@ $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt
 - This provides a useful approximation as the accuracy can be optimised by choosing the continuously compounded rate that corresponds to a prevailing periodically compounded rate.
   - To change from periodic compounding to continuous compounding, set the limit of the compounding frequency, $m$, to infinity:
 $$\lim_{m \to \infin}\left(1 + \frac{r}{m}\right)^{mt} = e^{rt} \Rightarrow P(t) = e^{rt}X$$
-  - With $r_c$ as the continuously compounded risk-free rate and $r_a$ as the annually compounded risk-free rate, equate the future values of \$1 in a similar approach to periodically compounded in interest rates:
+  - With $r_c$ as the continuously compounded risk-free rate and $r_a$ as the annually compounded risk-free rate, equate the future values of 1 USD in a similar approach to periodically compounded in interest rates:
 $$e^{r_ct} = (1 + r_a)^t \Rightarrow r_ct = log((1 + r_a)^t) \Rightarrow r_c = log(1 + r_a)$$
 
 ## Time Value of Money
 
-- Concept that the value of \$1 today is more than the value of \$1 in a year's time.
-  - This because of the opportunity cost associated with not receiving the \$1 today.
-- Interest rates are closely linked to the time value of money as the annual interest received on \$1 can be viewed as a component of the opportunity cost.
+- Concept that the value of 1 USD today is more than the value of 1 USD in a year's time.
+  - This because of the opportunity cost associated with not receiving the 1 USD today.
+- Interest rates are closely linked to the time value of money as the annual interest received on 1 USD can be viewed as a component of the opportunity cost.
 
 ## Present Value
 
@@ -140,9 +141,22 @@ $$e^{r_ct} = \left(1 + \frac{r_2}{2}\right)^{2t} \Rightarrow r_ct = log\left(\le
 - The present value, $PV = \frac{X}{(1 + r)^t}$, can be viewed as a discounted value of X, assuming that $(1 + r)^t > 1$.
 - Discounted value and present value can be used interchangeably.
 - Rewriting present value as a function of time, we get $PV = d(t)X$ where we can express the discount factor as $d(t) = \frac{1}{(1 +r)^t}$.
-- The future value at time $t$ of a \$1 investment today is $(1 + r)^t$ which is the reciprocal of $d(t)$, i.e. $\frac{1}{d(t)} = (1 + r)^t$.
+- The future value at time $t$ of a 1 USD investment today is $(1 + r)^t$ which is the reciprocal of $d(t)$, i.e. $\frac{1}{d(t)} = (1 + r)^t$.
   - We can therefore say the future value of an investment $P_0 = X$ today is:
 $$P(t) = \frac{1}{d(t)}X = (1 + r)^tX$$
 - Discount factors can be expressed in terms of interest rates with different compounding convention.
   - For periodically compounded rates: $d(t) = \frac{1}{\left(1 + \frac{r_m}{m}\right)^{mt}}$.
   - For continuously compounded rates: $d(t) = e^{-r_ct}$.
+
+## Discounted Cash Flow Analysis
+
+- For an asset that pays amounts $c_1, c_2, ..., c_N$ (cash flows) at respective times $t_1, t_2, ..., t_N$, we can say that an individual payment $c_i$ will be made at time $t_i$.
+- To value the asset, we need to know the present value of a stream of cash flows.
+- The present value of an individual payment $c_i$ with discount factor $d(t_i)$ is $d(t_i)c_i$.
+- Model the present value of a stream of cash flows as the present value of an individual cash flow - i.e. the total amount that needs to be invested today to replicate the stream of cash flows.
+- Each cash flow is independent so the present value of the cash flow stream is the sum of the cash flows of the individual payment: $PV = d(t_1)c_1 + d(t_2)c_2 + ... + d(t_N)c_N$. More generally, this can be written as:
+$$PV = \sum_{i=1}^{N} d(t_i)c_i$$
+- For annual compounding where $r(t_i)$ is the annually compounded rate for term $t_i$, the present value is:
+$$PV = \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}}$$
+- For continuous compounding where $\rho(t_i)$ is the continuously compounded rate for term $t_i$, the present value is:
+$$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
