@@ -13,6 +13,7 @@
     - [Continuous Compounding](#continuous-compounding)
   - [Time Value of Money](#time-value-of-money)
   - [Present Value](#present-value)
+  - [Discount Factors](#discount-factors)
 
 ## Introduction
 
@@ -63,12 +64,12 @@
 ### Gross Return
 
 - Measures what an investment returns as a fraction of the initial investment.
-- Between time $t$ and time $t + \tau$, the gross return is $\frac{V(t + \tau)}{V(t)}$
+- Between time $t$ and time $t + \tau$, the gross return is $\frac{V(t + \tau)}{V(t)}$.
 
 ### Net Return
 
 - Measures the profit an investment has earned as a fraction of the initial investment.
-- Between time $t$ and time $t + \tau$, the net return is $\frac{V(t + \tau) - V(t)}{V(t)}$
+- Between time $t$ and time $t + \tau$, the net return is $\frac{V(t + \tau) - V(t)}{V(t)}$.
 
 ### Annual Compounding
 
@@ -77,7 +78,7 @@
   - $X$ is invested for two years at interest rate $r(2)$ which is annually compounded.
   - After one year, the total investment value is $(1 + r(2))X$ and this then becomes the principal on which interest is charged for the second year.
   - Therefore, after two years, the investment value is $(1 + r(2))(1 + r(2))X$.
-  - This can be written as $(1 + r(2))^2X$
+  - This can be written as $(1 + r(2))^2X$.
 
 ### Future Value
 
@@ -91,10 +92,10 @@ $$P(t)=(1 + r(t))^tP_0$$
 
 - Interest is compounded with frequency $m$ if the interest is reinvested with the principal $m$ times per year.
 - Denoting $r_m(t)$ to be the interest rate compounded $m$ times per year with term $t$.
-- In each compounding period ($m$ times per year), the earned interest is $\frac{r_m(t)X}{m}$
-- The value of the investment after one period is $X + \frac{r_m(t)X}{m} \equiv \left(1 + \frac{r_m(t)}{m}\right)X$
+- In each compounding period ($m$ times per year), the earned interest is $\frac{r_m(t)X}{m}$.
+- The value of the investment after one period is $X + \frac{r_m(t)X}{m} \equiv \left(1 + \frac{r_m(t)}{m}\right)X$.
 - The interest earned in the second period is calculated by applying the interest rate to the combined principal and interest earned so far is $\frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X$.
-- The value of the investment after two periods is $\left(1 + \frac{r_m(t)}{m}\right)X + \frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X \equiv \left(1 + \frac{r_m(t)}{m}\right)^2X$
+- The value of the investment after two periods is $\left(1 + \frac{r_m(t)}{m}\right)X + \frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X \equiv \left(1 + \frac{r_m(t)}{m}\right)^2X$.
 - The future value of an investment $X$ in $t$ years:
 $$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
 
@@ -133,3 +134,15 @@ $$\left(1 + \frac{r_m}{m}\right)^{mt}PV = X \Rightarrow PV = \frac{X}{\left(1 + 
 $$e^{r_ct}PV = X \Rightarrow PV = e^{-r_ct}X$$
 - For example, to find the continuously compounded interest rate $r_c$ that is equivalent to semi-annual interest rate $r_2$, equate the future values of a $1 investment with the two interest rates:
 $$e^{r_ct} = \left(1 + \frac{r_2}{2}\right)^{2t} \Rightarrow r_ct = log\left(\left(1 + \frac{r_2}{2}\right)^{2t}\right) \Rightarrow r_c = 2log\left(1 + \frac{r_2}{2}\right)$$
+
+## Discount Factors
+
+- The present value, $PV = \frac{X}{(1 + r)^t}$, can be viewed as a discounted value of X, assuming that $(1 + r)^t > 1$.
+- Discounted value and present value can be used interchangeably.
+- Rewriting present value as a function of time, we get $PV = d(t)X$ where we can express the discount factor as $d(t) = \frac{1}{(1 +r)^t}$.
+- The future value at time $t$ of a \$1 investment today is $(1 + r)^t$ which is the reciprocal of $d(t)$, i.e. $\frac{1}{d(t)} = (1 + r)^t$.
+  - We can therefore say the future value of an investment $P_0 = X$ today is:
+$$P(t) = \frac{1}{d(t)}X = (1 + r)^tX$$
+- Discount factors can be expressed in terms of interest rates with different compounding convention.
+  - For periodically compounded rates: $d(t) = \frac{1}{\left(1 + \frac{r_m}{m}\right)^{mt}}$.
+  - For continuously compounded rates: $d(t) = e^{-r_ct}$.
