@@ -12,7 +12,7 @@
     - [Interest Rate Conversions](#interest-rate-conversions)
     - [Continuous Compounding](#continuous-compounding)
   - [Time Value of Money](#time-value-of-money)
-    - [Present Value](#present-value)
+  - [Present Value](#present-value)
 
 ## Introduction
 
@@ -90,7 +90,7 @@ $$P(t)=(1 + r(t))^tP_0$$
 ### Periodic Compounding
 
 - Interest is compounded with frequency $m$ if the interest is reinvested with the principal $m$ times per year.
-- We denote $r_m(t)$ to be the interest rate compounded $m$ times per year with term $t$.
+- Denoting $r_m(t)$ to be the interest rate compounded $m$ times per year with term $t$.
 - In each compounding period ($m$ times per year), the earned interest is $\frac{r_m(t)X}{m}$
 - The value of the investment after one period is $X + \frac{r_m(t)X}{m} \equiv \left(1 + \frac{r_m(t)}{m}\right)X$
 - The interest earned in the second period is calculated by applying the interest rate to the combined principal and interest earned so far is $\frac{r_m(t)}{m}\left(1 + \frac{r_m(t)}{m}\right)X$.
@@ -100,10 +100,10 @@ $$P(t)=\left(1 + \frac{r_m(t)}{m}\right)^{mt}X$$
 
 ### Interest Rate Conversions
 
-- For an investment $X$ with future value $P(t)$ in $t$ years, we can define the gross return as:
+- For an investment $X$ with future value $P(t)$ in $t$ years, the gross return is defined as:
 $$\frac{P(t)}{X} \equiv \frac{\left(1 + \frac{r_m(t)}{m}\right)^{mt}X}{X} \equiv \left(1 + \frac{r_m(t)}{m}\right)^{mt}$$
 - Interest rates are considered to be _equivalent_ if they lead to the same total return, i.e the same gross or net return.
-- For two interest rates $r_m(t)$ and $r_k(t)$, we can equate the gross returns of \$1 to express $r_m(t)$ in terms of $r_k(t)$:
+- For two interest rates $r_m(t)$ and $r_k(t)$, equate the gross returns of \$1 to express $r_m(t)$ in terms of $r_k(t)$:
 $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt} \Rightarrow r_m(t) = m\left(1 + \frac{r_k(t)}{k}\right)^{\frac{k}{m}} - m$$
 
 ### Continuous Compounding
@@ -111,9 +111,9 @@ $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt
 - Instantaneous compounding of all interest income - as soon as interest is paid, new interest is paid on it.
 - Mathematically, this is the limit of periodic compounding as the period goes to 0 or the frequency goes to infinity.
 - This provides a useful approximation as the accuracy can be optimised by choosing the continuously compounded rate that corresponds to a prevailing periodically compounded rate.
-  - We can change from periodic compounding to continuous compounding by increasing the compounding frequency, $m$, to infinity:
+  - To change from periodic compounding to continuous compounding, set the limit of the compounding frequency, $m$, to infinity:
 $$\lim_{m \to \infin}\left(1 + \frac{r}{m}\right)^{mt} = e^{rt} \Rightarrow P(t) = e^{rt}X$$
-  - With $r_c$ as the continuously compounded risk-free rate and $r_a$ as the annually compounded risk-free rate, we can equate the future values of \$1 in a similar approach to periodically compounded in interest rates:
+  - With $r_c$ as the continuously compounded risk-free rate and $r_a$ as the annually compounded risk-free rate, equate the future values of \$1 in a similar approach to periodically compounded in interest rates:
 $$e^{r_ct} = (1 + r_a)^t \Rightarrow r_ct = log((1 + r_a)^t) \Rightarrow r_c = log(1 + r_a)$$
 
 ## Time Value of Money
@@ -122,7 +122,7 @@ $$e^{r_ct} = (1 + r_a)^t \Rightarrow r_ct = log((1 + r_a)^t) \Rightarrow r_c = l
   - This because of the opportunity cost associated with not receiving the \$1 today.
 - Interest rates are closely linked to the time value of money as the annual interest received on \$1 can be viewed as a component of the opportunity cost.
 
-### Present Value
+## Present Value
 
 - The present value $PV$ of an investment $X$, valued at time $t$, is the amount that should be invested today, accounting for prevailing interest rates, so that at time $t$, the investment of value $PV$ is worth $X$.
 - Assuming a prevailing risk-free, annually compounded interest rate $r$:
@@ -131,3 +131,5 @@ $$(1 + r)^tPV = X \Rightarrow PV = \frac{X}{(1 + r)^t}$$
 $$\left(1 + \frac{r_m}{m}\right)^{mt}PV = X \Rightarrow PV = \frac{X}{\left(1 + \frac{r_m}{m}\right)^{mt}}$$
 - For a continuously compounded interest rate $r_c$:
 $$e^{r_ct}PV = X \Rightarrow PV = e^{-r_ct}X$$
+- For example, to find the continuously compounded interest rate $r_c$ that is equivalent to semi-annual interest rate $r_2$, equate the future values of a $1 investment with the two interest rates:
+$$e^{r_ct} = \left(1 + \frac{r_2}{2}\right)^{2t} \Rightarrow r_ct = log\left(\left(1 + \frac{r_2}{2}\right)^{2t}\right) \Rightarrow r_c = 2log\left(1 + \frac{r_2}{2}\right)$$
