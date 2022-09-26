@@ -7,3 +7,5 @@
 - The price of a bond (i.e. the principal of the loan) is called the **par value** or **face value**.
 
   ![Bond Process](images/bond-process.png "Bond Process")
+
+- Bonds can be bought and sold after issue on the markets and will have a **market value** - this is rarely the same as the par value.
