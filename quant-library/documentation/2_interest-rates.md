@@ -15,6 +15,11 @@
   - [Present Value](#present-value)
   - [Discount Factors](#discount-factors)
   - [Discounted Cash Flow Analysis](#discounted-cash-flow-analysis)
+  - [Simple Interest](#simple-interest)
+  - [Day Count Conventions](#day-count-conventions)
+  - [LIBOR](#libor)
+  - [Federal Funds Rate](#federal-funds-rate)
+  - [SONIA](#sonia)
 
 ## Introduction
 
@@ -51,7 +56,7 @@
 - Interest rates are a function of the **loan term** (the duration of time the loan is held).
 - $r(t)$ is used to denote the interest rate for borrowing money over a loan term $t$.
 - The function $r(t)$ can be used to represent the following:
-  - An interest rate with the term to maturity, $t$.
+  - An interest rate with the term to maturity $t$.
   - The interest rate observed on market at time $t$, referred to as calendar time.
 - The notation $r(t, T)$ is used to denote the interest rate maturing at date $T$, observed at time $t$. This implies that the term to maturity is $T - t$.
 
@@ -113,7 +118,7 @@ $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt
 - Instantaneous compounding of all interest income - as soon as interest is paid, new interest is paid on it.
 - Mathematically, this is the limit of periodic compounding as the period goes to 0 or the frequency goes to infinity.
 - This provides a useful approximation as the accuracy can be optimised by choosing the continuously compounded rate that corresponds to a prevailing periodically compounded rate.
-  - To change from periodic compounding to continuous compounding, set the limit of the compounding frequency, $m$, to infinity:
+  - To change from periodic compounding to continuous compounding, set the limit of the compounding frequency $m$, to infinity:
 $$\lim_{m \to \infin}\left(1 + \frac{r}{m}\right)^{mt} = e^{rt} \Rightarrow P(t) = e^{rt}X$$
   - With $r_c$ as the continuously compounded risk-free rate and $r_a$ as the annually compounded risk-free rate, equate the future values of 1 USD in a similar approach to periodically compounded in interest rates:
 $$e^{r_ct} = (1 + r_a)^t \Rightarrow r_ct = log((1 + r_a)^t) \Rightarrow r_c = log(1 + r_a)$$
@@ -160,3 +165,51 @@ $$PV = \sum_{i=1}^{N} d(t_i)c_i$$
 $$PV = \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}}$$
 - For continuous compounding where $\rho(t_i)$ is the continuously compounded rate for term $t_i$, the present value is:
 $$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
+
+## Simple Interest
+
+- Simple interest does not involve compounding - the interest amount is only levied on the original principal.
+- For example, a simple interest rate of 7% on a 10,000 USD principal would pay 700 USD for every year of the term.
+- Therefore, for a principal amount $F$, a simple interest rate $r$, over a term $T$, the total interest can be expressed as $rTF$.
+  - Similarly, the total investment value (principal and interest) is $F + rTF \equiv (1 + rT)F$.
+  - It should be noted that the term does not have to be an integer and that simple interest rates are offered used on terms that are less than a year.
+
+## Day Count Conventions
+
+- The term of an investment is calculated by dividing the number of days by annual day count.
+- In short-term money markets, there are 2 major day count conventions:
+  - **actual/360** for most markets, including USD.
+  - **actual/365** for mainly GBP markets.
+
+## LIBOR
+
+**Retired in 2021 for non-USD currencies and 2023 for USD.**
+
+- The London Interbank Offered Rate (LIBOR) was a benchmark interest rate at which major global banks lent to each other over the short-term.
+- LIBOR wass produced for the following currencies:
+  - USD
+  - EUR
+  - GBP
+  - JPY
+  - CHF
+- The Intercontinental Exchange (ICE) asked the 16 member banks for each currency what they would charge other banks for short-term unsecured loans and then calculated LIBOR based on [Waterfall Methodology](https://www.theice.com/publicdocs/USD_LIBOR_Methodology.pdf).
+  - Both the highest four rates, and the lowest four rates were removed before an average was taken of the middle 8 rates to obtain the published LIBOR.
+  - This method is known as taking a trimmed mean.
+- LIBOR terms range from overnight to 1 year and will take into account market conditions as well as an inherit credit risk, due to the chance the bank will not pay back the loan.
+- LIBOR provides an indication of the health of the banking sector.
+- Following the 2008 Financial Crisis, the _LIBOR Scandal_ came to light and the transition to new and improved interest rate benchmarks began. These new benchmarks are known as Alternative Reference Rates (ARRs).
+  - In 2018, the US interbank lending market had to dropped to only 5 billion USD, down from pre 2008 Financial Crisis levels of 100 billion USD. This is a very small market to base a global benchmark on.
+
+## Federal Funds Rate
+
+- The US central bank is known as The Federal Reserve or "The Fed".
+- The Fed implements monetary policy by influencing short-term interest rates. This is done as follows:
+  - Every US bank must keep a set percentage of their deposits in reserve in an account with the Fed.
+  - In order to keep the reserve amount in their Fed account above the minimum level, a bank may have to borrow money (unsecured) from another bank's Fed account.
+  - This market is known as the Federal Funds Market and the overnight rate at which the lending bank loans to the borrowing bank is known as the Federal Funds Rate.
+  - The target Fed Funds Rate is set by the Federal Open Markets Committee (FOMC).
+  - The Fed does not directly set the Fed Funds Rate, but engineers the effective fed funds rate, which is realised on the markets, by buying and selling US Government debt securities from banks.
+
+## SONIA
+
+- The Sterling Overnight Index Average (SONIA)
