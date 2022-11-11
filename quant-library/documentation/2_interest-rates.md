@@ -20,6 +20,7 @@
   - [LIBOR](#libor)
   - [Federal Funds Rate](#federal-funds-rate)
   - [SONIA](#sonia)
+    - [SONIA Compounded in Arrears](#sonia-compounded-in-arrears)
 
 ## Introduction
 
@@ -212,4 +213,18 @@ $$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
 
 ## SONIA
 
-- The Sterling Overnight Index Average (SONIA)
+- The Sterling Overnight Index Average (SONIA) will replace LIBOR as the risk free rate for short-term borrowing in the sterling sector.
+- Based on actual transactions unlike LIBOR, with daily transactions in the market totalling 40 billion GBP (April 2021).
+- SONIA has no term structure (overnight only) so provides minimal credit risk exposure even though it is based on unsecured transactions.
+- Published since 1997 with the Bank of England taking responsibility for the rate in 2016.
+- Measured by collecting data on rates that banks are able to borrow funds from other financial institutions.
+  - Eligible transaction must be over 25 million GBP, unsecured, and have 1 day term to maturity.
+  - The trimmed mean is then calculated from the eligible transactions (mean after the highest and lowest 25% is removed).
+
+### SONIA Compounded in Arrears
+
+- Given SONIA is an overnight interest rate, it must be extended to a term rate to be used with products that have a term to maturity. This term rate is known as SONIA Compounded in Arrears.
+- See official documentation [here](https://www.bankofengland.co.uk/markets/sonia-benchmark/sonia-key-features-and-policies).
+- The SONIA Compounded Index measures the return on an investment made at overnight SONIA each business day with daily compounding.
+- We define the SONIA Compounded Index as $I(t)$ on a business date $t$  where $S(t)$ is the SONIA rate for date $t$ and $\tau(t)$ is the number of calendar days between business dates $t$ and $t + 1$:
+$$I(t + 1) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right)$$
