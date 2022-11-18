@@ -228,3 +228,8 @@ $$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
 - The SONIA Compounded Index measures the return on an investment made at overnight SONIA each business day with daily compounding.
 - We define the SONIA Compounded Index as $I(t)$ on a business date $t$  where $S(t)$ is the SONIA rate for date $t$ and $\tau(t)$ is the number of calendar days between business dates $t$ and $t + 1$:
 $$I(t + 1) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right)$$
+- An iterative approach is taken by taking the value calculated for $I(t + 1)$ and substituting it back into the formula in place of $I(t)$. This leads to:
+$$I(t + m) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right) \times ... \times \left(1 + \frac{S(t + m - 1)\tau(t + m - 1)}{365}\right)$$
+- The Compounded SONIA rate $S(T,U)$ where $d$ is the **calendar days** between **business dates** $T$ and $U$ is defined as:
+$$S(T,U) = \left(\frac{I(U)}{I(T)} - 1 \right) \times \frac{365}{d}$$
+- SONIA compounded in arrears over a term (between business dates $T$ and $U$) is the effective term rate (simply compounded) that is equivalent to rolling over an overnight loan at the SONIA rate over the term.
