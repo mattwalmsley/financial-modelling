@@ -23,6 +23,8 @@
     - [SONIA Compounded in Arrears](#sonia-compounded-in-arrears)
   - [SOFR](#sofr)
     - [Compound SOFR](#compound-sofr)
+      - [Issues with Compounding in Arrears](#issues-with-compounding-in-arrears)
+    - [Credit Sensitive Alternatives to SOFR](#credit-sensitive-alternatives-to-sofr)
 
 ## Introduction
 
@@ -260,3 +262,19 @@ $$I(t + m) = I(t) \times \Pi_{j=0}^{m-1}\left(1 + \frac{S(t + j)\tau(t + j)}{360
 - Compounded SOFR over $d$ calendar dates between $T$ to $U$ is therefore:
 $$S(T,U) = \left(\frac{I(U)}{I(T)} - 1 \right) \times \frac{360}{d}$$
 - The only difference between the calculation for SONIA and SOFR is the annual day count convention (365 vs 360 respectively).
+
+#### Issues with Compounding in Arrears
+
+- The interest charge will not be determined until the end of the loan period, when the payment is due. This can cause difficulty for some borrowers.
+- Regulators have proposed some solutions:
+  - A 'look back' structure where the rates used for calculating the compound rates are lagged by a set number of days.
+  - Delaying the settlement date (when the payment is due) after the fixing date of the rate.
+
+### Credit Sensitive Alternatives to SOFR
+
+- SOFR has minimal sensitivity to the credit markets which has delayed the uptake of SOFR by banks in the business loan market.
+- **AMERIBOR** is a USD rate that is similar to SONIA but based on unsecured transactions.
+- Other alternatives include:
+  - ICE Bank Yield Index
+  - BSBY (Bloomberg)
+  - IHS Markit Credit Spread Adjustment
