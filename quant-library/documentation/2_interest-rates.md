@@ -21,6 +21,8 @@
   - [Federal Funds Rate](#federal-funds-rate)
   - [SONIA](#sonia)
     - [SONIA Compounded in Arrears](#sonia-compounded-in-arrears)
+  - [SOFR](#sofr)
+    - [Compound SOFR](#compound-sofr)
 
 ## Introduction
 
@@ -213,7 +215,7 @@ $$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
 
 ## SONIA
 
-- The Sterling Overnight Index Average (SONIA) will replace LIBOR as the risk free rate for short-term borrowing in the sterling sector.
+- The Sterling Overnight Index Average (SONIA) will replace LIBOR as the risk free rate for short-term borrowing in the GBP sector.
 - Based on actual transactions unlike LIBOR, with daily transactions in the market totalling 40 billion GBP (April 2021).
 - SONIA has no term structure (overnight only) so provides minimal credit risk exposure even though it is based on unsecured transactions.
 - Published since 1997 with the Bank of England taking responsibility for the rate in 2016.
@@ -233,3 +235,28 @@ $$I(t + m) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right) \times ... \ti
 - The Compounded SONIA rate $S(T,U)$ where $d$ is the **calendar days** between **business dates** $T$ and $U$ is defined as:
 $$S(T,U) = \left(\frac{I(U)}{I(T)} - 1 \right) \times \frac{365}{d}$$
 - SONIA compounded in arrears over a term (between business dates $T$ and $U$) is the effective term rate (simply compounded) that is equivalent to rolling over an overnight loan at the SONIA rate over the term.
+
+## SOFR
+
+- The Secured Overnight Financing Rate (SOFR) has been selected as the alternative reference rate to replace libor for the USD sector.
+- SOFR is published  by the Federal Reserve and is an overnight rate based on transaction in money markets (financing rates paid in the overnight US Treasury repo market), similar to SONIA.
+  - **Repo** is shorthand for **repurchase agreements**  and hence the US Treasury repo market refers to the repo agreements that have US Treasury securities as collateral.
+  - Repurchase Agreements are short term deals between two parties where cash is exchanged for an asset with an agreement to reverse the exchange at a set future date. Upon the termination of the contract, the cash borrower (asset seller) buys the asset back for the original price in addition to interest at the **repo rate**.
+  - A repurchase agreement allows one counterparty to receive a loan by putting up an asset as collateral.
+  - **Overnight repos** have a termination date on the following day whereas **term repos** have longer durations. The overnight repo market is much larger than the term repo market (the US Treasury repo market has a daily transaction volume ~ 1 trillion USD).
+- The US Treasury repo market has various segments including bilateral deals and tri-party repos with a third intermediary party (usually, the Bank Of New York Mellon).
+  - The wide variety of segments allow for a clearer picture of the market when calculating SOFR.
+- SOFR is calculated using the volume weighted median of the rates across all the segments of the overnight US Treasury repo market.
+- The Federal Reserve Bank Of New York is responsible for collecting the dat and repo rates. SOFR is then published on the day after collection (i.e. the day on which the overnight transactions mature/reach termination).
+
+### Compound SOFR
+
+- SOFR must be converted to a term rate for products that have a maturity any longer than one day, similar to SONIA.
+- SOFR can be compounded in arrears and in advance - the construction of these is the same in both directions.
+  - The 'in advance' calculation is done before the loan term using the SOFR rates that have prevailed prior to the start date.
+  - The 'in arrears' calculation is performed at maturity using the SOFR rates in effect over the duration of the actual loan term.
+- SOFR compounded in arrears/advance is calculated in the same way as SONIA compounded in arrears where $S(t)$ is overnight SOFR for date $t$ and $\tau(t)$ is the number of **calendar days** between **business dates** $t$ and $t + 1$:
+$$I(t + m) = I(t) \times \Pi_{j=0}^{m-1}\left(1 + \frac{S(t + j)\tau(t + j)}{360}\right)$$
+- Compounded SOFR over $d$ calendar dates between $T$ to $U$ is therefore:
+$$S(T,U) = \left(\frac{I(U)}{I(T)} - 1 \right) \times \frac{360}{d}$$
+- The only difference between the calculation for SONIA and SOFR is the annual day count convention (365 vs 360 respectively).
