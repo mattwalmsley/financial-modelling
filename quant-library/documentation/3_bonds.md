@@ -4,11 +4,12 @@
   - [Introduction](#introduction)
   - [Bond Pricing Model](#bond-pricing-model)
   - [Yield to Maturity](#yield-to-maturity)
+  - [Yield Curves](#yield-curves)
+    - [Discount Curves](#discount-curves)
 
 ## Introduction
 
-- Bonds can be regarded as a *debt instrument*, whereby the "owner" of the bond is also the "owner" of a debt.
-  - Debt can therefore be traded on the bond and money markets.
+- Bonds can be regarded as a *debt instrument*, whereby the "owner" of the bond is also the "owner" of a debt. Debt can therefore be traded on the bond and money markets.
 - Bonds are created when a **bond issuer** first offers bonds for sale on a market. These bonds are then purchased by **bond holders** (also known as **bond buyers** ).
 - The price of the bond represents the amount loaned to the bond issuer by the bond holder - i.e. the debt.
 - The price of a bond (i.e. the principal of the loan) is called the **par value** or **face value**.
@@ -43,3 +44,16 @@ $$P = \sum_{j=1}^{J}\frac{c_j}{(1 + y)^{T_j}}$$
 - For a periodically compounded yield to maturity $y$, with $m$ periods per year, the bond price is as follows:
 
 $$P = \sum_{j=1}^{J}\frac{c_j}{(1 + \frac{y}{m})^{mT_j}}$$
+
+## Yield Curves
+
+- A yield curve quantifies the relationship between the return of a fixed income security and its term.
+- On any single yield curve, the different instruments displayed should be *equivalent* (have the same credit quality), differing only by maturity. For example, yields on US Treasury Bonds should not be displayed on the same yield curve as yields for highly distressed corporate bonds.
+
+  ![Typical Yield Curve](images/yield-curve.png "Typical Yield Curve")
+
+### Discount Curves
+- Discount curves are one of the primary application of yield curves.
+- A discount curve is the relation between time $T$ and the discount factor $d(T)$, which corresponds to discounting back from any value of $T$.
+- A continuously compounded **spot rate curve** is a special kind of yield curve where the discount factor for a continuously compoounded interest rate is used for the yield curve $y(T)$:
+$$d(T) = e^{-y(T)T}$$
