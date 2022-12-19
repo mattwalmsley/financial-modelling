@@ -5,7 +5,8 @@
   - [Bond Pricing Model](#bond-pricing-model)
   - [Yield to Maturity](#yield-to-maturity)
   - [Yield Curves](#yield-curves)
-    - [Discount Curves](#discount-curves)
+    - [Discount and Spot Rate Curves](#discount-and-spot-rate-curves)
+    - [Building a Yield Curve](#building-a-yield-curve)
 
 ## Introduction
 
@@ -52,8 +53,21 @@ $$P = \sum_{j=1}^{J}\frac{c_j}{(1 + \frac{y}{m})^{mT_j}}$$
 
   ![Typical Yield Curve](images/yield-curve.png "Typical Yield Curve")
 
-### Discount Curves
+- **N.B.** The commonly referenced US Treasury yield curve is constructed using yields to maturity and is ***not*** a spot rate curve.
+
+### Discount and Spot Rate Curves
+
 - Discount curves are one of the primary application of yield curves.
 - A discount curve is the relation between time $T$ and the discount factor $d(T)$, which corresponds to discounting back from any value of $T$.
-- A continuously compounded **spot rate curve** is a special kind of yield curve where the discount factor for a continuously compoounded interest rate is used for the yield curve $y(T)$:
+- A continuously compounded **spot rate curve** is a special kind of yield curve where the discount factor for a continuously compounded interest rate is used for the yield curve $y(T)$:
 $$d(T) = e^{-y(T)T}$$
+- For a term $T$, the present value of 1 USD paid at time $T$ can be represented as $d(T)$.
+  - Similarly, a spot rate $y(T)$ can be defined as the interest rate a credit issuer would charge for a loan over a term $T$ (even if there is no such instrument currently trading on the markets).
+  - The corresponding spot rate curve $y(T)$ can also be expressed in terms of the discount curve $d(T)$:
+$$y(T) = -\frac{log(d(T))}{T}$$
+
+### Building a Yield Curve
+
+- For $N$ fixed income securities with maturities at times $T_{1}, T_{2}, ..., T_{N}$, the yields are calculated from the respective market prices as: $y(T_{1}), y(T_{2}), ..., y(T_{N})$.
+- The times $T_{1}$ to $T_{N}$ are known as the **tenors** and are usually the maturities or expiration dates of the traded calibration instruments.
+- Interpolation is used to extend the yield curve from a finite set of tenors to the entire interval $T_{1}$ to $T_{N}$.
