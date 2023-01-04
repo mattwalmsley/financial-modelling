@@ -7,6 +7,8 @@
   - [Yield Curves](#yield-curves)
     - [Discount and Spot Rate Curves](#discount-and-spot-rate-curves)
     - [Building a Yield Curve](#building-a-yield-curve)
+  - [Bootstrapping Spot Curves](#bootstrapping-spot-curves)
+    - [Example](#example)
 
 ## Introduction
 
@@ -71,3 +73,42 @@ $$y(T) = -\frac{log(d(T))}{T}$$
 - For $N$ fixed income securities with maturities at times $T_{1}, T_{2}, ..., T_{N}$, the yields are calculated from the respective market prices as: $y(T_{1}), y(T_{2}), ..., y(T_{N})$.
 - The times $T_{1}$ to $T_{N}$ are known as the **tenors** and are usually the maturities or expiration dates of the traded calibration instruments.
 - Interpolation is used to extend the yield curve from a finite set of tenors to the entire interval $T_{1}$ to $T_{N}$.
+
+## Bootstrapping Spot Curves
+
+- Building a yield curve from real market data.
+- For a collection of $N$ bonds with maturities at times $T_{1} < T_{2} < ... < T_{N}$, and observable market prices $P_{1}, P_{2}, ..., P_{N}$:
+  - The discount curve $d(T)$ for $T \le T_{1}$ is calculated first to discount the coupons of bond 1 and find $P_{1}$.
+  - The discount curve $d(T)$ for $T_{1} \le T \le T_{2}$ is calculated next using the values for $T \le T_{1}$ to discount the coupons of bond 2 and find $P_{2}$.
+  - This process is repeated through all $N$ bonds to calculate $d(T)$ for $T \le T_{N}$.
+
+### Example
+
+- In this example, there are 3 bonds:
+
+|        |      Coupon      | Face Value | Time to Maturity | Market Price |
+| ------ |:----------------:|:----------:|:----------------:|:------------:|
+| Bond 1 |       Zero       | 1,000 USD  |      6 Months    |    985 USD   |
+| Bond 2 | 5% (Semi-Annual) | 10,000 USD |      1 Year      |  10,124 USD  |
+| Bond 3 |    7% (Annual)   | 10,000 USD |      2 Years     |  10,507 USD  |
+
+- The tenors for the yield curve will be the maturities of the bonds: $T_{1} = 0.5$, $T_{2} = 1$ and $T_{3} = 2$.
+- The market prices of the bonds are used to calibrate the discount factors $d(T_{1})$, $d(T_{2})$ and $d(T_{3})$, or equivalently, the yields $y(T_{1})$, $y(T_{2})$ and $y(T_{3})$.
+$$P_{1} = d(0.5)(1000) \Longrightarrow d(0.5) = \frac{985}{1000}$$ 
+$$\boxed{d(0.5) = 0.985}$$
+$$Using \space y(T) = -\frac{log(d(T))}{T}$$
+$$y(0.5) = -\frac{log(0.985)}{0.5}$$
+$$\boxed{y(0.5) = 3.0\%}$$
+- Bond 2 has a semi-annual coupon of 5% so there is a payment in 6 months ($T = 0.5$) and a payment in 1 year ($T = 1$).
+- Using the discount factor $d(0.5)$ to discount the coupon payment in 6 months, and then using the bond price to calibrate the discount factor $d(1)$:
+$$P_{2} = d(0.5)\left(\frac{10000 \times 5\%}{2}\right) + d(1)\left(\frac{10000 \times 5\%}{2} + 10000\right)$$
+$$d(1) = \frac{10124 - (0.985 \times 250)}{10250}$$
+$$\boxed{d(1) = 0.9637}$$
+$$y(1) = -\frac{log(0.9637)}{1}$$
+$$\boxed{y(1) = 3.7\%}$$
+- Similar to bond 2, we have the discounting equation for the market price of bond 3:
+$$P_{3} = d(1)(10000 \times 7\%) + d(2)((10000 \times 7\%) + 10000)$$
+$$d(2) = \frac{10507- (0.9637 \times 700)}{10700}$$
+$$\boxed{d(2) = 0.9189}$$
+$$y(2) = -\frac{log(0.9189)}{2}$$
+$$\boxed{y(2) = 4.2\%}$$
