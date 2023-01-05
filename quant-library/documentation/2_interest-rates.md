@@ -2,6 +2,7 @@
 
 - [Interest Rates](#interest-rates)
   - [Introduction](#introduction)
+  - [Assumptions](#assumptions)
   - [Term Structure](#term-structure)
   - [Investment Returns](#investment-returns)
     - [Gross Return](#gross-return)
@@ -54,6 +55,19 @@
   - Theoretical rate of interest for a risk free investment.
   - In the real-world the **Secured Overnight Financing Rate (SOFR)** is used.
   - Core concept used for derivatives pricing.
+
+## Assumptions
+
+- These assumptions hold true unless stated otherwise:
+  - Interest rates are risk free (usually referred to as the risk-free rate).
+  - Term structures are flat (very little variation between short and long-term yields, usually indicative of the market being unsure about the future direction of the economy).
+  - Interest rates are continuously compounded.
+  - Interest rates are constant in time.
+  - The variable $r$ will be used to represent interest rates, which are understood to be _deterministic_, a _constant function of time/term_, and a _risk-free continuously compounded_ rate.
+- These assumptions lead to a crude model of interest rates, but will be sufficient for non-fixed income products.
+- The following products will deviate from these assumptions (where stated):
+  - **Bonds and interest rate products** (fixed-income) - the compounding convention will usually be the same as the frequency of the coupon payments and the term structures are not assumed to be flat.
+  - **Swaps** (closely related to fixed income products) - the compounding convention will be semi-annually or quarterly and will be not be constant with time.
 
 ## Term Structure
 
