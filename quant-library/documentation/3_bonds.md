@@ -94,7 +94,7 @@ $$y(T) = -\frac{log(d(T))}{T}$$
 
 - The tenors for the yield curve will be the maturities of the bonds: $T_{1} = 0.5$, $T_{2} = 1$ and $T_{3} = 2$.
 - The market prices of the bonds are used to calibrate the discount factors $d(T_{1})$, $d(T_{2})$ and $d(T_{3})$, or equivalently, the yields $y(T_{1})$, $y(T_{2})$ and $y(T_{3})$.
-$$P_{1} = d(0.5)(1000) \Longrightarrow d(0.5) = \frac{985}{1000}$$ 
+$$P_{1} = d(0.5)(1000) \Longrightarrow d(0.5) = \frac{985}{1000}$$
 $$\boxed{d(0.5) = 0.985}$$
 $$Using \space y(T) = -\frac{log(d(T))}{T}$$
 $$y(0.5) = -\frac{log(0.985)}{0.5}$$
@@ -112,3 +112,15 @@ $$d(2) = \frac{10507- (0.9637 \times 700)}{10700}$$
 $$\boxed{d(2) = 0.9189}$$
 $$y(2) = -\frac{log(0.9189)}{2}$$
 $$\boxed{y(2) = 4.2\%}$$
+
+- The discount factor for $d(1.5)$ can now be linearly interpolated using the yield curve values $y(1)$ and $y(2)$:
+$$Using \space d(T) = e^{-y(T)T}$$
+$$d(1.5) = e^{-y(1.5) \times 1.5}$$
+$$y(1.5) = \frac{y(1) + y(2)}{2}$$
+$$\boxed{y(1.5) = 3.95\%}$$
+$$d(1.5) = e^{-(0.0395 \times 1.5)}$$
+$$\boxed{d(1.5) = 0.942}$$
+- The price of a 2 year bond with a 100,000 USD face value and a 7% coupon paid semi-annually can be calculated as follows:
+$$P_{1.5} = d(0.5)\left(\frac{100000 \times 7\%}{2}\right) + d(1)\left(\frac{100000 \times 7\%}{2}\right) + d(1.5)\left(\frac{100000 \times 7\%}{2}\right)+ d(2)\left(\frac{100000 \times 7\%}{2} + 100000\right)$$
+$$P_{1.5} = (0.985 \times 3500) + (0.9637 \times 3500) + (0.942 \times 3500) + (0.9189 \times 103500)$$
+$$\boxed{P_{1.5} = 105,224 \space USD}$$
