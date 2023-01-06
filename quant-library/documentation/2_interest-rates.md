@@ -138,7 +138,7 @@ $$\left(1 + \frac{r_m(t)}{m}\right)^{mt} = \left(1 + \frac{r_k(t)}{k}\right)^{kt
 - Mathematically, this is the limit of periodic compounding as the period goes to 0 or the frequency goes to infinity.
 - This provides a useful approximation as the accuracy can be optimised by choosing the continuously compounded rate that corresponds to a prevailing periodically compounded rate.
   - To change from periodic compounding to continuous compounding, set the limit of the compounding frequency $m$, to infinity:
-$$\lim_{m \to \infin}\left(1 + \frac{r}{m}\right)^{mt} = e^{rt} \Rightarrow P(t) = e^{rt}X$$
+$$\lim_{m \to \infty}\left(1 + \frac{r}{m}\right)^{mt} = e^{rt} \Rightarrow P(t) = e^{rt}X$$
   - With $r_c$ as the continuously compounded risk-free rate and $r_a$ as the annually compounded risk-free rate, equate the future values of 1 USD in a similar approach to periodically compounded in interest rates:
 $$e^{r_ct} = (1 + r_a)^t \Rightarrow r_ct = log((1 + r_a)^t) \Rightarrow r_c = log(1 + r_a)$$
 
