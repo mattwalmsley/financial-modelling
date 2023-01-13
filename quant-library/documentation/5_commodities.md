@@ -8,7 +8,8 @@
   - [Valuation](#valuation)
   - [Volatility](#volatility)
   - [Risks](#risks)
-  - [Inventory, Storage, and Convenience Yield](#inventory-storage-and-convenience-yield)
+  - [Inventory and Storage Costs](#inventory-and-storage-costs)
+    - [Convenience Yield](#convenience-yield)
 
 ## Introduction
 
@@ -56,5 +57,18 @@
 - **Transportation** of the physical goods provide a risk due to the the potential for the product to be damaged or spoilt during transport, as well as the cost of the transport itself.
 - The **storage** of the products also provides similar types of risk to transportation.
 
-## Inventory, Storage, and Convenience Yield
+## Inventory and Storage Costs
 
+- The theory of inventory has been a major advance in understanding commodity assets.
+- The higher the inventory levels of a commodity, the lower the price volatility.
+- Holding inventories allows both suppliers and consumers to operate with stability during a demand or supply shock.
+  - Suppliers and consumers can react quickly to demand if they hold inventories.
+- Generally, inventories stabilize commodities' prices, but will incur storage costs.
+
+### Convenience Yield
+
+- Inventories can be modelled in a similar way to dividend yields on stock, using *convenience yield*.
+- Convenience yields are implemented as a continuously compounded return accruing to holdings of a commodity.
+- The *net yield* accounts for the storage costs associated with holding an inventory and is modelled as a negative yield
+
+$$Net \space Yield = Convenience \space Yield - Storage \space Costs$$

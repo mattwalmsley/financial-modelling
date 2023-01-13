@@ -164,9 +164,9 @@ $$e^{r_ct} = \left(1 + \frac{r_2}{2}\right)^{2t} \Rightarrow r_ct = log\left(\le
 
 - The present value, $PV = \frac{X}{(1 + r)^t}$, can be viewed as a discounted value of X, assuming that $(1 + r)^t > 1$.
 - Discounted value and present value can be used interchangeably.
-- Rewriting present value as a function of time, we get $PV = d(t)X$ where we can express the discount factor as $d(t) = \frac{1}{(1 +r)^t}$.
+- Rewriting present value as a function of time gives $PV = d(t)X$ where the discount factor can be expressed as $d(t) = \frac{1}{(1 +r)^t}$.
 - The future value at time $t$ of a 1 USD investment today is $(1 + r)^t$ which is the reciprocal of $d(t)$, i.e. $\frac{1}{d(t)} = (1 + r)^t$.
-  - We can therefore say the future value of an investment $P_0 = X$ today is:
+  - Therefore, the future value of an investment $P_0 = X$ today is:
 $$P(t) = \frac{1}{d(t)}X = (1 + r)^tX$$
 - Discount factors can be expressed in terms of interest rates with different compounding convention.
   - For periodically compounded rates: $d(t) = \frac{1}{\left(1 + \frac{r_m}{m}\right)^{mt}}$.
@@ -174,8 +174,8 @@ $$P(t) = \frac{1}{d(t)}X = (1 + r)^tX$$
 
 ## Discounted Cash Flow Analysis
 
-- For an asset that pays amounts $c_1, c_2, ..., c_N$ (cash flows) at respective times $t_1, t_2, ..., t_N$, we can say that an individual payment $c_i$ will be made at time $t_i$.
-- To value the asset, we need to know the present value of a stream of cash flows.
+- For an asset that pays amounts $c_1, c_2, ..., c_N$ (cash flows) at respective times $t_1, t_2, ..., t_N$, an individual payment $c_i$ will be made at time $t_i$.
+- To value the asset, the present value of a stream of cash flows needs to be calculated.
 - The present value of an individual payment $c_i$ with discount factor $d(t_i)$ is $d(t_i)c_i$.
 - Model the present value of a stream of cash flows as the present value of an individual cash flow - i.e. the total amount that needs to be invested today to replicate the stream of cash flows.
 - Each cash flow is independent so the present value of the cash flow stream is the sum of the cash flows of the individual payment: $PV = d(t_1)c_1 + d(t_2)c_2 + ... + d(t_N)c_N$. More generally, this can be written as:
@@ -244,7 +244,7 @@ $$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
 - Given SONIA is an overnight interest rate, it must be extended to a term rate to be used with products that have a term to maturity. This term rate is known as SONIA Compounded in Arrears.
 - See official documentation [here](https://www.bankofengland.co.uk/markets/sonia-benchmark/sonia-key-features-and-policies).
 - The SONIA Compounded Index measures the return on an investment made at overnight SONIA each business day with daily compounding.
-- We define the SONIA Compounded Index as $I(t)$ on a business date $t$  where $S(t)$ is the SONIA rate for date $t$ and $\tau(t)$ is the number of calendar days between business dates $t$ and $t + 1$:
+- The SONIA Compounded Index is defined as $I(t)$ on a business date $t$  where $S(t)$ is the SONIA rate for date $t$ and $\tau(t)$ is the number of calendar days between business dates $t$ and $t + 1$:
 $$I(t + 1) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right)$$
 - An iterative approach is taken by taking the value calculated for $I(t + 1)$ and substituting it back into the formula in place of $I(t)$. This leads to:
 $$I(t + m) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right) \times ... \times \left(1 + \frac{S(t + m - 1)\tau(t + m - 1)}{365}\right)$$

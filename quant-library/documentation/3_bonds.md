@@ -40,7 +40,7 @@ $$P = \sum_{i=1}^{N}d(t_i)c_i$$
 - A simple measure of yield is the coupon rate paid by the security.
 - The **current yield** is the annual coupon value divided by the price of the bond.
 - The most commonly used yield is the **yield to maturity**, defined as a specific interest rate $y$, at which the market price of a bond would be recovered if all payments were discounted by it.
-- With coupons $c_1$ to $c_J$ paid at times $T_1$ to $T_J$ (assuming that $C_J$ is the par value paid at time $T_J$), we can define the market value of a bond for an annually compounded yield to maturity $P$, as follows:
+- With coupons $c_1$ to $c_J$ paid at times $T_1$ to $T_J$ (assuming that $C_J$ is the par value paid at time $T_J$), the market value of a bond for an annually compounded yield to maturity $P$ can be defined as follows:
 
 $$P = \sum_{j=1}^{J}\frac{c_j}{(1 + y)^{T_j}}$$
 
@@ -106,7 +106,7 @@ $$d(1) = \frac{10124 - (0.985 \times 250)}{10250}$$
 $$\boxed{d(1) = 0.9637}$$
 $$y(1) = -\frac{log(0.9637)}{1}$$
 $$\boxed{y(1) = 3.7\%}$$
-- Similar to bond 2, we have the discounting equation for the market price of bond 3:
+- Similar to bond 2, the discounting equation for the market price of bond 3 is:
 $$P_{3} = d(1)(10000 \times 7\%) + d(2)((10000 \times 7\%) + 10000)$$
 $$d(2) = \frac{10507- (0.9637 \times 700)}{10700}$$
 $$\boxed{d(2) = 0.9189}$$

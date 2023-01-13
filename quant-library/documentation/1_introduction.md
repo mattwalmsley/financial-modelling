@@ -5,6 +5,7 @@
   - [Derivatives](#derivatives)
   - [Value](#value)
   - [Risk](#risk)
+  - [Modelling Portfolios](#modelling-portfolios)
 
 ## Cash Products
 
@@ -39,5 +40,18 @@
 
 ## Risk
 
-- Chance or possibility og suffering financial loss, e.g. losing money on an investment.
+- Chance or possibility of suffering financial loss, e.g. losing money on an investment.
 - Derivatives can server as risk management tools.
+
+## Modelling Portfolios
+
+- A portfolio is a collection of assets and can be considered as a individual/unit asset.
+- The value of the portfolio is the sum of the values of each of the component assets.
+  - Each asset will have a natural base valuation unit - i.e. for stocks this would be 1 share, and for FX this would be one unit of the currency (1 EUR or 1 USD).
+  - The portfolio values will be expressed in terms of the number of base units for each asset (the *allocation*) multiplied by the respective value of the base units.
+- The spot price (cash value) at time $t$ of the base unit for the $i^{th}$asset in the portfolio can be denoted by $S_{i}(t)$.
+  - The allocation of the $i^{th}$ asset can be denoted as $\alpha_{i}$.
+  - If asset 1 is IBM and there are 100 shares of IBM in a portfolio, then $\alpha_{1}$ is 100.
+  - If asset 2 is Japanese Yen (JPY) and there are 100,000 JPY in a portfolio, then $\alpha_{2}$ is 100,000.
+  - The value of a portfolio at time $t$ is therefore:
+$$V(t) = \sum_{i=1}^{N}\alpha_{i}S_{i}(t)$$
