@@ -6,6 +6,7 @@
   - [Value](#value)
   - [Risk](#risk)
   - [Modelling Portfolios](#modelling-portfolios)
+  - [Foreign Currencies (FX)](#foreign-currencies-fx)
 
 ## Cash Products
 
@@ -55,3 +56,22 @@
   - If asset 2 is Japanese Yen (JPY) and there are 100,000 JPY in a portfolio, then $\alpha_{2}$ is 100,000.
   - The value of a portfolio at time $t$ is therefore:
 $$V(t) = \sum_{i=1}^{N}\alpha_{i}S_{i}(t)$$
+- Any cash held in a portfolio is assumed to be invested at the risk-free rate.
+  - Let $r$ be the continuously compounded risk-free interest rate.
+  - A lump sum of cash $X$ can be represented in a portfolio's value expression by $Xe^{rt}$, assuming it was brought into the portfolio at time $t=0$.
+- Similarly, any debt in the portfolio can be represented as a negative cash allocation.
+  - A debt of $X$, taken on at time $t = 0$ at the risk-free interest rate $r$, would be represented by $-Xe^{rt}$.
+  - The value of a portfolio containing $n$ assets with values $S_{i}(t)$ for $i = 1 ... n$ and a debt of value of $Xe^{rt}$ would be:
+$$V(t) = \sum_{i=1}^{N}S_{i}(t) - Xe^{rt}$$
+- The portfolio could have a negative value if $Xe^{rt} > \sum_{i=1}^{N}S_{i}(t)$ at some time $t$.
+  - The owner of a portfolio with a negative value would need to pay any potential buyers of the portfolio.
+
+## Foreign Currencies (FX)
+
+- The (spot) price of one unit of foreign currency, priced in the domestic currency, can be denoted as $S(t)$.
+- A holding of $\alpha$ units of a foreign currency at time $t = 0$ would be represented in a portfolio's value by the term $\alpha S(0)$.
+- Any foreign currency in a portfolio is assumed to be invested at the respective currency's risk-free rate, denoted by $r_{f}$.
+  - Similarly, the domestic currency's risk-free rate is denoted by $r_{d}$.
+- A holding of $N$ units of domestic currency is represented by $Ne^{r_{d}t}$.
+- A holding of $K$ units of foregin currency is represented by $Ke^{r_{f}t}$.
+  - This can be represented in the domestic currency by $Ke^{r_{f}t}S(t)$.
