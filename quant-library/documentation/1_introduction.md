@@ -73,5 +73,5 @@ $$V(t) = \sum_{i=1}^{N}S_{i}(t) - Xe^{rt}$$
 - Any foreign currency in a portfolio is assumed to be invested at the respective currency's risk-free rate, denoted by $r_{f}$.
   - Similarly, the domestic currency's risk-free rate is denoted by $r_{d}$.
 - A holding of $N$ units of domestic currency is represented by $Ne^{r_{d}t}$.
-- A holding of $K$ units of foregin currency is represented by $Ke^{r_{f}t}$.
+- A holding of $K$ units of foreign currency is represented by $Ke^{r_{f}t}$.
   - This can be represented in the domestic currency by $Ke^{r_{f}t}S(t)$.
