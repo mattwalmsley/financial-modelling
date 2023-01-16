@@ -7,6 +7,7 @@
   - [Risk](#risk)
   - [Modelling Portfolios](#modelling-portfolios)
   - [Foreign Currencies (FX)](#foreign-currencies-fx)
+  - [Long versus Short Positions](#long-versus-short-positions)
 
 ## Cash Products
 
@@ -75,3 +76,24 @@ $$V(t) = \sum_{i=1}^{N}S_{i}(t) - Xe^{rt}$$
 - A holding of $N$ units of domestic currency is represented by $Ne^{r_{d}t}$.
 - A holding of $K$ units of foreign currency is represented by $Ke^{r_{f}t}$.
   - This can be represented in the domestic currency by $Ke^{r_{f}t}S(t)$.
+- The holding of $K$ units in a foreign currency, $Ke^{r_{f}t}$, can be interpreted as a time dependent allocation of the foreign currency.
+  - The interest rate $r_{f}$ represents the continuously compounded return earn by the foreign currency.
+  - Returns on the foreign currency can therefore be modelled in a similar way to [dividends](4_equities.md#dividends) on stocks and [convenience yields](5_commodities.md#convenience-yield) on commodities.
+
+## Long versus Short Positions
+
+- Having a **long position** in an asset will cause the portfolio value to *increase* as the asset value increases.
+- Having a **short position** in an asset will cause the portfolio value to *decrease* as the asset value increases.
+- The simplest way to take a long position in the cash markets is to buy the asset.
+  - This can be very expensive as assets will need to be bought outright.
+- Taking a short position in the cash markets is not possible on all assets but some do accommodate for this
+  - **Stocks** can be shorted on most exchanging using the following mechanism:
+    1. Investor A borrows the desired number of shares from investor B who owns the stock.
+    2. Investor A then sells the stock on the market for the current market value.
+    3. Investor A will then need to compensate investor B for any of the dividends paid by the stock during this time.
+    4. Investor A is obligated to give the shares back to investor B at a set point in the future and will need to buy the shares at a future market price. 
+    5. A lower market price in the future will make a profit for investor A (assuming the drop in the stocks value is greater than the dividend payments). The risk-free rate and transaction related costs (broker fee, capital gains tax, etc.) should also be considered.
+  - **Foreign currencies** can be shorted by borrowing money in the desired currency with the aim of paying back the amount with less of the domestic currency.
+  - **Bonds** can be shorted using *reverse repurchase agreements* as well as other investment vehicles.
+  - **Commodities** can be shorted by using *exchange traded funds* (ETFs).
+- Sometimes it is hard to take long and short positions directly in the cash market (e.g. commodities), so investors will use **derivatives** to take positions on assets.

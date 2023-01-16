@@ -31,6 +31,10 @@
 - The **ex-dividend date** is the cut-off point for being eligible to receive dividends. Investors who purchase stock *on or after* the ex-dividend date are will not be paid dividends on their shares.
   - Due to market force, the share price drops by the value of the divided per share on the ex-dividend date.
 - The **dividend yield** is the value of the dividends that a company pays out per year as a percentage of its share price.
+  - If a stock, with price $S(t)$, pays dividends, the dividend yield can be modelled as a continuously compounded yield $y$, acting like an interest rate.
+  - At time $t = 0$, with an initial allocation of $\alpha$ shares, and assuming all dividends are reinvested into the stock holding, the allocation at time $t$ is $\alpha e^{yt}$.
+  - The investment at time $t$ is therefore $\alpha e^{yt}S(t)$.
+  - Modelling the dividends with a continuous yield is most appropriate for stock indices or portfolios. For an individual stock, a more accurate model is to model the dividend as a lump sum payment.
 
 ### Valuation
 
