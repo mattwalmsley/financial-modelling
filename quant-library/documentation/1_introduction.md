@@ -91,7 +91,7 @@ $$V(t) = \sum_{i=1}^{N}S_{i}(t) - Xe^{rt}$$
     1. Investor A borrows the desired number of shares from investor B who owns the stock.
     2. Investor A then sells the stock on the market for the current market value.
     3. Investor A will then need to compensate investor B for any of the dividends paid by the stock during this time.
-    4. Investor A is obligated to give the shares back to investor B at a set point in the future and will need to buy the shares at a future market price. 
+    4. Investor A is obligated to give the shares back to investor B at a set point in the future and will need to buy the shares at a future market price.
     5. A lower market price in the future will make a profit for investor A (assuming the drop in the stocks value is greater than the dividend payments). The risk-free rate and transaction related costs (broker fee, capital gains tax, etc.) should also be considered.
   - **Foreign currencies** can be shorted by borrowing money in the desired currency with the aim of paying back the amount with less of the domestic currency.
   - **Bonds** can be shorted using *reverse repurchase agreements* as well as other investment vehicles.
