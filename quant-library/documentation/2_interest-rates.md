@@ -227,7 +227,7 @@ $$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
   - In order to keep the reserve amount in their Fed account above the minimum level, a bank may have to borrow money (unsecured) from another bank's Fed account.
   - This market is known as the Federal Funds Market and the overnight rate at which the lending bank loans to the borrowing bank is known as the Federal Funds Rate.
   - The target Fed Funds Rate is set by the Federal Open Markets Committee (FOMC).
-  - The Fed does not directly set the Fed Funds Rate, but engineers the effective fed funds rate, which is realised on the markets, by buying and selling US Government debt securities from banks.
+  - The Fed does not directly set the Fed Funds Rate, but engineers the effective fed funds rate, which is realized on the markets, by buying and selling US Government debt securities from banks.
 
 ## SONIA
 
