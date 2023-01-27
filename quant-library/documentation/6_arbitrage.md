@@ -7,6 +7,7 @@
   - [Arbitrage Examples](#arbitrage-examples)
     - [Example 1: Stocks](#example-1-stocks)
     - [Example 2: Bonds](#example-2-bonds)
+  - [The Law of One Price](#the-law-of-one-price)
 
 ## Conceptual Introduction
 
@@ -105,3 +106,11 @@ $$\boxed{PV = 11,166.55 \space USD}$$
   - After 3 years, the debt from taking out the 3 loans is cleared. The cash investment of 1,166.55 USD which was invested at the risk-free annually compounded interest rate of 2% can be realized as follows:
 $$1166.55 \times (1 + 0.02)^{3} = \boxed{1,237.95 \space USD}$$
 - This arbitrage opportunity yields a profit of 1,237.95 USD with zero risk of losing money.
+
+## The Law of One Price
+
+- If the probability of the prices of two assets, A and B, being equal at some time $T > 1$ is certain ($Prob(P_{A}(T) = P_{B}(T)) = 1$), then the prices at $T = 0$ must be the same or an arbitrage is present.
+  - This can be justified financially/logically as follows:
+    - Suppose that $P_{A}(0) \not = P_{B}(0)$ and that the prices are not random - they are known and deterministic prices at time $T = 0$ (i.e. we know the current prices).
+    - Either $P_{A}(0) > P_{B}(0)$ or $P_{A}(0) < P_{B}(0)$.
+    - Using the scenario where $P_{A}(0) > P_{B}(0)$, an arbitrage portfolio can be constructed by taking a short position in asset A and a long position in asset B.
