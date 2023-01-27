@@ -80,3 +80,28 @@
 
 ### Example 2: Bonds
 
+- Take a bond with a face value of 10,000 USD which is trading at par (i.e. the current market price is 10,000 USD).
+- This bond matures in 3 years and pays an annual coupon of 6%.
+- The current annually compounded risk-free interest rates for 1, 2, and 3 year terms are:
+  - $r(1) = 0.75\%$
+  - $r(2) = 1.5\%$
+  - $r(3) = 2\%$
+- Given the bond pays a 600 USD coupon in years 1 and 2, and 10,600 USD (par value + coupon) in year 3, the bond pricing formula can be applied for annually compounded interest rates to find the present fair value of the bond as follows:
+$$PV = \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}}$$
+$$PV = \frac{600}{1 + 0.0075} + \frac{600}{(1 + 0.015)^{2}} + \frac{10600}{(1 + 0.02)^{3}}$$
+$$PV = 595.53 + 582.40 + 9988.62$$
+$$\boxed{PV = 11,166.55 \space USD}$$
+- Given the bond's current market price (10,000 USD) is lower than the present fair value (11,166.55 USD), there is a potential arbitrage opportunity present that can be constructed as follows:
+  - At year 0, borrow 595.53 USD with a 1 year term, 582.40 USD with a 2 year term and 9,988.62 USD with a 3 year term, the debt owed on each of these amounts will be exactly matched by the coupon payments from the bond respectively.
+    - This is equivalent to selling 3 zero-coupon bonds with the original bond's coupon payments as the par values for the 3 zero-coupon bonds.
+  - Having borrowed 11,166.55 USD, the original bond can be purchased for 10,000 USD (current market price).
+  - This leave 1,166.55 USD left over as cash which can be invested at the risk-free annually compounded interest rate for 3 years ($r(3) = 2\%$).
+  - At this point, the portfolio has 3 components:
+    - The 10,000 USD face value bond
+    - The 3 loans
+    - A cash holding of 1,166.55 USD which is invested at the risk-free rate for 3 years
+  - The cost to enter this portfolio is 0 and it will yield a positive and certain profit.
+  - As each of the 3 loans is due, the debt due will equal the bond's coupon payment at that time.
+  - After 3 years, the debt from taking out the 3 loans is cleared. The cash investment of 1,166.55 USD which was invested at the risk-free annually compounded interest rate of 2% can be realized as follows:
+$$1166.55 \times (1 + 0.02)^{3} = \boxed{1,237.95 \space USD}$$
+- This arbitrage opportunity yields a profit of 1,237.95 USD with zero risk of losing money.
