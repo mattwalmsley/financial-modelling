@@ -114,3 +114,7 @@ $$1166.55 \times (1 + 0.02)^{3} = \boxed{1,237.95 \space USD}$$
     - Suppose that $P_{A}(0) \not = P_{B}(0)$ and that the prices are not random - they are known and deterministic prices at time $T = 0$ (i.e. we know the current prices).
     - Either $P_{A}(0) > P_{B}(0)$ or $P_{A}(0) < P_{B}(0)$.
     - Using the scenario where $P_{A}(0) > P_{B}(0)$, an arbitrage portfolio can be constructed by taking a short position in asset A and a long position in asset B.
+    - The cash is received by entering into this portfolio is equal to $P_{A}(0) - P_{B}(0)$.
+    - At time $T$, the cash is valued at $(P_{A}(0) - P_{B}(0))e^{rT}$ where $r$ is the risk-free rate.
+    - As s $P_{A}(T) = P_{B}(T)$, the cash received for exiting the long position in asset B can be used to purchase asset A and exit the short position.
+    - The riskless profit here is equal to $(P_{A}(0) - P_{B}(0))e^{rT}$.
