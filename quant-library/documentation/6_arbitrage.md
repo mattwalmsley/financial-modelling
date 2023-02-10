@@ -8,6 +8,10 @@
     - [Example 1: Stocks](#example-1-stocks)
     - [Example 2: Bonds](#example-2-bonds)
   - [The Law of One Price](#the-law-of-one-price)
+    - [Law of One Price Example 1: Stocks](#law-of-one-price-example-1-stocks)
+    - [Law of One Price Example 2: Bonds](#law-of-one-price-example-2-bonds)
+  - [Arbitrage and Discounted Cash Flow Analysis](#arbitrage-and-discounted-cash-flow-analysis)
+    - [Disounted Cash Flow Analysis Example](#disounted-cash-flow-analysis-example)
 
 ## Conceptual Introduction
 
@@ -118,3 +122,46 @@ $$1166.55 \times (1 + 0.02)^{3} = \boxed{1,237.95 \space USD}$$
     - At time $T$, the cash is valued at $(P_{A}(0) - P_{B}(0))e^{rT}$ where $r$ is the risk-free rate.
     - As s $P_{A}(T) = P_{B}(T)$, the cash received for exiting the long position in asset B can be used to purchase asset A and exit the short position.
     - The riskless profit here is equal to $(P_{A}(0) - P_{B}(0))e^{rT}$.
+
+### Law of One Price Example 1: Stocks
+
+- Using the same three stocks from the earlier example for arbitrage, construct a portfolio with 1 share of A and 2 shares of B. This can be referred to as asset 1 and at time $t$ the value $V_{1}(t)$ is:
+$$V_{1}(t) = P_{A}(t) + 2 P_{B}(t)$$
+- Similarly, asset 2 will be one share of stock C:
+$$V_{2}(t) = P_{C}(t)$$
+- Assuming as per the earlier example, that there are only two states in the world at time $t = 1$, the following is true:
+$$Prob(V_{1}(1) = V_{2}(2)) = 1$$
+- The value of the two assets at time $t = 0$ must be equal or there is an arbitrage. In this example there is an arbitrage:
+$$V_{1}(0) = 65 \space USD$$
+$$V_{2}(0) = 80 \space USD$$
+$$\therefore V_{1}(0) < V_{2}(0)$$
+
+### Law of One Price Example 2: Bonds
+
+- Using the bond from the earlier example which paid 3 coupons of 600 USD as well as the final payment of the face value of 10,000 USD, construct an arbitrage portfolio of 3 zero-coupon bonds.
+  - The bond can be modelled as a series of 3 cash flows:
+    - 600 USD in year 1
+    - 600 USD in year 2
+    - 10,600 USD in year 3
+  - The arbitrage portfolio will consist of the follow zero-coupon bonds:
+    - $Z_{1}$ with a face value of 600 USD and a 1 year maturity
+    - $Z_{2}$ with a face value of 600 USD and a 2 year maturity
+    - $Z_{3}$ with a face value of 10,600 USD and a 3 year maturity
+- The portfolio of the zero-coupon bonds will have the same cash flow as the original bond and so the *Law of One Price* dictates that the value of the portfolio must equal the price of the bond at any time $t$ (up until the 3 year maturity).
+- Using the same risk free rates as the earlier example: $r(1) = 0.75\%$, $r(2) = 1.5\%$, and $r(3) = 2\%$:
+$$Z_{1}(0) = \frac{600}{1 + 0.0075} = 595.53 \space USD$$
+$$Z_{2}(0) = \frac{600}{(1 + 0.015)^{2}} = 582.40 \space USD$$
+$$Z_{3}(0) = \frac{10600}{(1 + 0.02)^{3}} = 9988.62 \space USD$$
+- The value of the portfolio $V(t)$ is:
+$$V(t) = Z_{1}(t) + Z_{2}(t) + Z_{3}(t)$$
+- As stated, at time $t = 0$, the value of the bond $B(0)$ must equal the value of the portfolio $V(0)$. The arbitrage can be shown as follows:
+$$V(0) = 11,166.55 \space USD$$
+$$B(0) = 10,000 \space USD$$
+$$\therefore V(0) > B(0)$$
+
+## Arbitrage and Discounted Cash Flow Analysis
+
+- Arbitrage is what justifies the concepts of the *time value of money* and *present value*.
+- The formula: $PV = e^{-rt}X$ where $r$ is the risk-free rate, must hold true for a present value $PV$ of any value/price $X$ otherwise there is an arbitrage, as demonstrated by the *Law of One Price*.
+
+### Disounted Cash Flow Analysis Example
