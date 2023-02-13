@@ -11,7 +11,8 @@
     - [Law of One Price Example 1: Stocks](#law-of-one-price-example-1-stocks)
     - [Law of One Price Example 2: Bonds](#law-of-one-price-example-2-bonds)
   - [Arbitrage and Discounted Cash Flow Analysis](#arbitrage-and-discounted-cash-flow-analysis)
-    - [Disounted Cash Flow Analysis Example](#disounted-cash-flow-analysis-example)
+    - [Discounted Cash Flow Analysis Example 1](#discounted-cash-flow-analysis-example-1)
+    - [Discounted Cash Flow Analysis Example 2](#discounted-cash-flow-analysis-example-2)
 
 ## Conceptual Introduction
 
@@ -163,5 +164,36 @@ $$\therefore V(0) > B(0)$$
 
 - Arbitrage is what justifies the concepts of the *time value of money* and *present value*.
 - The formula: $PV = e^{-rt}X$ where $r$ is the risk-free rate, must hold true for a present value $PV$ of any value/price $X$ otherwise there is an arbitrage, as demonstrated by the *Law of One Price*.
+- Both of the following examples are special cases of arbitrage pricing.
 
-### Disounted Cash Flow Analysis Example
+### Discounted Cash Flow Analysis Example 1
+
+- Take a prevailing interest rate of 6% on a 3 year term and a contract paying 10,000 in 3 years time (i.e a zero-coupon bond with a 10,000 USD face value).
+- Discount a 10,000 USD payment in 3 years time using the prevailing interest rate:
+  $$PV = e^{-rt}X$$
+  $$PV = e^{-0.06 \times 3} \times 10000$$
+  $$\boxed{PV = 8,353 \space USD}$$
+- If the contract is currently trading at 9,000 USD the contract is **overpriced** and a short position should be assumed to take advantage of the arbitrage.
+  - The contract can be sold for 9,000 USD and the cash received then invested at the risk-free rate (6\%):
+  - This leads to a investment worth $e^{0.06 \times 3} \times 9000 = 10,775 \space USD$.
+  - A riskless profit of 775 USD is realized upon exiting the short position on the contract.
+- If the contract is currently trading at 7,000 USD the contract is **underpriced** and a long position should be assumed to take advantage of this arbitrage.
+  - 7,000 USD should be borrowed at the 3 year term risk-free rate to buy the contract.
+  - This leads to a debt worth $e^{0.06 \times 3} \times 7000 = 8,381 \space USD$
+  - Upon the contract expiry, 10,000 USD will be received and a riskless profit of 1,619 USD ($10,000 - 8381$) will be realized once the debt is paid back.
+
+### Discounted Cash Flow Analysis Example 2
+
+- Take the context for discounted cash flow analysis where a security makes $N$ payments $c_{1}, c_{2},..,c_{N}$ at times $t_{1}, t_{2},..,t_{N}$, and model each payment $c_{n}$ as a zero-coupon bond maturing at time $t_{i}$ with a face value of $c_{i}$.
+- A portfolio that consists of all $N$ zero-coupon bonds replicates the cash flow.
+- Using the *Law of One Price*, the value of this portfolio must equal the value of the cash flow.
+- The value of the portfolio at time $t$ is:
+$$V(t) = \sum_{i=1}^{N}Z_{i}(t)$$
+- The face value of the $i^{th}$ zero-coupon bond (and the cash payment $c_{i}$) at time $t_{i}$ is:
+$$Z_{i}(t_{i}) = c_{i}$$
+- The value at time $t = 0$ of $c_{i}$ can be written in terms of the discount factor:
+$$Z_{i}(0) = d(t_{i})c_{i}$$
+- Let $P(t)$ be the value of the cash flow, where $PV = P(0)$. Using the *Law of One Price*:
+$$P(0) = V(0)$$
+$$P(0) = \sum_{i=1}^{N}Z_{i}(0) \equiv  \sum_{i=1}^{N}d(t_{i})c_{i}$$
+- This reproduces the formula for discounted cash flow analysis using arbitrage justification.
