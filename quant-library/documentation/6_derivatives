@@ -1,0 +1,33 @@
+# Derivatives
+
+- [Derivatives](#derivatives)
+  - [Introduction](#introduction)
+    - [Derivative Products](#derivative-products)
+    - [Derivative Markets](#derivative-markets)
+    - [Assumptions](#assumptions)
+
+## Introduction
+
+- Derivatives are financial products or assets whose structure and value is derived from another asset.
+- The base asset is called the **underlying asset** (generally referred to as the underlying).
+- The derivative is linked to the underlying through revenues paid to the holder of the derivative product - these revenues are known as **payoffs**.
+  - The payoffs of a derivative are generally determined by the price of the underlying asset at a set point during the derivative contract's life - often the expiration date of the contract.
+  - Arbitrage is the main tool for linking the derivative's value to its underlying.
+- The price of the underlying asset is referred to as the **cash price** or **spot price** to distinguish it from the price of its derivatives.
+- The underlying asset is traded on the **cash market**, assuming it is a cash product (not always the case).
+- The profit and loss is the change in the value of an investment or financial position(s) and is usually shortened to **P&L**.
+
+### Derivative Products
+
+- **Forwards**/**futures**: contracts that lock in a price that two parties will exchange an asset for at a set future date.
+- **Options**: contracts that give one party the right, but not the obligation, to exchange an asset.
+- **Swaps**: contracts that allow two parties to exchange cash flows or liabilities from two different financial instruments. Interest rate swaps are the most common, facilitating a swap between a floating interest rate and a fixed one.
+
+### Derivative Markets
+
+### Assumptions
+
+- Transactions costs are zero.
+- Unlimited investing and borrowing at the risk-free rate.
+- No restrictions on short selling assets.
+
