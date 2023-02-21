@@ -5,6 +5,8 @@
     - [Derivative Products](#derivative-products)
     - [Derivative Markets](#derivative-markets)
     - [Assumptions](#assumptions)
+  - [Forwards](#forwards)
+    - [Settlement](#settlement)
 
 ## Introduction
 
@@ -25,9 +27,38 @@
 
 ### Derivative Markets
 
+- Markets can be divided into **over the counter (OTC)** or on organised **exchanges**.
+- OTC markets consist of deals between two counterparties that make private deals within financial regulations (little price transparency).
+- Exchanges, such as the Chicago Mercantile Exchange (CME), allow for more standardised products and regulated trading which are visible to all market participants (price transparency).
+- Generally, exchange-traded products are much more liquid than OTC products and have a less exposure to **counterparty credit risk** (risk of one counterparty failing to meet their obligations).
+  - The exchange acts as a counterparty to every deal made with its clients and are subject to strict regulations.
+  - With OTC deals, there is always a major concern than one counterparty will default.
+- OTC markets allow for more customisable deals to be made between broker-dealers and clients, or between broker-dealers themselves.
+- Following the 2008 financial crisis, there has been a push to move OTC products onto exchanges.
+
 ### Assumptions
 
 - Transactions costs are zero.
 - Unlimited investing and borrowing at the risk-free rate.
 - No restrictions on short selling assets.
 
+## Forwards
+
+- A forward contract is an agreement between a buyer and seller where the seller agrees to sell an asset to the buyer at a set point in the future at a price agreed upon entering into the contract.
+- By definition, forward contracts are traded on OTC markets and are often highly customised.
+- Generally, one of the counterparties is a financial institution or dealer, whilst the other counterparty is an end user of another dealer.
+- Forwards are usually used to hedge against changes in price.
+- Terminology:
+  - **Long position**: position of the buyer
+  - **Short position**: position of the seller
+  - **Expiration date or expiry**: agreed date on which the transaction will take place
+  - **Forward price**: the agreed transaction price
+- The **underlying asset** will be the asset that is traded at the forward contract's expiration date.
+- The forward contract is priced such that the value is 0 at the time of entering into the contract.
+
+### Settlement
+
+- At the expiration date, forward contracts can be **settled by delivery** or by **cash settlement**.
+- Settlement by delivery involves the seller exchange the underlying asset for the contract price with the buyer.
+- In a cash settled deals, the party with the negative cash position at the expiry compensates the other party with cash.
+- Due to the customised nature of the deals, forward contracts are illiquid securities and are usually held until expiry.
