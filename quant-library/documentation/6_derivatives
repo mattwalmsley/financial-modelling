@@ -7,6 +7,8 @@
     - [Assumptions](#assumptions)
   - [Forwards](#forwards)
     - [Settlement](#settlement)
+    - [Payoffs](#payoffs)
+    - [Pricing](#pricing)
 
 ## Introduction
 
@@ -62,3 +64,26 @@
 - Settlement by delivery involves the seller exchange the underlying asset for the contract price with the buyer.
 - In a cash settled deals, the party with the negative cash position at the expiry compensates the other party with cash.
 - Due to the customised nature of the deals, forward contracts are illiquid securities and are usually held until expiry.
+
+### Payoffs
+
+- The revenue a particular counterparty earns from a derivative contract is referred to as the **payoff**.
+- With forward contracts, neither the long position nor the short position receive any payment from the contract until the expiry date.
+  - Therefore at expiration, the values of the long and short positions in a forward contract are equal to the long and short payoffs respectively.
+- The payoff for a long position in a forward contract can be modelled as follows:
+  - Using the following notation:
+    - $S(t)$ as the price of the underlying asset at time $t$.
+    - $K_{\tau}$ as the forward price for expiry $\tau$.
+    - $T$ as the expiration (expiry date).
+    - $V(t)$ as the value of the long position at time $t$.
+  - At expiration of the contract, the underlying is transferred to the long position from the short position - the long position receives an asset (cash flow) with value $S(T)$.
+  - The long position must pay the short position the forward price $K_{\tau}$ to receive the asset - this should be deducted from the value received in order to calculate the long position's payoff.
+$$V(T) = S(T) - K_{\tau}$$
+- Similarly, the short position's payoff is:
+$$-V(T) = K_{\tau} - S(T)$$
+- Graphically, this can be represented as follows:
+
+    ![Forward Payoff](images/forward-payoff.png "Forward Payoff")
+
+### Pricing
+
