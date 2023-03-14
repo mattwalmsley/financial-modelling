@@ -9,6 +9,7 @@
     - [Settlement](#settlement)
     - [Payoffs](#payoffs)
     - [Pricing](#pricing)
+      - [Cash and Carry Arbitrage](#cash-and-carry-arbitrage)
 
 ## Introduction
 
@@ -89,20 +90,27 @@ $$-V(T) = K_{\tau} - S(T)$$
 
 - The value of the **long position**, $V(T) = S(T) - K_{\tau}$, can be calculated by using the Law of One Price and constructing a portfolio which models the payoff at time $t = T$.
   - $S(T)$ can be modelled by holding the underlying asset in the portfolio.
-  - $-K_{\tau}$ can be modelled as a cash payment (debt) discounted at time $t = 0$. This discounted (absolute) value is calculated by $e^{-rT}K_{\tau}$.
-  - The future value of this debt at time $t$ can then be calculated by $e^{rt}\left(e^{-rT}K_{\tau}\right)$.
+  - $-K_{T}$ can be modelled as a cash payment (debt) discounted at time $t = 0$. This discounted (absolute) value is calculated by $e^{-rT}K_{T}$.
+  - The future value of this debt at time $t$ can then be calculated by $e^{rt}\left(e^{-rT}K_{T}\right)$.
   - The value of this portfolio at time $t$ is modelled as follows:
-$$V(t) = S(t) - e^{rt}\left(e^{-rT}K_{\tau}\right)$$
-$$\boxed{V(t) = S(t) - e^{-r(T-t)}K_{\tau}}$$
-- This model can be validated by showing that at time $t = T$, the value of the portfolio is equal to $S(T) - K_{\tau}$:
-$$V(T) = S(T) - e^{-r(T-T)}K_{\tau}$$
-$$V(T) = S(T) - e^{0}K_{\tau}$$
-$$V(T) = S(T) - K_{\tau}$$
+$$V(t) = S(t) - e^{rt}\left(e^{-rT}K_{T}\right)$$
+$$\boxed{V(t) = S(t) - e^{-r(T-t)}K_{T}}$$
+- This model can be validated by showing that at time $t = T$, the value of the portfolio is equal to $S(T) - K_{T}$:
+$$V(T) = S(T) - e^{-r(T-T)}K_{T}$$
+$$V(T) = S(T) - e^{0}K_{T}$$
+$$V(T) = S(T) - K_{T}$$
 - Using the Law of One Price, the value of the forward contract $V(t)$ at any time $t < T$ must be equal to the value of the portfolio.
 - Similarly, the payoff of the **short position** can be modelled as:
-$$\boxed{-V(t) = e^{-r(T-t)}K_{\tau} - S(t)}$$
-- The forward price $K_{\tau}$ is set such that the value of the forward contract at $t = 0$ will be zero: $V(0) = 0$ and can be calculated as follows:
-$$V(0) = S(0) - e^{-r(T-0)}K_{\tau} = 0$$
-$$\Longrightarrow S(0) - e^{-rT}K_{\tau} = 0$$
-$$\therefore S(0) = e^{-rT}K_{\tau}$$
-$$\boxed{K_{\tau} = e^{rT}S(0)}$$
+$$\boxed{-V(t) = e^{-r(T-t)}K_{T} - S(t)}$$
+- The forward price $K_{T}$ is set such that the value of the forward contract at $t = 0$ will be zero: $V(0) = 0$ and can be calculated as follows:
+$$V(0) = S(0) - e^{-r(T-0)}K_{T} = 0$$
+$$\Longrightarrow S(0) - e^{-rT}K_{T} = 0$$
+$$\therefore S(0) = e^{-rT}K_{T}$$
+$$\boxed{K_{T} = e^{rT}S(0)}$$
+
+#### Cash and Carry Arbitrage
+
+- Forward prices may be deduced from two arbitrage strategies: the cash and carry arbitrage, and the reverse cash and carry arbitrage.
+- Recall the forward price, $K_{T} = e^{rT}S(0)$, where $S(t)$ is the underlying spot price, $r$ is the risk-free rate and $T$ is the expiration date of the forward contract.
+- If $K_{T} > e^{rT}S(0)$, an arbitrage can be constructed and therefore this inequality will never be present.
+- Similarly $K_{T} < e^{rT}S(0)$ will also lead to an arbitrage.
