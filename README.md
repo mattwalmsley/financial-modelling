@@ -13,6 +13,8 @@ The purpose of this repository is for educational purposes only.
 - [Bonds](quant-library/documentation/3_bonds.md)
 - [Equities](quant-library/documentation/4_equities.md)
 - [Commodities](quant-library/documentation/5_commodities.md)
+- [Arbitrage](quant-library/documentation/6_arbitrage.md)
+- [Commodities](quant-library/documentation/7_derivatives)
 
 If Git repo breaks run the following:
 

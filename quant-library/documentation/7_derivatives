@@ -112,5 +112,23 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
 
 - Forward prices may be deduced from two arbitrage strategies: the cash and carry arbitrage, and the reverse cash and carry arbitrage.
 - Recall the forward price, $K_{T} = e^{rT}S(0)$, where $S(t)$ is the underlying spot price, $r$ is the risk-free rate and $T$ is the expiration date of the forward contract.
-- If $K_{T} > e^{rT}S(0)$, an arbitrage can be constructed and therefore this inequality will never be present.
-- Similarly $K_{T} < e^{rT}S(0)$ will also lead to an arbitrage.
+- If $K_{T} > e^{rT}S(0)$, a **cash and carry arbitrage** can be constructed and therefore this inequality will never be present. The portfolio can be constructed as follows:
+  - Take a short position in the forward contract.
+  - Borrow $S(0)$ in cash at the risk-free rate and purchase the underlying with the proceeds.
+  - The portfolio has three components:
+    1. the short forward position
+    2. the underlying asset
+    3. a debt of $S(0)e^{rt}$ at time $t$
+  - This portfolio is held until time $T$, at which point the short forward position (1) is exited by transferring the underlying asset (2) to the long forward position (counterparty) for the  contract price $K_{T}$.
+  - The debt of $S(0)e^{rT}$ (3) can be repaid, leaving a **profit** of $K_{T} - e^{rT}S(0)$.
+- Similarly $K_{T} < e^{rT}S(0)$ will lead to a **reverse cash and carry arbitrage** by constructing the following portfolio:
+  - Take a long position in the forward contract.
+  - Take a short position in the underlying and invest the proceeds $S(0)$ at the risk-free rate.
+  - The portfolio has three components:
+    1. the long forward position
+    2. the short position in the underlying asset
+    3. a cash holding of $S(0)e^{rt}$ at time $t$
+  - This portfolio is held until time $T$, at which point the forward contract price $K_{T}$ is paid to exit the long forward position (1). This then delivers the underlying asset which is used to exit the short position in the underlying asset (2).
+  - The cash holding of $S(0)e^{rT}$ (3) is left, leaving a **profit** of $e^{rT}S(0) - K_{T}$.
+- The **cost of carry** in the cash and carry portfolio was only the risk-free rate $r$; however, there will generally be other financing charges and costs associated with storage, transportation and holding. Additionally any income from holding the underlying asset such as dividends or convenience yields should be considered.
+- For the reverse cash and carry arbitrage, the **cost of carry** is reversed due to the short position in the underlying asset so any charges are received as income.
