@@ -10,6 +10,8 @@
     - [Payoffs](#payoffs)
     - [Pricing](#pricing)
       - [Cash and Carry Arbitrage](#cash-and-carry-arbitrage)
+    - [Zero Coupon Bond Example](#zero-coupon-bond-example)
+    - [Stock (No Dividends) Example](#stock-no-dividends-example)
 
 ## Introduction
 
@@ -132,3 +134,35 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
   - The cash holding of $S(0)e^{rT}$ (3) is left, leaving a **profit** of $e^{rT}S(0) - K_{T}$.
 - The **cost of carry** in the cash and carry portfolio was only the risk-free rate $r$; however, there will generally be other financing charges and costs associated with storage, transportation and holding. Additionally any income from holding the underlying asset such as dividends or convenience yields should be considered.
 - For the reverse cash and carry arbitrage, the **cost of carry** is reversed due to the short position in the underlying asset so any charges are received as income.
+
+### Zero Coupon Bond Example
+
+- Take a forward contract on zero-coupon bond maturing in 1 year and a risk-free interest rate of 3.5%.
+- If the bond currently has a market price of 925 USD, the forward price for a 6 month forward contract on this bond can be calculated as follows:
+  - Assume the risk-free rate, $r = 0.035$, is continuously compounded.
+  - The value of the underlying $S$ at $t = 0$ is $925 \space USD$
+  - The forward contract expiration $T$ is $0.5$
+  - Taking the formula for the forward price a $K = e^{rT}S(0)$, the price of a 6 month forward contract on this bond is calculated as $e^{0.035 \times 2} \times 925 \Longrightarrow 941.33 \space USD$
+- If one bond dealer offers a forward price of 950 USD, a riskless profit can be obtained as follows:
+  - Borrow 925 USD and buy the underlying bond.
+  - Enter into a short position in the forward contract with forward price 950 USD.
+  - This creates a portfolio with the following components:
+    1. the short forward position
+    2. the bond
+    3. a debt valued at $e^{0.035t}(925)$ at time $t$.
+  - This portfolio is held for 6 months, by which time the debt is worth 941.33 USD (this is also the fair forward price we calculated).
+  - The short position in the forward contract can be exited by selling the bond for 950 USD.
+  - This leaves a profit of $950 - 941.33 = 8.67 \space USD$
+- If another bond dealer offers a forward price of 935 USD, a riskless profit can be obtained as follows:
+  - Enter into a short position in the underlying bond and receive 925 USD in cash to invest at the risk-free rate.
+  - Enter into a long position in the forward contract with forward price 935 USD.
+  - This creates a portfolio with the following components:
+    1. the long forward position
+    2. the short position in the underlying bond
+    3. a cash investment valued at $e^{0.035t}(925)$ at time $t$.
+  - This portfolio is held for 6 months, by which time the cash investment is worth 941.33 USD.
+  - This cash investment can be used to exit the forward contract and buy the bond for the price of 935 USD.
+  - The short position in the underlying bond can fulfilled using the purchased bond.
+  - This leaves a profit of $941.33 - 935 = 6.33 \space USD$
+
+### Stock (No Dividends) Example
