@@ -166,3 +166,16 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
   - This leaves a profit of $941.33 - 935 = 6.33 \space USD$
 
 ### Stock (No Dividends) Example
+
+- Take a stock which does not pay dividends and is currently trading for 150 USD.
+- The price of a forward contract in 9 months time, assuming a risk-free interest rate of 4%, can be calculated as follows:
+  - Using the formula $K = e^{rT}S(0)$ where $r$ is the risk free interest rate ($4\%$), $T$ is the length of the contract ($0.75$), and $S(0)$ is the current price of the stock ($150 \space USD$), the forward price is $K = e^{0.04 \times 0.75} \times 150 = 154.57 \space USD$.
+- The value of the forward contract in 3 months $V(0.25)$, given the value of the stock in 3 months $S(0.25)$ is $130 \space USD$, can be calculated as follows:
+  - $V(.025) = S(0.25) - e^{-r(T-0.25)}K \Longrightarrow V(0.25) = 130 - e^{-0.04(0.75 - 0.25)}(154.57) = - 21.51 \space USD$
+  - The negative value indicates that a long position in this forward contract would lose money.
+- The value of the forward contract in 3 months $V(0.25)$, given the value of the stock in 3 months $S(0.25)$ is $170 \space USD$, can be calculated as follows:
+  - $V(.025) = S(0.25) - e^{-r(T-0.25)}K \Longrightarrow V(0.25) = 170 - e^{-0.04(0.75 - 0.25)}(154.57) = - 18.49 \space USD$
+  - The positive value indicates that a long position in this forward contract would make money.
+- Remember, a long position in a forward contract locks in a price to buy an asset.
+  - If the value of the underlying asset goes down, the forward contract loses money as the asset is could be bought at a cheaper price on the market.
+  - If the value of the underlying asset goes up, the forward contract makes money as the asset is being bought at a cheaper price than the current mark price.
