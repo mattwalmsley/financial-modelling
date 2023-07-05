@@ -12,6 +12,7 @@
       - [Cash and Carry Arbitrage](#cash-and-carry-arbitrage)
     - [Zero Coupon Bond Example](#zero-coupon-bond-example)
     - [Stock (No Dividends) Example](#stock-no-dividends-example)
+    - [Asset Paying a Known Income Example](#asset-paying-a-known-income-example)
 
 ## Introduction
 
@@ -179,3 +180,37 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
 - Remember, a long position in a forward contract locks in a price to buy an asset.
   - If the value of the underlying asset goes down, the forward contract loses money as the asset is could be bought at a cheaper price on the market.
   - If the value of the underlying asset goes up, the forward contract makes money as the asset is being bought at a cheaper price than the current mark price.
+
+### Asset Paying a Known Income Example
+
+- Let $I$ be the present value, at the inception of the contract ($t = 0$), of the known income paid by the asset during the life of the forward contract.
+  - **N.B. generally $I(t)$ denotes the present value at time $t$ of the income provide by an asset between $t$ and $T$.**
+- Considering arbitrage, the forward price can be caculated as:
+$$K_{T} = (S(0) - I)e^{rT}$$
+- This relationship can be proven using the *cash and carry arbitrage* as well as the *reverse cash and carry arbitrage*.
+- First consider the case where $K_{T} > (S(0) - I)e^{rT}$ and construct an arbitrage portfolio as follows:
+  - Take a short position in the forward contract.
+  - Borrow S(0) in cash at the risk-free rate and purchase the underlying asset.
+  - This gives a portfolio of:
+    1. the short forward position
+    2. the underlying asset
+    3. the debt valued at $S(0)e^{rt}$ at time $t$.
+  - This portfolio is held until time $T$, accruing the income paid by the asset, and will consist of the following:
+    1. the short forward position
+    2. the underlying asset
+    3. the debt valued at $S(0)e^{rT}$
+    4. the accrued income valued at $Ie^{rT}$
+  - The short forward position can be exited by exchanging the underlying asset for $K_{T}$ in cash.
+  - By rewriting the initial case as $K_{T} + Ie^{rT} > S(0)e^{rT}$ and calculating the total cash holding at time $T$ to be $K_{T} + Ie^{rT}$, it can be shown that an arbitrage profit will be retained once the debt of $S(0)e^rT$ is repaid.
+- Now consider the case where $K_{T} < (S(0) - I)e^{rT}$ and construct an arbitrage portfolio as follows:
+  - Take a long position in the forward contract.
+  - Take a short position in the underlying asset in return for $S(0)$ in cash which is invested at the risk-free rate.
+  - This gives a portfolio of:
+    1. the long forward position
+    2. the short position in the underlying asset
+    3. the cash holding valued at $S(0)e^{rt}$ at time $t$.
+  - This portfolio is held until time $T$
+  - By rewriting the initial case as $K_{T} + Ie^{rT} < S(0)e^{rT}$ and calculating that the value of the cash holding at time $T$ to be $S(0)e^{rT}$, it can be shown that the there will be sufficient cash funds to:
+    1. pay the forward contract price $K_{T}$ in return for the underlying asset which can be used to exit the short position.
+    2. pay the future value of the accrued income calculated as $Ie{rT}$ to the owner of the underlying asset.
+  - This inequality leads to an arbitrage profit equal to $S(0)e^{rT} - \left(K_{T} + Ie^{rT}\right)$.
