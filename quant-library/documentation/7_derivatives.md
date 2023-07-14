@@ -8,11 +8,12 @@
   - [Forwards](#forwards)
     - [Settlement](#settlement)
     - [Payoffs](#payoffs)
-    - [Pricing](#pricing)
-      - [Cash and Carry Arbitrage](#cash-and-carry-arbitrage)
-    - [Zero Coupon Bond Example](#zero-coupon-bond-example)
-    - [Stock (No Dividends) Example](#stock-no-dividends-example)
-    - [Asset Paying a Known Income Example](#asset-paying-a-known-income-example)
+    - [Pricing Contracts on an Underlying Asset with No Income](#pricing-contracts-on-an-underlying-asset-with-no-income)
+    - [Cash and Carry Arbitrage](#cash-and-carry-arbitrage)
+      - [Zero Coupon Bond Example](#zero-coupon-bond-example)
+      - [Stock (No Dividends) Example](#stock-no-dividends-example)
+      - [Asset Paying a Known Income Example](#asset-paying-a-known-income-example)
+    - [Pricing Contracts on an Underlying Asset with Known Income](#pricing-contracts-on-an-underlying-asset-with-known-income)
 
 ## Introduction
 
@@ -89,7 +90,7 @@ $$-V(T) = K_{\tau} - S(T)$$
 
     ![Forward Payoff](images/forward-payoff.png "Forward Payoff")
 
-### Pricing
+### Pricing Contracts on an Underlying Asset with No Income
 
 - The value of the **long position**, $V(T) = S(T) - K_{\tau}$, can be calculated by using the Law of One Price and constructing a portfolio which models the payoff at time $t = T$.
   - $S(T)$ can be modelled by holding the underlying asset in the portfolio.
@@ -111,7 +112,7 @@ $$\Longrightarrow S(0) - e^{-rT}K_{T} = 0$$
 $$\therefore S(0) = e^{-rT}K_{T}$$
 $$\boxed{K_{T} = e^{rT}S(0)}$$
 
-#### Cash and Carry Arbitrage
+### Cash and Carry Arbitrage
 
 - Forward prices may be deduced from two arbitrage strategies: the cash and carry arbitrage, and the reverse cash and carry arbitrage.
 - Recall the forward price, $K_{T} = e^{rT}S(0)$, where $S(t)$ is the underlying spot price, $r$ is the risk-free rate and $T$ is the expiration date of the forward contract.
@@ -136,7 +137,7 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
 - The **cost of carry** in the cash and carry portfolio was only the risk-free rate $r$; however, there will generally be other financing charges and costs associated with storage, transportation and holding. Additionally any income from holding the underlying asset such as dividends or convenience yields should be considered.
 - For the reverse cash and carry arbitrage, the **cost of carry** is reversed due to the short position in the underlying asset so any charges are received as income.
 
-### Zero Coupon Bond Example
+#### Zero Coupon Bond Example
 
 - Take a forward contract on zero-coupon bond maturing in 1 year and a risk-free interest rate of 3.5%.
 - If the bond currently has a market price of 925 USD, the forward price for a 6 month forward contract on this bond can be calculated as follows:
@@ -166,7 +167,7 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
   - The short position in the underlying bond can fulfilled using the purchased bond.
   - This leaves a profit of $941.33 - 935 = 6.33 \space USD$
 
-### Stock (No Dividends) Example
+#### Stock (No Dividends) Example
 
 - Take a stock which does not pay dividends and is currently trading for 150 USD.
 - The price of a forward contract in 9 months time, assuming a risk-free interest rate of 4%, can be calculated as follows:
@@ -181,7 +182,7 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
   - If the value of the underlying asset goes down, the forward contract loses money as the asset is could be bought at a cheaper price on the market.
   - If the value of the underlying asset goes up, the forward contract makes money as the asset is being bought at a cheaper price than the current mark price.
 
-### Asset Paying a Known Income Example
+#### Asset Paying a Known Income Example
 
 - Let $I$ be the present value, at the inception of the contract ($t = 0$), of the known income paid by the asset during the life of the forward contract.
   - **N.B. generally $I(t)$ denotes the present value at time $t$ of the income provide by an asset between $t$ and $T$.**
@@ -214,3 +215,24 @@ $$K_{T} = (S(0) - I)e^{rT}$$
     1. pay the forward contract price $K_{T}$ in return for the underlying asset which can be used to exit the short position.
     2. pay the future value of the accrued income calculated as $Ie{rT}$ to the owner of the underlying asset.
   - This inequality leads to an arbitrage profit equal to $S(0)e^{rT} - \left(K_{T} + Ie^{rT}\right)$.
+
+### Pricing Contracts on an Underlying Asset with Known Income
+
+- Extending the notation for the value of a forward contract (long position) to: $V(t;K,T)$ where $K$ is the forward price and $T$ is the expiration date.
+  - The fair forward price for a forward contract, as per the prevailing market conditions at time $t$, can be denoted as $K_{T}(t)$.
+  - In previous examples $K_{T}(t=0)$ was used, denoted as just $K_{T}$.
+  - This means that $V(t;K_{T}(t),T) = 0$ by definition given the value of the forward contract at the time of initiation will be 0.
+- It has been shown that a forward contract on an underlying asset that pays no income is valued as: $K_{T}(t) = e^{r(T-t)}S(t)$ and for an asset paying known income with a present value $I$ between $t$ and $T$, the forward contract is valued as $K_{T}(t) = (S(t)-I(t))e^{r(T-t)}$.
+- The general notation for the value of a forward contract at time $t$ is:
+$$V(t;K_,T) = (K_{T}(t) - K)e^{-r(T-t)}$$
+- This formula can be proven using arbitrage as follows:
+  - At time $t$, enter into 2 forward positions:
+    1. a long position in a forward contract expiring at time $T$ with contract price $K$.
+    2. a short position on a forward contract also expiring at time $T$ and with contract price $K_{T}(t)$.
+  - At a time $\tau$ where $t \leq \tau \leq T$, the value of the two forward positions is calculated as $V(\tau;K,T) - V(\tau;K_{T}(t),T)$.
+  - At time $T$ when both forward contracts expire, the value of the contracts will be $V(T;K,T) - V(T;K_{T}(t),T) \equiv S(T) - K - (S(T) - K{T}(t)) \equiv K_{T}(t) - K$.
+  - If the value of the forward contracts at time $T$ is equal to $K_{T} - K$ then, by the law of one price, the value at time $t$ will be equal to the discounted value of this cash value: $(K_{T}(t) - K)e^{-r(T-t)}$.
+  - This leads to $V(t;K,T) - V(t;K_{T}(t),T) = (K_{T}(t) - K)e^{-r(T-t)}$ and given $V(t;K_{T}(t),T) = 0$ by definition, this can be simplified to $V(t;K,T) = (K_{T}(t) - K)e^{-r(T-t)}$ as above.
+- Using the forward price for an asset paying a known income $K_{T}(t) = (S(t)-I(t))e^{r(T-t)}$ and substituting in $(K_{T}(t) - K)e^{-r(T-t)}$ leads to:
+$$V(t) = \left((S(t) - I(t))e^{r(T-t)} - K\right)e^{-r(T-t)}$$
+$$\boxed{ V(t) = S(t) - I(t) - Ke^{-r(T-t)}}$$
