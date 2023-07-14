@@ -186,7 +186,7 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
 
 - Let $I$ be the present value, at the inception of the contract ($t = 0$), of the known income paid by the asset during the life of the forward contract.
   - **N.B. generally $I(t)$ denotes the present value at time $t$ of the income provide by an asset between $t$ and $T$.**
-- Considering arbitrage, the forward price can be caculated as:
+- Considering arbitrage, the forward price can be calculated as:
 $$K_{T} = (S(0) - I)e^{rT}$$
 - This relationship can be proven using the *cash and carry arbitrage* as well as the *reverse cash and carry arbitrage*.
 - First consider the case where $K_{T} > (S(0) - I)e^{rT}$ and construct an arbitrage portfolio as follows:
