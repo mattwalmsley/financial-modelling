@@ -14,6 +14,7 @@
       - [Stock (No Dividends) Example](#stock-no-dividends-example)
       - [Asset Paying a Known Income Example](#asset-paying-a-known-income-example)
     - [Pricing Contracts on an Underlying Asset with Known Income](#pricing-contracts-on-an-underlying-asset-with-known-income)
+    - [Pricing Contracts on an Underlying Asset with Known Yield](#pricing-contracts-on-an-underlying-asset-with-known-yield)
 
 ## Introduction
 
@@ -187,7 +188,7 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
 - Let $I$ be the present value, at the inception of the contract ($t = 0$), of the known income paid by the asset during the life of the forward contract.
   - **N.B. generally $I(t)$ denotes the present value at time $t$ of the income provide by an asset between $t$ and $T$.**
 - Considering arbitrage, the forward price can be calculated as:
-$$K_{T} = (S(0) - I)e^{rT}$$
+$$\boxed{K_{T} = (S(0) - I)e^{rT}}$$
 - This relationship can be proven using the *cash and carry arbitrage* as well as the *reverse cash and carry arbitrage*.
 - First consider the case where $K_{T} > (S(0) - I)e^{rT}$ and construct an arbitrage portfolio as follows:
   - Take a short position in the forward contract.
@@ -236,3 +237,28 @@ $$V(t;K_,T) = (K_{T}(t) - K)e^{-r(T-t)}$$
 - Using the forward price for an asset paying a known income $K_{T}(t) = (S(t)-I(t))e^{r(T-t)}$ and substituting in $(K_{T}(t) - K)e^{-r(T-t)}$ leads to:
 $$V(t) = \left((S(t) - I(t))e^{r(T-t)} - K\right)e^{-r(T-t)}$$
 $$\boxed{ V(t) = S(t) - I(t) - Ke^{-r(T-t)}}$$
+
+### Pricing Contracts on an Underlying Asset with Known Yield
+
+- For an underlying with price $S(t)$ and a dividend yield $y$, where all dividends are reinvested and an initial allocation $e^{-yT}$, the value of a position at time $t$ can be calculated as $e^{-yT}e^{yt}S(t) \equiv e^{-y(T-t)}S(t)$ as shown in the [dividend yields](./4_equities.md#dividends) section.
+  - At time $t = T$ the position will therefore have a value of $S(T)$ and at time $t = 0$ the value (initial investment) will be equal to $e^{-yT}S(0)$.
+- The forward contract price on this underlying asset can be derived using the replicating portfolio method as follows:
+  - A long position in the forward contract will have a payoff $S(T) - K_{T}$.
+    - $S(T)$ can be represented by an allocation of $e^{-yT}$ in the underlying asset given the value of this position at time $T$ will be equal to $S(T)$.
+    - $K_{T}$ can be replicated by a debt of $e^{-rT}K_{T}$, borrowed at the risk-free rate $r$.
+  - At time $t = 0$, the portfolio will consist of:
+    1. an allocation of $e^{-yT}$ in the underlying asset
+    2. a debt of $e^{-rT}K_{T}$
+  - At time $t$ the allocation of the underlying asset will be worth $e^{-y(T-t)}S(t)$ and the debt will be worth $-e^{rT}e^{-rT}K_{T} \equiv -e^{-r(T-t)}K_{T}$.
+  - The value of the portfolio at time $t$ is therefore calculated as $\boxed{V(t) = e^{-y(T-t)}S(t) - e^{-r(T-t)}K_{T}}$.
+    - This portfolio replicates the forward payoff because at time $t = T$, the portfolio will be $V(T) = S(T) - K_{T}$ and by the Law of One Price, $V(T)$ is the value of the contract at any time $t \leq T$.
+  - At time $t = 0$, the value of the portfolio is calculated as $V(T) = e^{-y(T)}S(0) - e^{-r(T)}K_{T}$ and given the value of the forward contract at time $t = 0$ must equal 0, we can calculate the forward price $K_{T}$ as follows:
+$$V(0) = 0$$
+$$e^{-y(T)}S(0) - e^{-r(T)}K_{T} = 0$$
+$$e^{-y(T)}S(0) = e^{-r(T)}K_{T}$$
+$$e^{-y(T)+r(T)}S(0) = K_{T}$$
+$$\boxed{K_{T} = e^{(r-y)T}S(0)}$$
+
+- The cost of carry is represented by $r - y$ which is the finance charge net the income paid by the asset.
+- If the underlying asset was a commodity, the yield $y$ could be represented by $y = c - s$ where $c$ is the convenience yield and $s$ is the rate of storage cost. Hence the cost of carry would be $r + s - c$ and the forward price would be calculated as $K_{T} = e^{(r+s-c)T}S(0)$
+- This formula could also have been demonstrated using the cash and carry arbitrage.
