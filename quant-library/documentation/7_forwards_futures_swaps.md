@@ -18,6 +18,8 @@
       - [Underlying Asset with Known Yield](#underlying-asset-with-known-yield)
       - [Underlying Asset with Dividends](#underlying-asset-with-dividends)
     - [FX Forwards](#fx-forwards)
+      - [Pricing FX Forwards](#pricing-fx-forwards)
+      - [Interest Rate Parity Relationship](#interest-rate-parity-relationship)
 
 ## Introduction
 
@@ -146,9 +148,9 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
 - Take a forward contract on zero-coupon bond maturing in 1 year and a risk-free interest rate of 3.5%.
 - If the bond currently has a market price of 925 USD, the forward price for a 6 month forward contract on this bond can be calculated as follows:
   - Assume the risk-free rate, $r = 0.035$, is continuously compounded.
-  - The value of the underlying $S$ at $t = 0$ is $925 \space USD$
+  - The value of the underlying $S$ at $t = 0$ is $925 \text{ USD}$
   - The forward contract expiration $T$ is $0.5$
-  - Taking the formula for the forward price a $K = e^{rT}S(0)$, the price of a 6 month forward contract on this bond is calculated as $e^{0.035 \times 2} \times 925 \Longrightarrow 941.33 \space USD$
+  - Taking the formula for the forward price a $K = e^{rT}S(0)$, the price of a 6 month forward contract on this bond is calculated as $e^{0.035 \times 2} \times 925 \Longrightarrow 941.33 \text{ USD}$
 - If one bond dealer offers a forward price of 950 USD, a riskless profit can be obtained as follows:
   - Borrow 925 USD and buy the underlying bond.
   - Enter into a short position in the forward contract with forward price 950 USD.
@@ -158,7 +160,7 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
     3. a debt valued at $e^{0.035t}(925)$ at time $t$.
   - This portfolio is held for 6 months, by which time the debt is worth 941.33 USD (this is also the fair forward price we calculated).
   - The short position in the forward contract can be exited by selling the bond for 950 USD.
-  - This leaves a profit of $950 - 941.33 = 8.67 \space USD$
+  - This leaves a profit of $950 - 941.33 = 8.67 \text{ USD}$
 - If another bond dealer offers a forward price of 935 USD, a riskless profit can be obtained as follows:
   - Enter into a short position in the underlying bond and receive 925 USD in cash to invest at the risk-free rate.
   - Enter into a long position in the forward contract with forward price 935 USD.
@@ -169,18 +171,18 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
   - This portfolio is held for 6 months, by which time the cash investment is worth 941.33 USD.
   - This cash investment can be used to exit the forward contract and buy the bond for the price of 935 USD.
   - The short position in the underlying bond can fulfilled using the purchased bond.
-  - This leaves a profit of $941.33 - 935 = 6.33 \space USD$
+  - This leaves a profit of $941.33 - 935 = 6.33 \text{ USD}$
 
 #### Stock (No Dividends) Example
 
 - Take a stock which does not pay dividends and is currently trading for 150 USD.
 - The price of a forward contract in 9 months time, assuming a risk-free interest rate of 4%, can be calculated as follows:
-  - Using the formula $K = e^{rT}S(0)$ where $r$ is the risk free interest rate ($4\%$), $T$ is the length of the contract ($0.75$), and $S(0)$ is the current price of the stock ($150 \space USD$), the forward price is $K = e^{0.04 \times 0.75} \times 150 = 154.57 \space USD$.
-- The value of the forward contract in 3 months $V(0.25)$, given the value of the stock in 3 months $S(0.25)$ is $130 \space USD$, can be calculated as follows:
-  - $V(0.25) = S(0.25) - e^{-r(T-0.25)}K \Longrightarrow V(0.25) = 130 - e^{-0.04(0.75 - 0.25)}(154.57) = -21.51 \space USD$
+  - Using the formula $K = e^{rT}S(0)$ where $r$ is the risk free interest rate ($4\%$), $T$ is the length of the contract ($0.75$), and $S(0)$ is the current price of the stock ($150 \text{ USD}$), the forward price is $K = e^{0.04 \times 0.75} \times 150 = 154.57 \text{ USD}$.
+- The value of the forward contract in 3 months $V(0.25)$, given the value of the stock in 3 months $S(0.25)$ is $130 \text{ USD}$, can be calculated as follows:
+  - $V(0.25) = S(0.25) - e^{-r(T-0.25)}K \Longrightarrow V(0.25) = 130 - e^{-0.04(0.75 - 0.25)}(154.57) = -21.51 \text{ USD}$
   - The negative value indicates that a long position in this forward contract would lose money.
-- The value of the forward contract in 3 months $V(0.25)$, given the value of the stock in 3 months $S(0.25)$ is $170 \space USD$, can be calculated as follows:
-  - $V(0.25) = S(0.25) - e^{-r(T-0.25)}K \Longrightarrow V(0.25) = 170 - e^{-0.04(0.75 - 0.25)}(154.57) = 18.49 \space USD$
+- The value of the forward contract in 3 months $V(0.25)$, given the value of the stock in 3 months $S(0.25)$ is $170 \text{ USD}$, can be calculated as follows:
+  - $V(0.25) = S(0.25) - e^{-r(T-0.25)}K \Longrightarrow V(0.25) = 170 - e^{-0.04(0.75 - 0.25)}(154.57) = 18.49 \text{ USD}$
   - The positive value indicates that a long position in this forward contract would make money.
 - Remember, a long position in a forward contract locks in a price to buy an asset.
   - If the value of the underlying asset goes down, the forward contract loses money as the asset is could be bought at a cheaper price on the market.
@@ -272,11 +274,42 @@ $$\boxed{K_{T} = e^{(r-y)T}S(0)}$$
 
 - Take a stock that is currently trading for 247 USD and pays dividends of 5 USD in 2 months, 5 months and 8 months time.
 - The price of a forward contract in 9 months time, assuming a risk-free interest rate of 1.5%, can be calculated as follows:
-  - Calculate the present value at time $t = 0$ of the stream of dividend payments: $I(0) = e^{-0.015(\frac{2}{12})}(5) + e^{-0.015(\frac{5}{12})}(5) + e^{-0.015(\frac{8}{12})}(5)$ which equals $14.91 \space USD$.
-  - The price of the forward contract is then calculated using $K_{T} = (S(0) - I)e^{rT} \Longrightarrow K = (247 - 14.91)e^{(0.015)(075)} = 234.72 \space USD$
+  - Calculate the present value at time $t = 0$ of the stream of dividend payments: $I(0) = e^{-0.015(\frac{2}{12})}(5) + e^{-0.015(\frac{5}{12})}(5) + e^{-0.015(\frac{8}{12})}(5)$ which equals $14.91 \text{ USD}$.
+  - The price of the forward contract is then calculated using $K_{T} = (S(0) - I)e^{rT} \Longrightarrow K = (247 - 14.91)e^{(0.015)(075)} = 234.72 \text{ USD}$
 - The value of a position at time $t$ is calculated by $V(t) = S(t) - I(t) - Ke^{-r(T-t)}$ where $I(t)$ is the present value of the remaining dividend payments between time $t$ and the end of the contract at time $t = T$.
 - A short position in 3 months, when the underlying share price is 220 USD, is calculated by negating the value of the position as follows:
   - $-V(t) = Ke^{-r(T-t)} - S(t) + I(t)$ where $I(0.25) = e^{-0.015(\frac{2}{12})}(5) + e^{-0.015(\frac{5}{12})}(5)$ as the dividends will be paid 2 months and 5 months after this point in time.
-  - The present value of the remaining dividends is therefore $I(0.25) = 9.96 \space USD$ which leads to the value of the short position in 3 months: $-V(0.25) = (234.72)e^{-0.015(0.75-0.25)} - 220 + 9.96 = 22.93 \space USD$
+  - The present value of the remaining dividends is therefore $I(0.25) = 9.96 \text{ USD}$ which leads to the value of the short position in 3 months: $-V(0.25) = (234.72)e^{-0.015(0.75-0.25)} - 220 + 9.96 = 22.93 \text{ USD}$
 
 ### FX Forwards
+
+- Foreign Exchange forward contracts will lock in a particular exchange rate between two currencies at the contract expiration date.
+- The notation used for foreign currencies is explained [here](1_introduction.md#foreign-currencies-fx) and uses $r_{f}$ for the foreign currency risk-free rate and $r_{d}$ or just $r$ for the domestic risk-free rate.
+- It is also assumed that any holding of foreign currency is invested at $r_{f}$ and so foreign currency holding can be modelled to be assets that pay a known yield $y = r_{f}$.
+
+#### Pricing FX Forwards
+
+- Let S(t) be the spot exchange rate at time $t$, so that $S(t)$ is the price in the domestic currency for 1 unit of the foreign currency.
+- $K_{T}$ is the forward price (or exchange rate) for a contract that expires at time $t = T$.
+- Using the formula derived for [pricing a forward contract fo an asset with known yield](#underlying-asset-with-known-yield), the FX forward rate for a contract expiring at time $T$ is given by:
+
+$$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
+
+#### Interest Rate Parity Relationship
+
+- The theory for pricing FX forwards in known independently in foreign currency economics as the interest rate parity relationship and can be derived using the cash and carry arbitrage.
+- Take a situation where a forward rate $K_{T}$ is being offered such that $K_{T} > e^{(r_{d}-r_{f})T}S(0)$.
+- This inequality can be rewritten as $Ke^{r_{f}T}\frac{1}{S(0)} > e^{r_{d}T}$.
+- Multiplying through by a notional amount of 1000 USD to give:
+  $$\underbrace{K}_{\text{conversion of foreign currency back to domestic at forward rate}} \times \underbrace{e^{r_{f}T}}_{\text{investing foreign currency holding at foreign risk-free rate}} \times \underbrace{\frac{1000}{S(0)}}_{\text{conversion of 1000 USD to foreign currency at } t = 0} > \underbrace{1000e^{r_{d}T}}_{\text{value at time } T \text{ of a 1000 USD debt borrowed at time } t = 0}$$
+- In other words, this inequality implies that that the seller of this FX forwards contract can make a riskless profit by:
+  1. borrowing 1000 USD at the domestic risk-free rate
+  2. converting this cash to a foreign currency
+  3. investing the converted cash at the foreign risk-free rate
+  4. converting the foreign cash back to domestic cash at the expiry, using the contracted rate $K_{T}$
+- Similarly, if $K_{T} < e^{(r_{d}-r_{f})T}S(0)$ then an arbitrage profit can be constructed by:
+  1. borrowing 1000 units of the foreign currency at the foreign risk-free rate
+  2. converting this cash to the domestic currency
+  3. investing the converted cash at the domestic risk-free rate
+  4. converting the domestic cash back to foreign cash at the expiry, using the contracted rate $K_{T}$
+- These inequalities cannot be present so $K_{T} = e^{(r_{d}-r_{f})T}S(0)$.
