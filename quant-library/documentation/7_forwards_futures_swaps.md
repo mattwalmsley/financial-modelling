@@ -1,6 +1,6 @@
-# Derivatives
+# Forwards, Futures, and Swaps
 
-- [Derivatives](#derivatives)
+- [Forwards, Futures, and Swaps](#forwards-futures-and-swaps)
   - [Introduction](#introduction)
     - [Derivative Products](#derivative-products)
     - [Derivative Markets](#derivative-markets)
@@ -13,8 +13,11 @@
       - [Zero Coupon Bond Example](#zero-coupon-bond-example)
       - [Stock (No Dividends) Example](#stock-no-dividends-example)
       - [Asset Paying a Known Income Example](#asset-paying-a-known-income-example)
-    - [Pricing Contracts on an Underlying Asset with Known Income](#pricing-contracts-on-an-underlying-asset-with-known-income)
-    - [Pricing Contracts on an Underlying Asset with Known Yield](#pricing-contracts-on-an-underlying-asset-with-known-yield)
+    - [Pricing Forward Contracts](#pricing-forward-contracts)
+      - [Underlying Asset with Known Income](#underlying-asset-with-known-income)
+      - [Underlying Asset with Known Yield](#underlying-asset-with-known-yield)
+      - [Underlying Asset with Dividends](#underlying-asset-with-dividends)
+    - [FX Forwards](#fx-forwards)
 
 ## Introduction
 
@@ -217,7 +220,9 @@ $$\boxed{K_{T} = (S(0) - I)e^{rT}}$$
     2. pay the future value of the accrued income calculated as $Ie{rT}$ to the owner of the underlying asset.
   - This inequality leads to an arbitrage profit equal to $S(0)e^{rT} - \left(K_{T} + Ie^{rT}\right)$.
 
-### Pricing Contracts on an Underlying Asset with Known Income
+### Pricing Forward Contracts
+
+#### Underlying Asset with Known Income
 
 - Extending the notation for the value of a forward contract (long position) to: $V(t;K,T)$ where $K$ is the forward price and $T$ is the expiration date.
   - The fair forward price for a forward contract, as per the prevailing market conditions at time $t$, can be denoted as $K_{T}(t)$.
@@ -238,7 +243,7 @@ $$V(t;K_,T) = (K_{T}(t) - K)e^{-r(T-t)}$$
 $$V(t) = \left((S(t) - I(t))e^{r(T-t)} - K\right)e^{-r(T-t)}$$
 $$\boxed{ V(t) = S(t) - I(t) - Ke^{-r(T-t)}}$$
 
-### Pricing Contracts on an Underlying Asset with Known Yield
+#### Underlying Asset with Known Yield
 
 - For an underlying with price $S(t)$ and a dividend yield $y$, where all dividends are reinvested and an initial allocation $e^{-yT}$, the value of a position at time $t$ can be calculated as $e^{-yT}e^{yt}S(t) \equiv e^{-y(T-t)}S(t)$ as shown in the [dividend yields](./4_equities.md#dividends) section.
   - At time $t = T$ the position will therefore have a value of $S(T)$ and at time $t = 0$ the value (initial investment) will be equal to $e^{-yT}S(0)$.
@@ -262,3 +267,16 @@ $$\boxed{K_{T} = e^{(r-y)T}S(0)}$$
 - The cost of carry is represented by $r - y$ which is the finance charge net the income paid by the asset.
 - If the underlying asset was a commodity, the yield $y$ could be represented by $y = c - s$ where $c$ is the convenience yield and $s$ is the rate of storage cost. Hence the cost of carry would be $r + s - c$ and the forward price would be calculated as $K_{T} = e^{(r+s-c)T}S(0)$
 - This formula could also have been demonstrated using the cash and carry arbitrage.
+
+#### Underlying Asset with Dividends
+
+- Take a stock that is currently trading for 247 USD and pays dividends of 5 USD in 2 months, 5 months and 8 months time.
+- The price of a forward contract in 9 months time, assuming a risk-free interest rate of 1.5%, can be calculated as follows:
+  - Calculate the present value at time $t = 0$ of the stream of dividend payments: $I(0) = e^{-0.015(\frac{2}{12})}(5) + e^{-0.015(\frac{5}{12})}(5) + e^{-0.015(\frac{8}{12})}(5)$ which equals $14.91 \space USD$.
+  - The price of the forward contract is then calculated using $K_{T} = (S(0) - I)e^{rT} \Longrightarrow K = (247 - 14.91)e^{(0.015)(075)} = 234.72 \space USD$
+- The value of a position at time $t$ is calculated by $V(t) = S(t) - I(t) - Ke^{-r(T-t)}$ where $I(t)$ is the present value of the remaining dividend payments between time $t$ and the end of the contract at time $t = T$.
+- A short position in 3 months, when the underlying share price is 220 USD, is calculated by negating the value of the position as follows:
+  - $-V(t) = Ke^{-r(T-t)} - S(t) + I(t)$ where $I(0.25) = e^{-0.015(\frac{2}{12})}(5) + e^{-0.015(\frac{5}{12})}(5)$ as the dividends will be paid 2 months and 5 months after this point in time.
+  - The present value of the remaining dividends is therefore $I(0.25) = 9.96 \space USD$ which leads to the value of the short position in 3 months: $-V(0.25) = (234.72)e^{-0.015(0.75-0.25)} - 220 + 9.96 = 22.93 \space USD$
+
+### FX Forwards
