@@ -1,7 +1,7 @@
 # Forwards, Futures, and Swaps
 
 - [Forwards, Futures, and Swaps](#forwards-futures-and-swaps)
-  - [Introduction](#introduction)
+  - [Derivatives Introduction](#derivatives-introduction)
     - [Derivative Products](#derivative-products)
     - [Derivative Markets](#derivative-markets)
     - [Assumptions](#assumptions)
@@ -20,9 +20,10 @@
     - [FX Forwards](#fx-forwards)
       - [Pricing FX Forwards](#pricing-fx-forwards)
       - [Interest Rate Parity Relationship](#interest-rate-parity-relationship)
-      - [Example 1:](#example-1)
+      - [Example 1: Euros and US Dollars](#example-1-euros-and-us-dollars)
+      - [Example 2: Australian Dollars and US Dollars](#example-2-australian-dollars-and-us-dollars)
 
-## Introduction
+## Derivatives Introduction
 
 - Derivatives are financial products or assets whose structure and value is derived from another asset.
 - The base asset is called the **underlying asset** (generally referred to as the underlying).
@@ -315,22 +316,24 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
   4. converting the domestic cash back to foreign cash at the expiry, using the contracted rate $K_{T}$
 - These inequalities cannot be present so $K_{T} = e^{(r_{d}-r_{f})T}S(0)$.
 
-#### Example 1: 
+#### Example 1: Euros and US Dollars
 
 - Using a spot EUR/USD exchange rate of 1.20 USD, a domestic USD risk-free rate of 5% and a Eurozone risk-free rate of 8%, the price of a 6 month EUR/USD FX forward contract can be calculated as follows:
   - Allocating the standard notation as: $S(0) = 1.20 \text{ USD}$, $r_{d} = 5\%$, $r_{f} = 8\%$, $T = 0.5$.
   - Using $K_{T} = e^{(r_{d}-r_{f})T}S(0)$ and substituting in the values: $K_{T} = e^{(0.0.5-0.08)(0.5)}(1.2)$, the fair forward rate is $1.1821 \text{ USD}$.
 - If a forward contract in this example had a price of 1.21 USD, an arbitrage profit could be obtained as follows:
-  1. Borrow a notional amount of 1000 USD and convert into EUR at the spot rate of 1.2 USD to give 833.33 EUR.
+  1. Borrow a notional amount of 1000 USD and convert into EUR at the spot rate of 1.20 USD to give 833.33 EUR.
   2. Enter a forward contract to convert EUR to USD in 6 months time at a rate of 1.21 USD.
   3. Invest the 833.33 EUR at the foreign risk-free rate of 8% for 6 months to give a cash value of $(833.33)e^{(0.08)(0.5)} = 867.34 \text{ EUR}$.
   4. The 867.34 EUR can be converted back into USD at a rate of 1.21 USD to give 1049.48 USD.
   5. After 6 months, the debt from borrowing 1000 USD will be valued at $(1000)e^{(0.05)(0.5)} = 1025.32 \text{ USD}$
   6. This leaves an arbitrage profit of $1049.48 - 1025.32 = 24.16 \text{ USD}$
 - Similar, if the forward contract price was 1.15 USD then an arbitrage profit could be obtained as follows:
-  1. Borrow a notional amount of 1000 USD and convert into EUR at the spot rate of 1.2 USD to give 833.33 EUR.
-  1. Enter a forward contract to convert EUR to USD in 6 months time at a rate of 1.21 USD.
-  2. Invest the 833.33 EUR at the foreign risk-free rate of 8% for 6 months to give a cash value of $(833.33)e^{(0.08)(0.5)} = 867.34 \text{ EUR}$.
-  3. The 867.34 EUR can be converted back into USD at a rate of 1.21 USD to give 1049.48 USD.
-  4. After 6 months, the debt from borrowing 1000 USD will be valued at $(1000)e^{(0.05)(0.5)} = 1025.32 \text{ USD}$
-  5. This leaves an arbitrage profit of $1049.48 - 1025.32 = 24.16 \text{ USD}$
+  1. Borrow a notional amount of 1000 EUR and convert into USD at the spot rate of 1.20 USD to give 1200 EUR.
+  2. Enter a forward contract to convert USD to EUR in 6 months time at a rate of 1.15 USD.
+  3. Invest the 1200 USD at the domestic risk-free rate of 5% for 6 months to give a cash value of $(1200)e^{(0.05)(0.5)} = 1230.38 \text{ USD}$.
+  4. After 6 months, the debt from borrowing 1000 EUR will be valued at $(1000)e^{(0.08)(0.5)} = 1040.81 \text{ EUR}$ which can be paid off using USD, converted at the forward rate of 1.15 USD. At this exchange rate, 1196.93 USD will be needed to pay off the 1040.81 EUR debt.
+  5. This leaves an arbitrage profit of $1230.38 - 1196.93 = 33.45 \text{ USD}$
+
+#### Example 2: Australian Dollars and US Dollars
+- 
