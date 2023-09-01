@@ -320,7 +320,7 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
 
 - Using a spot EUR/USD exchange rate of 1.20 USD, a domestic USD risk-free rate of 5% and a Eurozone risk-free rate of 8%, the price of a 6 month EUR/USD FX forward contract can be calculated as follows:
   - Allocating the standard notation as: $S(0) = 1.20 \text{ USD}$, $r_{d} = 5\%$, $r_{f} = 8\%$, $T = 0.5$.
-  - Using $K_{T} = e^{(r_{d}-r_{f})T}S(0)$ and substituting in the values: $K_{T} = e^{(0.0.5-0.08)(0.5)}(1.2)$, the fair forward rate is $1.1821 \text{ USD}$.
+  - Using $K_{T} = e^{(r_{d}-r_{f})T}S(0)$ and substituting in the values: $K_{T} = e^{(0.05-0.08)(0.5)}(1.2)$, the fair forward rate is $1.1821 \text{ USD}$.
 - If a forward contract in this example had a price of 1.21 USD, an arbitrage profit could be obtained as follows:
   1. Borrow a notional amount of 1000 USD and convert into EUR at the spot rate of 1.20 USD to give 833.33 EUR.
   2. Enter a forward contract to convert EUR to USD in 6 months time at a rate of 1.21 USD.
@@ -336,4 +336,12 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
   5. This leaves an arbitrage profit of $1230.38 - 1196.93 = 33.45 \text{ USD}$
 
 #### Example 2: Australian Dollars and US Dollars
-- 
+
+- Using a spot AUD/USD exchange rate of 0.75 USD, a domestic USD risk-free rate of 4% and an Australian risk-free rate of 6%, the price of a 2 month AUD/USD FX forward contract can be calculated as follows:
+  - Allocating the standard notation as: $S(0) = 0.75 \text{ USD}$, $r_{d} = 4\%$, $r_{f} = 6\%$, $T = \frac{1}{6}$.
+  - Using $K_{T} = e^{(r_{d}-r_{f})T}S(0)$ and substituting in the values: $K_{T} = e^{(0.04-0.06)(\frac{1}{6})}(0.75)$, the fair forward rate is $0.7475 \text{ USD}$.
+- The value of the forward contract in 1 month time ($t=\frac{1}{12}$) when the exchange rate ($S(t)$) is 0.71 USD can be calculated by:
+$$\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}}$$
+$$\text{Where } K_{T} = 0.7475$$
+$$V(t) = e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\frac{1}{12})}(0.7475) = 0.03855 \text{ USD}$$
+
