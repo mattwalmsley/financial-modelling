@@ -22,6 +22,9 @@
       - [Interest Rate Parity Relationship](#interest-rate-parity-relationship)
       - [Example 1: Euros and US Dollars](#example-1-euros-and-us-dollars)
       - [Example 2: Australian Dollars and US Dollars](#example-2-australian-dollars-and-us-dollars)
+  - [Futures](#futures)
+    - [Futures Exchanges and Products](#futures-exchanges-and-products)
+    - [Futures Prices](#futures-prices)
 
 ## Derivatives Introduction
 
@@ -304,7 +307,7 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
 - This inequality can be rewritten as $Ke^{r_{f}T}\frac{1}{S(0)} > e^{r_{d}T}$.
 - Multiplying through by a notional amount of 1000 USD to give:
   $$\underbrace{K}_{\text{conversion of foreign currency back to domestic at forward rate}} \times \underbrace{e^{r_{f}T}}_{\text{investing foreign currency holding at foreign risk-free rate}} \times \underbrace{\frac{1000}{S(0)}}_{\text{conversion of 1000 USD to foreign currency at } t = 0} > \underbrace{1000e^{r_{d}T}}_{\text{value at time } T \text{ of a 1000 USD debt borrowed at time } t = 0}$$
-- In other words, this inequality implies that that the seller of this FX forwards contract can make a riskless profit by:
+- In other words, this inequality implies that that the seller of this FX forward contract can make a riskless profit by:
   1. borrowing 1000 USD at the domestic risk-free rate
   2. converting this cash to a foreign currency
   3. investing the converted cash at the foreign risk-free rate
@@ -345,3 +348,31 @@ $$\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}}$$
 $$\text{Where } K_{T} = 0.7475$$
 $$V(t) = e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\frac{1}{12})}(0.7475) = 0.03855 \text{ USD}$$
 
+## Futures
+
+- A futures contract is very similar to a forward contract in the sense that it is a contract between a buyer and a seller to sell a specific asset at a fixed time in the future at a price which is agreed when the contract is initiated.
+- The differences between a futures contracts and a forward contracts is that futures contracts are traded on exchanges and forward contracts are private deals between two counterparties, traded over-the-counter (OTC).
+- Futures contracts will closely track the cash price and are therefore used for a number of reasons:
+  - provide exposure to the underlying asset
+  - risk management purposes
+  - speculation on the underlying assets
+  - leverage
+- Examples of futures exchanges include the Chicago Mercantile Exchange (CME) and its subsidiaries: Chicago Board of Trade (CBOT), New York Mercantile Exchange (NYMEX).
+
+### Futures Exchanges and Products
+
+- Exchanges are responsible for creating futures contracts and therefore dictate the exact specification (expiry dates, delivery, etc.) and underlying assets for these contracts.
+- Futures Contracts are available on the following underlying assets:
+  - **Agricultural commodities**: wheat, corn, live cattle, dairy, orange juice, etc.
+  - **Energy commodities**: crude oil, natural gas, power, etc.
+  - **Metals**: gold, nickel copper, etc.
+  - **Equities**: indices, single stocks
+  - **Fixed income**: US Treasury notes and bonds, interest rates
+  - **Foreign Currencies**
+- The underlying assets will need to adhere to certain requirements to be accepted - both qualitatively (e.g. the grade of wheat, the maturity of bonds, etc.) and quantitatively (e.g. 10,000 bushels of corn, 100,000 USD bond face value etc.)
+- The **delivery month** is the month when the delivery of the underlying asset must take place and will often be used to distinguish different futures contract - e.g. 'the March corn futures contract'.
+- Certain assets will also need a **delivery location** specified in the contract too.
+- Some ambiguities are left in a futures contract so the seller (short position) in the contract has optionality over the time and location to deliver the underlying asset.
+- Only a small fraction of futures contracts are held until expiry and most will be terminated or closed out prior to expiry by the long position holder entering into a short position on the contract - the exchange will then terminate both positions.
+
+### Futures Prices
