@@ -25,6 +25,10 @@
   - [Futures](#futures)
     - [Futures Exchanges and Products](#futures-exchanges-and-products)
     - [Futures Prices](#futures-prices)
+      - [Futures Prices versus Forward Contract Prices](#futures-prices-versus-forward-contract-prices)
+    - [Futures Marking to Market (Settlement)](#futures-marking-to-market-settlement)
+      - [Marking to Market Example](#marking-to-market-example)
+      - [Margin Accounts](#margin-accounts)
 
 ## Derivatives Introduction
 
@@ -376,3 +380,52 @@ $$V(t) = e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\fra
 - Only a small fraction of futures contracts are held until expiry and most will be terminated or closed out prior to expiry by the long position holder entering into a short position on the contract - the exchange will then terminate both positions.
 
 ### Futures Prices
+
+- Similar to forward contracts prices, futures prices are denoted by $K_{T}(t)$ and futures contracts will have 0 value when being entered into.
+- The futures prices are decide by supply and demand forces on futures exchanges and therefore $K_{T}(t)$ represents the market price observed at time $t$.
+- The market for the underlying asset will clearly have an effect on the futures market and, in simple terms, the futures prices are expected to represent the market's expectation for the future spot price.
+  - This can be expressed in quantitative terms as $K_{T}(t) = E(S(T)|\mathcal{F}_{t})$ where $E(\cdot|\mathcal{F}_{t})$ represents an expectation conditional on the knowledge available at time $t$.
+  - Arbitrage opportunities would be present if the futures price systematically underestimated or overestimated the spot price at the expiration of the futures contract.
+- In practice however, futures prices will consider a risk premium that hedgers are willing to pay for protection from price risk and will agree to less favourable futures prices.
+  - The futures price will be an overestimate or underestimate depending on whether the hedgers in the market are net long or short in their positions.
+- The general consensus is that a futures price will be determined by a combination of both the predicted spot price at the futures expiration and the risk premium that hedgers are willing to pay.
+- **The futures price may be quoted for a single unit where as the contract size will be for a specified nuber of units**.
+  - E.g. Crude oil futures are quoted per barrel of oil but the contract size for a NYMEX oil futures is 1000 barrels. Futures positions are therefore calculated by multiplying the futures contract price by the contract size and then by the number of contracts.
+
+#### Futures Prices versus Forward Contract Prices
+
+- The basic financial structure between forwards and futures is the same; however, the institutional differences between them will lead to price differences.
+- Denoting a futures price as $K_{T}(t)$ and a forwards price as $F_{T}(t)$ at time $t$, there will rarely be a case where $K_{T}(t) = F_{T}(t)$ due to the following reasons:
+  - the difference in price transparency between the less visible over-the-counter (OTC) forwards market and the publicly visible futures exchanges.
+  - the presence of counterparty credit risk for forwards contracts (futures exchange acts as counterparty for futures contracts which reduces the counterparty credit risk to almost zero).
+  - futures positions will be **marked to market** or settled everyday so there will be cash flow between counterparties (by contrast, cash flow only occurs for forwards at the expiration of the contract).
+- In most markets, prices for forwards and futures are closely aligned due to the potential for arbitrage opportunities if large price differences are observed.
+
+### Futures Marking to Market (Settlement)
+
+- The days between the start and expiration of a futures contract can be denoted by $t_{1}, t_{2},...,t_{N} \equiv T$.
+- Between day 1 ($t_{1}$) and day 2 ($t_{2}$), the futures price will change from $K_{T}(t_{1})$ to $K_{T}(t_{2})$.
+- Taking the case where $K_{T}(t_{2}) < K_{T}(t_{1})$:
+  - The seller of the futures contract would  be in the **superior** position and the buyer of the futures contract in the **inferior** position.
+  - As part of the daily settlement process at the end of day 2, the exchange would demand a cash payment from the long position holder for an amount equal to $K_{T}(t_{1}) - K_{T}(t_{2})$ and give this amount to the short position holder.
+- Similarly for the case where $K_{T}(t_{2}) > K_{T}(t_{1})$:
+  - The seller of the futures contract would be in the **inferior** position and the buyer of the futures contract in the **superior** position.
+  - As part of the daily settlement process at the end of day 2, the exchange would demand a cash payment from the short position holder for an amount equal to $K_{T}(t_{2}) - K_{T}(t_{1})$ and give this amount to the long position holder.
+- The cash flows at settlement between $t_{i}$ and $t_{i+1}$ will be calculated for the actual futures position by:
+$$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-K_{T}(t_{i}))$$
+
+#### Marking to Market Example
+
+- The COMEX Silver futures contract which has a contract size of 5000 ounces.
+- If two long positions in the futures contract were taken, the settlement cash flows can calculated by $2 \times 5000 \times (K_{T}(t_{i+1})-K_{T}(t_{i}))$ using the following example settlement prices :
+  - $K_{T}(t_{1}) = 16.20 \text{ USD/ounce}$
+  - $K_{T}(t_{2}) = 16.50 \text{ USD/ounce}$
+  - $K_{T}(t_{3}) = 16.15 \text{ USD/ounce}$
+  - $K_{T}(t_{4}) = 16.00 \text{ USD/ounce}$
+- On day $t_{2}$ the cash flow will be $2 \times 5000 \times (16.50 - 16.20)) = 3000 \text{ USD}$ so the long position will be credited by this amount (exchange will deliver a cash payment to the account).
+- On day $t_{3}$ the cash flow will be $2 \times 5000 \times (16.15 - 16.50)) = -3500 \text{ USD}$ so the long position will be debited by this amount (exchange will demand a cash payment from the account).
+- On day $t_{4}$ the cash flow will be $2 \times 5000 \times (16.00 - 16.15)) = -1500 \text{ USD}$ so the long position will be debited by this amount (exchange will demand a cash payment from the account).
+
+#### Margin Accounts
+
+- 
