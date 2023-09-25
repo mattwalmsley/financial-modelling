@@ -428,4 +428,13 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
 
 #### Margin Accounts
 
-- 
+- When a new futures position is opened, the investor must deposit an **initial margin** in cash in a margin **account** with the exchange.
+- The margin account is used during the exchange's settlement process, depositing or withdrawing amounts as required.
+- The balance of the margin account must not fall below a set level - known as the **maintenance margin**. This is smaller the the initial margin amount.
+- The exchange will issue a **margin call** if the balance falls below the maintenance margin requirement.
+- The main purpose of margin accounts is to ensure futures investors are able to meet the requirements for the daily settlement process - i.e. this is the exchange protecting itself against counterparty credit risk.
+- Using the [marking to market example](./7_forwards_futures_swaps.md#marking-to-market-example) and assuming a initial margin requirement of 3,500 USD and a maintenance margin requirement of 3,000 USD, the flows into and out of the margin account can be shown as follows:
+  - A long position in 2 contracts requires a margin deposit of $2 \times 3500 \text{ USD} = 7000 \text{ USD}$, i.e. the starting balance of the margin account.
+  - On day two, 3000 USD is deposited into the account leading to a balance in the margin account of 10, 000 USD.
+  - On day three, 3500 USD is withdrawn from the account leading to a balance in the margin account of 6,500 USD. This is above the maintenance margin requirement of $2 \times 3000 \text{ USD} = 6000 \text{ USD}$.
+  - On day four, 1500 USD is withdrawn from the account leading to a balance in the margin account of 5,000 USD. This is now below the maintenance margin requirement and an additional 2,000 USD will be need to be deposited to reach the initial margin requirement of 7000 USD. Otherwise, the positions will be closed.
