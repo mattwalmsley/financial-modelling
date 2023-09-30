@@ -25,10 +25,14 @@
   - [Futures](#futures)
     - [Futures Exchanges and Products](#futures-exchanges-and-products)
     - [Futures Prices](#futures-prices)
+      - [Convergence of Futures Prices to Spot Prices](#convergence-of-futures-prices-to-spot-prices)
       - [Futures Prices versus Forward Contract Prices](#futures-prices-versus-forward-contract-prices)
     - [Futures Marking to Market (Settlement)](#futures-marking-to-market-settlement)
       - [Marking to Market Example](#marking-to-market-example)
       - [Margin Accounts](#margin-accounts)
+      - [Futures Settlement versus Forwards Settlements](#futures-settlement-versus-forwards-settlements)
+    - [Futures Hedging](#futures-hedging)
+      - [Cash Market Exposure](#cash-market-exposure)
 
 ## Derivatives Introduction
 
@@ -167,7 +171,7 @@ $$\boxed{K_{T} = e^{rT}S(0)}$$
     1. the short forward position
     2. the bond
     3. a debt valued at $e^{0.035t}(925)$ at time $t$.
-  - This portfolio is held for 6 months, by which time the debt is worth 941.33 USD (this is also the fair forward price we calculated).
+  - This portfolio is held for 6 months, by which time the debt is worth 941.33 USD (this is also the fair forward price that was calculated).
   - The short position in the forward contract can be exited by selling the bond for 950 USD.
   - This leaves a profit of $950 - 941.33 = 8.67 \text{ USD}$
 - If another bond dealer offers a forward price of 935 USD, a riskless profit can be obtained as follows:
@@ -268,7 +272,7 @@ $$\boxed{ V(t) = S(t) - I(t) - Ke^{-r(T-t)}}$$
   - At time $t$ the allocation of the underlying asset will be worth $e^{-y(T-t)}S(t)$ and the debt will be worth $-e^{rT}e^{-rT}K_{T} \equiv -e^{-r(T-t)}K_{T}$.
   - The value of the portfolio at time $t$ is therefore calculated as $\boxed{V(t) = e^{-y(T-t)}S(t) - e^{-r(T-t)}K_{T}}$.
     - This portfolio replicates the forward payoff because at time $t = T$, the portfolio will be $V(T) = S(T) - K_{T}$ and by the Law of One Price, $V(T)$ is the value of the contract at any time $t \leq T$.
-  - At time $t = 0$, the value of the portfolio is calculated as $V(T) = e^{-y(T)}S(0) - e^{-r(T)}K_{T}$ and given the value of the forward contract at time $t = 0$ must equal 0, we can calculate the forward price $K_{T}$ as follows:
+  - At time $t = 0$, the value of the portfolio is calculated as $V(T) = e^{-y(T)}S(0) - e^{-r(T)}K_{T}$ and given the value of the forward contract at time $t = 0$ must equal 0, the forward price $K_{T}$ can be calculated as follows:
 $$V(0) = 0$$
 $$e^{-y(T)}S(0) - e^{-r(T)}K_{T} = 0$$
 $$e^{-y(T)}S(0) = e^{-r(T)}K_{T}$$
@@ -386,18 +390,36 @@ $$V(t) = e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\fra
 - The market for the underlying asset will clearly have an effect on the futures market and, in simple terms, the futures prices are expected to represent the market's expectation for the future spot price.
   - This can be expressed in quantitative terms as $K_{T}(t) = E(S(T)|\mathcal{F}_{t})$ where $E(\cdot|\mathcal{F}_{t})$ represents an expectation conditional on the knowledge available at time $t$.
   - Arbitrage opportunities would be present if the futures price systematically underestimated or overestimated the spot price at the expiration of the futures contract.
-- In practice however, futures prices will consider a risk premium that hedgers are willing to pay for protection from price risk and will agree to less favourable futures prices.
+  - For spot prices $S(t)$ and for a cost of carry $c$, futures price at time $t$ are expected to have the following relationship:
+$$\boxed{K_{T}(t) \approx e^{c(T-t)}S(T)}$$
+- Futures prices will also consider a risk premium that hedgers are willing to pay for protection from price risk and will agree to less favourable futures prices.
   - The futures price will be an overestimate or underestimate depending on whether the hedgers in the market are net long or short in their positions.
 - The general consensus is that a futures price will be determined by a combination of both the predicted spot price at the futures expiration and the risk premium that hedgers are willing to pay.
-- **The futures price may be quoted for a single unit where as the contract size will be for a specified nuber of units**.
+- It should be noted that the current spot price does not usually determine the futures prices, and in some markets it is the futures prices that actually drive the current spot price.
+- **The futures price may be quoted for a single unit where as the contract size will be for a specified number of units**.
   - E.g. Crude oil futures are quoted per barrel of oil but the contract size for a NYMEX oil futures is 1000 barrels. Futures positions are therefore calculated by multiplying the futures contract price by the contract size and then by the number of contracts.
+- As shown, the delivery process for futures contracts is a critical process for relating the spot price to the futures price.
+
+#### Convergence of Futures Prices to Spot Prices
+
+- As time $t$ approaches the expiration date $T$, the futures price and spot price will come together (converge).
+- During the delivery month, the futures price must equal (or be very close to) the spot price: $K_{T}(T) = S(T)$.
+- This relationship can be validated using the arbitrage argument:
+  - Taking the case of $K_{T}(T) > S(T)$ in the expiration/delivery month, an arbitrage profit can be realized as follow:
+    1. take a short position in the futures contract, receiving $K_T(T)$
+    2. purchase the underlying asset at the spot price, paying $S(T)$
+    3. immediately make delivery on the futures contract and receive an arbitrage profit of $K_T(T) - S(T)$
+  - For the opposite case where $K_{T}(T) < S(T)$, an arbitrage profit can be obtained in a similar way:
+    1. take a long position in the futures contract, paying $K_{T}(T)$
+    2. receive the underlying asset at delivery of the futures contract
+    3. sell the underlying asset on the spot market, receiving $S(T)$ and obtaining an arbitrage profit of $S(T) - K_{T}(T)$
 
 #### Futures Prices versus Forward Contract Prices
 
 - The basic financial structure between forwards and futures is the same; however, the institutional differences between them will lead to price differences.
 - Denoting a futures price as $K_{T}(t)$ and a forwards price as $F_{T}(t)$ at time $t$, there will rarely be a case where $K_{T}(t) = F_{T}(t)$ due to the following reasons:
   - the difference in price transparency between the less visible over-the-counter (OTC) forwards market and the publicly visible futures exchanges.
-  - the presence of counterparty credit risk for forwards contracts (futures exchange acts as counterparty for futures contracts which reduces the counterparty credit risk to almost zero).
+  - the presence of counterparty credit risk for forward contracts (futures exchange acts as counterparty for futures contracts which reduces the counterparty credit risk to almost zero).
   - futures positions will be **marked to market** or settled everyday so there will be cash flow between counterparties (by contrast, cash flow only occurs for forwards at the expiration of the contract).
 - In most markets, prices for forwards and futures are closely aligned due to the potential for arbitrage opportunities if large price differences are observed.
 
@@ -438,3 +460,29 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
   - On day two, 3000 USD is deposited into the account leading to a balance in the margin account of 10, 000 USD.
   - On day three, 3500 USD is withdrawn from the account leading to a balance in the margin account of 6,500 USD. This is above the maintenance margin requirement of $2 \times 3000 \text{ USD} = 6000 \text{ USD}$.
   - On day four, 1500 USD is withdrawn from the account leading to a balance in the margin account of 5,000 USD. This is now below the maintenance margin requirement and an additional 2,000 USD will be need to be deposited to reach the initial margin requirement of 7000 USD. Otherwise, the positions will be closed.
+
+#### Futures Settlement versus Forwards Settlements
+
+- First consider the [cash settlement](./7_forwards_futures_swaps.md#settlement) process for forward contracts.
+  - The long position in a forward contract is obligated to receive/pay the forward payoff at the expiration date.
+  - The [forward payoff](./7_forwards_futures_swaps.md#payoffs) amount will be equal to $S(T) - K$ and can be modelled as a cash flow where, if the payoff is negative, the long position holder must pay the short position holder.
+- In the settlement process of a futures contract, the long position holder has the obligation to receive a stream of daily cash flows over the duration of the contract: $[K_{T}(t_{2}) - K_{T}(t_{1})], [K_{T}(t_{2}) - K_{T}(t_{1})], ... , [K_{T}(T) - K_{T}(t_{N-1})]$.
+  - Given that futures contracts can be terminated before delivery, a futures position can be viewed as an obligation to receive/pay daily amounts up until the expiration or termination of the contracts.
+- With a forward contract, no cash payments are made until the contract expiry when the transaction takes places for the contract forward price.
+- The modelling methods used to derive the forward price and contract value ([cash and carry arbitrage](./7_forwards_futures_swaps.md#cash-and-carry-arbitrage) and replication arguments) are therefore not applicable to futures contracts.
+
+### Futures Hedging
+
+#### Cash Market Exposure
+
+- As discussed, the futures prices are strongly linked to the spot prices of their underlying assets:
+  - The futures price and spot price converge together at expiration: $K_{T}(T) = S(T)$
+  - There is an approximate relationship that relates the futures price at time $t$ to the spot price: $K_{T}(t) \approx e^{c(T-t)}S(t)$ where $c$ is the cost of carry.
+    - This is due to arbitrage opportunities becoming present with any large deviations from this approximation.
+    - Any resulting arbitrage opportunities being taken will force the prices closer together.
+- Exposure to the cash market can therefore be obtained by taking a futures position and can be proven as follows:
+  - Taking an initial case where the cost of carry $c$ can assumed to be zero: $c = 0$, the futures contract price is equal to the underlying spot price: $K_{T}(t) = S(t)$.
+  - Through the settlement process, the value of a long futures position will following the change in value of the underlying spot price: $K_{T}(t_{2}) - K_{T}(t_{1}) = S(t_{2}) - S(t_{1})$ per unit.
+  - This change in value will be scaled up if the contract size is $C$ units and the position size is $J$ contracts: $JC(K_{T}(t_{2}) - K_{T}(t_{1})) = JC(S(t_{2}) - S(t_{1}))$.
+  - For a long position of J futures contracts, the daily profit and losses will exactly match the profit and losses of holding JC units of the underlying asset.
+  - A short position of J futures contracts would be exposed to reversed value changes: $JC(K_{T}(t_{1}) - K_{T}(t_{2})) = JC(S(t_{1}) - S(t_{2}))$.
