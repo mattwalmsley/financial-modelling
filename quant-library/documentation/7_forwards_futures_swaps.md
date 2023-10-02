@@ -33,6 +33,7 @@
       - [Futures Settlement versus Forwards Settlements](#futures-settlement-versus-forwards-settlements)
     - [Futures Hedging](#futures-hedging)
       - [Cash Market Exposure](#cash-market-exposure)
+      - [Risk Management using Futures Hedging](#risk-management-using-futures-hedging)
 
 ## Derivatives Introduction
 
@@ -486,3 +487,22 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
   - This change in value will be scaled up if the contract size is $C$ units and the position size is $J$ contracts: $JC(K_{T}(t_{2}) - K_{T}(t_{1})) = JC(S(t_{2}) - S(t_{1}))$.
   - For a long position of J futures contracts, the daily profit and losses will exactly match the profit and losses of holding JC units of the underlying asset.
   - A short position of J futures contracts would be exposed to reversed value changes: $JC(K_{T}(t_{1}) - K_{T}(t_{2})) = JC(S(t_{1}) - S(t_{2}))$.
+
+#### Risk Management using Futures Hedging
+
+- Price risk in an asset can be controlled through hedging with futures contracts due to the exposure futures contracts have to the underlying asset's cash market.
+- A **long cash position** can be hedged with a **short futures position**, and similarily, a **short cash position** can be hedged with a **long futures position**.
+- For a cash position containing $N$ units of an asset at a price per unit of $S(t)$, the number of futures contracts of contract size $C$ required to hedge the entire position would be $J = \frac{N}{C}$.
+  - For the case that $\frac{N}{C}$ is not an integer, $J$ would be rounded up to the nearest integer.
+- A futures position that fully hedges a cash position is called a **unitary hedge**.
+- Denote the value of a portfolio containing the underlying assets and futures positions required for the cash position to be unitary hedged as $W(t)$.
+  - For a position that is long $N$ units of the underlying asset (cash position) and short $J$ futures contracts (futures position) the portfolio value is: $W(t) = NS(t) + \text{ Short Futures Position Value}$.
+  - The 1-day change in the portfolio value is therefore: 
+$$\Delta W(t) = \Delta \text{Cash} + \Delta \text{Futures}$$
+$$ \Delta W(t)= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C}$$
+$$\Delta W(t) = N \Delta S(t)- N \Delta K_{T}(t)$$
+$$\Delta W(t) = N(S(t_{2}) - S(t_{1}))- N(K_{T}(t_{2}) - K_{T}(t_{1})) \text{ where } K_{T}(t_{2}) - K_{T}(t_{1}) = S(t_{2}) - S(t_{1})$$
+$$\Delta W(t) = N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1}))$$
+$$ \therefore \Delta W(t) = 0$$
+- As shown, any changes in the price of a underlying asset, in this idealised scenario, has no effect on the value of a unitary hedged portfolio.
+  - This is known as a **perfect hedge**.
