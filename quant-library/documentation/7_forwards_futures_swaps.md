@@ -34,6 +34,8 @@
     - [Futures Hedging](#futures-hedging)
       - [Cash Market Exposure](#cash-market-exposure)
       - [Risk Management using Futures Hedging](#risk-management-using-futures-hedging)
+      - [Futures Hedging Example 1: Oil Refinery](#futures-hedging-example-1-oil-refinery)
+      - [Basis Risk](#basis-risk)
 
 ## Derivatives Introduction
 
@@ -506,3 +508,22 @@ $$\Delta W(t) = N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1}))$$
 $$ \therefore \Delta W(t) = 0$$
 - As shown, any changes in the price of a underlying asset, in this idealised scenario, has no effect on the value of a unitary hedged portfolio.
   - This is known as a **perfect hedge**.
+
+#### Futures Hedging Example 1: Oil Refinery
+
+- In the current month, June, an oil refinery is planning for the number of barrels required for the month of October.
+- The refinery expects to refine a total of 2 millions barrels of oil in October and wants to control its price risk through futures hedging.
+- The current spot price for WTI is 55 USD per barrel.
+- The cost of carry is assumed to be 0 so the futures price is equal to the spot price: $K_{T}(t) = S(t) = 55 \text{ USD}$.
+- The contract size for the NYMEX WTI crude oil futures contract is 1000 barrels.
+- Given that the refinery needs 2 million barrels (i.e. the refinery is short), the refinery will need to take a long position in $\frac{2000000}{1000} = 2000$ futures contracts to hedge the price of WTI.
+- The November futures contract will be chosen as the hedging instrument as it delivers from the 1st November, ensuring complete coverage of October.
+- The portfolio value is equal to the long futures position plus the short cash position (i.e. the need for the barrels of oil).
+- For a spot price in October of 60 USD per barrel, the change in the value of the position is therefore:
+$$\Delta W(t) = \Delta \text{Cash} + \Delta \text{Futures}$$
+$$\Delta W(t) = -2000000\Delta S(t) + (2000)(1000) \Delta K_{T}(t)$$
+$$\Delta W(t) = (-2000000)(60 - 55) + (2000)(1000)(60 -55)$$
+$$\Delta W(t) = 0$$
+- This is an example of a **perfect hedge** and is unrealistic in practice due to the cost of carry rarely being equal to 0.
+
+#### Basis Risk
