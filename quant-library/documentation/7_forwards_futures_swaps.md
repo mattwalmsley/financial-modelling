@@ -551,7 +551,7 @@ $$b(t) = -(r+s-y)(T-t)S(t)$$
 $$b(t) = - \underbrace{r(T-t)S(t)}_{\text{Finance}} - \underbrace{s(T-t)S(t)}_{\text{Storage}} + \underbrace{y(T-t)S(t)}_{\text{Convenience}}$$
 - As discussed in [futures price](#futures-prices), the arbitrage relationship $K_{T}(t) = e^{c(T-t)}S(t)$ is only an approximation as prices will fluctuate around this assumption in practice due to the forces of supply and demand.
   - For a commodity, the futures price $K_{T}(t)$ will fluctuate from the spot price $S(t)$ through the forces of supply and demand in combination with the finance, storage and convenience factors associated with the cost of carry.
-- In summary, the basis for a commodities futures will be determind by:
+- In summary, the basis for a commodities futures will be determined by:
   - Interest charges/rates
   - Local storage and transportation costs
   - Locally determined convenience yields
