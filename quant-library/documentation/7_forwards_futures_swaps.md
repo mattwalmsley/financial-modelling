@@ -36,6 +36,8 @@
       - [Risk Management using Futures Hedging](#risk-management-using-futures-hedging)
       - [Futures Hedging Example 1: Oil Refinery](#futures-hedging-example-1-oil-refinery)
       - [Basis Risk](#basis-risk)
+        - [Commodity Basis Risk](#commodity-basis-risk)
+        - [Basis Risk Example](#basis-risk-example)
 
 ## Derivatives Introduction
 
@@ -493,13 +495,13 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
 #### Risk Management using Futures Hedging
 
 - Price risk in an asset can be controlled through hedging with futures contracts due to the exposure futures contracts have to the underlying asset's cash market.
-- A **long cash position** can be hedged with a **short futures position**, and similarily, a **short cash position** can be hedged with a **long futures position**.
+- A **long cash position** can be hedged with a **short futures position**, and similarly, a **short cash position** can be hedged with a **long futures position**.
 - For a cash position containing $N$ units of an asset at a price per unit of $S(t)$, the number of futures contracts of contract size $C$ required to hedge the entire position would be $J = \frac{N}{C}$.
   - For the case that $\frac{N}{C}$ is not an integer, $J$ would be rounded up to the nearest integer.
 - A futures position that fully hedges a cash position is called a **unitary hedge**.
 - Denote the value of a portfolio containing the underlying assets and futures positions required for the cash position to be unitary hedged as $W(t)$.
   - For a position that is long $N$ units of the underlying asset (cash position) and short $J$ futures contracts (futures position) the portfolio value is: $W(t) = NS(t) + \text{ Short Futures Position Value}$.
-  - The 1-day change in the portfolio value is therefore: 
+  - The 1-day change in the portfolio value is therefore:  
 $$\Delta W(t) = \Delta \text{Cash} + \Delta \text{Futures}$$
 $$ \Delta W(t)= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C}$$
 $$\Delta W(t) = N \Delta S(t)- N \Delta K_{T}(t)$$
@@ -527,3 +529,43 @@ $$\Delta W(t) = 0$$
 - This is an example of a **perfect hedge** and is unrealistic in practice due to the cost of carry rarely being equal to 0.
 
 #### Basis Risk
+
+- The **basis** is the difference between the spot and the futures prices and is denoted $b(t)$ (or $b_{T}(t)$ if explicitly denoting the futures expiry).
+$$b(t) = S(t) - K_{T}(t)$$
+- By assuming the cost of carry to be 0 in previous examples, the spot and futures price were assumed to be equal: $S(t) = K_{T}(t)$, and so the basis $b(t)$ was also assumed to be 0.
+- Assuming a non-zero cost of carry, $c \not ={0}$, and using the formula from [futures prices](#futures-prices): $K_{T}(t) = e^{c(T-t)}S(t)$, the basis can be calculated by:
+$$b(t) = S(t) - e^{c(T-t)}S(t)$$
+$$b(t) =  \left(1 - e^{c(T-t)} \right)S(t)$$
+- Using a [Taylor Series](https://mathworld.wolfram.com/TaylorSeries.html) approximation and more specifically the [Maclaurin Series](https://mathworld.wolfram.com/MaclaurinSeries.html) for $e^{x} = 1 + x + \frac{1}{2}x^{2} + \frac{1}{6}x^{3} + \frac{1}{24}x^{4}...$ where $x = c(T-t)$, the basis risk can be approximated by:
+$$e^{c(T-t)} = 1 + c(T-t) + \text{error (H.O.T.)}$$
+- Assuming the error (higher order terms) will be small for short-dated contracts or for low cost of carry:
+  $$b(t) = [1-(1+c(T-t))]S(t)$$
+  $$b(t) = -c(T-t)S(t)$$
+
+##### Commodity Basis Risk
+
+- For a commodity, the cost of carry $c$ is calculated by adding the interest rate $r$ and the storage costs $s$ and subtracting the convenience yield $y$:
+$$c = r + s - y$$
+- The basis can then be calculated by:
+$$b(t) = -(r+s-y)(T-t)S(t)$$
+$$b(t) = - \underbrace{r(T-t)S(t)}_{\text{Finance}} - \underbrace{s(T-t)S(t)}_{\text{Storage}} + \underbrace{y(T-t)S(t)}_{\text{Convenience}}$$
+- As discussed in [futures price](#futures-prices), the arbitrage relationship $K_{T}(t) = e^{c(T-t)}S(t)$ is only an approximation as prices will fluctuate around this assumption in practice due to the forces of supply and demand.
+  - For a commodity, the futures price $K_{T}(t)$ will fluctuate from the spot price $S(t)$ through the forces of supply and demand in combination with the finance, storage and convenience factors associated with the cost of carry.
+- In summary, the basis for a commodities futures will be determind by:
+  - Interest charges/rates
+  - Local storage and transportation costs
+  - Locally determined convenience yields
+  - Fluctuations driven by supply and demand driven
+
+##### Basis Risk Example
+
+- Taking a long position in $N$ units of an asset asset hedged with a short futures positions in $N$ units, the change in value of the combined position between $t_{1}$ and $t_{2}$ can be denoted as $\Delta W(t)$:
+$$\Delta W(t) = \Delta [\text{Cash Value}] + \Delta [\text{Futures Value}]$$
+$$\Delta W(t) = N \Delta S - N \Delta K_{T}$$
+$$\Delta W(t) = N(S(t_{2}) - S(t_{1})) - N(K_{T}(t_{2}) - K_{T}(t_{1}))$$
+$$\Delta W(t) = N(S(t_{2}) - K_{T}(t_{2})) - N(S(t_{1}) - K_{T}(t_{1}))$$
+$$\Delta W(t) = Nb(t_{2})- Nb(t_{1})$$
+$$\Delta W(t) = \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2}) - b(t_{1}))}_{\text{Basis Change}}$$
+- In the case of a unitary hedge, i.e. purchasing enough futures contracts to completely offset the cash position in the underlying asset, the price risk is therefore replaced with basis risk.
+- Basis risk is a lot smaller than price risk so from a risk management perspective, this is a good trade-off.
+- A perfect unitary hedge is not achievable in practice due to the existence of futures basis and other market complexities, but futures hedging is still an effective tool for reducing price risk.
