@@ -38,6 +38,8 @@
       - [Basis Risk](#basis-risk)
         - [Commodity Basis Risk](#commodity-basis-risk)
         - [Basis Risk Example](#basis-risk-example)
+      - [Futures Hedging Example 1: FX Futures](#futures-hedging-example-1-fx-futures)
+      - [Futures Hedging Example 2: Copper Futures](#futures-hedging-example-2-copper-futures)
 
 ## Derivatives Introduction
 
@@ -569,3 +571,45 @@ $$\Delta W(t) = \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2
 - In the case of a unitary hedge, i.e. purchasing enough futures contracts to completely offset the cash position in the underlying asset, the price risk is therefore replaced with basis risk.
 - Basis risk is a lot smaller than price risk so from a risk management perspective, this is a good trade-off.
 - A perfect unitary hedge is not achievable in practice due to the existence of futures basis and other market complexities, but futures hedging is still an effective tool for reducing price risk.
+
+#### Futures Hedging Example 1: FX Futures
+
+- For a US base exporting company which is due to receive a payment of 1 million EUR in November when the current month is May, the risk of adverse moves in the EUR/USD exchange rate can be mitigated using futures assuming the following EUR/USD rates in this scenario:
+
+|         |   Spot   | December Futures  |
+| ------  |:--------:|:-----------------:|
+|   May   | 1.15 USD |      1.18 USD     |
+| November| 1.02 USD |      1.03 USD     |
+
+- The CME EUR/USD futures contract has a contract size of 125,000 EUR and are sold for delivery in December. 
+  - The December futures contract, which delivers from 1st December, is needed so that there is coverage for the whole month of November.
+  - Therefore, a short position in 8 EUR/USD December futures contracts would be needed to fully hedge the risk (unitary hedge).
+- Taking the EUR/USD exchange rate change from 1.15 USD in May to 1.02 USD in November, the cash position has decreased in value by $(1000000)(1.15-1.02) = 130,000 \text{ USD}$.
+- The futures basis in May is long the spot and short the futures: $1.15 - 1.18 = -0.03 \text{ USD}$
+- In November, the futures basis is $1.02 - 1.03 = -0.01 \text{ USD}$
+- The combined position has therefore profited by:
+$$\Delta W(t) = N(b(t_{2})- b(t_{1}))$$
+$$\Delta W(t) = (1000000)(-0.01- (-0.03))$$
+$$\Delta W(t) = 20,000 \text{ USD}$$
+
+#### Futures Hedging Example 2: Copper Futures
+
+- A copper mining company anticipates a volatile copper market and wants to hedge their price risk for the fall (autumn).
+- The company is currently April and the company predicts it will be producing about 15,000 metric tonnes of copper in October and November.
+- Around 10,000 tonnes of copper will need coverage using futures contracts.
+- The CME copper futures contract has a contract size of 25,000 pounds (around 11 metric tonnes) and trades for delivery every month for the next year.
+- It can be assumed that 1 metric tonne is 2204.62 pounds (lbs).
+- The number of futures contracts required to cover 10,000 tonnes would be $frac{10000}{11} \approx 900$ and these contracts should expire no earlier than December.
+- Assuming the company takes a short position in 900 December copper futures contracts and that the following conditions are true in this scenario:
+
+|         |   Spot   | December Futures  |
+| ------  |:--------:|:-----------------:|
+|  April  | 3.05 /lb |      3.11 /lb     |
+| November| 3.15 /lb |      3.16 /lb     |
+
+- If, at the end of November, the company has produced 16,000 tonnes of copper in the last two months, the combined position's value can be calculated as follows:
+  - The cash position can be calculated to have increased by $16000 \times 2204.62 \times (3.15-3.05) = 3,527,392 \text{ USD}$
+  - The futures position can be calculated to have decreased by $900 \times 25000 \times (3.16 - 3.11) = 1,125,00 \text{ USD}$. This is a loss because the company has taken a short position in these futures contracts.
+  - The overall position is therefore worth $3,527,392- 1,125,00 = 2,402,392 \text{ USD}$.
+- The futures hedging has reduced the income received by the copper produced.
+- In general, when the cash market moves in a market participants favour, the futures hedge actually reduces this benefit.
