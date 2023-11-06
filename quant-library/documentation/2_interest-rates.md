@@ -157,7 +157,7 @@ $$(1 + r)^tPV = X \Rightarrow PV = \frac{X}{(1 + r)^t}$$
 $$\left(1 + \frac{r_m}{m}\right)^{mt}PV = X \Rightarrow PV = \frac{X}{\left(1 + \frac{r_m}{m}\right)^{mt}}$$
 - For a continuously compounded interest rate $r_c$:
 $$e^{r_ct}PV = X \Rightarrow PV = e^{-r_ct}X$$
-- For example, to find the continuously compounded interest rate $r_c$ that is equivalent to semi-annual interest rate $r_2$, equate the future values of a $1 investment with the two interest rates:
+- For example, to find the continuously compounded interest rate $r_c$ that is equivalent to semi-annual interest rate $r_2$, equate the future values of a 1 USD investment with the two interest rates:
 $$e^{r_ct} = \left(1 + \frac{r_2}{2}\right)^{2t} \Rightarrow r_ct = log\left(\left(1 + \frac{r_2}{2}\right)^{2t}\right) \Rightarrow r_c = 2log\left(1 + \frac{r_2}{2}\right)$$
 
 ## Discount Factors
@@ -170,7 +170,7 @@ $$e^{r_ct} = \left(1 + \frac{r_2}{2}\right)^{2t} \Rightarrow r_ct = log\left(\le
 $$P(t) = \frac{1}{d(t)}X = (1 + r)^tX$$
 - Discount factors can be expressed in terms of interest rates with different compounding convention.
   - For periodically compounded rates: $d(t) = \frac{1}{\left(1 + \frac{r_m}{m}\right)^{mt}}$.
-  - For continuously compounded rates: $d(t) = e^{-r_ct}$.
+  - For continuously compounded rates: $d(t) = e^{-r_{c}t}$.
 
 ## Discounted Cash Flow Analysis
 

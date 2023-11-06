@@ -43,6 +43,7 @@
     - [Speculation and Leverage](#speculation-and-leverage)
       - [Speculation Example](#speculation-example)
   - [The LIBOR Curve](#the-libor-curve)
+    - [LIBOR Curve Example](#libor-curve-example)
 
 ## Derivatives Introduction
 
@@ -374,9 +375,9 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
 - The value of the forward contract in 1 month time ($t=\frac{1}{12}$) when the exchange rate ($S(t)$) is 0.71 USD can be calculated by:
 
 ```math
-\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}} \newline
-\text{Where } K_{T} = 0.7475 \newline
-\begin{aligned} \newline
+\begin{aligned}
+&\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}} \\
+&\text{Where } K_{T} = 0.7475 \\
 V(t) &= e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\frac{1}{12})}(0.7475) \\
 &= 0.03855 \text{ USD}
 \end{aligned}
@@ -530,9 +531,9 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
 &= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C} \\
 &= N \Delta S(t)- N \Delta K_{T}(t) \\
 &= N(S(t_{2}) - S(t_{1}))- N(K_{T}(t_{2}) - K_{T}(t_{1})) \text{ where } K_{T}(t_{2}) - K_{T}(t_{1}) = S(t_{2}) - S(t_{1}) \\
-&= N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1}))
-\end{aligned} \\
+&= N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1})) \\
 \therefore \boxed{\Delta W(t) = 0}
+\end{aligned} \\
 ```
 
 - As shown, any changes in the price of a underlying asset, in this idealised scenario, has no effect on the value of a unitary hedged portfolio.
@@ -697,7 +698,10 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - The London Inter-Bank Offered Rate (LIBOR) is a short-term interest rate published daily that represents the rate at which major banks would loan money to other major banks for loan terms (tenors) up to 1 year.
 - Various interest rate derivatives allow the LIBOR interest rates to be extended beyond the 1 year tenor, forming a spot rate curve known as the LIBOR (spot) curve.
   - For example, the market prices of EUR/USD futures and interest rate swaps are commonly bootstrapped to an interest rate curve up to around the 30 year tenor.
-- Recall from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves) that a spot curve is comprised of the implied discount factors.
+  - Recall from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves) that a spot curve is comprised of the implied discount factors.
+- The LIBOR discount curve is therefore the curve of discount factors implied by the spot LIBOR rates up to the 1 year tenor, together with market observed EUR/USD futures prices and swap rates.
+  - The EUR/USD futures and (LIBOR) swaps are interest rate derivatives, linked to the current short term LIBOR rates.
+  - Longer term interest rates can be derived from the short-term LIBOR by applying arbitrage principles to these interest rate derivatives.
 - To express interest rates, yield curves, and discount factors observed on the markets, the following notation is used:
   - $P(t,T)$ denotes the price at time $t$ of a zero-coupon bond maturing at time $T$.
     - As a default assumption, all zero-coupon bonds have a 1 USD face value so that $P(t,T)$ is the present value at time $t$ of the 1 USD paid at time $T$.
@@ -705,4 +709,40 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
     - $P(0,T)$ is the discount curve observed "today" and can be related to the d(t) in [Discount Factors](./2_interest-rates.md#discount-factors) by $P(0,T) = d(T)$.
     - Similarly, the discount curve observed on date $t$ is denoted $P(t,T)$.
     - The notation $P(t,T)$ will be used to denote both discount factors and zero-coupon bond prices, which are numerically equal albeit conceptually different.
+  - $T - t$ represents the tenor, time to maturity, term of the loan etc.
+  - $P(t,T) = e^{-(T-t)y(t,T)}$ denotes the relationship between the continuously compounded LIBOR spot rate $y(t,T)$ and the LIBOR discount factor $P(t,T)$, extending the derivation from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves).
+  - $P(t,T)=\frac{1}{1+(T-t)L(t,T)}$ denotes the relationship between the simply compounded spot LIBOR rate $L(t,T)$ and the discount factor, using the formula for [Simple Interest](./2_interest-rates.md#simple-interest).
+  - $y(T)$ and $L(T)$ represent the continuously compounded and simply compounded LIBOR spot rates respectively as if they are observed "today", i.e. $y(0,T)$ and $L(0,T)$.
+    - The discount factors are therefore equal to:
+      - $P(0,T) = e^{-Ty(T)}$
+      - $P(0,T) = \frac{1}{1+TL(T)}$
 
+### LIBOR Curve Example
+
+- For 6 month LIBOR discount factor is 0.98, the continuously compounded 6 month LIBOR spot rate can be calculated as follows:
+
+```math
+\begin{aligned}
+P(t,T) &= e^{-(T-t)y(t,T)} \\
+P(0,T) &= e^{-(T)y(T)} \\
+log(P(0,T)) &= -(T)y(T) \\
+y(T) &= - \frac{log(P(0,T))}{T} \\
+&= - \frac{log(0.98)}{\frac{6}{12}} \\
+&= 0.0404 \\
+&= \boxed{4.04\%}
+\end{aligned}
+```
+
+- Similarly, the simply compounded 6 month LIBOR spot rate can be calculated as follows:
+
+```math
+\begin{aligned}
+P(t,T) &= \frac{1}{1+(T-t)L(t,T)} \\
+P(0,T) &= \frac{1}{1+(T)L(T)} \\
+P(0,T)+TP(0,T)L(T) &= 1 \\
+L(T) &= \frac{1 - P(0,T)}{TP(0,T)} \\
+&= \frac{1 - 0.98}{\frac{6}{12}(0.98)} \\
+&= 0.0408 \\
+&= \boxed{4.08\%}
+\end{aligned}
+```
