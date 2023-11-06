@@ -398,7 +398,7 @@ $$V(t) = e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\fra
 - Similar to forward contracts prices, futures prices are denoted by $K_{T}(t)$ and futures contracts will have 0 value when being entered into.
 - The futures prices are decide by supply and demand forces on futures exchanges and therefore $K_{T}(t)$ represents the market price observed at time $t$.
 - The market for the underlying asset will clearly have an effect on the futures market and, in simple terms, the futures prices are expected to represent the market's expectation for the future spot price.
-  - This can be expressed in quantitative terms as $K_{T}(t) = E(S(T)|\mathcal{F}_{t})$ where $E(\cdot|\mathcal{F}_{t})$ represents an expectation conditional on the knowledge available at time $t$.
+  - This can be expressed in quantitative terms as $K_{T}(t) = E(S(T)| \mathcal{F}_{t})$ where $E(\cdot|\mathcal{F}_{t})$ represents an expectation conditional on the knowledge available at time $t$.
   - Arbitrage opportunities would be present if the futures price systematically underestimated or overestimated the spot price at the expiration of the futures contract.
   - For spot prices $S(t)$ and for a cost of carry $c$, futures price at time $t$ are expected to have the following relationship:
 $$\boxed{K_{T}(t) \approx e^{c(T-t)}S(T)}$$
@@ -553,7 +553,7 @@ $$e^{c(T-t)} = 1 + c(T-t) + \text{error (H.O.T.)}$$
 $$c = r + s - y$$
 - The basis can then be calculated by:
 $$b(t) = -(r+s-y)(T-t)S(t)$$
-$$b(t) = - \underbrace{r(T-t)S(t)}_\text{Finance} - \underbrace{s(T-t)S(t)}_\text{Storage} + \underbrace{y(T-t)S(t)}_{\text{Convenience}}$$
+$$b(t) = - {\underbrace{r(T-t)S(t)}_{ \text{Finance}}} - {\underbrace{s(T-t)S(t)}_{ \text{Storage}}} + {\underbrace{y(T-t)S(t)}_{ \text{Convenience}}}$$
 - As discussed in [futures price](#futures-prices), the arbitrage relationship $K_{T}(t) = e^{c(T-t)}S(t)$ is only an approximation as prices will fluctuate around this assumption in practice due to the forces of supply and demand.
   - For a commodity, the futures price $K_{T}(t)$ will fluctuate from the spot price $S(t)$ through the forces of supply and demand in combination with the finance, storage and convenience factors associated with the cost of carry.
 - In summary, the basis for a commodities futures will be determined by:
