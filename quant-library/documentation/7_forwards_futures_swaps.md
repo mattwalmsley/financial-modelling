@@ -129,9 +129,15 @@ $$-V(T) = K_{\tau} - S(T)$$
 $$V(t) = S(t) - e^{rt}\left(e^{-rT}K_{T}\right)$$
 $$\boxed{V(t) = S(t) - e^{-r(T-t)}K_{T}}$$
 - This model can be validated by showing that at time $t = T$, the value of the portfolio is equal to $S(T) - K_{T}$:
-$$V(T) = S(T) - e^{-r(T-T)}K_{T}$$
-$$V(T) = S(T) - e^{0}K_{T}$$
-$$V(T) = S(T) - K_{T}$$
+
+```math
+\begin{aligned}
+V(T) &= S(T) - e^{-r(T-T)}K_{T} \\
+&= S(T) - e^{0}K_{T} \\
+&= S(T) - K_{T} \\
+\end{aligned}
+```
+
 - Using the Law of One Price, the value of the forward contract $V(t)$ at any time $t < T$ must be equal to the value of the portfolio.
 - Similarly, the payoff of the **short position** can be modelled as:
 $$\boxed{-V(t) = e^{-r(T-t)}K_{T} - S(t)}$$
@@ -324,8 +330,11 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
 - Take a situation where a forward rate $K_{T}$ is being offered such that $K_{T} > e^{(r_{d}-r_{f})T}S(0)$.
 - This inequality can be rewritten as $Ke^{r_{f}T}\frac{1}{S(0)} > e^{r_{d}T}$.
 - Multiplying through by a notional amount of 1000 USD to give:
-  $$
-  \underbrace{K}_{\text{conversion of foreign currency back to domestic at forward rate}} \times \underbrace{e^{r_{f}T}}_{\text{investing foreign currency holding at foreign risk-free rate}} \times \underbrace{\frac{1000}{S(0)}}_{\text{conversion of 1000 USD to foreign currency at } t = 0} > \underbrace{1000e^{r_{d}T}}_{\text{value at time } T \text{ of a 1000 USD debt borrowed at time } t = 0}$$
+  
+```math
+\underbrace{K}_{\text{conversion of foreign currency back to domestic at forward rate}} \times \underbrace{e^{r_{f}T}}_{\text{investing foreign currency holding at foreign risk-free rate}} \times \underbrace{\frac{1000}{S(0)}}_{\text{conversion of 1000 USD to foreign currency at } t = 0} > \underbrace{1000e^{r_{d}T}}_{\text{value at time } T \text{ of a 1000 USD debt borrowed at time } t = 0}
+```
+
 - In other words, this inequality implies that that the seller of this FX forward contract can make a riskless profit by:
   1. borrowing 1000 USD at the domestic risk-free rate
   2. converting this cash to a foreign currency
@@ -399,7 +408,7 @@ $$V(t) = e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\fra
 - Similar to forward contracts prices, futures prices are denoted by $K_{T}(t)$ and futures contracts will have 0 value when being entered into.
 - The futures prices are decide by supply and demand forces on futures exchanges and therefore $K_{T}(t)$ represents the market price observed at time $t$.
 - The market for the underlying asset will clearly have an effect on the futures market and, in simple terms, the futures prices are expected to represent the market's expectation for the future spot price.
-  - This can be expressed in quantitative terms as $K_{T}(t) = E(S(T)| \mathcal{F}_{t})$ where $E(\cdot|\mathcal{F}_{t})$ represents an expectation conditional on the knowledge available at time $t$.
+  - This can be expressed in quantitative terms as $`K_{T}(t) = E(S(T)| \mathcal{F}_{t})`$ where $E(\cdot|\mathcal{F}_{t})$ represents an expectation conditional on the knowledge available at time $t$.
   - Arbitrage opportunities would be present if the futures price systematically underestimated or overestimated the spot price at the expiration of the futures contract.
   - For spot prices $S(t)$ and for a cost of carry $c$, futures price at time $t$ are expected to have the following relationship:
 $$\boxed{K_{T}(t) \approx e^{c(T-t)}S(T)}$$
@@ -507,13 +516,19 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
 - A futures position that fully hedges a cash position is called a **unitary hedge**.
 - Denote the value of a portfolio containing the underlying assets and futures positions required for the cash position to be unitary hedged as $W(t)$.
   - For a position that is long $N$ units of the underlying asset (cash position) and short $J$ futures contracts (futures position) the portfolio value is: $W(t) = NS(t) + \text{ Short Futures Position Value}$.
-  - The 1-day change in the portfolio value is therefore:  
-$$\Delta W(t) = \Delta \text{Cash} + \Delta \text{Futures}$$
-$$\Delta W(t)= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C}$$
-$$\Delta W(t) = N \Delta S(t)- N \Delta K_{T}(t)$$
-$$\Delta W(t) = N(S(t_{2}) - S(t_{1}))- N(K_{T}(t_{2}) - K_{T}(t_{1})) \text{ where } K_{T}(t_{2}) - K_{T}(t_{1}) = S(t_{2}) - S(t_{1})$$
-$$\Delta W(t) = N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1}))$$
-$$\therefore \Delta W(t) = 0$$
+  - The 1-day change in the portfolio value is therefore:
+
+```math
+\begin{aligned}
+\Delta W(t) &= \Delta \text{Cash} + \Delta \text{Futures} \\
+&= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C} \\
+&= N \Delta S(t)- N \Delta K_{T}(t) \\
+&= N(S(t_{2}) - S(t_{1}))- N(K_{T}(t_{2}) - K_{T}(t_{1})) \text{ where } K_{T}(t_{2}) - K_{T}(t_{1}) = S(t_{2}) - S(t_{1}) \\
+&= N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1}))
+\end{aligned} \\
+\therefore \boxed{\Delta W(t) = 0}
+```
+
 - As shown, any changes in the price of a underlying asset, in this idealised scenario, has no effect on the value of a unitary hedged portfolio.
   - This is known as a **perfect hedge**.
 
@@ -528,10 +543,16 @@ $$\therefore \Delta W(t) = 0$$
 - The November futures contract will be chosen as the hedging instrument as it delivers from the 1st November, ensuring complete coverage of October.
 - The portfolio value is equal to the long futures position plus the short cash position (i.e. the need for the barrels of oil).
 - For a spot price in October of 60 USD per barrel, the change in the value of the position is therefore:
-$$\Delta W(t) = \Delta \text{Cash} + \Delta \text{Futures}$$
-$$\Delta W(t) = -2000000\Delta S(t) + (2000)(1000) \Delta K_{T}(t)$$
-$$\Delta W(t) = (-2000000)(60 - 55) + (2000)(1000)(60 -55)$$
-$$\Delta W(t) = 0$$
+
+```math
+\begin{aligned}
+\Delta W(t) &= \Delta \text{Cash} + \Delta \text{Futures} \\
+&= -2000000\Delta S(t) + (2000)(1000) \Delta K_{T}(t) \\
+&= (-2000000)(60 - 55) + (2000)(1000)(60 -55) \\
+&= 0 \\
+\end{aligned}
+```
+
 - This is an example of a **perfect hedge** and is unrealistic in practice due to the cost of carry rarely being equal to 0.
 
 #### Basis Risk
@@ -553,11 +574,13 @@ $$e^{c(T-t)} = 1 + c(T-t) + \text{error (H.O.T.)}$$
 - For a commodity, the cost of carry $c$ is calculated by adding the interest rate $r$ and the storage costs $s$ and subtracting the convenience yield $y$:
 $$c = r + s - y$$
 - The basis can then be calculated by:
-$$b(t) = -(r+s-y)(T-t)S(t)$$
 
-$$
-b(t) = - \underbrace{r(T-t)S(t)}_{ \text{Finance}} - \underbrace{s(T-t)S(t)}_{ \text{Storage}} + \underbrace{y(T-t)S(t)}_{ \text{Convenience}}
-$$
+```math
+\begin{aligned}
+b(t) &= -(r+s-y)(T-t)S(t) \\
+&= - \underbrace{r(T-t)S(t)}_{ \text{Finance}} - \underbrace{s(T-t)S(t)}_{ \text{Storage}} + \underbrace{y(T-t)S(t)}_{ \text{Convenience}}
+\end{aligned}
+```
 
 - As discussed in [futures price](#futures-prices), the arbitrage relationship $K_{T}(t) = e^{c(T-t)}S(t)$ is only an approximation as prices will fluctuate around this assumption in practice due to the forces of supply and demand.
   - For a commodity, the futures price $K_{T}(t)$ will fluctuate from the spot price $S(t)$ through the forces of supply and demand in combination with the finance, storage and convenience factors associated with the cost of carry.
@@ -570,12 +593,18 @@ $$
 ##### Basis Risk Example
 
 - Taking a long position in $N$ units of an asset asset hedged with a short futures positions in $N$ units, the change in value of the combined position between $t_{1}$ and $t_{2}$ can be denoted as $\Delta W(t)$:
-$$\Delta W(t) = \Delta [\text{Cash Value}] + \Delta [\text{Futures Value}]$$
-$$\Delta W(t) = N \Delta S - N \Delta K_{T}$$
-$$\Delta W(t) = N(S(t_{2}) - S(t_{1})) - N(K_{T}(t_{2}) - K_{T}(t_{1}))$$
-$$\Delta W(t) = N(S(t_{2}) - K_{T}(t_{2})) - N(S(t_{1}) - K_{T}(t_{1}))$$
-$$\Delta W(t) = Nb(t_{2})- Nb(t_{1})$$
-$$\Delta W(t) = \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2}) - b(t_{1}))}_{\text{Basis Change}}$$
+
+```math
+\begin{aligned}
+\Delta W(t) &= \Delta [\text{Cash Value}] + \Delta [\text{Futures Value}] \\
+&= N \Delta S - N \Delta K_{T} \\
+&= N(S(t_{2}) - S(t_{1})) - N(K_{T}(t_{2}) - K_{T}(t_{1})) \\
+&= N(S(t_{2}) - K_{T}(t_{2})) - N(S(t_{1}) - K_{T}(t_{1})) \\
+&= Nb(t_{2})- Nb(t_{1}) \\
+\Delta W(t) &= \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2}) - b(t_{1}))}_{\text{Basis Change}}
+\end{aligned}
+```
+
 - In the case of a unitary hedge, i.e. purchasing enough futures contracts to completely offset the cash position in the underlying asset, the price risk is therefore replaced with basis risk.
 - Basis risk is a lot smaller than price risk so from a risk management perspective, this is a good trade-off.
 - A perfect unitary hedge is not achievable in practice due to the existence of futures basis and other market complexities, but futures hedging is still an effective tool for reducing price risk.
@@ -596,9 +625,14 @@ $$\Delta W(t) = \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2
 - The futures basis in May is long the spot and short the futures: $1.15 - 1.18 = -0.03 \text{ USD}$
 - In November, the futures basis is $1.02 - 1.03 = -0.01 \text{ USD}$
 - The combined position has therefore profited by:
-$$\Delta W(t) = N(b(t_{2})- b(t_{1}))$$
-$$\Delta W(t) = (1000000)(-0.01- (-0.03))$$
-$$\Delta W(t) = 20,000 \text{ USD}$$
+  
+```math
+\begin{aligned}
+\Delta W(t) &= N(b(t_{2})- b(t_{1})) \\
+&= (1000000)(-0.01- (-0.03)) \\
+&= 20,000 \text{ USD}
+\end{aligned}
+```
 
 #### Futures Hedging Example 2: Copper Futures
 
@@ -660,3 +694,9 @@ $$\Delta W(t) = 20,000 \text{ USD}$$
 - Recall from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves) that a spot curve is comprised of the implied discount factors.
 - To express interest rates, yield curves, and discount factors observed on the markets, the following notation is used:
   - $P(t,T)$ denotes the price at time $t$ of a zero-coupon bond maturing at time $T$.
+    - As a default assumption, all zero-coupon bonds have a 1 USD fave value so that $P(t,T)$ is the present value, at time 
+
+```math
+this is a + b - c \frac{x}{y}
+```
+

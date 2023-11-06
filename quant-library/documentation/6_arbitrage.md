@@ -93,10 +93,18 @@
   - $r(2) = 1.5\%$
   - $r(3) = 2\%$
 - Given the bond pays a 600 USD coupon in years 1 and 2, and 10,600 USD (par value + coupon) in year 3, the bond pricing formula can be applied for annually compounded interest rates to find the present fair value of the bond as follows:
-$$PV = \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}}$$
-$$PV = \frac{600}{1 + 0.0075} + \frac{600}{(1 + 0.015)^{2}} + \frac{10600}{(1 + 0.02)^{3}}$$
-$$PV = 595.53 + 582.40 + 9988.62$$
-$$\boxed{PV = 11,166.55 \space USD}$$
+
+```math
+\begin{aligned}
+PV &= \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}} \\
+&= \frac{600}{1 + 0.0075} + \frac{600}{(1 + 0.015)^{2}} + \frac{10600}{(1 + 0.02)^{3}} \\
+&= 595.53 + 582.40 + 9988.62 \\
+&= \boxed{11,166.55 \text{ USD}}
+\end{aligned} \\
+
+
+```
+
 - Given the bond's current market price (10,000 USD) is lower than the present fair value (11,166.55 USD), there is a potential arbitrage opportunity present that can be constructed as follows:
   - At year 0, borrow 595.53 USD with a 1 year term, 582.40 USD with a 2 year term and 9,988.62 USD with a 3 year term, the debt owed on each of these amounts will be exactly matched by the coupon payments from the bond respectively.
     - This is equivalent to selling 3 zero-coupon bonds with the original bond's coupon payments as the par values for the 3 zero-coupon bonds.
@@ -170,9 +178,15 @@ $$\therefore V(0) > B(0)$$
 
 - Take a prevailing interest rate of 6% on a 3 year term and a contract paying 10,000 in 3 years time (i.e a zero-coupon bond with a 10,000 USD face value).
 - Discount a 10,000 USD payment in 3 years time using the prevailing interest rate:
-  $$PV = e^{-rt}X$$
-  $$PV = e^{-0.06 \times 3} \times 10000$$
-  $$\boxed{PV = 8,353 \space USD}$$
+
+```math
+\begin{aligned}
+PV &= e^{-rt}X \\
+&= e^{-0.06 \times 3} \times 10000 \\
+&= \boxed{8,353 \text{ USD}}
+\end{aligned}
+```
+
 - If the contract is currently trading at 9,000 USD the contract is **overpriced** and a short position should be assumed to take advantage of the arbitrage.
   - The contract can be sold for 9,000 USD and the cash received then invested at the risk-free rate (6\%):
   - This leads to a investment worth $e^{0.06 \times 3} \times 9000 = 10,775 \space USD$.
