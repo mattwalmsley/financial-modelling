@@ -372,9 +372,15 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
   - Allocating the standard notation as: $S(0) = 0.75 \text{ USD}$, $r_{d} = 4\%$, $r_{f} = 6\%$, $T = \frac{1}{6}$.
   - Using $K_{T} = e^{(r_{d}-r_{f})T}S(0)$ and substituting in the values: $K_{T} = e^{(0.04-0.06)(\frac{1}{6})}(0.75)$, the fair forward rate is $0.7475 \text{ USD}$.
 - The value of the forward contract in 1 month time ($t=\frac{1}{12}$) when the exchange rate ($S(t)$) is 0.71 USD can be calculated by:
-$$\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}}$$
-$$\text{Where } K_{T} = 0.7475$$
-$$V(t) = e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\frac{1}{12})}(0.7475) = 0.03855 \text{ USD}$$
+
+```math
+\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}} \\ 
+\text{Where } K_{T} = 0.7475 \\
+\begin{aligned}
+V(t) &= e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\frac{1}{12})}(0.7475) \\
+&= 0.03855 \text{ USD}
+\end{aligned}
+```
 
 ## Futures
 
