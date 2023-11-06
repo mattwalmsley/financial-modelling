@@ -374,9 +374,9 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
 - The value of the forward contract in 1 month time ($t=\frac{1}{12}$) when the exchange rate ($S(t)$) is 0.71 USD can be calculated by:
 
 ```math
-\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}} \\ 
-\text{Where } K_{T} = 0.7475 \\
-\begin{aligned}
+\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}} \newline
+\text{Where } K_{T} = 0.7475 \newline
+\begin{aligned} \newline
 V(t) &= e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\frac{1}{12})}(0.7475) \\
 &= 0.03855 \text{ USD}
 \end{aligned}
