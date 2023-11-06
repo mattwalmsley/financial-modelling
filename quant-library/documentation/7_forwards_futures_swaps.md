@@ -324,7 +324,8 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
 - Take a situation where a forward rate $K_{T}$ is being offered such that $K_{T} > e^{(r_{d}-r_{f})T}S(0)$.
 - This inequality can be rewritten as $Ke^{r_{f}T}\frac{1}{S(0)} > e^{r_{d}T}$.
 - Multiplying through by a notional amount of 1000 USD to give:
-  $$\underbrace{K}_{\text{conversion of foreign currency back to domestic at forward rate}} \times \underbrace{e^{r_{f}T}}_{\text{investing foreign currency holding at foreign risk-free rate}} \times \underbrace{\frac{1000}{S(0)}}_{\text{conversion of 1000 USD to foreign currency at } t = 0} > \underbrace{1000e^{r_{d}T}}_{\text{value at time } T \text{ of a 1000 USD debt borrowed at time } t = 0}$$
+  $$
+  \underbrace{K}_{\text{conversion of foreign currency back to domestic at forward rate}} \times \underbrace{e^{r_{f}T}}_{\text{investing foreign currency holding at foreign risk-free rate}} \times \underbrace{\frac{1000}{S(0)}}_{\text{conversion of 1000 USD to foreign currency at } t = 0} > \underbrace{1000e^{r_{d}T}}_{\text{value at time } T \text{ of a 1000 USD debt borrowed at time } t = 0}$$
 - In other words, this inequality implies that that the seller of this FX forward contract can make a riskless profit by:
   1. borrowing 1000 USD at the domestic risk-free rate
   2. converting this cash to a foreign currency
@@ -554,9 +555,9 @@ $$c = r + s - y$$
 - The basis can then be calculated by:
 $$b(t) = -(r+s-y)(T-t)S(t)$$
 
-```math
+$$
 b(t) = - \underbrace{r(T-t)S(t)}_{ \text{Finance}} - \underbrace{s(T-t)S(t)}_{ \text{Storage}} + \underbrace{y(T-t)S(t)}_{ \text{Convenience}}
-```
+$$
 
 - As discussed in [futures price](#futures-prices), the arbitrage relationship $K_{T}(t) = e^{c(T-t)}S(t)$ is only an approximation as prices will fluctuate around this assumption in practice due to the forces of supply and demand.
   - For a commodity, the futures price $K_{T}(t)$ will fluctuate from the spot price $S(t)$ through the forces of supply and demand in combination with the finance, storage and convenience factors associated with the cost of carry.
@@ -574,7 +575,7 @@ $$\Delta W(t) = N \Delta S - N \Delta K_{T}$$
 $$\Delta W(t) = N(S(t_{2}) - S(t_{1})) - N(K_{T}(t_{2}) - K_{T}(t_{1}))$$
 $$\Delta W(t) = N(S(t_{2}) - K_{T}(t_{2})) - N(S(t_{1}) - K_{T}(t_{1}))$$
 $$\Delta W(t) = Nb(t_{2})- Nb(t_{1})$$
-$$\Delta W(t) = \underbrace{N}_\text{Position Size} \times \underbrace{(b(t_{2}) - b(t_{1}))}_\text{Basis Change}$$
+$$\Delta W(t) = \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2}) - b(t_{1}))}_{\text{Basis Change}}$$
 - In the case of a unitary hedge, i.e. purchasing enough futures contracts to completely offset the cash position in the underlying asset, the price risk is therefore replaced with basis risk.
 - Basis risk is a lot smaller than price risk so from a risk management perspective, this is a good trade-off.
 - A perfect unitary hedge is not achievable in practice due to the existence of futures basis and other market complexities, but futures hedging is still an effective tool for reducing price risk.
