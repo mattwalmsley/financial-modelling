@@ -508,11 +508,11 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
   - For a position that is long $N$ units of the underlying asset (cash position) and short $J$ futures contracts (futures position) the portfolio value is: $W(t) = NS(t) + \text{ Short Futures Position Value}$.
   - The 1-day change in the portfolio value is therefore:  
 $$\Delta W(t) = \Delta \text{Cash} + \Delta \text{Futures}$$
-$$ \Delta W(t)= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C}$$
+$$\Delta W(t)= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C}$$
 $$\Delta W(t) = N \Delta S(t)- N \Delta K_{T}(t)$$
 $$\Delta W(t) = N(S(t_{2}) - S(t_{1}))- N(K_{T}(t_{2}) - K_{T}(t_{1})) \text{ where } K_{T}(t_{2}) - K_{T}(t_{1}) = S(t_{2}) - S(t_{1})$$
 $$\Delta W(t) = N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1}))$$
-$$ \therefore \Delta W(t) = 0$$
+$$\therefore \Delta W(t) = 0$$
 - As shown, any changes in the price of a underlying asset, in this idealised scenario, has no effect on the value of a unitary hedged portfolio.
   - This is known as a **perfect hedge**.
 
