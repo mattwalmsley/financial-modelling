@@ -40,6 +40,9 @@
         - [Basis Risk Example](#basis-risk-example)
       - [Futures Hedging Example 1: FX Futures](#futures-hedging-example-1-fx-futures)
       - [Futures Hedging Example 2: Copper Futures](#futures-hedging-example-2-copper-futures)
+    - [Speculation and Leverage](#speculation-and-leverage)
+      - [Speculation Example](#speculation-example)
+  - [The LIBOR Curve](#the-libor-curve)
 
 ## Derivatives Introduction
 
@@ -550,7 +553,7 @@ $$e^{c(T-t)} = 1 + c(T-t) + \text{error (H.O.T.)}$$
 $$c = r + s - y$$
 - The basis can then be calculated by:
 $$b(t) = -(r+s-y)(T-t)S(t)$$
-$$b(t) = - \underbrace{r(T-t)S(t)}_{\text{Finance}} - \underbrace{s(T-t)S(t)}_{\text{Storage}} + \underbrace{y(T-t)S(t)}_{\text{Convenience}}$$
+$$b(t) = - \underbrace{r(T-t)S(t)}_\text{Finance} - \underbrace{s(T-t)S(t)}_\text{Storage} + \underbrace{y(T-t)S(t)}_{\text{Convenience}}$$
 - As discussed in [futures price](#futures-prices), the arbitrage relationship $K_{T}(t) = e^{c(T-t)}S(t)$ is only an approximation as prices will fluctuate around this assumption in practice due to the forces of supply and demand.
   - For a commodity, the futures price $K_{T}(t)$ will fluctuate from the spot price $S(t)$ through the forces of supply and demand in combination with the finance, storage and convenience factors associated with the cost of carry.
 - In summary, the basis for a commodities futures will be determined by:
@@ -567,7 +570,7 @@ $$\Delta W(t) = N \Delta S - N \Delta K_{T}$$
 $$\Delta W(t) = N(S(t_{2}) - S(t_{1})) - N(K_{T}(t_{2}) - K_{T}(t_{1}))$$
 $$\Delta W(t) = N(S(t_{2}) - K_{T}(t_{2})) - N(S(t_{1}) - K_{T}(t_{1}))$$
 $$\Delta W(t) = Nb(t_{2})- Nb(t_{1})$$
-$$\Delta W(t) = \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2}) - b(t_{1}))}_{\text{Basis Change}}$$
+$$\Delta W(t) = \underbrace{N}_\text{Position Size} \times \underbrace{(b(t_{2}) - b(t_{1}))}_\text{Basis Change}$$
 - In the case of a unitary hedge, i.e. purchasing enough futures contracts to completely offset the cash position in the underlying asset, the price risk is therefore replaced with basis risk.
 - Basis risk is a lot smaller than price risk so from a risk management perspective, this is a good trade-off.
 - A perfect unitary hedge is not achievable in practice due to the existence of futures basis and other market complexities, but futures hedging is still an effective tool for reducing price risk.
@@ -613,3 +616,42 @@ $$\Delta W(t) = 20,000 \text{ USD}$$
   - The overall position is therefore worth $3,527,392- 1,125,00 = 2,402,392 \text{ USD}$.
 - The futures hedging has reduced the income received by the copper produced.
 - In general, when the cash market moves in a market participants favour, the futures hedge actually reduces this benefit.
+
+### Speculation and Leverage
+
+- Futures can be used for risk management by offsetting/reducing exposure to a position as discussed in [futures hedging](#futures-hedging), but they can also be used for speculation by obtaining exposure to an asset and therefore increasing risk.
+- An investor can obtain long exposure to crude oil under the speculative belief that the price will rise by eith r buying the outright position in the cash market (buying oil) or by taking a long futures position.
+  - As shown in [cash market exposure](#cash-market-exposure), the futures position provides the same exposure to the underlying asset price as the equivalent cash position (actually holding the asset).
+- Opting to gain exposure through futures is normally preferred as futures markets are generally much more liquid (easier to buy/sell) than the cash market and for some assets, such as commodities, there are considerable costs/complications with taking cash positions (e.g. storage, insurance and transportation).
+- Futures contracts also provide **leverage**, allowing participants to multiply their buying power and obtain a much larger exposure on the financial market.
+  - Instead of buying the underlying asset on the cash market for a certain amount, long futures positions can be maintained  through depositing smaller amounts in [margin accounts](#margin-accounts), leveraging the amount of exposure to the underlying asset.
+  - For example to speculate on the crude oil market by gaining exposure to 1000 barrels of crude oil, an investor would need to buy 1000 barrels of the underlying asset (at 65 USD per barrel this would be 65,000 USD) or the investor can take a long futures position as follows:
+    - One futures contract of NYMEX WTI has a contract size of 1000 barrels and could be obtained by posting margin of about 3000 USD in a futures exchange margin account.
+    - An investment of 3000 USD in the futures market gives an investor the same exposure as 65,000 USD in the cash market.
+
+#### Speculation Example
+
+- A speculator wants to take a long position on 25 million JPY. The choices are taking a cash position or taking a long position in the CME JPY/USD futures contract.
+- The CME JPY/USD futures contract has a contract size of 12.5 million JPY so two futures contracts would be required to gain exposure to 25 million JPY.
+- Assume the following scenario for spot and futures prices, assuming exposure is obtained through a 3 month JPY/USD futures contract with a margin requirement of 4000 USD per contract:
+
+|             |     Spot   | 3 Month Futures |
+| ----------- |:----------:|:---------------:|
+|      T(0)   | 0.009 USD  |  0.0090895 USD  |
+| T(2 months) | 0.0097 USD | 0.00970035 USD  |
+
+- At time 0, To obtain a cash position of 25 million JPY, an investment of $0.009 \times 25000000 = 225,000 \text{ USD}$ would be required, whereas the futures position of two futures contract would only required $2 \times 4000 = 8000 \text{ USD}$ to be posted into a margin account as the initial investment.
+- In two months time, the cash position has profited by $(25000000)(0.0097-0.009) = 17,500 \text{ USD}$ and the futures position has increased by $(2)(12500000)(0.00970035-0.0090895) = 17,486 \text{ USD}$.
+- The net return on the cash position is $\frac{17500}{225000} = 7.78\%$ and on the futures position is $\frac{17486}{8000} = 219\%$.
+  - From the point of view of net return, the futures position offers the better choice for the speculator.
+- This scenario shows a favourable movement in prices for the speculator; however, if the market had moved the against the speculator by the same amount, the speculator would have made a net loss of 7.78% on the cash position and a 219% net loss on the futures position (i.e. more than the initial investment in your futures position).
+  - Margin would also require posting into the margin account during the daily settlement if the market moved against the speculator, requiring more investment over the 2 month period.
+
+## The LIBOR Curve
+
+- The London Inter-Bank Offered Rate (LIBOR) is a short-term interest rate published daily that represents the rate at which major banks would loan money to other major banks for loan terms (tenors) up to 1 year.
+- Various interest rate derivatives allow the LIBOR interest rates to be extended beyond the 1 year tenor, forming a spot rate curve known as the LIBOR (spot) curve.
+  - For example, the market prices of EUR/USD futures and interest rate swaps are commonly bootstrapped to an interest rate curve up to around the 30 year tenor.
+- Recall from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves) that a spot curve is comprised of the implied discount factors.
+- To express interest rates, yield curves, and discount factors observed on the markets, the following notation is used:
+  - $P(t,T)$ denotes the price at time $t$ of a zero-coupon bond maturing at time $T$.

@@ -16,6 +16,24 @@ The purpose of this repository is for educational purposes only.
 - [Arbitrage](quant-library/documentation/6_arbitrage.md)
 - [Derivatives](quant-library/documentation/7_derivatives)
 
+## Git Commands
+
+View git remotes:
+
+    git remote -v
+
+Rename git remote:
+
+    git remote rename <old_name> <new_name>
+
+Git add second remote repo:
+
+    git remote add <name> <url>
+
+Git push to second remote repo:
+
+    git push <remote_name> <branch_name>
+
 If Git repo breaks run the following:
 
     find .git/objects/ -size 0 -exec rm -f {} \;
