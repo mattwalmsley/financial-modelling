@@ -719,7 +719,7 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 
 ### LIBOR Curve Example
 
-- For 6 month LIBOR discount factor is 0.98, the continuously compounded 6 month LIBOR spot rate can be calculated as follows:
+- For a 6 month LIBOR discount factor of 0.98, the continuously compounded 6 month LIBOR spot rate can be calculated as follows:
 
 ```math
 \begin{aligned}
