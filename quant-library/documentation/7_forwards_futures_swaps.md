@@ -694,9 +694,9 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - Recall from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves) that a spot curve is comprised of the implied discount factors.
 - To express interest rates, yield curves, and discount factors observed on the markets, the following notation is used:
   - $P(t,T)$ denotes the price at time $t$ of a zero-coupon bond maturing at time $T$.
-    - As a default assumption, all zero-coupon bonds have a 1 USD fave value so that $P(t,T)$ is the present value, at time 
-
-```math
-this is a + b - c \frac{x}{y}
-```
+    - As a default assumption, all zero-coupon bonds have a 1 USD face value so that $P(t,T)$ is the present value at time $t$ of the 1 USD paid at time $T$.
+    - $P(t,T)$ is therefore a *forward starting* discount factor (the discount factor that will be observed at time $t$).
+    - $P(0,T)$ is the discount curve observed "today" and can be related to the d(t) in [Discount Factors](./2_interest-rates.md#discount-factors) by $P(0,T) = d(T)$.
+    - Similarly, the discount curve observed on date $t$ is denoted $P(t,T)$.
+    - The notation $P(t,T)$ will be used to denote both discount factors and zero-coupon bond prices, which are numerically equal albeit conceptually different.
 
