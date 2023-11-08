@@ -42,8 +42,10 @@
       - [Futures Hedging Example 2: Copper Futures](#futures-hedging-example-2-copper-futures)
     - [Speculation and Leverage](#speculation-and-leverage)
       - [Speculation Example](#speculation-example)
-  - [The LIBOR Curve](#the-libor-curve)
-    - [LIBOR Curve Example](#libor-curve-example)
+  - [Forward Interest Rate](#forward-interest-rate)
+    - [The LIBOR Curve](#the-libor-curve)
+      - [LIBOR Curve Example](#libor-curve-example)
+      - [Applying Arbitrage Principals to Construct the LIBOR Curve](#applying-arbitrage-principals-to-construct-the-libor-curve)
 
 ## Derivatives Introduction
 
@@ -693,7 +695,15 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - This scenario shows a favourable movement in prices for the speculator; however, if the market had moved the against the speculator by the same amount, the speculator would have made a net loss of 7.78% on the cash position and a 219% net loss on the futures position (i.e. more than the initial investment in your futures position).
   - Margin would also require posting into the margin account during the daily settlement if the market moved against the speculator, requiring more investment over the 2 month period.
 
-## The LIBOR Curve
+## Forward Interest Rate
+
+- A forward interest rate is an interest rate on a loan that is agreed ahead of a loan term starting in the future.
+- The [London Inter-Bank Offered Rate (LIBOR)](./2_interest-rates.md#libor) is often used as a benchmark when setting a forward interest rate.
+  - $L(t,T_{1},T_{2})$ denotes the discretely compounded LIBOR forward interest rate that can be secured at time $t$ for a loan held from time $T_{1}$ to time $T_{2}$
+  - This is calculated using prevailing spot rates for the [LIBOR Curve](#the-libor-curve) and [applying arbitrage principals](#apply-arbitrage-principals-to-construct-the-libor-curve).
+
+
+### The LIBOR Curve
 
 - The London Inter-Bank Offered Rate (LIBOR) is a short-term interest rate published daily that represents the rate at which major banks would loan money to other major banks for loan terms (tenors) up to 1 year.
 - Various interest rate derivatives allow the LIBOR interest rates to be extended beyond the 1 year tenor, forming a spot rate curve known as the LIBOR (spot) curve.
@@ -711,13 +721,13 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
     - The notation $P(t,T)$ will be used to denote both discount factors and zero-coupon bond prices, which are numerically equal albeit conceptually different.
   - $T - t$ represents the tenor, time to maturity, term of the loan etc.
   - $P(t,T) = e^{-(T-t)y(t,T)}$ denotes the relationship between the continuously compounded LIBOR spot rate $y(t,T)$ and the LIBOR discount factor $P(t,T)$, extending the derivation from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves).
-  - $P(t,T)=\frac{1}{1+(T-t)L(t,T)}$ denotes the relationship between the simply compounded spot LIBOR rate $L(t,T)$ and the discount factor, using the formula for [Simple Interest](./2_interest-rates.md#simple-interest).
-  - $y(T)$ and $L(T)$ represent the continuously compounded and simply compounded LIBOR spot rates respectively as if they are observed "today", i.e. $y(0,T)$ and $L(0,T)$.
+  - $P(t,T)=\frac{1}{1+(T-t)L(t,T)}$ denotes the relationship between the discretely compounded spot LIBOR rate $L(t,T)$ and the discount factor.
+  - $y(T)$ and $L(T)$ represent the continuously compounded and discretely compounded LIBOR spot rates respectively as if they are observed "today", i.e. $y(0,T)$ and $L(0,T)$.
     - The discount factors are therefore equal to:
       - $P(0,T) = e^{-Ty(T)}$
       - $P(0,T) = \frac{1}{1+TL(T)}$
 
-### LIBOR Curve Example
+#### LIBOR Curve Example
 
 - For a 6 month LIBOR discount factor of 0.98, the continuously compounded 6 month LIBOR spot rate can be calculated as follows:
 
@@ -746,3 +756,14 @@ L(T) &= \frac{1 - P(0,T)}{TP(0,T)} \\
 &= \boxed{4.08\%}
 \end{aligned}
 ```
+
+#### Applying Arbitrage Principals to Construct the LIBOR Curve
+
+- Arbitrage principals acts on tangible, traded assets and given interest rates are not assets themselves, an equivalent collection of assets must be used.
+  - Bonds can be used to apply arbitrage principals to interest rates, and more specifically, zero-coupon bonds.
+- The following two portfolios both replicate a 1 USD payment received at time $T_{2}$:
+  1. A zero-coupon bond maturing at time $T_{2}$
+  2. A forward contract expiring at time $T_{1}$ on a bond maturing at time $T_{2}$, together with a $P(t,T_{1},T_{2})$ notional zero-coupon bond expiring at time $T_{1}$
+     - $P(t,T_{1},T_{2})$ represents the forward price of a bond maturing at time $T_{2}$ and a forward contract expiring at time $T_{1}$, assuming $T_{1} < T_{2}$.
+     - The cost at time $T_{1}$ of a zero-coupon bond maturing at time $T_{2}$ is $P(t,T_{1},T_{2})$ so to replicate the 1 USD payment at $T_{2}, a zero-coupon bond maturing at time $T_{1}$ with a face value of $P(t,T_{1},T_{2})$ is required.
+     - This is essentially discounting the forward price of the zero-coupon bond, maturing at time $T_{2}$, back to time $t$ as zero-coupon bond prices are numerically the same as discount factors.
