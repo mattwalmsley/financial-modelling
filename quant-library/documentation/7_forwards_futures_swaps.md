@@ -763,7 +763,66 @@ L(T) &= \frac{1 - P(0,T)}{TP(0,T)} \\
   - Bonds can be used to apply arbitrage principals to interest rates, and more specifically, zero-coupon bonds.
 - The following two portfolios both replicate a 1 USD payment received at time $T_{2}$:
   1. A zero-coupon bond maturing at time $T_{2}$
-  2. A forward contract expiring at time $T_{1}$ on a bond maturing at time $T_{2}$, together with a $P(t,T_{1},T_{2})$ notional zero-coupon bond expiring at time $T_{1}$
-     - $P(t,T_{1},T_{2})$ represents the forward price of a bond maturing at time $T_{2}$ and a forward contract expiring at time $T_{1}$, assuming $T_{1} < T_{2}$.
-     - The cost at time $T_{1}$ of a zero-coupon bond maturing at time $T_{2}$ is $P(t,T_{1},T_{2})$ so to replicate the 1 USD payment at $T_{2}, a zero-coupon bond maturing at time $T_{1}$ with a face value of $P(t,T_{1},T_{2})$ is required.
-     - This is essentially discounting the forward price of the zero-coupon bond, maturing at time $T_{2}$, back to time $t$ as zero-coupon bond prices are numerically the same as discount factors.
+  2. A forward contract expiring at time $T_{1}$ on a bond maturing at time $T_{2}$, together with a zero-coupon bond expiring at time $T_{1}$ that has a $P(t,T_{1},T_{2})$ face value.
+     - $P(t,T_{1},T_{2})$ is the cost at time $T_{1}$ of a zero-coupon bond maturing at time $T_{2}$ so to replicate the 1 USD payment at $T_{2}, a zero-coupon bond maturing at time $T_{1}$ with a face value of $P(t,T_{1},T_{2})$ is required.
+     - This is essentially discounting the forward price at time $T_{1}$ of the zero-coupon bond, maturing at time $T_{2}$, back to time $t$ as zero-coupon bond prices are numerically the same as discount factors.
+- The price of the two portfolios must be the same due to the Law of One Price, so the following applies, still assuming a 1 USD payment at $T_{2}$:
+
+```math
+\begin{aligned}
+\overbrace
+{
+\underbrace{P(t,T_{1})}_{\text{Price at time } t \text{ of zero-coupon bond maturing at }T_{1} \text{with face value} P(t,T_{1},T_{2})} 
+\times 
+\underbrace{P(t,T_{1},T_{2})}_{\text{Price at time } T_{1} \text{ of zero-coupon bond maturing at }T_{2}} 
+}^{\text{Price at time } t \text{ of zero-coupon bond maturing at }T_{2}}
+&= \underbrace{P(t,T_{2})}_{\text{Price at time } t \text{ of zero-coupon bond maturing at }T_{2}}
+\end{aligned}
+```
+
+$$P(t,T_{1},T_{2}) = \frac{P(t,T_{2})}{P(t,T_{1})}$$
+
+- Recalling the relationship between a discretely compounded spot interest rate $L(t,T)$ and a discount factor or zero-coupon bond price $P(t,T)$ from [the LIBOR curve](#the-libor-curve):
+ $$P(t,T)=\frac{1}{1+(T-t)L(t,T)}$$
+- The forward interest rate is defined to have the same relationship to the forward price that the spot interest rate $L(t,T)$ has to the cash price:
+ 
+ ```math
+ \begin{aligned}
+ \text{Forward Price} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\
+ \Longrightarrow \frac{P(t,T_{2})}{P(t,T_{1})} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\
+1 + (T_{2}-T_{1})L(t,T_{1},T_{2}) &= \frac{P(t,T_{1})}{P(t,T_{2})} \\
+L(t,T_{1},T_{2}) &= \frac{P(t,T_{1})}{(T_{2}-T_{1})P(t,T_{2})} - \frac{1}{(T_{2}-T_{1})} \\\\
+L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})}
+\end{aligned}
+```math
+
+- The forward interest rate F(t,T_{1},T_{2}) can be determined at time $t$ in terms of the observable bond prices at time $t$.
+  - The bond prices $P(t,T_{1})$ and $P(t,T_{2})$ which are listed on markets at time $t$ reflect the prevailing structure of interest rates at time $t$.
+  - The principles of arbitrage can then be applied to imply the forward interest rate F(t,T_{1},T_{2}) from the structure of interest rates at time $t$.
+
+##### Applying Arbitrage Principles Example
+
+- Taking the current spot LIBOR rates (discretely compounded) for a 2 year tenor as 4% and a 4 year tenor as 7%, the forward interest rate on a loan starting in 2 years and maturing in 4 years can be calculated by first using the bond prices as follows:
+
+
+```math
+\begin{aligned}
+& L(0,2) = 4\% = 0.04 \\
+& L(0,4) = 7\% = 0.07 \\
+& P(t,T) = \frac{1}{1+(T-t)L(t,T)} \\
+\Longrightarrow P(0,2) &= \frac{1}{1+(2-0)(0.04)} = \boxed{0.9259 \text{ USD}} \\
+\Longrightarrow P(0,4) &= \frac{1}{1+(4-0)(0.07)} = \boxed{0.7813\text{ USD}} \\
+\end{aligned}
+```
+
+- Then the forward interest rate can then be calculated from these bond prices:
+- 
+```math
+\begin{aligned}
+L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})} \\
+L(0,2,4) &= \frac{P(0,2) - P(0,4)}{(4-2)P(0,2)} \\
+&= \frac{0.9259 - 0.7813}{(2)(0.7813)} \\
+&= 0.0925 \\
+&= \boxed{9.25\%}
+\end{aligned}
+```
