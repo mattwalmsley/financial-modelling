@@ -42,10 +42,11 @@
       - [Futures Hedging Example 2: Copper Futures](#futures-hedging-example-2-copper-futures)
     - [Speculation and Leverage](#speculation-and-leverage)
       - [Speculation Example](#speculation-example)
-  - [Forward Interest Rate](#forward-interest-rate)
+  - [Forward Interest Rates](#forward-interest-rates)
     - [The LIBOR Curve](#the-libor-curve)
       - [LIBOR Curve Example](#libor-curve-example)
       - [Applying Arbitrage Principals to Construct the LIBOR Curve](#applying-arbitrage-principals-to-construct-the-libor-curve)
+    - [Forward Rate Agreements](#forward-rate-agreements)
 
 ## Derivatives Introduction
 
@@ -695,7 +696,7 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - This scenario shows a favourable movement in prices for the speculator; however, if the market had moved the against the speculator by the same amount, the speculator would have made a net loss of 7.78% on the cash position and a 219% net loss on the futures position (i.e. more than the initial investment in your futures position).
   - Margin would also require posting into the margin account during the daily settlement if the market moved against the speculator, requiring more investment over the 2 month period.
 
-## Forward Interest Rate
+## Forward Interest Rates
 
 - A forward interest rate is an interest rate on a loan that is agreed ahead of a loan term starting in the future.
 - The [London Inter-Bank Offered Rate (LIBOR)](./2_interest-rates.md#libor) is often used as a benchmark when setting a forward interest rate.
@@ -759,6 +760,7 @@ L(T) &= \frac{1 - P(0,T)}{TP(0,T)} \\
 
 #### Applying Arbitrage Principals to Construct the LIBOR Curve
 
+- Future interest rates can be locked in by applying arbitrage principles on spot rates that exist on today's market.
 - Arbitrage principals acts on tangible, traded assets and given interest rates are not assets themselves, an equivalent collection of assets must be used.
   - Bonds can be used to apply arbitrage principals to interest rates, and more specifically, zero-coupon bonds.
 - The following two portfolios both replicate a 1 USD payment received at time $T_{2}$:
@@ -816,7 +818,7 @@ L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})}
 ```
 
 - Then the forward interest rate can then be calculated from these bond prices:
-- 
+
 ```math
 \begin{aligned}
 L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})} \\
@@ -826,3 +828,12 @@ L(0,2,4) &= \frac{P(0,2) - P(0,4)}{(4-2)P(0,2)} \\
 &= \boxed{9.25\%}
 \end{aligned}
 ```
+
+### Forward Rate Agreements
+
+- Forward rate agreements (FRA) are contracts that mandate a certain amount (principal) can be either borrowed or lent over a specified term in the future with an interest rate agreed at the contract's inception.
+- FRAs are cash settled over-the-counter (OTC) products and normally no borrowing/lending occurs.
+  - Only interest rate payments are exchange at the expiration of the contract.
+- Conceptually, the borrower in an FRA contract has a long position (i.e. they are the buyer of a forward contract) and the right to borrow money at a specified future date is the underlying asset with the agreed interest rate being the contracted price.
+- Using the same notation as for forward contracts, the contracted rate is denoted $K$ and the contracted principal is denoted $N$ with the loan term defined as times $T_{1}$ (inception) to $T_{2}$ (expiration).
+- The borrower is therefore agreeing to pay $K \times (T_{2}-T_{1}) \times N$ at the contract expiration $T_{2}$, assuming a discretely compounded interest rate $K$.
