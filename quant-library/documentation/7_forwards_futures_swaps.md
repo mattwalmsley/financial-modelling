@@ -47,6 +47,7 @@
       - [LIBOR Curve Example](#libor-curve-example)
       - [Applying Arbitrage Principals to Construct the LIBOR Curve](#applying-arbitrage-principals-to-construct-the-libor-curve)
     - [Forward Rate Agreements](#forward-rate-agreements)
+      - [FRA Example](#fra-example)
 
 ## Derivatives Introduction
 
@@ -837,3 +838,37 @@ L(0,2,4) &= \frac{P(0,2) - P(0,4)}{(4-2)P(0,2)} \\
 - Conceptually, the borrower in an FRA contract has a long position (i.e. they are the buyer of a forward contract) and the right to borrow money at a specified future date is the underlying asset with the agreed interest rate being the contracted price.
 - Using the same notation as for forward contracts, the contracted rate is denoted $K$ and the contracted principal is denoted $N$ with the loan term defined as times $T_{1}$ (inception) to $T_{2}$ (expiration).
 - The borrower is therefore agreeing to pay $K \times (T_{2}-T_{1}) \times N$ at the contract expiration $T_{2}$, assuming a discretely compounded interest rate $K$.
+- The economic value of the FRA contract, at its expiration $T_{2}$, is the difference between the market value of the underlying asset and the contracted price $K$.
+- Taking $L(T_{1},T_{2})$ as the discretely compounded spot LIBOR rate at the expiration data, the market value of the underlying asset is therefore the amount needed to borrow the principal amount $N$ between times $T_{1}$ and $T_{2}$:
+$$L(T_{1},T_{2}) \times (T_{1} - T_{2}) \times N$$
+- After borrowing a principal amount $N$ at a forward agreed rate of $K$, the borrow could lend the money at time $T_{1}$ with the current market interest rate of $L(T_{1},T_{2})$.
+- In doing so, the payoff for the borrower is, as stated, the difference between the amount that would be received for lending a principal amount $N$ at the current market's interest rate $L(T_{1},T_{2})$ less the principal amount $N$ borrowed at time $T_{1}$ at a forward rate $K$:
+$$L(T_{1},T_{2})(T_{2}-T_{1})N - K(T_{2} - T_{1})N$$
+$$(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N$$
+- Essentially, the borrower is taking a fixed interest rate payment $K$ and **swapping** it for a floating interest payment $L(T_{1},T_{2})$, whilst the lender is **swapping** a floating interest payment for a fixed one.
+- In this hypothetical example, the borrower would pay/receive an amount ($L(T_{1},T_{2}) - K$ at time $T_{2}$, i.e. the principal amount $N$ does not actually need to be transferred as part of the contract.
+- In practice however, FRAs are cash settled where the counterparties exchange the discounted value of the interest rate payments at contract expiration $T_{1}$:
+
+```math
+\begin{aligned}
+P(T_{1},T_{2}) &= \frac{1}{1+(T_{2}-T_{1})L(t,T)} \\\\
+\text{Borrow pays/receives } \Longrightarrow P(T_{1},T_{2}) &= \frac{(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N}{1+(T_{2}-T_{1})L(t,T)} \\\\
+\text{Lender pays/receives } (-P(T_{1},T_{2})) \Longrightarrow P(T_{1},T_{2}) &= \frac{(T_{2}-T_{1})(K - L(T_{1},T_{2}))N}{1+(T_{2}-T_{1})L(t,T)}
+\end{aligned}
+```
+
+- To is important the note that the purpose of an FRA is **not** to borrow or lend money, but to gain or mitigate exposure to fixed/variable interest rates.
+
+#### FRA Example
+
+- Taking an FRA which has an expiry in 1 year on a 3 month loan for a 5 million USD principal amount with an agreed interest rate of 3%. Assuming a 3 month spotLIBOR rate of 2.1%, the amount paid/received by the borrower can be calculated as follows:
+
+```math
+\begin{aligned}
+P(T_{1},T_{2}) &= \frac{(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N}{1+(T_{2}-T_{1})L(t,T)} \\\\
+&= \frac{(\frac{3}{12})(0.03 - 0.021)(5000000)}{1+(\frac{3}{12})(0.021)} \\\\
+&= \boxed{11,191 \text{ USD}}
+\end{aligned}
+```
+
+- Given this value of 11,191 USD is positive, the borrower will receive this amount at the contract expiration.
