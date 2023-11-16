@@ -48,6 +48,8 @@
       - [Applying Arbitrage Principals to Construct the LIBOR Curve](#applying-arbitrage-principals-to-construct-the-libor-curve)
     - [Forward Rate Agreements](#forward-rate-agreements)
       - [FRA Example](#fra-example)
+      - [FRA Valuation](#fra-valuation)
+        - [FRA Valuation Example](#fra-valuation-example)
 
 ## Derivatives Introduction
 
@@ -624,10 +626,10 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 
 - For a US base exporting company which is due to receive a payment of 1 million EUR in November when the current month is May, the risk of adverse moves in the EUR/USD exchange rate can be mitigated using futures assuming the following EUR/USD rates in this scenario:
 
-|         |   Spot   | December Futures  |
-| ------  |:--------:|:-----------------:|
-|   May   | 1.15 USD |      1.18 USD     |
-| November| 1.02 USD |      1.03 USD     |
+|          |   Spot   | December Futures |
+|----------|:--------:|:----------------:|
+| May      | 1.15 USD |     1.18 USD     |
+| November | 1.02 USD |     1.03 USD     |
 
 - The CME EUR/USD futures contract has a contract size of 125,000 EUR and are sold for delivery in December. 
   - The December futures contract, which delivers from 1st December, is needed so that there is coverage for the whole month of November.
@@ -799,7 +801,7 @@ L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})}
 \end{aligned}
 ```math
 
-- The forward interest rate F(t,T_{1},T_{2}) can be determined at time $t$ in terms of the observable bond prices at time $t$.
+- The forward interest rate $F(t,T_{1},T_{2})$ can be determined at time $t$ in terms of the observable bond prices at time $t$.
   - The bond prices $P(t,T_{1})$ and $P(t,T_{2})$ which are listed on markets at time $t$ reflect the prevailing structure of interest rates at time $t$.
   - The principles of arbitrage can then be applied to imply the forward interest rate F(t,T_{1},T_{2}) from the structure of interest rates at time $t$.
 
@@ -872,3 +874,73 @@ P(T_{1},T_{2}) &= \frac{(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N}{1+(T_{2}-T_{1})L(t,T
 ```
 
 - Given this value of 11,191 USD is positive, the borrower will receive this amount at the contract expiration.
+
+#### FRA Valuation
+
+- Recalling that a payment $L(T_{1},T_{2})(T_{2}-T_{1})N - K(T_{2} - T_{1})N$ at time $T_{2}$ can be discounted to time $T_{1}$ to become the payoff that the borrow receives at $T_{1}$ in a forward rate agreement between $T_{1}$ and $T_{2}$ (assuming the contract expiration is $T_{1}$):
+$$P(T_{1},T_{2}) = \frac{(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N}{1+(T_{2}-T_{1})L(t,T)}$$
+- The payoff to the borrower is effectively the discounted value of an exchange of interest payments that would be made at time $T_{2}$.
+  - The fair value of a forward rate agreement can be calculated by constructing a portfolio replicating these exchange of interest rate payments using arbitrage principles.
+- The $K(T_{2} - T_{1})N$ component of the payment at time $T_{2}$ is a fixed payment that can be replicated by borrowing the discounted value at time $t$ to give the following component of the replicating portfolio (negative because this a debt):
+$$-P(t, T_{2})(T_{2} - T_{1})KN$$
+- The floating component of the payment is $L(T_{1},T_{2})(T_{2}-T_{1})N$ which is based on the spot LIBOR rate $L(T_{1}, T_{2})$ that is observed at time $T_{1}$ but unknown at time $t$ can be replicated as follows:
+  1. Taking a long position in a zero-coupon bond expiring at time $T_{1}$ with a face value of $N$.
+  2. Taking a short position in a zero-coupon bond expiring at time $T_{2}$ with a face value of $N$.
+     - Shorting a bond essentially means borrowing the discounted value of the face value of $N$ with an obligation to pay back $N$ at time $T_{2}$ - simply put, this is a debt that requires a payment of $N$ at time $T_{2}$.
+- The replication portfolio has three components: essentially, two debts and one zero-coupon bond.
+- At the FRA expiry, time $T_1$, the following happens:
+  -  The zero-coupon bond matures and a payment of $N$ is received.
+  -  This value of $N$ is invested at the prevailing spot LIBOR rate $L(T_{1},T_{2})$ from time $T_{1}$ to time $T_{2}$
+-  At time $T_{2}$, the following then happens:
+   -  The investment made at time $T_{1}$ matures and pays out $(1 + (T_{2} - T_{1})L(T_{1},T_{2}))N$ with the interest earned at the spot LIBOR rate $L(T_{1},T_{2})$.
+   -  Payment $N$ is required for the debt from taking a short position in the zero-coupon bond which matures at $T_{2}.
+   -  Once the payment is made $(1 + (T_{2} - T_{1})L(T_{1},T_{2}))N - N = (T_{2} - T_{1})L(T_{1},T_{2})N$ remains which is the same as the floating payment in the FRA.
+-  Discounting the value of the positions in the zero-coupon bonds with face $N$ leads to $P(t,T_{1})N$ for the long position on the zero-coupon bond expiring at time $T_{1}$ and a discounted value of $-P(t,T_{2})N$ for the short position on the zero-coupon bond expiring at time $T_{2}$ (a debt).
+-  By applying the Law of One Price to this 3-component portfolio, The value of the FRA at time t from the borrower's perspective, is therefore:
+
+```math
+\begin{aligned}
+\boxed{V_{\text{FRA}}(t) = P(t,T_{1})N -P(t,T_{2})N - P(t, T_{2})(T_{2} - T_{1})KN} \\
+\end{aligned}
+```
+
+- The value of the lender's position is the negative of this value.
+- THe forward rate $K$ at time $t$ time will be such that the value of the FRA at time $t$ will be 0.
+- Setting $V_{\text{FRA}}(t) = 0$ and solving for $K$:
+
+```math
+\begin{aligned}
+0 &= P(t,T_{1})N -P(t,T_{2})N - P(t, T_{2})(T_{2} - T_{1})KN \\
+P(t, T_{2})(T_{2} - T_{1})KN  &= P(t,T_{1})N -P(t,T_{2})N \\
+P(t, T_{2})(T_{2} - T_{1})K  &= P(t,T_{1}) -P(t,T_{2}) \\\\
+&\boxed{K  = \frac{P(t,T_{1}) -P(t,T_{2})}{P(t, T_{2})(T_{2} - T_{1})}}
+\end{aligned}
+```
+
+- This value of K is exactly the same as the forward LIBOR rate $L(t, T_{1}, T_{2})$ which is logical given this was derived using arbitrage principals.
+
+##### FRA Valuation Example
+
+Taking a 5-year LIBOR spot rate of 3.5% and a 6-year LIBOR spot rate of 4% (both discretely compounded), the market value today of a forward rate agreement for a 1-year term and expiring in 5 years on a principal of 2,000,000 USD with a contracted rate of 6% can be calculated from the borrowers perspective as follows:
+
+```math
+\begin{aligned}
+V_{\text{FRA}}(t) &= P(t,T_{1})N -P(t,T_{2})N - P(t, T_{2})(T_{2} - T_{1})KN \\\\
+P(t,T)=\frac{1}{1+(T-t)L(t,T)} \Longrightarrow V_{\text{FRA}}(t) &= \frac{N}{1+(T_{1}-t)L(t,T_{1})} - \frac{N}{1+(T_{2}-t)L(t,T_{2})} - \frac{(T_{2} - T_{1})KN}{1+(T_{2}-t)L(t,T_{2})} \\\\
+t=0 \Longrightarrow V_{\text{FRA}}(0) &= \frac{2000000}{1+(5)(0.035)} - \frac{2000000}{1+(6)(0.04)} - \frac{(6 - 5)(0.06)(2000000)}{1+(6)(0.04)} \\\\
+V_{\text{FRA}}(0) &= \boxed{-7550 \text{ USD}}
+\end{aligned}
+```
+
+- The fair value of the contracted rate can be calculated as follows:
+
+```math
+\begin{aligned}
+K  &= \frac{P(t,T_{1}) - P(t,T_{2})}{P(t, T_{2})(T_{2} - T_{1})} \\\\
+P(t,T)=\frac{1}{1+(T-t)L(t,T)} &\Longrightarrow P(t,T_{1}) = \frac{1}{1 + (5)(0.035)} = 0.851 \\\\
+&\Longrightarrow P(t,T_{1}) = \frac{1}{1 + (6)(0.04)} = 0.806 \\\\
+K  &= \frac{0.851 - 0.806}{0.806(6 - 5)} \\\\
+&= 0.0558 \\
+&= \boxed{5.58\%}
+\end{aligned}
+```
