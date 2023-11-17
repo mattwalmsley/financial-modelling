@@ -50,6 +50,10 @@
       - [FRA Example](#fra-example)
       - [FRA Valuation](#fra-valuation)
         - [FRA Valuation Example](#fra-valuation-example)
+  - [Eurodollar Futures](#eurodollar-futures)
+    - [Eurodollar Futures Contract Specification](#eurodollar-futures-contract-specification)
+    - [Eurodollar Futures Example 1: Contract Futures Rate Calculation](#eurodollar-futures-example-1-contract-futures-rate-calculation)
+    - [Eurodollars Futures Example 2: Marking to Market](#eurodollars-futures-example-2-marking-to-market)
 
 ## Derivatives Introduction
 
@@ -631,7 +635,7 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 | May      | 1.15 USD |     1.18 USD     |
 | November | 1.02 USD |     1.03 USD     |
 
-- The CME EUR/USD futures contract has a contract size of 125,000 EUR and are sold for delivery in December. 
+- The CME EUR/USD futures contract has a contract size of 125,000 EUR and are sold for delivery in December.
   - The December futures contract, which delivers from 1st December, is needed so that there is coverage for the whole month of November.
   - Therefore, a short position in 8 EUR/USD December futures contracts would be needed to fully hedge the risk (unitary hedge).
 - Taking the EUR/USD exchange rate change from 1.15 USD in May to 1.02 USD in November, the cash position has decreased in value by $(1000000)(1.15-1.02) = 130,000 \text{ USD}$.
@@ -672,7 +676,7 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 ### Speculation and Leverage
 
 - Futures can be used for risk management by offsetting/reducing exposure to a position as discussed in [futures hedging](#futures-hedging), but they can also be used for speculation by obtaining exposure to an asset and therefore increasing risk.
-- An investor can obtain long exposure to crude oil under the speculative belief that the price will rise by eith r buying the outright position in the cash market (buying oil) or by taking a long futures position.
+- An investor can obtain long exposure to crude oil under the speculative belief that the price will rise by either buying the outright position in the cash market (buying oil) or by taking a long futures position.
   - As shown in [cash market exposure](#cash-market-exposure), the futures position provides the same exposure to the underlying asset price as the equivalent cash position (actually holding the asset).
 - Opting to gain exposure through futures is normally preferred as futures markets are generally much more liquid (easier to buy/sell) than the cash market and for some assets, such as commodities, there are considerable costs/complications with taking cash positions (e.g. storage, insurance and transportation).
 - Futures contracts also provide **leverage**, allowing participants to multiply their buying power and obtain a much larger exposure on the financial market.
@@ -704,8 +708,7 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - A forward interest rate is an interest rate on a loan that is agreed ahead of a loan term starting in the future.
 - The [London Inter-Bank Offered Rate (LIBOR)](./2_interest-rates.md#libor) is often used as a benchmark when setting a forward interest rate.
   - $L(t,T_{1},T_{2})$ denotes the discretely compounded LIBOR forward interest rate that can be secured at time $t$ for a loan held from time $T_{1}$ to time $T_{2}$
-  - This is calculated using prevailing spot rates for the [LIBOR Curve](#the-libor-curve) and [applying arbitrage principals](#apply-arbitrage-principals-to-construct-the-libor-curve).
-
+  - This is calculated using prevailing spot rates for the [LIBOR Curve](#the-libor-curve) and [applying arbitrage principals](#applying-arbitrage-principals-to-construct-the-libor-curve).
 
 ### The LIBOR Curve
 
@@ -790,7 +793,7 @@ $$P(t,T_{1},T_{2}) = \frac{P(t,T_{2})}{P(t,T_{1})}$$
 - Recalling the relationship between a discretely compounded spot interest rate $L(t,T)$ and a discount factor or zero-coupon bond price $P(t,T)$ from [the LIBOR curve](#the-libor-curve):
  $$P(t,T)=\frac{1}{1+(T-t)L(t,T)}$$
 - The forward interest rate is defined to have the same relationship to the forward price that the spot interest rate $L(t,T)$ has to the cash price:
- 
+
  ```math
  \begin{aligned}
  \text{Forward Price} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\
@@ -889,14 +892,14 @@ $$-P(t, T_{2})(T_{2} - T_{1})KN$$
      - Shorting a bond essentially means borrowing the discounted value of the face value of $N$ with an obligation to pay back $N$ at time $T_{2}$ - simply put, this is a debt that requires a payment of $N$ at time $T_{2}$.
 - The replication portfolio has three components: essentially, two debts and one zero-coupon bond.
 - At the FRA expiry, time $T_1$, the following happens:
-  -  The zero-coupon bond matures and a payment of $N$ is received.
-  -  This value of $N$ is invested at the prevailing spot LIBOR rate $L(T_{1},T_{2})$ from time $T_{1}$ to time $T_{2}$
--  At time $T_{2}$, the following then happens:
-   -  The investment made at time $T_{1}$ matures and pays out $(1 + (T_{2} - T_{1})L(T_{1},T_{2}))N$ with the interest earned at the spot LIBOR rate $L(T_{1},T_{2})$.
-   -  Payment $N$ is required for the debt from taking a short position in the zero-coupon bond which matures at $T_{2}.
-   -  Once the payment is made $(1 + (T_{2} - T_{1})L(T_{1},T_{2}))N - N = (T_{2} - T_{1})L(T_{1},T_{2})N$ remains which is the same as the floating payment in the FRA.
--  Discounting the value of the positions in the zero-coupon bonds with face $N$ leads to $P(t,T_{1})N$ for the long position on the zero-coupon bond expiring at time $T_{1}$ and a discounted value of $-P(t,T_{2})N$ for the short position on the zero-coupon bond expiring at time $T_{2}$ (a debt).
--  By applying the Law of One Price to this 3-component portfolio, The value of the FRA at time t from the borrower's perspective, is therefore:
+  - The zero-coupon bond matures and a payment of $N$ is received.
+  - This value of $N$ is invested at the prevailing spot LIBOR rate $L(T_{1},T_{2})$ from time $T_{1}$ to time $T_{2}$
+- At time $T_{2}$, the following then happens:
+  - The investment made at time $T_{1}$ matures and pays out $(1 + (T_{2} - T_{1})L(T_{1},T_{2}))N$ with the interest earned at the spot LIBOR rate $L(T_{1},T_{2})$.
+  - Payment $N$ is required for the debt from taking a short position in the zero-coupon bond which matures at $T_{2}.
+  - Once the payment is made $(1 + (T_{2} - T_{1})L(T_{1},T_{2}))N - N = (T_{2} - T_{1})L(T_{1},T_{2})N$ remains which is the same as the floating payment in the FRA.
+- Discounting the value of the positions in the zero-coupon bonds with face $N$ leads to $P(t,T_{1})N$ for the long position on the zero-coupon bond expiring at time $T_{1}$ and a discounted value of $-P(t,T_{2})N$ for the short position on the zero-coupon bond expiring at time $T_{2}$ (a debt).
+- By applying the Law of One Price to this 3-component portfolio, The value of the FRA at time t from the borrower's perspective, is therefore:
 
 ```math
 \begin{aligned}
@@ -944,3 +947,61 @@ K  &= \frac{0.851 - 0.806}{0.806(6 - 5)} \\\\
 &= \boxed{5.58\%}
 \end{aligned}
 ```
+
+## Eurodollar Futures
+
+- The Eurodollar futures contract that is traded on exchanges, such as the Chicago Mercantile Exchange and can be considered as the futures equivalent of a forward rate agreement.
+- There is a close link between the Eurodollar futures contract and the 3-month spot LIBOR rate, such that the Eurodollar futures is designed to mimic a futures contract with a 3-month LIBOR Certificate of Deposit (CD) as the underlying.
+- As with other interest rate derivatives, the Eurodollar futures contract is designed to hedge/gain exposure to interest rates.
+  - Taking a long position in the Eurodollar futures contract implies taking a short position in interest rates and therefore taking a short position in the Eurodollar futures contract implies taking a long position on interest rates.
+
+### Eurodollar Futures Contract Specification
+
+- The futures contract is designed to approximately act as a futures contract with a 1,000,000 USD deposit at the 3-month LIBOR rate as the underlying.
+- The exact specification of the Eurodollars futures contract are as follows:
+  - The contract price is defined as being 100% minus the contracted futures interest rate %, such that $P=100(1-F(t,T,T+0.25))$ where $F(t,T,T+0.25)$ is the futures interest rate as a decimal at time $t$ for a term between $T$ and $T+0.25$.
+  - The delivery of the contract is explicitly linked to the LIBOR curve as the price at expiration $T$ is quoted as $P=100(1-L(t,T+0.25))$ where $L(T,T+0.25)$ is the 3-month LIBOR rate at time $T$.
+  - A 1 basis point change (0.01% or 0.0001) in the contracted futures rate implies a 25 USD change in the value of the contract as $1000000 \text{ USD} \times 0.0001 \times \frac{1}{4} = 25 \text{ USD}$, assuming that 3 months is a $\frac{1}{4}$ of a year.
+    - Considering the [day count convention](./2_interest-rates.md#day-count-conventions), it is not correct to assume that the underlying is a 1,000,000 USD deposit at the 3-month LIBOR rate due to 3 months not being exactly a quarter of a year.
+  - From day $t$ to day $t+1$, the change in the [mark to market](#futures-marking-to-market-settlement) of a long position in the Eurodollar futures contract is the change in value:
+
+```math
+\begin{aligned}
+\text{Day t} &\Longrightarrow 1000000 + 1000000 \left(\frac{1}{4}F(t,T,T+0.25)\right) \\\\
+\text{Day t + 1} &\Longrightarrow 1000000 + 1000000\left(\frac{1}{4}F(t+1,T,T+0.25)\right) \\\\
+\Delta(t \rightarrow t+1) &= 1000000\left(\frac{1}{4}F(t+1,T,T+0.25)\right) - 1000000\left(\frac{1}{4}F(t,T,T+0.25)\right) \\\\
+&= 1000000 \frac{1}{4} (F(t+1,T,T+0.25)- F(t,T,T+0.25)) \\\\
+\end{aligned}
+```
+
+- Substituting in the 1 basis point cases, the change in the mark to market can be demonstrated to be 25 USD:
+$$\Delta(t \rightarrow t+1) = 1000000 \frac{1}{4} (0.0001) = 25 \text{ USD}$$
+- In simple terms, for every basis point rise in contracted futures rate the long position in the futures contract will see a 25 USD loss  and a short position will see a 25 USD gain during the settlement process.
+- The contract is delivered on the expiration date with one final mark to market payment to the margin account.
+
+### Eurodollar Futures Example 1: Contract Futures Rate Calculation
+
+- Taking a Eurodollar futures contract which had a price yesterday of 98.1% and a price today of 97.8%, the futures rates on these days can be calculated as follows:
+
+```math
+\begin{aligned}
+P &= 100-F(t,T,T+0.25) \\
+F(t,T,T+0.25) &= 100 - P \\
+\text{Yesterday} \Longrightarrow &= 100 - 98.1 = \boxed{1.9\%} \\
+\text{Today} \Longrightarrow &= 100 - 97.8 = \boxed{2.2\%}
+\end{aligned}
+```
+
+### Eurodollars Futures Example 2: Marking to Market
+
+- Using the contracted prices from example 1, the change in margin account of an investor who has taken a short position in the Eurodollar futures contract can be calculated as follows:
+
+```math
+\begin{aligned}
+\Delta(t \rightarrow t+1) &= 1000000\left(\frac{1}{4}F(t+1,T,T+0.25)\right) - 1000000\left(\frac{1}{4}F(t,T,T+0.25)\right) \\\\
+&= 1000000 \frac{1}{4} (0.022- 0.019) \\\\
+&= \boxed{750 \text{ USD}}
+\end{aligned}
+```
+
+- The value is positive due to rises in the contracted rate benefiting the short position in the Eurodollars future position.
