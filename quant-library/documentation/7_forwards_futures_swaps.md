@@ -54,6 +54,8 @@
     - [Eurodollar Futures Contract Specification](#eurodollar-futures-contract-specification)
     - [Eurodollar Futures Example 1: Contract Futures Rate Calculation](#eurodollar-futures-example-1-contract-futures-rate-calculation)
     - [Eurodollars Futures Example 2: Marking to Market](#eurodollars-futures-example-2-marking-to-market)
+  - [Swaps](#swaps)
+    - [Interest Rate Swaps](#interest-rate-swaps)
 
 ## Derivatives Introduction
 
@@ -1005,3 +1007,28 @@ F(t,T,T+0.25) &= 100 - P \\
 ```
 
 - The value is positive due to rises in the contracted rate benefiting the short position in the Eurodollars future position.
+
+## Swaps
+
+- Swaps are derivatives which involve two counterparties who agree to exchange cash flows with each other.
+- Common examples of swaps includes:
+  - **Interest Rate Swaps**: a fixed interest payment, on a certain notional value, is exchanged for a floating interest payment on the same notional value.
+  - **Currency Swaps**: an interest payment in one currency is exchanged for an interest rate in another currency.
+  - **Equity Swaps**: a fixed payment is exchanged for the return on some stock or stock index.
+  - **Commodity Swaps**: a fixed payment is exchanged for a payment related to a commodity price.
+- Historically, the swap market has been an over-the-counter (OTC) market with two main types of participants: **dealers** (investment banks, broker/dealers, etc.) and **end users** (non-financial businesses and individuals).
+  - As with most OTC products, counterparty credit risk is a major concern for swaps that are traded over-the-counter.
+- Following the 2008 financial crisis, global regulators transitioned swaps to become more standardised products that could be traded in exchange-like environments.
+  - Many swaps are now centrally cleared which greatly reduces counterparty credit risk.
+  - **Swap Execution Facilities** have been created as trading platforms for swaps and match counterparties together.
+- The general direction of the swap market is heading, through regulatory intervention, towards an exchange traded market as opposed to an over-the-counter market.
+
+### Interest Rate Swaps
+
+- Interest rate swaps are the most common swap contract with the great majority of swaps being derivatives of interest rates.
+- Most interest rates swaps will exchange a floating interest payment such as a LIBOR rate with a fixed interest rate that is set at the swap contract initiation.
+- The counterparty paying the fixed rate is denoted as the **payer** and the counterparty paying the floating rate (and receiving the fixed rate) is denoted as the **receiver**.
+- At the origination of an interest rate swap $t_{0}$, a notional value $N$ is set which represents the principal that the interest rate payments will be calculated upon (even though this principal is never exchanged between the counterparties).
+- The contract will also specify a series of payment dates $\{t_{i}\}_{i=1}^{I}$ which are usually spaced by 3 or 6 month intervals.
+- The fixed interest rate specified in the contract is denoted by $S$ and known as the **Swap Rate**.
+- The observed market value on date $t_{i}$ of the floating interest rate is denoted $L_{i}$. **Note that** $L_{i}$ **is not the floating interest rate payment paid on date** $t_{i}$**, but the market observable interest rate on** $t_{i}$.
