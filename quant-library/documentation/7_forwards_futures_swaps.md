@@ -43,6 +43,7 @@
     - [Speculation and Leverage](#speculation-and-leverage)
       - [Speculation Example](#speculation-example)
   - [Forward Interest Rates](#forward-interest-rates)
+    - [Simple Interest](#simple-interest)
     - [The LIBOR Curve](#the-libor-curve)
       - [LIBOR Curve Example](#libor-curve-example)
       - [Applying Arbitrage Principals to Construct the LIBOR Curve](#applying-arbitrage-principals-to-construct-the-libor-curve)
@@ -56,6 +57,10 @@
     - [Eurodollars Futures Example 2: Marking to Market](#eurodollars-futures-example-2-marking-to-market)
   - [Swaps](#swaps)
     - [Interest Rate Swaps](#interest-rate-swaps)
+      - [Usages of Interest Rate Swaps](#usages-of-interest-rate-swaps)
+      - [Swap Cash Flows](#swap-cash-flows)
+      - [Interest Rate Swaps Example](#interest-rate-swaps-example)
+    - [Pricing Swaps](#pricing-swaps)
 
 ## Derivatives Introduction
 
@@ -709,12 +714,20 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 
 - A forward interest rate is an interest rate on a loan that is agreed ahead of a loan term starting in the future.
 - The [London Inter-Bank Offered Rate (LIBOR)](./2_interest-rates.md#libor) is often used as a benchmark when setting a forward interest rate.
-  - $L(t,T_{1},T_{2})$ denotes the discretely compounded LIBOR forward interest rate that can be secured at time $t$ for a loan held from time $T_{1}$ to time $T_{2}$
+  - $L(t,T_{1},T_{2})$ denotes the simple LIBOR forward interest rate that can be secured at time $t$ for a loan held from time $T_{1}$ to time $T_{2}$
   - This is calculated using prevailing spot rates for the [LIBOR Curve](#the-libor-curve) and [applying arbitrage principals](#applying-arbitrage-principals-to-construct-the-libor-curve).
+- The compounding convention for LIBOR rates is generally T_{2} - T_{1} (simple compounding).
+
+### Simple Interest
+
+- Simple interest is similar to [periodically/discretely compounded interest](./2_interest-rates.md#periodic-compounding), but the interest is only calculated/charged once over the loan term.
+- If $L$ is the interest rate charged over a loan term $\tau \equiv t_{2} - t_{1}$, assuming that $t_{2} > t_{1}$, on a notional value $N$, then the total interest charged is $\tau LN \equiv (t_{2} - t_{1})LN$.
+- With simple interest, no compounding (interest on interest) occurs because the compounding period is 1.
 
 ### The LIBOR Curve
 
 - The London Inter-Bank Offered Rate (LIBOR) is a short-term interest rate published daily that represents the rate at which major banks would loan money to other major banks for loan terms (tenors) up to 1 year.
+- As of June 2023, LIBOR has been transitioned out and replaced with other benchmarks, the most common being [SOFR](./2_interest-rates.md#sofr) for USD. The references to LIBOR here are used for illustrative purposes.
 - Various interest rate derivatives allow the LIBOR interest rates to be extended beyond the 1 year tenor, forming a spot rate curve known as the LIBOR (spot) curve.
   - For example, the market prices of EUR/USD futures and interest rate swaps are commonly bootstrapped to an interest rate curve up to around the 30 year tenor.
   - Recall from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves) that a spot curve is comprised of the implied discount factors.
@@ -730,8 +743,8 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
     - The notation $P(t,T)$ will be used to denote both discount factors and zero-coupon bond prices, which are numerically equal albeit conceptually different.
   - $T - t$ represents the tenor, time to maturity, term of the loan etc.
   - $P(t,T) = e^{-(T-t)y(t,T)}$ denotes the relationship between the continuously compounded LIBOR spot rate $y(t,T)$ and the LIBOR discount factor $P(t,T)$, extending the derivation from [Discount and Spot Rate Curves](./3_bonds.md#discount-and-spot-rate-curves).
-  - $P(t,T)=\frac{1}{1+(T-t)L(t,T)}$ denotes the relationship between the discretely compounded spot LIBOR rate $L(t,T)$ and the discount factor.
-  - $y(T)$ and $L(T)$ represent the continuously compounded and discretely compounded LIBOR spot rates respectively as if they are observed "today", i.e. $y(0,T)$ and $L(0,T)$.
+  - $P(t,T)=\frac{1}{1+(T-t)L(t,T)}$ denotes the relationship between the simple interest spot LIBOR rate $L(t,T)$ and the discount factor.
+  - $y(T)$ and $L(T)$ represent the continuously compounded and simple interest LIBOR spot rates respectively as if they are observed "today", i.e. $y(0,T)$ and $L(0,T)$.
     - The discount factors are therefore equal to:
       - $P(0,T) = e^{-Ty(T)}$
       - $P(0,T) = \frac{1}{1+TL(T)}$
@@ -792,7 +805,7 @@ L(T) &= \frac{1 - P(0,T)}{TP(0,T)} \\
 
 $$P(t,T_{1},T_{2}) = \frac{P(t,T_{2})}{P(t,T_{1})}$$
 
-- Recalling the relationship between a discretely compounded spot interest rate $L(t,T)$ and a discount factor or zero-coupon bond price $P(t,T)$ from [the LIBOR curve](#the-libor-curve):
+- Recalling the relationship between a simple interest spot rate $L(t,T)$ and a discount factor or zero-coupon bond price $P(t,T)$ from [the LIBOR curve](#the-libor-curve):
  $$P(t,T)=\frac{1}{1+(T-t)L(t,T)}$$
 - The forward interest rate is defined to have the same relationship to the forward price that the spot interest rate $L(t,T)$ has to the cash price:
 
@@ -812,7 +825,7 @@ L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})}
 
 ##### Applying Arbitrage Principles Example
 
-- Taking the current spot LIBOR rates (discretely compounded) for a 2 year tenor as 4% and a 4 year tenor as 7%, the forward interest rate on a loan starting in 2 years and maturing in 4 years can be calculated by first using the bond prices as follows:
+- Taking the current spot LIBOR rates (simple interest) for a 2 year tenor as 4% and a 4 year tenor as 7%, the forward interest rate on a loan starting in 2 years and maturing in 4 years can be calculated by first using the bond prices as follows:
 
 
 ```math
@@ -844,9 +857,9 @@ L(0,2,4) &= \frac{P(0,2) - P(0,4)}{(4-2)P(0,2)} \\
   - Only interest rate payments are exchange at the expiration of the contract.
 - Conceptually, the borrower in an FRA contract has a long position (i.e. they are the buyer of a forward contract) and the right to borrow money at a specified future date is the underlying asset with the agreed interest rate being the contracted price.
 - Using the same notation as for forward contracts, the contracted rate is denoted $K$ and the contracted principal is denoted $N$ with the loan term defined as times $T_{1}$ (inception) to $T_{2}$ (expiration).
-- The borrower is therefore agreeing to pay $K \times (T_{2}-T_{1}) \times N$ at the contract expiration $T_{2}$, assuming a discretely compounded interest rate $K$.
+- The borrower is therefore agreeing to pay $K \times (T_{2}-T_{1}) \times N$ at the contract expiration $T_{2}$, assuming a simple interest rate $K$.
 - The economic value of the FRA contract, at its expiration $T_{2}$, is the difference between the market value of the underlying asset and the contracted price $K$.
-- Taking $L(T_{1},T_{2})$ as the discretely compounded spot LIBOR rate at the expiration data, the market value of the underlying asset is therefore the amount needed to borrow the principal amount $N$ between times $T_{1}$ and $T_{2}$:
+- Taking $L(T_{1},T_{2})$ as the simple interest spot LIBOR rate at the expiration data, the market value of the underlying asset is therefore the amount needed to borrow the principal amount $N$ between times $T_{1}$ and $T_{2}$:
 $$L(T_{1},T_{2}) \times (T_{1} - T_{2}) \times N$$
 - After borrowing a principal amount $N$ at a forward agreed rate of $K$, the borrow could lend the money at time $T_{1}$ with the current market interest rate of $L(T_{1},T_{2})$.
 - In doing so, the payoff for the borrower is, as stated, the difference between the amount that would be received for lending a principal amount $N$ at the current market's interest rate $L(T_{1},T_{2})$ less the principal amount $N$ borrowed at time $T_{1}$ at a forward rate $K$:
@@ -926,7 +939,7 @@ P(t, T_{2})(T_{2} - T_{1})K  &= P(t,T_{1}) -P(t,T_{2}) \\\\
 
 ##### FRA Valuation Example
 
-Taking a 5-year LIBOR spot rate of 3.5% and a 6-year LIBOR spot rate of 4% (both discretely compounded), the market value today of a forward rate agreement for a 1-year term and expiring in 5 years on a principal of 2,000,000 USD with a contracted rate of 6% can be calculated from the borrowers perspective as follows:
+Taking a 5-year LIBOR spot rate of 3.5% and a 6-year LIBOR spot rate of 4% (both simple interest), the market value today of a forward rate agreement for a 1-year term and expiring in 5 years on a principal of 2,000,000 USD with a contracted rate of 6% can be calculated from the borrowers perspective as follows:
 
 ```math
 \begin{aligned}
@@ -1032,3 +1045,45 @@ F(t,T,T+0.25) &= 100 - P \\
 - The contract will also specify a series of payment dates $\{t_{i}\}_{i=1}^{I}$ which are usually spaced by 3 or 6 month intervals.
 - The fixed interest rate specified in the contract is denoted by $S$ and known as the **Swap Rate**.
 - The observed market value on date $t_{i}$ of the floating interest rate is denoted $L_{i}$. **Note that** $L_{i}$ **is not the floating interest rate payment paid on date** $t_{i}$**, but the market observable interest rate on** $t_{i}$.
+- The number of payments per year is denoted by $m$ and is usually 2 or 4 depending on whether the payments are semi-annually or quarterly.
+- The floating rate $L_{i}$ is usually 3-month LIBOR if $m = 4$ or 6-month LIBOR if $m=2$.
+- Generally, the compounding convention for LIBOR rates as well as the fixed swap rate is [simple interest](#simple-interest):
+$$\text{Total Interest Rate Charged} = \tau LN$$
+- To borrow a principal $N$ at a LIBOR rate $L_{i-1}$ (set on date $t_{i-1}$), the interest charged from date $t_{i-1}$ to $t_{i}$ (assuming the interest is paid at $t_{i}$) is:
+$$(t_{i}-t_{i-1})L_{i-1}N$$
+- On date $t_{i}$, the payer pays to the receiver $\frac{S}{m}N$ and the receiver pays the payer $\frac{L_{i-1}}{m}N$.
+  - Note that the floating interest rate $L_{i-1}$ is the interest rate observed on the *previous* payment date.
+
+#### Usages of Interest Rate Swaps
+
+- Interest rate swaps are commonly used to reduce/gain exposure to varying interest rates.
+- Banks prefer to charge floating rates on their loans so customers can use swaps to converting their flexible rate interest payments to fixed rate payments.
+
+#### Swap Cash Flows
+
+![Swap Cash Flows](images/swap-cash-flows.png "Swap Cash Flows")
+
+#### Interest Rate Swaps Example
+
+- Two counterparties, A and B, enter into a 5-year swap contract where A is the payer and B is the receiver.
+- The contracted notional amount is 10,000,000 USD and the swap fate (i.e. the fixed interest rate) is 3%.
+- The payments are semi-annual and the floating interest rate is the 6-month LIBOR rate, defined in the table below.
+
+|     Date    | 6-month LIBOR |
+| ----------- |:-------------:|
+|      $t$      |      2.8%     |
+| $t$ + 6 months|      3.1%     |
+
+- The first two cash flows in the swap contract can be calculated using the table below as follows:
+  - The first payment is due 6 months after the contract origination at $t$ + 6 months:
+    - A pays B the swap rate (fixed): $\frac{S}{m}N \Longrightarrow \frac{0.03}{2}10000000 = 150,00 \text{ USD}$
+    - B pays A the LIBOR rate observed at the contract origination (floating): $\frac{L_{i-1}}{m}N \Longrightarrow \frac{0.028}{2}10000000 = 140,00 \text{ USD}$
+    - The result is a net payment of 10,000 USD from A to B.
+  - The second payment is due 12 months after the contract origination at $t$ + 12 months:
+    - A pays B the swap rate (fixed) again: $\frac{S}{m}N \Longrightarrow \frac{0.03}{2}10000000 = 150,00 \text{ USD}$
+    - B pays A the LIBOR rate observed at 6 months after the contract origination (floating): $\frac{L_{i-1}}{m}N \Longrightarrow \frac{0.031}{2}10000000 = 155,00 \text{ USD}$
+    - The result is a net payment of 5,000 USD from B to A.
+- The payment cycle would occur every 6 months for the duration of the contract - 5 years.
+
+### Pricing Swaps
+

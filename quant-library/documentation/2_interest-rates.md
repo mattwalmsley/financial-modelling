@@ -254,7 +254,7 @@ $$S(T,U) = \left(\frac{I(U)}{I(T)} - 1 \right) \times \frac{365}{d}$$
 
 ## SOFR
 
-- The Secured Overnight Financing Rate (SOFR) has been selected as the alternative reference rate to replace libor for the USD sector.
+- The Secured Overnight Financing Rate (SOFR) has been selected as the alternative reference rate to replace LIBOR for the USD sector.
 - SOFR is published  by the Federal Reserve and is an overnight rate based on transaction in money markets (financing rates paid in the overnight US Treasury repo market), similar to SONIA.
   - **Repo** is shorthand for **repurchase agreements**  and hence the US Treasury repo market refers to the repo agreements that have US Treasury securities as collateral.
   - Repurchase Agreements are short term deals between two parties where cash is exchanged for an asset with an agreement to reverse the exchange at a set future date. Upon the termination of the contract, the cash borrower (asset seller) buys the asset back for the original price in addition to interest at the **repo rate**.
