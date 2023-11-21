@@ -61,6 +61,7 @@
       - [Swap Cash Flows](#swap-cash-flows)
       - [Interest Rate Swaps Example](#interest-rate-swaps-example)
     - [Pricing Swaps](#pricing-swaps)
+      - [Fair Swap Rate](#fair-swap-rate)
 
 ## Derivatives Introduction
 
@@ -1087,3 +1088,89 @@ $$(t_{i}-t_{i-1})L_{i-1}N$$
 
 ### Pricing Swaps
 
+- In simple terms, a swap consists of two cash flows (payment streams) - the fixed interest payments (swap rate) and floating interest payments (LIBOR or similar).
+- The value of a swap is the appropriate difference (long vs short position in the swap contract) between the two payment streams.
+- The stream of fixed payments is called the **fixed leg** of the swap and its value is denoted $V_{\text{fixed}}$.
+- The stream of floating payments is called the **floating leg** of the swap and its value is denoted $V_{\text{float}}$.
+- Using the same notation as [interest rate swaps](#interest-rate-swaps), where the following notations applying:
+  - $\{t_{j}\}_{j=0}^{J}$ represents the payment dates between the origination date $t_{j=0}$ and the final payment date $t_{j=J}$.
+  - $S$ is the fixed rate (swap rate)
+  - $L_{j}$ is the floating interest rate set at time $t_{j}$ (market observable rate)
+  - $N$ is the notional amount
+  - $m$ is the frequency og swap payment - i.e. there are $m$ payments per year
+    - In most cases, it can be presumed that $t_{j} = \frac{j}{m}$; however, this is not applicable for this derivation.
+  - $d(t)$ is the discount factor for time $t$, where $d(t)$ is the value today of a payment of 1 USD received at time $t$.
+- The value of the fixed leg $V_{\text{fixed}}$ can be derived as follows:
+  - As shown in [interest rate swaps](#interest-rate-swaps), the fixed payment each cycle is $\frac{S}{m}N$.
+  - Therefore, the discounted value of the $j$'th fixed payment is $d(t_{j})\frac{S}{m}N$.
+  - The value of $V_{\text{fixed}}$ is the sum of the discounted values of all the payments:
+
+```math
+\begin{aligned}
+V_{\text{fixed}} &= \sum_{j=1}^{J}d(t_{j})\frac{S}{m}N \\\\
+&= \frac{SN}{m}\sum_{j=1}^{J}d(t_{j})
+\end{aligned}
+
+```
+
+- The value of the floating leg $V_{\text{float}}$ can now be derived as follows:
+  - As shown in [interest rate swaps](#interest-rate-swaps), the $j$'th floating payment is $\frac{L_{j-1}}{m}N$.
+    - The floating rate $L_{j-1}$ is observed on the market at time $t_{j-1}$ so is not known at the contract origination.
+    - The value of the floating leg needs to be calculated by applying arbitrage principles to a replication portfolio that determines the value of the $j$'th floating payment at contract origination.
+  - A replication portfolio for the $j$'th floating payment can be constructed as follows:
+    - There will be 2 components in the portfolio, both initiated when the swap contract is originated:
+      1. a loan maturing at time $t_{j}$ with a face value of $N$ (e.g. a short position in a zero-coupon bond with face value $N$ that matures at $t_{j}$)
+      2. an investment maturing at time $t_{j-1}$ also with a face value of $N$ (e.g. a long position in a zero-coupon bond with face value $N$ that matures at $t_{j-1}$)
+    - The portfolio behaves as follows:
+      - At time $t_{j-1}$ , the investment matures and a cash payment of $N$ is received
+      - The cash proceeds of the investment $N$ are reinvested at the floating interest rate $L_{j-1}$, which is observed on the market at time $T_{j-1}$.
+      - This reinvestment is held from $t_{j-1}$ to $t_{j}$.
+      - At time $t_{j}$ this investment is worth $N + N \frac{L_{j-1}}{m} \equiv (1 + \frac{L_{j-1}}{m})N$ assuming simple interest.
+      - Also at $t_{j}$ the loan matures and a debt of $N$ is due to be paid.
+      - The portfolio at $t_{j}$ is worth $(1 + \frac{L_{j-1}}{m})N - N \equiv \frac{L_{j-1}}{m}N$.
+      - The $j$'th floating payment in the swap is also worth $\frac{L_{j-1}}{m}N$.
+    - The Law of One Price can be applied which states that the cost of entering into this portfolio must also be the fair value (arbitrage price) of the $j$'th floating payment at the origination date of the swap contract $t_{j=0}$.
+      - The cost to enter into the portfolio is the cost at time $t_{j=0}$ (discounted value) of the investment less the loan: $Nd(t_{j-1}) - Nd(t_{j}) \equiv N(d(t_{j-1}) - d(t_{j}))$
+    - $V_{\text{float}}$ is the sum of all the floating leg payments:
+
+```math
+\begin{aligned}
+V_{\text{float}} &= \sum_{j=1}^{J}N(d(t_{j-1}) - d(t_{j})) \\\\
+&= N \sum_{j=1}^{J}(d(t_{j-1}) - d(t_{j})) \\\\
+&= N [d(t_{0}) - d(t_{1}) + d(t_{1}) - d(t_{2}) + d(t_{2}) - d(t_{3}) +...+ d(t_{J-1}) - d(t_{J})] \\\\
+&= N(d(t_{0}) - d(t_{J})) \\\\
+d(t_{0}) = 1 \Longrightarrow &= N(1- d(t_{J}))
+\end{aligned}
+```
+
+- For the payer (the counterparty that is paying the fixed swap rate), the value of the swap is:
+
+```math
+\begin{aligned}
+V &= V_{\text{float}} - V_{\text{fixed}} \\\\
+&= \boxed{N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j})}
+\end{aligned}
+```
+
+- For the receiver (the counterparty that is paying the floating swap rate), the value of the swap is:
+
+```math
+\begin{aligned}
+V &= V_{\text{fixed}} - V_{\text{float}} \\\\
+&= \boxed{\frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) - N(1- d(t_{J}))}
+\end{aligned}
+```
+
+#### Fair Swap Rate
+
+- The fair swap rate is the value of the fixed rate $S$ in an interest rat swap that sets the swap contract to 0 at contract origination, i.e. $V = 0$.
+- For the payer, the fair swap rate $S$ is:
+
+```math
+\begin{aligned}
+V = N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) \\\\
+0 = N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) \\\\
+\frac{S}{m}\sum_{j=1}^{J}d(t_{j}) = (1- d(t_{J})) \\\\
+\boxed{S = \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})}} \\\\
+\end{aligned}
+```
