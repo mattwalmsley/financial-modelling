@@ -62,6 +62,8 @@
       - [Interest Rate Swaps Example](#interest-rate-swaps-example)
     - [Pricing Swaps](#pricing-swaps)
       - [Fair Swap Rate](#fair-swap-rate)
+    - [Swaps Example 1: Interest Rate Swap](#swaps-example-1-interest-rate-swap)
+    - [Swaps Example 2: Hedging Interest Rate Rises](#swaps-example-2-hedging-interest-rate-rises)
 
 ## Derivatives Introduction
 
@@ -1174,3 +1176,63 @@ V = N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) \\\\
 \boxed{S = \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})}} \\\\
 \end{aligned}
 ```
+
+### Swaps Example 1: Interest Rate Swap
+
+- For a 1-year interest rate swap with quarterly payments on a notional value of 500,000 USD, the fixed rate can be calculated, using a term structure of discount factors: $d(0.25) = 0.982$, $d(0.5) = 0.975$, $d(0.75) = 0.965$, $d(1) = 0.952$, as follows:
+  - Quarterly swap payments implies the frequency of payments $m=4$.
+  - For a 1-year swap with $m=4$, there will be a total number of payments $J=4$.
+  - The [fair swap rate](#fair-swap-rate) can be calculated as follows:
+
+```math
+\begin{aligned}
+S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
+&= \frac{4(1- 0.952)}{0.982 + 0.975 + 0.965+ 0.952} \\\\
+&= 0.04956 \\\\
+&= \boxed{4.956 \%} \\\\
+\end{aligned}
+```
+
+- If the term structure of the discount factors was to change after 3 months to the following: $d(0.25) = 0.979$, $d(0.5) = 0.961$, $d(0.75) = 0.955$, the value of the position in 3 months from the payer's perspective can be calculated as follow:
+  - Note that $d(0.75)$ is now the discount factor at $t_{J}$ given 3 months have passed
+
+```math
+\begin{aligned}
+V &= V_{\text{float}} - V_{\text{fixed}} \\\\
+
+&= N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) \\\\
+&= 500000(1- 0.955) - \frac{(0.04956)(500000)}{4}(0.979 + 0.961 + 0.955) \\\\
+&= 225000 - 17935 \\\\
+&= \boxed{4565 \text{ USD}}
+\end{aligned}
+```
+
+### Swaps Example 2: Hedging Interest Rate Rises
+
+- A corporation has issued a floating rate bond with a 5,000,000 USD face value which pays 6-month LIBOR plus 200 basis points (bps) and has a 1-year maturity.
+  - 1 bps is equal to 0.01%
+- The corporation can protect itself against interest rate increases using swaps as follows:
+  - Enter into an interest rate swap as the payer (of the fixed rate).
+  - The variable interest rate payments will then be swapped for fixed payments.
+  - To fully cover the variable payments with fixed payments, the corporation must enter into a 1-year swap on a notion of 5,000,000 USD that makes semi-annual floating payments based on the 6-month LIBOR.
+- The market swap rate, assuming the term term structure of discount factors: $d(0.5) = 0.996$, $d(1) = 0.989$, can be calculated as follows:
+
+```math
+\begin{aligned}
+S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
+&= \frac{2(1- 0.989)}{0.996 + 0.989} \\\\
+&= 0.01108 \\\\
+&= \boxed{1.108 \%} \\\\
+\end{aligned}
+```
+
+- For a scenario where the 6-month LIBOR rate at swap origination is 0.8% and that 6 months later the 6-month LIBOR rate has risen to 1.7%, the effectiveness of this risk management strategy can be determined as follows:
+  - Calculate the interest payments without taking a swap contract:
+    - The interest payment made 6 months after origination would be: $\frac{0.008 + 0.02}{2} \times 5000000 = 70,000 \text{ USD}$
+    - The interest payment made 12 months after origination would be: $\frac{0.017 + 0.02}{2} \times 5000000 = 92,500 \text{ USD}$
+    - The total interest paid over the year would therefore have been 162,500 USD.
+  - Calculate the interest payments made with the swap contract:
+    - The interest payments made at 6 months and 12 months after origination would both be: $\frac{0.01108 + 0.02}{2} \times 5000000 = 77,700 \text{ USD}$
+    - The total interest paid over the year would therefore have been 155,400 USD.
+  - With the swap contract in place, the corporation would be $162500 - 155400 = 7,100 \text{ USD}$ better off.
+    - The savings are almost negligible when compared to the 5,000,00 USD notional, but over a longer term, there may be more benefit to taking out a swap contract.
