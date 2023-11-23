@@ -1246,7 +1246,7 @@ S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
 
 - As a recap, the [LIBOR curve](#the-libor-curve) is a spot rate curve which can be constructed by [applying arbitrage principals](#applying-arbitrage-principals-to-construct-the-libor-curve) to bond prices; however, this section will explore bootstrapping money market instruments to construct the LIBOR curve as follows:
   - **Tenors from today out to 3 months**: Discount factors can be derived from the cash LIBOR rates up to 3 months and then these discount factors can be used to calculated the spot rates.
-  - **Tenors from 3 months out to 2-5 years**: Eurodollar futures rates can be used to calculate the spot LIBOR rates as th Eurodollar futures market is liquid and transparent (unlike [FRAs](#forward-rate-agreements) which are traded OTC). A convexity adjustment could be made to compensate for using futures rates instead of forwards rates.
+  - **Tenors from 3 months out to 2-5 years**: Eurodollar futures rates can be used to calculate the spot LIBOR rates as th Eurodollar futures market is liquid and transparent (unlike [FRAs](#forward-rate-agreements) which are traded OTC). A convexity adjustment could be made to compensate for using futures rates instead of forwards rates if greater accuracy is needed.
   - **Tenors further out than 2-5 years**: Market swap rates can be used to calculate the discount factors and from these the spot rates can be calculated. As long as there's a sufficiently liquid swap market available, tenors can be calculated.
 
 ### LIBOR Curve Bootstrapping Example
@@ -1297,6 +1297,55 @@ y\left(\frac{3}{12}\right) &= -\frac{log(0.99676)}{\left(\frac{3}{12}\right)} = 
 |  15M  | 97.3  |
 |  18M  | 97.0  |
 
+- Recalling from [applying arbitrage principals to construct the LIBOR curve](#applying-arbitrage-principals-to-construct-the-libor-curve) the formula for today's ($t=0$) price of a forward contract expiring at $T_{1} \equiv T$ for a bond maturing at time $T_{2} \equiv T+ \tau$:
+
+```math
+\begin{aligned}
+\frac{P(t,T_{2})}{P(t,T_{1})} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\\\
+\frac{P(0,T + \tau)}{P(0,T)} &= \frac{1}{1+(\tau)L(0,T,T + \tau)}
+\end{aligned}
+```
+
+- The LIBOR rate $L(0,T_{1},T_{1} + \tau)$ can be substituted for a forward rate $F(0,T_{1},T_{1} + \tau)$ to give the formula for discount factor extension (i.e. the discount factor for $T + \tau$ when the discount factor at $T$ is known):
+
+```math
+\begin{aligned}
+\frac{P(0,T + \tau)}{P(0,T)} &= \frac{1}{1+(\tau)F(0,T,T + \tau)} \\\\
+\Longrightarrow P(0,T + \tau) &= P(0,T) \frac{1}{1+(\tau)F(0,T,T + \tau)} \\\\
+\text{where} \Longrightarrow F \left(0,\frac{3}{12},\frac{6}{12} \right) &= 100 - 98.4 = 1.6 \% = 0.016 \\\\\
+\text{where} \Longrightarrow P\left(0,\frac{3}{12}\right) &= 0.99676 \\\\
+P\left(0,\frac{6}{12}\right) &= 0.99676  \frac{1}{1+\left(\frac{3}{12}\right)0.016} = 0.993
+\end{aligned}
+```
+
+- A similar process can be applied for the other tenors out to 18 months:
+
+```math
+\begin{aligned}
+\Longrightarrow F\left(0,\frac{6}{12},\frac{9}{12}\right) &= 100 - 98.0 = 2.0 \% = 0.02 \\\\
+P\left(0,\frac{9}{12}\right) &= 0.988 \\\\
+\Longrightarrow F\left(0,\frac{9}{12},\frac{12}{12}\right) &= 100 - 97.6 = 2.4 \% = 0.024 \\\\
+P\left(0,\frac{12}{12}\right) &= 0.982 \\\\
+\Longrightarrow F\left(0,\frac{12}{12},\frac{15}{12}\right) &= 100 - 97.3 = 2.7 \% = 0.027 \\\\
+P\left(0,\frac{15}{12}\right) &= 0.975 \\\\
+\Longrightarrow F\left(0,\frac{15}{12},\frac{18}{12}\right) &= 100 - 97.0 = 3.0 \% = 0.03 \\\\
+P\left(0,\frac{18}{12}\right) &= 0.968 \\\\
+\end{aligned}
+```
+
+- The spot rates can then be calculated from the discount factors using:
+
+```math
+\begin{aligned}
+y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
+\Longrightarrow y\left(\frac{6}{12}\right) &= 0.01405 = \boxed{1.41 \%} \\\\
+\Longrightarrow y\left(\frac{9}{12}\right) &= 0.01610 = \boxed{1.61 \%} \\\\
+\Longrightarrow y\left(\frac{12}{12}\right) &= 0.01816 = \boxed{1.82 \%} \\\\
+\Longrightarrow y\left(\frac{15}{12}\right) &= 0.02025 = \boxed{2.03 \%} \\\\
+\Longrightarrow y\left(\frac{18}{12}\right) &= 0.02168 = \boxed{2.17 \%} \\\\
+\end{aligned}
+```
+
 #### Swaps: 2 years out to 4 years
 
 - Fixed swap rates are given in percentages.
@@ -1306,3 +1355,20 @@ y\left(\frac{3}{12}\right) &= -\frac{log(0.99676)}{\left(\frac{3}{12}\right)} = 
 |   2Y  | 2.3 |
 |   4Y  | 2.7 |
 
+- Recalling the formula for the [fair swap rate](#fair-swap-rate) for a swap contract with semi-annual payments ($m=2$):
+
+```math
+\begin{aligned}
+S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
+&= \frac{2(1- P(0,T_{J}))}{\sum_{j=1}^{J}P(0,T_{j})}
+\end{aligned}
+```
+
+- If the 2-year swap rate $S$ is known and the discount factors from $T_{j=0}$ to $T_{j=J-1}$ are also known, then the discount factor $P(0,T_{J})$ where $T_{j=J} = 2$ can be calculated by substituing in the semi-annual payments $P\left(0,\frac{6}{12}\right)$, $P\left(0,\frac{12}{12}\right)$, $P\left(0,\frac{18}{12}\right)$:
+
+```math
+\begin{aligned}
+S &= \frac{2(1- P(0,T_{J}))}{\sum_{j=1}^{J}P(0,T_{j})} \\\\
+S(2) &= \frac{2(1- P(0,2))}{\sum_{j=1}^{J}P(0,T_{j})}
+\end{aligned}
+```
