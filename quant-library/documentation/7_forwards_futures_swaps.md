@@ -64,6 +64,11 @@
       - [Fair Swap Rate](#fair-swap-rate)
     - [Swaps Example 1: Interest Rate Swap](#swaps-example-1-interest-rate-swap)
     - [Swaps Example 2: Hedging Interest Rate Rises](#swaps-example-2-hedging-interest-rate-rises)
+  - [Building the LIBOR Curve using Money Market Instruments](#building-the-libor-curve-using-money-market-instruments)
+    - [LIBOR Curve Bootstrapping Example](#libor-curve-bootstrapping-example)
+      - [Deposits: out to 3 months](#deposits-out-to-3-months)
+      - [Futures: 6 months out to 18 months](#futures-6-months-out-to-18-months)
+      - [Swaps: 2 years out to 4 years](#swaps-2-years-out-to-4-years)
 
 ## Derivatives Introduction
 
@@ -1236,3 +1241,68 @@ S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
     - The total interest paid over the year would therefore have been 155,400 USD.
   - With the swap contract in place, the corporation would be $162500 - 155400 = 7,100 \text{ USD}$ better off.
     - The savings are almost negligible when compared to the 5,000,00 USD notional, but over a longer term, there may be more benefit to taking out a swap contract.
+
+## Building the LIBOR Curve using Money Market Instruments
+
+- As a recap, the [LIBOR curve](#the-libor-curve) is a spot rate curve which can be constructed by [applying arbitrage principals](#applying-arbitrage-principals-to-construct-the-libor-curve) to bond prices; however, this section will explore bootstrapping money market instruments to construct the LIBOR curve as follows:
+  - **Tenors from today out to 3 months**: Discount factors can be derived from the cash LIBOR rates up to 3 months and then these discount factors can be used to calculated the spot rates.
+  - **Tenors from 3 months out to 2-5 years**: Eurodollar futures rates can be used to calculate the spot LIBOR rates as th Eurodollar futures market is liquid and transparent (unlike [FRAs](#forward-rate-agreements) which are traded OTC). A convexity adjustment could be made to compensate for using futures rates instead of forwards rates.
+  - **Tenors further out than 2-5 years**: Market swap rates can be used to calculate the discount factors and from these the spot rates can be calculated. As long as there's a sufficiently liquid swap market available, tenors can be calculated.
+
+### LIBOR Curve Bootstrapping Example
+
+#### Deposits: out to 3 months
+
+- LIBOR rates are given in percentages.
+
+| Tenor | Rate |
+|:-----:|:----:|
+|   1M  | 0.8  |
+|   2M  | 1.0  |
+|   3M  | 1.3  |
+
+- The cash LIBOR rates for 1, 2, and 3 months can be denoted as follows:
+$$L\left(\frac{1}{12}\right)=0.008, \space L\left(\frac{2}{12}\right)=0.01, \space L\left(\frac{3}{12}\right)=0.013$$
+- Recalling that the relationship between the LIBOR rate and the discount factor for simple interest is $P(t,T)=\frac{1}{1+(T-t)L(t,T)}$, the discount factors (zero-coupon bond prices) can be calculated as follows:
+
+```math
+\begin{aligned}
+P\left(0,\frac{1}{12}\right) &= \frac{1}{1+\left(\frac{1}{12}-0\right)0.008} = 0.99933 \\\\
+P\left(0,\frac{2}{12}\right) &= \frac{1}{1+\left(\frac{2}{12}-0\right)0.01} = 0.99834 \\\\
+P\left(0,\frac{3}{12}\right) &= \frac{1}{1+\left(\frac{3}{12}-0\right)0.013} = 0.99676
+\end{aligned}
+```
+
+- Now recalling that [spot rates can be calculated from discount factors](./3_bonds#discount-and-spot-rate-curves) using:
+
+```math
+\begin{aligned}
+y(T) &= -\frac{log(d(T))}{T} \\\\
+\Longrightarrow y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
+y\left(\frac{1}{12}\right) &= -\frac{log(0.99933)}{\left(\frac{1}{12}\right)} = 0.00804 = \boxed{0.804 \%} \\\\
+y\left(\frac{2}{12}\right) &= -\frac{log(0.99834)}{\left(\frac{2}{12}\right)} = 0.009968 = \boxed{0.997 \%} \\\\
+y\left(\frac{3}{12}\right) &= -\frac{log(0.99676)}{\left(\frac{3}{12}\right)} = 0.01298 = \boxed{1.30 \%} \\\\
+\end{aligned}
+```
+
+#### Futures: 6 months out to 18 months
+
+- The contract price is defined in the [Eurodollar Futures Contract Specification](#eurodollar-futures-contract-specification) as being 100% minus the contracted futures interest rate %, such that $P=100(1-F(t,T,T+0.25))$ where $F(t,T,T+0.25)$ is the futures interest rate as a decimal at time $t$ for a term between $T$ and $T+0.25$.
+
+| Tenor | Price |
+|:-----:|:-----:|
+|   6M  | 98.4  |
+|   9M  | 98.0  |
+|  12M  | 97.6  |
+|  15M  | 97.3  |
+|  18M  | 97.0  |
+
+#### Swaps: 2 years out to 4 years
+
+- Fixed swap rates are given in percentages.
+
+| Tenor | Rate|
+|:-----:|:---:|
+|   2Y  | 2.3 |
+|   4Y  | 2.7 |
+
