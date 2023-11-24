@@ -1364,11 +1364,65 @@ S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
 \end{aligned}
 ```
 
-- If the 2-year swap rate $S$ is known and the discount factors from $T_{j=0}$ to $T_{j=J-1}$ are also known, then the discount factor $P(0,T_{J})$ where $T_{j=J} = 2$ can be calculated by substituing in the semi-annual payments $P\left(0,\frac{6}{12}\right)$, $P\left(0,\frac{12}{12}\right)$, $P\left(0,\frac{18}{12}\right)$:
+- If the 2-year swap rate $S$ is known and the discount factors from $T_{j=0}$ to $T_{j=J-1}$ are also known, then the discount factor $P(0,T_{J})$ where $T_{j=J} = 2$ can be calculated by substituting in the semi-annual ($m=2$) payments $P\left(0,\frac{6}{12}\right)$, $P\left(0,\frac{12}{12}\right)$, $P\left(0,\frac{18}{12}\right)$:
 
 ```math
 \begin{aligned}
 S &= \frac{2(1- P(0,T_{J}))}{\sum_{j=1}^{J}P(0,T_{j})} \\\\
-S(2) &= \frac{2(1- P(0,2))}{\sum_{j=1}^{J}P(0,T_{j})}
+S(2) &= \frac{2(1 - P(0,2))}{P(0,0.5) + P(0,1) + P(0,1.5) + P(0,2)} \\\\
+S(2)(P(0,2)) + 2P(0,2) &= 2 - S(2)(P(0,0.5) + P(0,1) + P(0,1.5)) \\\\
+P(0,2) &= \frac{2 - S(2)(P(0,0.5) + P(0,1) + P(0,1.5))}{S(2) + 2} \\\\
+&= \frac{2 - 0.023(0.993 + 0.982 + 0.968)}{0.023 + 2} \\\\
+&= 0.955 \\\\\\
+\Longrightarrow y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
+y(2) &= -\frac{log(0.955)}{2} \\\\
+&= 0.02302 = \boxed{2.30 \%}
 \end{aligned}
 ```
+
+- Following a similar approach to find the discount factor for the 4 year swap rate $P(0,4)$ would require the discount factors to be known for the 2.5, 3 and 3.5 year swaps:
+$$S(4) = \frac{2(1 - P(0,4))}{P(0,0.5) + P(0,1) + P(0,1.5) + P(0,2) + P(0,2.5) + P(0,3) + P(0,3.5) + P(0,4)}$$
+- A quick approach to find the unknown discount factors between 2 and 4 years is to linearly interpolate the swap rates between $S(2)=2.3$ and $S(4)=2.7$:
+
+```math
+\begin{aligned}
+\text{{Linear Interpolation }}(x, x_0, x_1, y_0, y_1) &= y_0 + \frac{{(x - x_0) \cdot (y_1 - y_0)}}{{x_1 - x_0}} \\\\
+\Longrightarrow S(2.5) &= 2.3 + \frac{{(2.5 - 2) \cdot (2.7 - 2.3)}}{{4 - 2}} = 2.4 \\\\
+\Longrightarrow S(3) &= 2.3 + \frac{{(3 - 2) \cdot (2.7 - 2.3)}}{{4 - 2}} = 2.5 \\\\
+\Longrightarrow S(3.5) &= 2.3 + \frac{{(3.5 - 2) \cdot (2.7 - 2.3)}}{{4 - 2}} = 2.6 \\\\
+\end{aligned}
+```
+
+The discount factors can now be calculated  starting with $P(0,2.5)$:
+
+```math
+\begin{aligned}
+P(0,2.5) &= \frac{2 - S(2.5)(P(0,0.5) + P(0,1) + P(0,1.5) + P(0,2))}{S(2.5) + 2} \\\\
+&= \frac{2 - 0.024(0.993 + 0.982 + 0.968 + 0.955)}{0.024 + 2} \\\\
+&= 0.942
+\end{aligned}
+```
+
+- A similar process can be carried out to calculate the discount factors $P(0,3)$, $P(0,3.5)$ and $P(0,4)$ to give the following:
+
+```math
+\begin{aligned}
+P(0,3) &= 0.928 \\
+P(0,3.5) &= 0.913 \\
+P(0,4) &= 0.898
+\end{aligned}
+```
+
+- Finally, the spot prices can be calculated as before:
+
+```math
+\begin{aligned}
+\Longrightarrow y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
+y(4) &= -\frac{log(0.898)}{4} \\\\
+&= 0.0269 = \boxed{2.69 \%}
+\end{aligned}
+```
+
+- The final curve can then be plotted as follows:
+
+  ![LIBOR Curve](images/libor-curve-example.png "LIBOR Curve")
