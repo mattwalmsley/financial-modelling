@@ -4,6 +4,10 @@
   - [Introduction](#introduction)
   - [Formal Definitions](#formal-definitions)
   - [Time Series Statistics](#time-series-statistics)
+  - [Fat-Tailed Distributions](#fat-tailed-distributions)
+    - [Quantile-Quantile (Q-Q) Plots](#quantile-quantile-q-q-plots)
+    - [Moments of a Distribution](#moments-of-a-distribution)
+      - [Kurtosis](#kurtosis)
   - [Brownian Motion](#brownian-motion)
 
 ## Introduction
@@ -69,5 +73,45 @@ $$S_{n} = \sum_{j=1}^{n}X_{j}$$
   - The sample mean for this series will be $\bar{x} = \frac{1}{N} \sum_{i=1}^{N} x(i)$
   - The **sample autocovariance** function is $\hat{\gamma}(k) = \frac{1}{N} \sum_{i=1}^{N-k}(x(i)-\bar{x})(x(i+k)-\bar{x})$
   - The **sample autocorrelation** function is $\hat{\rho}=\frac{\hat{\gamma}(k)}{\hat{\gamma}(0)}$
+
+## Fat-Tailed Distributions
+
+- The density of a normal (Gaussian) distribution with mean $\mu$ and variance ${\sigma}^{2}$ is given by:
+$$f(x) = \frac{1}{\sqrt{2 \pi {\sigma}^{2}}}e^{-\frac{(x- \mu)^{2}}{2 {\sigma}^{2}}}$$
+- As $x \rightarrow \plusmn \infty$, the normal density (and the probability) will decay exponentially.
+- **Fat-tailed** distributions are probability distributions with densities that decay to 0 slower than exponentially and typically, will decay algebraically by $\frac{1}{x^{k}}$.
+  - For example, the density of the [Student T-Distribution](https://www.investopedia.com/terms/t/tdistribution.asp) with $\nu$ degrees of freedom decays by $\frac{1}{|x|^{\nu + 1}} \text{ as } x \rightarrow \plusmn \infty$.
+
+  ![Normal Distribution vs Fat-Tailed T-Distribution](images/t-distribution.png "Normal Distribution vs Fat-Tailed T-Distribution")
+
+- As shown, outlier values of x are much more likely with fat-tailed distributions.
+
+### Quantile-Quantile (Q-Q) Plots
+
+- Quantile-quantile (q-q) plots compare the quantile of one random sample to the quantile of another random sample.
+- A normal q-q plot compares the quantiles of a sample against the theoretical quantiles of a normal (Gaussian) distribution.
+- If a random sample $\{x_{i}\}_{i=1}^{N}$ is from a normal distribution, the its normal q-q plot will resemble a straight line.
+- For a fat-tailed distribution, the q-q plot will deviate from resembling a straight line at the extreme/outlier values:
+
+  ![Normal Distribution vs Fat-Tailed T-Distribution Q-Q Plot](images/t-distribution-q-q.png "Normal Distribution vs Fat-Tailed T-Distribution Q-Q Plot")
+
+### Moments of a Distribution
+
+- The idea of a distribution having [moments](https://en.wikipedia.org/wiki/Moment_(mathematics)) stem from mechanics and is used to describe the shape of a function's graph. If a function describe the mass density, the zeroth moment would be the total mass, the first moment would be the center of mass and the second momnent would be the moment of intertia.
+- In statistics, distributions have the following moments:
+  - **First moment** is the mean (expected value)
+  - **Second moment** is the variance (spread of values around the mean) and the standard deviation in the square root of the variance
+  - **Third moment** is the skewness (how symmetric/asymetric the distribution is around the mean)
+  - **Fourth moment** is the kurtosis ('fatness' of the tails)
+
+#### Kurtosis
+
+- A high kurtosis indicates that a lot of the data is distributed in the tails, whereas a low kurtosis indicates fewer data points in the tails.
+- As this is the fourth moment, kurtosis is more sensitive to extreme outliers than the second moment variance.
+- The standard definition for kurtosis is a **normalized** version of the fourth moment and, for a mean $\mu$ and variance $\sigma$, is given by:
+$$\text{Kurt}(X) = E \left[ \left( \frac{X - \mu}{\sigma} \right)^4 \right]$$
+- For a normally distributed random variable, the kurtosis is 3 so **excessive kurtosis** is defined as $\text{Kurt}(X) - 3$ for a random variable $X$.
+- High kurtosis 
+
 
 ## Brownian Motion
