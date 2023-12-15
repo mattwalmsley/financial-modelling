@@ -8,6 +8,8 @@
     - [Quantile-Quantile (Q-Q) Plots](#quantile-quantile-q-q-plots)
     - [Moments of a Distribution](#moments-of-a-distribution)
       - [Kurtosis](#kurtosis)
+  - [Asset Return Measures](#asset-return-measures)
+    - [Continuously-Compounded Returns](#continuously-compounded-returns)
   - [Brownian Motion](#brownian-motion)
 
 ## Introduction
@@ -111,7 +113,31 @@ $$f(x) = \frac{1}{\sqrt{2 \pi {\sigma}^{2}}}e^{-\frac{(x- \mu)^{2}}{2 {\sigma}^{
 - The standard definition for kurtosis is a **normalized** version of the fourth moment and, for a mean $\mu$ and variance $\sigma$, is given by:
 $$\text{Kurt}(X) = E \left[ \left( \frac{X - \mu}{\sigma} \right)^4 \right]$$
 - For a normally distributed random variable, the kurtosis is 3 so **excessive kurtosis** is defined as $\text{Kurt}(X) - 3$ for a random variable $X$.
-- High kurtosis 
 
+## Asset Return Measures
+
+### Continuously-Compounded Returns
+
+- The 1-period **continuously compounded return** or **log return** of an asset with price $P(t)$ at time $t$ is defined as:
+
+```math
+\begin{aligned}
+r(t) &= \text{log} \left( \frac{P(t)}{P(t-1)} \right) \\\\
+&= \text{log}(P(t)) - \text{log}(P(t-1))
+\end{aligned}
+```
+
+- The $k$-period continuously compounded return can therefore be defined as:
+
+```math
+\begin{aligned}
+r_{k}(t) &= \text{log} \left( \frac{P(t)}{P(t-k)} \right) \\\\
+&= \text{log}(P(t)) - \text{log}(P(t-k))
+\end{aligned}
+```
+
+- The period $k$ should be in the same unit of time as the value for $t$ - this is normally years of days when working with financial models.
+- The continuously compounded return is the $\text{log}$ of the corresponding [gross return](./2_interest-rates.md#gross-return).
+- The continuously compounded returns across a period from $t$ to $t-k$ can be written as follows:
 
 ## Brownian Motion
