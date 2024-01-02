@@ -10,6 +10,7 @@
       - [Kurtosis](#kurtosis)
   - [Asset Return Measures](#asset-return-measures)
     - [Continuously-Compounded Returns](#continuously-compounded-returns)
+    - [Asset Return Measures Example](#asset-return-measures-example)
   - [Brownian Motion](#brownian-motion)
 
 ## Introduction
@@ -127,17 +128,67 @@ r(t) &= \text{log} \left( \frac{P(t)}{P(t-1)} \right) \\\\
 \end{aligned}
 ```
 
-- The $k$-period continuously compounded return can therefore be defined as:
+- The $k$-period continuously compounded return between a time $t$ and a time $k$-periods before $t$ can therefore be defined as:
 
 ```math
 \begin{aligned}
-r_{k}(t) &= \text{log} \left( \frac{P(t)}{P(t-k)} \right) \\\\
-&= \text{log}(P(t)) - \text{log}(P(t-k))
+r_k(t) &= \text{log} \left( \frac{P(t)}{P(t-k)} \right) \\
+&= \text{log}(P(t)) - \text{log}(P(t-k)) \\\\
 \end{aligned}
 ```
 
 - The period $k$ should be in the same unit of time as the value for $t$ - this is normally years of days when working with financial models.
 - The continuously compounded return is the $\text{log}$ of the corresponding [gross return](./2_interest-rates.md#gross-return).
-- The continuously compounded returns across a period from $t$ to $t-k$ can be written as follows:
+- The continuously compounded returns across a period from $t$ to $t-k$ can be written as the sum of all the intervals within the period as follows:
+
+```math
+\begin{aligned}
+r_{k}(t) &= \text{log}(P(t)) - \text{log}(P(t-1)) \\
+&+ \text{log}(P(t-1)) - \text{log}(P(t-2)) \\
+&+ \text{log}(P(t-2)) - \text{log}(P(t-3)) \\
+&+ ...  \\
+&+ \text{log}(P(t-k+1)) - \text{log}(P(t-k)) \\\\
+
+r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + ... + r(t-k+1) \\\\
+r_{k}(t) &= \sum_{i=0}^{k-1}r(t-i)
+\end{aligned}
+```
+
+### Asset Return Measures Example
+
+- The prices for a stock on 6 consecutive business days ($t=[1,6]$) are as shown in the table below:
+
+| Time, $t$ | Price, $P(t)$|
+|:---------:|:-------------:|
+|     1     |      105      |
+|     2     |      111      |
+|     3     |      102      |
+|     4     |      109      |
+|     5     |      107      |
+|     6     |      108      |
+
+- The daily $\text{log}$ returns can be calculated as follows:
+
+```math
+\begin{aligned}
+r(t) &= \text{log} \left( \frac{P(t)}{P(t-1)} \right) \\\\
+r(2) &= \text{log} \left( \frac{P(2)}{P(1)} \right) = \text{log} \left( \frac{111}{105} \right) = \boxed{2.41 \%} \\\\
+r(3) &= \text{log} \left( \frac{P(3)}{P(2)} \right) = \text{log} \left( \frac{102}{111} \right) = \boxed{-3.67 \%} \\\\
+r(4) &= \text{log} \left( \frac{P(4)}{P(3)} \right) = \text{log} \left( \frac{109}{102} \right) = \boxed{2.88 \%} \\\\
+r(5) &= \text{log} \left( \frac{P(5)}{P(4)} \right) = \text{log} \left( \frac{107}{109} \right) = \boxed{-0.80 \%} \\\\
+r(6) &= \text{log} \left( \frac{P(6)}{P(5)} \right) = \text{log} \left( \frac{108}{107} \right) = \boxed{0.40 \%} \\\\
+\end{aligned}
+```
+
+- The weekly $\text{log}$ return can be calculated as follows:
+
+```math
+\begin{aligned}
+r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + ... + r(t-k+1) \\\\
+r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
+&= 2.41 \% -3.67 \% + 2.88 \% - 0.80 \% + 0.40 \% \\
+&= \boxed{1.22 \%}
+\end{aligned}
+```
 
 ## Brownian Motion
