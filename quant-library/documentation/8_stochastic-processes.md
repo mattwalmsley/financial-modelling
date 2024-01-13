@@ -11,6 +11,10 @@
   - [Asset Return Measures](#asset-return-measures)
     - [Continuously-Compounded Returns](#continuously-compounded-returns)
     - [Asset Return Measures Example](#asset-return-measures-example)
+  - [Stylized Facts of Asset Prices and Returns](#stylized-facts-of-asset-prices-and-returns)
+    - [Volatility Clustering](#volatility-clustering)
+    - [Asset Return Autocorrelation](#asset-return-autocorrelation)
+    - [Fat Tails](#fat-tails)
   - [Brownian Motion](#brownian-motion)
 
 ## Introduction
@@ -190,5 +194,26 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 &= \boxed{1.22 \%}
 \end{aligned}
 ```
+
+## Stylized Facts of Asset Prices and Returns
+
+### Volatility Clustering
+
+- Asset prices exhibit distinct regimes of low, intermediate, and high volatility.
+- Price volatility is different to returns volatility, e.g. a price increasing by 7% every day for a number of consecutive days would have a very volatile price but constant daily returns of 7%.
+- In practice, volatile prices will imply volatile returns as returns are not systematically positive or negative (the mean is close to 0).
+- Returns will oscillate between plus or minus the absolute return level and so the volatility regimes are easier to spot from the returns.
+  - Additionally, the volatility of returns are given as a percentage of the price level, i.e. properly scaled unlike the price volatility which could be measured by a change in USD (a 5 USD change on an asset priced at 10 USD has much higher volatility than a 5 USD change in an asset priced at 500 USD).
+
+### Asset Return Autocorrelation
+
+- Raw returns series exhibit little to no autocorrelation. Correlation between returns at different times is essentially 0.
+  - For an asset returns series $r(t)$, the sample autocorrelation function $\hat{\rho}(k) \approx 0$ for any $k \neq 0$.
+- Absolute values of returns at different times exhibit considerable autocorrelation which decay slowly over time.
+  - For a time series of absolute values of return $|r(t)|$, the autocorrelation function $\hat{\rho}(k) \neq 0$ for $k$ not too large, and $\hat{\rho}(k) \rightarrow 0$ as $k$ increases.
+
+### Fat Tails
+
+- The distribution of asset returns have much fatter tails than Gaussian distributions (i.e. excessive kurtosis).
 
 ## Brownian Motion
