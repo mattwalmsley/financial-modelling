@@ -215,5 +215,6 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 ### Fat Tails
 
 - The distribution of asset returns have much fatter tails than Gaussian distributions (i.e. excessive kurtosis).
+- Return data over a longer time period, e.g. monthly will show significantly less evidence of a fat-tailed distribution.
 
 ## Brownian Motion
