@@ -15,6 +15,7 @@
     - [Volatility Clustering](#volatility-clustering)
     - [Asset Return Autocorrelation](#asset-return-autocorrelation)
     - [Fat Tails](#fat-tails)
+  - [Random Walks](#random-walks)
   - [Brownian Motion](#brownian-motion)
 
 ## Introduction
@@ -216,5 +217,54 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 
 - The distribution of asset returns have much fatter tails than Gaussian distributions (i.e. excessive kurtosis).
 - Return data over a longer time period, e.g. monthly will show significantly less evidence of a fat-tailed distribution.
+
+## Random Walks
+
+- Taking a random walk to be the movement of an autonomous particle which, depending on the outcome of flipping a coin, is able to move up (heads) or down (tails) 1 level.
+  - The starting point is level 0.
+  - The levels are assumed to be a range of integers $...,-2,-1,0,1,2,...$
+
+  ![Random Walks](images/random-walk.png "Random Walks")
+
+- Let the probability of a jump up (heads) be $p$ and the probability of a jump down (tails) is $q=1-p$:
+
+```math
+\begin{aligned}
+\text{Prob(jump up)} &= p \\
+\text{Prob(jump down)} &= p = 1 - q
+\end{aligned}
+```
+
+- Assume that each coin flip is independent of all the other flips such that previous flip has no influence on the next.
+- Each $j$'th move is represented by a random variable $X_{j}$ such that:
+
+```math
+\begin{aligned}
+\text{Prob}(X_{j} = +1) &= p \\
+\text{Prob}(X_{j} = -1) &= q
+\end{aligned}
+```
+
+- The sequence of random moves $X_{1}, X_{2},...,X_{j},...,X_{N}$ are independent and identically distributed such that $\text{Prob}(X_{1} = y_{1}, X_{2} = y_{2},...,X_{N} = y_{N}) \equiv \text{Prob}(X_{1} = y_{1}) \text{Prob}(X_{2} = y_{2})...\text{Prob}(X_{N} = y_{N})$ where $y_{i}=+1$ or $y_{i} = -1$.
+- For example, the probability of 2 up moves followed by a down move is: 
+
+```math
+\begin{aligned}
+\text{Prob}(X_{1} = +1, X_{2} = +1, X_{3} = -1) &= \text{Prob}(X_{1} = +1)\text{Prob}(X_{2} = +1)\text{Prob}(X_{3} = -1) \\
+&= p \times p \times q \\
+&= p^{2}q
+\end{aligned}
+```
+
+- The position after $N$ moves is the jump of the $N$ moves, such that the discrete time stochastic process $S_{N}$ is the **random walk**:
+
+```math
+\begin{aligned}
+S_{N} &= X_{1} + X_{2} +...+ X_{N} \\
+&= \sum_{j=1}^{N}X_{j}
+\end{aligned}
+```
+
+- The moves $X_{j}$ can follow any distribution for a random walk as long as they are independent and identically distributed.
 
 ## Brownian Motion
