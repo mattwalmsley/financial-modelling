@@ -16,6 +16,7 @@
     - [Asset Return Autocorrelation](#asset-return-autocorrelation)
     - [Fat Tails](#fat-tails)
   - [Random Walks](#random-walks)
+    - [The Binomial Distribution](#the-binomial-distribution)
   - [Brownian Motion](#brownian-motion)
 
 ## Introduction
@@ -245,7 +246,7 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 \end{aligned}
 ```
 
-- The sequence of random moves $X_{1}, X_{2},...,X_{j},...,X_{N}$ are independent and identically distributed such that $\text{Prob}(X_{1} = y_{1}, X_{2} = y_{2},...,X_{N} = y_{N}) \equiv \text{Prob}(X_{1} = y_{1}) \text{Prob}(X_{2} = y_{2})...\text{Prob}(X_{N} = y_{N})$ where $y_{i}=+1$ or $y_{i} = -1$.
+- The sequence of random moves $X_{1}, X_{2},...,X_{j},...,X_{n}$ are independent and identically distributed such that $\text{Prob}(X_{1} = y_{1}, X_{2} = y_{2},...,X_{n} = y_{n}) \equiv \text{Prob}(X_{1} = y_{1}) \text{Prob}(X_{2} = y_{2})...\text{Prob}(X_{n} = y_{n})$ where $y_{i}=+1$ or $y_{i} = -1$.
 - For example, the probability of 2 up moves followed by a down move is: 
 
 ```math
@@ -256,15 +257,66 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 \end{aligned}
 ```
 
-- The position after $N$ moves is the jump of the $N$ moves, such that the discrete time stochastic process $S_{N}$ is the **random walk**:
+- The position after $n$ moves is the sum of all the moves from $1$ to $n$, such that the discrete time stochastic process $S_{n}$ is the **random walk**:
 
 ```math
 \begin{aligned}
-S_{N} &= X_{1} + X_{2} +...+ X_{N} \\
-&= \sum_{j=1}^{N}X_{j}
+S_{n} &= X_{1} + X_{2} +...+ X_{n} \\
+&= \sum_{j=1}^{n}X_{j}
 \end{aligned}
 ```
 
 - The moves $X_{j}$ can follow any distribution for a random walk as long as they are independent and identically distributed.
+- The distribution of $S_{n}$ at a time $n$ is evaluated as follow:
+  - At time $n=1$ the position $S_{1}$ is equal to the move $X_{1}$ such that $S_{1}$ has the same distribution as $X_{1}$, denoted as: $\text{Prob}(S_{1}=1)=\text{Prob}(X_{1}=+1)=p$
+  - At time $n=2$, the values for $S_{2}$ will be either $+2$, $0$ or $-2$.
+    - The event $\{S_{2} = 2\}$ will result from a path consisting of $X_{1}=+1$ and $X_{2}=+1$ and have a probability of $\text{Prob}(S_{2}=2)=\text{Prob}(X_{1}=+1, X_{2}=+1)$. Because $X_{1}$ and $X_{2}$ are independent, $\text{Prob}(S_{2}=2)=\text{Prob}(X_{1}=+1)\text{Prob}(X_{2}=+1)=\boxed{p^{2}}$.
+    - The event $\{S_{2} = 0\}$ can result from two paths: one consisting of $X_{1}=+1$ and $X_{2}=-1$, and a second consisting of $X_{1}=-1$ and $X_{2}=+1$. These path are mutually exclusive and so the probability of the event $\{S_{2} = 0\}$ occurring is $\text{Prob}(X_{1}=+1, X_{2}=-1) + \text{Prob}(X_{1}=-1, X_{2}=+1)=pq + qp = \boxed{2pq}$
+    - The probability of the event $\{S_{2} = -2\}$ is calculated in a similar way to the probability of the event $\{S_{2} = +2\}$, such that $\text{Prob}(S_{2}=-2)=\text{Prob}(X_{1}=-1)\text{Prob}(X_{2}=-1)=\boxed{q^{2}}$
+  - The distribution described here is the **binomial distribution** for 2 trials with a success probability of $p$.
+- To continue evaluating the random walk positions for times greater than $n=2$, the [binomial distribution](#the-binomial-distribution) can be applied.
+
+### The Binomial Distribution
+
+- Take a range of Bernoulli random variables $Y_{1}$, $Y_{2}$,...,$Y_{n}$ which are all independent and distributed as the Bernoulli distribution:
+$$\text{Prob}(Y_{j}=1)=p \text{ and } \text{Prob}(Y_{j}=0)=q=1-p$$
+- Generally, $Y_{j}=1$ denotes success on the $j$'th trial, and similarly $Y_{j}=0$ denotes failure on the $j$'th trial with $p$ and $q$ denoting the probability of success and failure respectively.
+- The total number of successes in $n$ trials is defined as $Z_{n}$ so, given $Y_{j}=0$ for a failure, this leads to:
+$$Z_{n} = \sum_{j=1}^{n}Y_{j}$$
+- $Z_{n}$ is the binomial distribution and the probability of having $k$ successes in $n$ trials (with condition $0 \leq k \leq n$) is given by:
+$$\text{Prob}(Z_{n}=k) = \frac{n!}{k!(n-k)!}p^{k}q^{n-k}$$
+- The binomial distribution is denoted $\text{bin}(k;n,p)$.
+- Applying the binomial distribution to the [random walks](#random-walks) example where $n=2$ leads to the same probabilities:
+
+```math
+\begin{aligned}
+\text{Prob}(S_{2}=2) &\equiv \text{Prob}(Z_{2}=2) = \text{bin}(2;2,p) = p^{2} \\
+\text{Prob}(S_{2}=0) &\equiv \text{Prob}(Z_{2}=1) = \text{bin}(1;2,p) = 2pq \\
+\text{Prob}(S_{2}=-2) &\equiv \text{Prob}(Z_{2}=0) = \text{bin}(0;2,p) = q^{2}
+\end{aligned}
+```
+
+- The proof that the Binomial Distribution can be extended to find the distribution of random walk position $S_{n}$ is as follows.
+- The Bernoulli random variable $Y_{j}$ can be related to the moves $X_{j}$ by $X_{j}=2Y_{j}-1$, so that $X_{j}=1$ when $Y_{j}=1$ and $X_{j}=-1$ when $Y_{j}=0$.
+- The probabilities $p$ and $q$ remain the same between the random walks and binomial distribution, as well as the assumptions that the successive trials/moves are independent.
+
+```math
+\begin{aligned}
+S_{n} &=  \sum_{j=1}^{n}X_{j} \\
+S_{n} &=  \sum_{j=1}^{n}(2Y_{j}-1) \\
+S_{n} &=  2\sum_{j=1}^{n}Y_{j}-\sum_{j=1}^{n}1 \\
+S_{n} &=  2Z_{n}-n\\
+\end{aligned}
+```
+
+- The random walks distribution $S_{n}$ will inherit a *shifted* binomial distribution from $Z_{n}$.
+- For simpliciy, let $n=2m$ so that the values of $S_{n}$ will only be even integers ranging from $-2m$ to $2m$.
+
+```math
+\begin{aligned}
+&\text{Prob}(S_{n}=2\mathcal{l}) = \frac{n!}{(m+\mathcal{l})!(m-\mathcal{l})!}p^{m+\mathcal{l}}q^{n-\mathcal{l}} \\
+\text{for } &\mathcal{l} = -m,-m+1,...,m-1,m
+\end{aligned}
+```
 
 ## Brownian Motion
