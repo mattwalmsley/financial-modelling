@@ -17,6 +17,7 @@
     - [Fat Tails](#fat-tails)
   - [Random Walks](#random-walks)
     - [The Binomial Distribution](#the-binomial-distribution)
+  - [Asset Pricing Models using Random Walks](#asset-pricing-models-using-random-walks)
   - [Brownian Motion](#brownian-motion)
 
 ## Introduction
@@ -318,5 +319,21 @@ S_{n} &=  2Z_{n}-n\\
 \text{for } &\mathcal{l} = -m,-m+1,...,m-1,m
 \end{aligned}
 ```
+
+## Asset Pricing Models using Random Walks
+
+- The random walks described so far have been discrete time models with fixed unit increments (moves); therefore, assumptions will need to evaluated to decide whether random walks are a suitable model for modelling asset prices which evolve continuously in time by and move by differing amounts.
+- Random walks may not be suitable for some pricing models and the following should be considered:
+  - Can prices be modelled using discrete time intervals, e.g. daily closing prices or weekly/monthly averages.
+  - Can the moves in price be modelled as multiple moves of a unit-size?
+- Increasing the frequency of the moves and decreasing the unit-size of the move itself will produce a better model but increase the computational power.
+- One obvious problem with random walks is that the value can become negative which, for most assets, is not possible in the real world.
+- A more subtle problem is that the unit-size of the move up/down is the same regardless of the price level - this is due to the next move being independent of all previous moves.
+  - In practice, this is not the case as a 1 USD move up/down on a stock is far more likely when it is valued at 100 USD($\plusmn1\%$) than when it is valued at 2 USD($\plusmn50\%$).
+  - In other words, the random walk model discussed so far assumes that the chance of a 1% increase in the stock price is the same as a 50% increase.
+  - However, the concept that each move is completely independent and any historical information has no effect on deciding the direction of the next move is a desirable property in a model as it corresponds to the [Efficient Market Hypothesis](https://www.investopedia.com/terms/e/efficientmarkethypothesis.asp) (EMH), a fundamental idea in financial economics.
+    - EMH has supporting theoretical and empirical evidence but there is also strong empirical evidence against this hypothesis.
+    - Generally, the concept EMH puts forward is used as a base case and modifications are made to account for the complexities of markets in the real world.
+    - Similarly, the random walk model can be considered a base case that is modified to model the complexities of the real world.
 
 ## Brownian Motion
