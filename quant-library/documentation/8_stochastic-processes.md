@@ -19,6 +19,7 @@
     - [The Binomial Distribution](#the-binomial-distribution)
   - [Asset Pricing Models using Random Walks](#asset-pricing-models-using-random-walks)
   - [Brownian Motion](#brownian-motion)
+    - [Brownian Motion with Drift](#brownian-motion-with-drift)
 
 ## Introduction
 
@@ -228,12 +229,12 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 
   ![Random Walks](images/random-walk.png "Random Walks")
 
-- Let the probability of a jump up (heads) be $p$ and the probability of a jump down (tails) is $q=1-p$:
+- Let the probability of a move up (heads) be $p$ and the probability of a move down (tails) is $q=1-p$:
 
 ```math
 \begin{aligned}
-\text{Prob(jump up)} &= p \\
-\text{Prob(jump down)} &= p = 1 - q
+\text{Prob(move up)} &= p \\
+\text{Prob(move down)} &= p = 1 - q
 \end{aligned}
 ```
 
@@ -337,3 +338,60 @@ S_{n} &=  2Z_{n}-n\\
     - Similarly, the random walk model can be considered a base case that is modified to model the complexities of the real world.
 
 ## Brownian Motion
+
+- To develop a more realistic model for pricing assets, whilst still retaining the properties of [random walks](#random-walks), a continuous time model must be derived.
+  - This can be achieved by reducing the time step between moves (increasing the frequency of the moves) to a very small value.
+  - The unit-size of the moves must also decrease with the time step in order to avoid causing the variance to go to infinity as follows:
+
+```math
+\begin{aligned}
+\text{Let } \sigma^{2} = \text{Var}(X_{j}) \\
+\lim_{m \to \infty} \text{Var}(S_{m}) &= \lim_{m \to \infty} \text{Var} \left(\sum_{j=1}^{m}X_{j} \right) \\
+&= \lim_{m \to \infty} \sum_{j=1}^{m} \text{Var}(X_{j}) \text{ by independence} \\\\
+&= \lim_{m \to \infty} m \sigma^{2} \\\\
+&= \infty
+\end{aligned}
+```
+
+- The moves $X_{j}$ of size 1 must be scaled down for the limit to be sensible. This can be done by dividing $X_{j}$ by a factor $\alpha$.
+  - The [central limit theorem](https://www.investopedia.com/terms/c/central_limit_theorem.asp) suggests that $\alpha = \sqrt{m}$, such that:
+
+```math
+\begin{aligned}
+
+\lim_{m \to \infty} \text{Var} \left(\sum_{j=1}^{m} \frac{X_{j}}{\sqrt{m}} \right) &= \lim_{m \to \infty} \sum_{j=1}^{m} \text{Var} \left( \frac{X_{j}}{\sqrt{m}} \right) \text{ by independence} \\\\
+\text{With }\text{Var}(\alpha X) = \alpha^{2} \text{Var}(X) \Longrightarrow &= \lim_{m \to \infty} \sum_{j=1}^{m} \frac{1}{m} \text{Var} X_{j} \\\\
+&= \lim_{m \to \infty} \frac{1}{m}  \sum_{j=1}^{m} \sigma^{2} \\\\
+&= \lim_{m \to \infty} \frac{1}{m}  m \sigma^{2} \\\\
+&= \sigma^{2} \text{ (a finite variance)}
+\end{aligned}
+```
+
+- As shown, $\alpha = \sqrt{m}$ is the right scaling for the moves, and so, as the number of time-steps $m$ per unit time increases, a limit should be considered.
+  - For any real time $t \geq 0$, the number of moves will be some integer close to $mt$.
+- The scaled random walks, with a floor function $\lfloor mt \rfloor$, are therefore:
+$$S_{t}^{(m)} = \sum_{j=1}^{\lfloor mt \rfloor} \frac{X_{j}}{\sqrt{m}}$$
+- **Brownian motion** is a continuous time stochastic process which is conventionally denoted $W(t)$ and has the following properties:
+  - $W(0) = 0$ with probability 1.
+  - The sample paths of $W(t)$ are continuous with probability 1.
+  - $W(s) - W(t)$ is independent of the move $W(r) -W(s)$ for $t < s < r$.
+    - In other words, the displacement of the particle over any time interval only depends on the length of the interval and not on its location, and that the displacements over disjoint intervals are independent of each other.
+  - $W(t) - W(s)$ is normally distributed with mean 0 and variance $|t-s|$ for any $t,s \geq 0$.
+- Due to the central limit theorem, the distribution of any increment $S_{t_{2}}^{(m)} - S_{t_{1}}^{(m)}$ converges to a normal distribution as $m \rightarrow \infty$.
+  - The independence of jumps in the random walk passes to the independence of increments in the limit.
+- The random walk converges to Brownian motion: $S_{t}^{(m)} \rightarrow W(t) \text{ as } m \rightarrow \infty$ in the sense of weak convergence of stochastic processes.
+
+### Brownian Motion with Drift
+
+- TO be a suitable representation of asset prices, a model must be able to support a trend due to the bull and bear nature of markets.
+- Brownian motion as a model has an expected value of 0 so needs modification to be useful in modelling asset prices.
+- By adding a 'drift' term $\mu t$ that grows (linearly in the most basic implementation) in time to the Brownian motion model, a trend can be represented.
+$$W(t; \mu , \sigma) = \mu t + \sigma W(t)$$
+- The addition of the drift term does not provide any advantages over the random walk model as a drift term $\mu n$ could also be added to a random walks.
+
+```math
+\begin{aligned}
+T_{n} &= \mu n + S_{n} \\\\
+&= \mu n  + \sum_{j=1}^{n} X_{j}
+\end{aligned}
+```
