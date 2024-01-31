@@ -20,6 +20,8 @@
   - [Asset Pricing Models using Random Walks](#asset-pricing-models-using-random-walks)
   - [Brownian Motion](#brownian-motion)
     - [Brownian Motion with Drift](#brownian-motion-with-drift)
+    - [Modelling Asset Prices using Brownian Motion](#modelling-asset-prices-using-brownian-motion)
+  - [The Log-Normal Model](#the-log-normal-model)
 
 ## Introduction
 
@@ -378,12 +380,12 @@ $$S_{t}^{(m)} = \sum_{j=1}^{\lfloor mt \rfloor} \frac{X_{j}}{\sqrt{m}}$$
     - In other words, the displacement of the particle over any time interval only depends on the length of the interval and not on its location, and that the displacements over disjoint intervals are independent of each other.
   - $W(t) - W(s)$ is normally distributed with mean 0 and variance $|t-s|$ for any $t,s \geq 0$.
 - Due to the central limit theorem, the distribution of any increment $S_{t_{2}}^{(m)} - S_{t_{1}}^{(m)}$ converges to a normal distribution as $m \rightarrow \infty$.
-  - The independence of jumps in the random walk passes to the independence of increments in the limit.
+  - The independence of moves in the random walk passes to the independence of increments in the limit.
 - The random walk converges to Brownian motion: $S_{t}^{(m)} \rightarrow W(t) \text{ as } m \rightarrow \infty$ in the sense of weak convergence of stochastic processes.
 
 ### Brownian Motion with Drift
 
-- TO be a suitable representation of asset prices, a model must be able to support a trend due to the bull and bear nature of markets.
+- To be a suitable representation of asset prices, a model must be able to support a trend due to the bull and bear nature of markets.
 - Brownian motion as a model has an expected value of 0 so needs modification to be useful in modelling asset prices.
 - By adding a 'drift' term $\mu t$ that grows (linearly in the most basic implementation) in time to the Brownian motion model, a trend can be represented.
 $$W(t; \mu , \sigma) = \mu t + \sigma W(t)$$
@@ -395,3 +397,34 @@ T_{n} &= \mu n + S_{n} \\\\
 &= \mu n  + \sum_{j=1}^{n} X_{j}
 \end{aligned}
 ```
+
+### Modelling Asset Prices using Brownian Motion
+
+- Recall that the most compelling advantage of the random walk model is the independence of the moves which provides an implementation of [Efficient Market Hypothesis](https://www.investopedia.com/terms/e/efficientmarkethypothesis.asp) (EMH).
+  - Brownian motion preserves this independence through the incremental moves of the particles up until a tme $t$ have no influence on the moves after this time $t$.
+- Brownian motion is a continuous time model and can be considered to be a continuous time version of the random walk model.
+- The size of the move $W(t_{2}) - W(t_{1})$ between times $t_{1}$ and $t_{2}$ is not limited to a unit value in Brownian motion and large moves are less likely given $W(t_{2}) - W(t_{1})$ follows a normal distribution - this is an advantage over the random walk model which assumes a uniform size of move.
+  - The larger the time increment from $t_{1}$ to $t_{2}$, the more likely a larger move $W(t_{2}) - W(t_{1})$.
+  - The mean size for a move is 0.
+- There are still some limitations to the Brownian motion model:
+  - Asset prices could become negative with time.
+  - The moves are insensitive to price level (e.g. a 1 USD increase in price when a stock is valued at 2 USD is just as likely as when the same stock is valued at 100 USD).
+    - In other words, the volatility of prices are insensitive to the absolute price level, such that, regardless of the value of $W(t_{1})$, the variance of the move in price is always equal to the time difference $\text{Var}(W(t_{2}) - W(t_{2})) = t_{2} - t_{1}$.
+
+## The Log-Normal Model
+
+- The log-normal model aims to overcome the limitations of the Brownian motion model for asset pricing.
+- The asset price is denoted $S(t)$ and changes in the logarithm of the asset price $\log (S(t))$ are denoted as $\psi (t)$.
+  - It follows that $S(t) = e^{\psi (t)}$ and $\psi (t+1) = \psi (t) + \delta$ where $\delta$ is the increase in the logarithm of the asset price from $t$ to $t+1$.
+
+```math
+\begin{aligned}
+S(t+1) &= e^{\psi (t+1)} \\
+&= e^{\psi (t) + \delta} \\
+&= e^{\psi (t)}e^{\delta} \\
+&= S(t)e^{\delta}
+\end{aligned}
+```
+
+- The asset price at $t+1$ is calculated by multiplying the asset price at $t$ by the factor $e^{\delta}$.
+- The price jump is therefore: $S(t+1) -S(t) = e^{\delta}S(t) - S(t)$ and this holds regardless of the price level.
