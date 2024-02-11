@@ -17,11 +17,13 @@
     - [Fat Tails](#fat-tails)
   - [Random Walks](#random-walks)
     - [The Binomial Distribution](#the-binomial-distribution)
-  - [Asset Pricing Models using Random Walks](#asset-pricing-models-using-random-walks)
+    - [Modelling Asset Prices using Random Walks](#modelling-asset-prices-using-random-walks)
   - [Brownian Motion](#brownian-motion)
     - [Brownian Motion with Drift](#brownian-motion-with-drift)
     - [Modelling Asset Prices using Brownian Motion](#modelling-asset-prices-using-brownian-motion)
   - [The Log-Normal Model](#the-log-normal-model)
+    - [Modelling Asset Prices with the Log-Normal Model](#modelling-asset-prices-with-the-log-normal-model)
+      - [Standard distribution of the Log-Normal Model](#standard-distribution-of-the-log-normal-model)
 
 ## Introduction
 
@@ -110,11 +112,11 @@ $$f(x) = \frac{1}{\sqrt{2 \pi {\sigma}^{2}}}e^{-\frac{(x- \mu)^{2}}{2 {\sigma}^{
 
 ### Moments of a Distribution
 
-- The idea of a distribution having [moments](https://en.wikipedia.org/wiki/Moment_(mathematics)) stem from mechanics and is used to describe the shape of a function's graph. If a function describe the mass density, the zeroth moment would be the total mass, the first moment would be the center of mass and the second momnent would be the moment of intertia.
+- The idea of a distribution having [moments](https://en.wikipedia.org/wiki/Moment_(mathematics)) stem from mechanics and is used to describe the shape of a function's graph. If a function describe the mass density, the zeroth moment would be the total mass, the first moment would be the center of mass and the second moment would be the moment of inertia.
 - In statistics, distributions have the following moments:
   - **First moment** is the mean (expected value)
   - **Second moment** is the variance (spread of values around the mean) and the standard deviation in the square root of the variance
-  - **Third moment** is the skewness (how symmetric/asymetric the distribution is around the mean)
+  - **Third moment** is the skewness (how symmetric/asymmetric the distribution is around the mean)
   - **Fourth moment** is the kurtosis ('fatness' of the tails)
 
 #### Kurtosis
@@ -251,7 +253,7 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 ```
 
 - The sequence of random moves $X_{1}, X_{2},...,X_{j},...,X_{n}$ are independent and identically distributed such that $\text{Prob}(X_{1} = y_{1}, X_{2} = y_{2},...,X_{n} = y_{n}) \equiv \text{Prob}(X_{1} = y_{1}) \text{Prob}(X_{2} = y_{2})...\text{Prob}(X_{n} = y_{n})$ where $y_{i}=+1$ or $y_{i} = -1$.
-- For example, the probability of 2 up moves followed by a down move is: 
+- For example, the probability of 2 up moves followed by a down move is:
 
 ```math
 \begin{aligned}
@@ -314,7 +316,7 @@ S_{n} &=  2Z_{n}-n\\
 ```
 
 - The random walks distribution $S_{n}$ will inherit a *shifted* binomial distribution from $Z_{n}$.
-- For simpliciy, let $n=2m$ so that the values of $S_{n}$ will only be even integers ranging from $-2m$ to $2m$.
+- For simplicity, let $n=2m$ so that the values of $S_{n}$ will only be even integers ranging from $-2m$ to $2m$.
 
 ```math
 \begin{aligned}
@@ -323,7 +325,7 @@ S_{n} &=  2Z_{n}-n\\
 \end{aligned}
 ```
 
-## Asset Pricing Models using Random Walks
+### Modelling Asset Prices using Random Walks
 
 - The random walks described so far have been discrete time models with fixed unit increments (moves); therefore, assumptions will need to evaluated to decide whether random walks are a suitable model for modelling asset prices which evolve continuously in time by and move by differing amounts.
 - Random walks may not be suitable for some pricing models and the following should be considered:
@@ -428,3 +430,96 @@ S(t+1) &= e^{\psi (t+1)} \\
 
 - The asset price at $t+1$ is calculated by multiplying the asset price at $t$ by the factor $e^{\delta}$.
 - The price jump is therefore: $S(t+1) -S(t) = e^{\delta}S(t) - S(t)$ and this holds regardless of the price level.
+  - In other words, the change in price will be equal to  $e^{\delta} -1$ times initial price.
+  - A fixed additive jump in $\text{log}(S(t))$ implies that the price change scales with the price level.
+  - This feature is useful for modelling asset prices and suggests that modelling $\text{log}(S(t))$ as Brownian motion (a random walk) rather than $S(t)$ will be provide a better asset pricing model.
+- Recall the definition of **strict stationarity** from [Time Series Statistics](#time-series-statistics) where the multivariate distribution of returns does not change with time and is true up to the second moments, variances and autocorrelations.
+  - Empirically, asset returns tend to be stationary over reasonable periods of time.
+  - Asset price changes and asset returns cannot both be stationary as a 10% return implies a 1 USD increase in a 10 USD stock, but a 20 USD increase in a 200 USD stock.
+  - It is therefore reasonable to consider modelling $\text{log}(S(t))$ as Brownian motion rather than $S(t)$ itself, such that $\text{log}(S(t)) = W(t)$.
+- The asset returns can be modelled as follows:
+
+```math
+\begin{aligned}
+\text{log} \left(\frac{S(t)}{S(t-1)} \right) &= \text{log}(S(t)) - \text{log}(S(t-1)) \\\\
+\text{log}(S(t)) = W(t) \Longrightarrow \\
+&= W(t) - W(t-1)
+\end{aligned}
+```
+
+- Recall the properties of [Brownian motion](#brownian-motion) and the sequence of Brownian differences $W(t) - W(t-1), W(t+1) - W(t),...,W(t+k) - W(t+k-1)$ that are stationary and uncorrelated (independent).
+  - Therefore, the $\text{log}$ returns will also have these properties.
+- In summary, modelling $\text{log}(S(t))$ as Brownian motion accomplishes the following:
+  - Average asset price changes are proportional to the price level.
+  - Asset returns are stationary and uncorrelated.
+- It is standard practice to add a drift term as discussed in [Brownian Motion with Drift](#brownian-motion-with-drift), a volatility factor $\sigma$, and an initial asset price $S(0)$, such that the log-normal model for an asset price $S(t)$ (also known as geometric Brownian motion) becomes:
+
+```math
+\begin{aligned}
+\text{log}(S(t)) = \text{log}(S(0)) + \mu t + \sigma W(t) \\\\
+S(t) = \boxed{S(0) + e^{\mu t + \sigma W(t)}}
+\end{aligned}
+```
+
+### Modelling Asset Prices with the Log-Normal Model
+
+- Evaluating the log-normal model against the issues that were present in [Modelling Asset Prices using Brownian Motion](#modelling-asset-prices-using-brownian-motion):
+  - As long as $S(0)$ is positive, then the asset price $S(t)$ will also be positive due to the exponential factor $e^{\mu t + \sigma W(t)}$.
+  - A typical change in price $S(t+1) - S(t)$ over a single unit of time can be evaluated by calculating the standard deviation $\sqrt{ \text{Var}(S(t+1) - S(t))}$.
+
+#### Standard distribution of the Log-Normal Model
+
+- The standard deviation of the log-normal model, $\sqrt{\text{Var}(S(t+1) - S(t))}$, can be calculated as follows.
+
+```math
+\begin{aligned}
+S(t) &= S(0) + e^{\mu t + \sigma W(t)} \\\\
+S(t + 1) &= S(0) + e^{\mu (t+1) + \sigma W(t + 1)} \\\\
+\Longrightarrow \frac{S(t + 1)}{S(t)} &= \frac{S(0) + e^{\mu (t+1) + \sigma W(t + 1)}}{S(0) + e^{\mu t + \sigma W(t)}} \\\\
+&= \frac{e^{\mu (t+1) + \sigma W(t + 1)}}{e^{\mu t + \sigma W(t)}} \\\\
+&= \frac{e^{\mu t} \cdot e^{\mu + \sigma W(t + 1)}}{e^{\mu t} \cdot e^{\sigma W(t)}} \\\\
+&= \frac{e^{\mu + \sigma W(t + 1)}}{e^{\sigma W(t)}} \\\\
+&= e^{\mu + \sigma W(t + 1)} \cdot e^{- \sigma W(t)} \\\\
+&= e^{\mu + \sigma W(t + 1) - \sigma W(t)} \\\\
+&= e^{\mu + \sigma (W(t + 1) - W(t))} \\\\
+\Longrightarrow S(t+1) &= S(t)e^{\mu + \sigma (W(t + 1) - W(t))} \\\\
+\Longrightarrow S(t+1) - S(t) &= S(t)(e^{\mu + \sigma (W(t + 1) - W(t))} - 1) \\\\
+\end{aligned}
+```
+
+- Assuming $S(t)$ is known at time $t$ (deterministic) and that the only source of randomness is $W(t + 1) - W(t)$ which is a normally distributed random variable with mean 0 and variance 1 as per the properties of Brownian motion properties.
+- Denoting $Z$ as the random variable $W(t + 1) - W(t)$, the variance of the change in price, $\text{Var}(S(t+1) - S(t))$ is therefore calculated as follows:
+
+```math
+\begin{aligned}
+\text{Var}(S(t+1) - S(t)) &= \text{Var}[S(t)(e^{\mu + \sigma (W(t + 1) - W(t))} - 1)] \\
+&= \text{Var}[S(t)(e^{\mu + \sigma (Z)} - 1)] \\
+&= \text{Var}(e^{\mu + \sigma (Z)} - 1)S(t)^{2} \text{ assuming } S(t) \text{ is a known constant at } t
+\end{aligned}
+```
+
+- The standard deviation is therefore calculated by square rooting the variance:
+
+```math
+\begin{aligned}
+\sqrt{\text{Var}(S(t+1) - S(t))} &= \sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)S(t)^{2}} \\\\
+&= \sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)}S(t)\\\\
+B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)} \Longrightarrow &= BS(t)
+\end{aligned}
+```
+
+- Where $B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)}$ is a constant greater than 0 for a  normal distribution $Z \sim \mathcal{N}(0,1)$
+
+```math
+\begin{aligned}
+E[Z] &= 0 \\
+\text{Var}(Z) &= 1 \\\\
+E \left[e^{\mu + \sigma Z} \right] &= e^{\mu + \sigma E[Z] + \frac{ \sigma^{2}}{2}} = e^{\mu + \frac{\sigma^{2}}{2}} \\\\
+\text{Var}(e^{\mu + \sigma Z}) &= e^{2 \mu + 2 \sigma^{2}} \\\\
+\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)} &= \sqrt{\text{Var}(e^{\mu + \sigma Z}) - (E[e^{\mu + \sigma Z}])^{2}} \\\\
+&=\sqrt{e^{2 \mu + 2 \sigma^{2}} - (e^{\mu + \frac{\sigma^{2}}{2}})^{2}} \\\\
+&= \sqrt{e^{2 \mu + 2 \sigma^{2}} - e^{2 \mu + \sigma^{2}}} \\\\
+&= \sqrt{e^{2 \mu + \sigma^{2}} \cdot e^{\sigma^{2}} - 1} \\\\
+&= e^{\mu + \frac{\sigma^{2}}{2}} \sqrt{e^{\sigma^{2}} -1}
+\end{aligned}
+```
