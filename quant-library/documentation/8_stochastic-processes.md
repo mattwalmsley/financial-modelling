@@ -24,6 +24,7 @@
   - [The Log-Normal Model](#the-log-normal-model)
     - [Modelling Asset Prices with the Log-Normal Model](#modelling-asset-prices-with-the-log-normal-model)
       - [Standard distribution of the Log-Normal Model](#standard-distribution-of-the-log-normal-model)
+    - [Limitations of the Log-Normal Model](#limitations-of-the-log-normal-model)
 
 ## Introduction
 
@@ -508,7 +509,7 @@ B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)} \Longrightarrow &= BS(t)
 \end{aligned}
 ```
 
-- Where $B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)}$ is a constant greater than 0 for a  normal distribution $Z \sim \mathcal{N}(0,1)$
+- Where $B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)}$ is a constant greater than 0 for a  normal distribution $Z \sim \mathcal{N}(0,1)$:
 
 ```math
 \begin{aligned}
@@ -520,6 +521,18 @@ E \left[e^{\mu + \sigma Z} \right] &= e^{\mu + \sigma E[Z] + \frac{ \sigma^{2}}{
 &=\sqrt{e^{2 \mu + 2 \sigma^{2}} - (e^{\mu + \frac{\sigma^{2}}{2}})^{2}} \\\\
 &= \sqrt{e^{2 \mu + 2 \sigma^{2}} - e^{2 \mu + \sigma^{2}}} \\\\
 &= \sqrt{e^{2 \mu + \sigma^{2}} \cdot e^{\sigma^{2}} - 1} \\\\
-&= e^{\mu + \frac{\sigma^{2}}{2}} \sqrt{e^{\sigma^{2}} -1}
+&= e^{\mu + \frac{\sigma^{2}}{2}} \sqrt{e^{\sigma^{2}} -1} \\\\
+\Longrightarrow B &= \boxed{e^{\mu + \frac{\sigma^{2}}{2}} \sqrt{e^{\sigma^{2}} -1}}
 \end{aligned}
 ```
+
+- The important part is that $B$ is a constant which only depends on $\mu$ and $\sigma$, known model parameters, and is independent of the asset price $S(t)$.
+- To summarise, the standard deviation of the changes in price is $BS(t)$ - i.e. the price change $\propto$ the price level.
+  - If the asset price doubles, the changes in price will be twice as large on average - this solves the problem with the Brownian motion model being insensitive to asset prices.
+
+### Limitations of the Log-Normal Model
+
+- Aside from uncorrelated returns, the log-normal model is unable to replicate any of the [Stylized Facts of Asset Prices and Returns](#stylized-facts-of-asset-prices-and-returns).
+- As daily returns are independent as well as uncorrelated, the model cannot replicate volatility clustering and the autocorrelation function for absolute return values will be 0.
+- Given the distribution of Brownian increments $W(t + 1) - W(t)$ is normal, the asset returns will not have a fat-tailed distribution in the log-normal model.
+- Overall, the log-normal model fails to accurately model a lot of the widely accepted empirical properties of asset prices and can only be used to approximate prices; however, option pricing model still use the log-normal model as a base.
