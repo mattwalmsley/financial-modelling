@@ -207,8 +207,6 @@ _UpgradeReport_Files/
 ###############
 bin/
 obj/
-Debug/
-net8.0/
 TestResults/
 ###################
 # Web publish log #
