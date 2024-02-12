@@ -1,10 +1,8 @@
+# Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
-*.so
 
 # Distribution / packaging
 .Python
@@ -55,33 +53,29 @@ cover/
 *.mo
 *.pot
 
+# Django
 # Django stuff:
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Flask
 # Flask stuff:
 instance/
 .webassets-cache
 
+# Scrapy
 # Scrapy stuff:
 .scrapy
 
 # Sphinx documentation
 docs/_build/
 
-# PyBuilder
-.pybuilder/
-target/
-
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# IPython
-profile_default/
-ipython_config.py
-
+# Environments
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
@@ -109,52 +103,19 @@ ipython_config.py
 #   https://pdm.fming.dev/#use-with-ide
 .pdm.toml
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+# SageMath parsed files
+*.sage.py
 
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed files
-*.sage.py
+# pyenv
+#   For a library or package, you might want to ignore these files since the code is
+#   intended to run in multiple environments; otherwise, check them in:
+# .python-version
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
+# JetBrains Rider
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -177,66 +138,22 @@ cython_debug/
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
-# Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
-
-# Gradle and Maven with auto-import
-# When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
-# auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
-
-# CMake
-cmake-build-*/
-
-# Mongo Explorer plugin
-.idea/**/mongoSettings.xml
-
-# File-based project format
-*.iws
-
 # IntelliJ
 out/
 
-# mpeltonen/sbt-idea plugin
-.idea_modules/
+# CMake
+CMakeFiles/
+CMakeScripts/
+CMakeCache.txt
+CMakeScripts/
+Testing/
+CTestTestfile.cmake
 
-# JIRA plugin
-atlassian-ide-plugin.xml
+# CMake build directory
+cmake-build-debug/
 
-# Cursive Clojure plugin
-.idea/replstate.xml
-
-# SonarLint plugin
-.idea/sonarlint/
-
-# Crashlytics plugin (for Android Studio and IntelliJ)
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-
-# Editor-based Rest Client
-.idea/httpRequests
-
-# Android studio 3.1+ serialized cache file
-.idea/caches/build_file_checksums.ser
-
-.vscode/
-
-# Local History for Visual Studio Code
-.history/
-
-# Built Visual Studio Code Extensions
-*.vsix
+# Virtual environment
+.venv/
 
 # C++
 # Prerequisites
@@ -253,13 +170,8 @@ fabric.properties
 *.pch
 
 # Compiled Dynamic libraries
-*.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
 
 # Compiled Static libraries
 *.lai
@@ -271,3 +183,59 @@ fabric.properties
 *.exe
 *.out
 *.app
+
+###################
+# compiled source #
+###################
+*.com
+*.class
+*.pdb
+*.dll.config
+*.cache
+*.suo
+# Include dlls if they’re in the NuGet packages directory
+!/packages/*/lib/*.dll
+# Include dlls if they're in the CommonReferences directory
+!*CommonReferences/*.dll
+
+####################
+# VS Upgrade stuff #
+####################
+_UpgradeReport_Files/
+###############
+# Directories #
+###############
+bin/
+obj/
+Debug/
+net8.0/
+TestResults/
+###################
+# Web publish log #
+###################
+*.Publish.xml
+
+# Logs and databases #
+######################
+*.log
+
+# Windows generated files #
+##########################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Visual Studio Code
+.vscode/
+
+# Local History for Visual Studio Code
+.history/
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
