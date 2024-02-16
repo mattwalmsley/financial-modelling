@@ -43,3 +43,40 @@
 - Unless stated otherwise:
   - The options will be treated as european style.
   - The underlying assets will be a stock paying no dividends (i.e. no income).
+
+## Option Payoffs
+
+- The option payoff is central to valuing the option and is uses the same principals as the [payoffs](./7_forwards_futures_swaps.md#payoffs) for derivatives contracts which are equal to the revenue paid to a particular counterparty (either the long or short position).
+- For European options which have a single expiration date, the option payoff will be equal to the option value at the time of the payoff (option expiration).
+- The notation used for option pricing will extend the notation used so far:
+  - $S(t)$ will be the price of the underlying asset at time $t$.
+  - $K$ is the strike price.
+  - $T$ is the expiration date.
+  - The premium, when taking a long position in the call ($C$) or put ($P$), is denoted by any of the following:
+    - $C(S(t))$ or $P(S(t))$ - dependent on the price of the underlying asset.
+    - $C(S(t), t)$ or $P(S(t), t)$  - as above and also dependent on time $t$.
+    - $C(S(t),t;K,T)$ or $P(S(t),t;K,T)$  - as above and also dependent on the strike $K$ and expiration date $T$.
+
+### Long Call Payoff
+
+- If an investor holds a long position in a European call option, then at the expiration date $T$, the investor has the right to buy the underlying asset at the strike price $K$.
+- It only makes sense for the investor to exercise the option if the strike $K$ is less than the spot price of the underlying asset at the expiration date $S(T)$
+- Assuming $S(T) > K$, the payoff from immediately selling the underlying asset at the expiration date is $S(T) - K$.
+- If $S(T) < K$ then the option will not be exercised and the payoff will be 0.
+- The long call payoff can be written as follows:
+
+```math
+\begin{aligned}
+C(S(T), T) &=
+\begin{cases}
+S(T) - K &S(T) > K \\
+0 &S(T) \leq K
+\end{cases} \\\\
+&=\text{max}\{0,S(T)-K\}
+\end{aligned}
+```
+
+### Short Call Payoff
+
+- The short call payoff is the negative of the [long call payoff](#long-call-payoff):
+$$-C(S(T),T) = - \text{max}\{0,S(T)-K\}$$
