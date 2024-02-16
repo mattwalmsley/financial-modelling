@@ -14,7 +14,9 @@ The purpose of this repository is for educational purposes only.
 - [Equities](quant-library/documentation/4_equities.md)
 - [Commodities](quant-library/documentation/5_commodities.md)
 - [Arbitrage](quant-library/documentation/6_arbitrage.md)
-- [Derivatives](quant-library/documentation/7_derivatives)
+- [Forwards, Futures, and Swaps](quant-library/documentation/7_forwards_futures_swaps.md)
+- [Stochastic Processes](quant-library/documentation/8_stochastic-processes.md)
+- [Options](quant-library/documentation/9_options.md)
 
 ## Git Commands
 
