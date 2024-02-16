@@ -46,7 +46,7 @@
 
 ## Option Payoffs
 
-- The option payoff is central to valuing the option and is uses the same principals as the [payoffs](./7_forwards_futures_swaps.md#payoffs) for derivatives contracts which are equal to the revenue paid to a particular counterparty (either the long or short position).
+- The option payoff is central to valuing the option and uses the same principals as the [payoffs for derivatives contracts](./7_forwards_futures_swaps.md#payoffs) where the payoffs are equal to the revenue paid to a particular counterparty (either the long or short position).
 - For European options which have a single expiration date, the option payoff will be equal to the option value at the time of the payoff (option expiration).
 - The notation used for option pricing will extend the notation used so far:
   - $S(t)$ will be the price of the underlying asset at time $t$.
