@@ -62,7 +62,7 @@
 - If an investor holds a long position in a European call option, then at the expiration date $T$, the investor has the right to buy the underlying asset at the strike price $K$.
 - It only makes sense for the investor to exercise the option if the strike $K$ is less than the spot price of the underlying asset at the expiration date $S(T)$
 - Assuming $S(T) > K$, the payoff from immediately selling the underlying asset at the expiration date is $S(T) - K$.
-- If $S(T) < K$ then the option will not be exercised and the payoff will be 0.
+- If $S(T) \leq K$ then the option will not be exercised and the payoff will be 0.
 - The long call payoff can be written as follows:
 
 ```math
@@ -76,7 +76,38 @@ S(T) - K &S(T) > K \\
 \end{aligned}
 ```
 
+  ![Long Call Profit](images/long-call.png "Long Call Profit")
+
 ### Short Call Payoff
 
 - The short call payoff is the negative of the [long call payoff](#long-call-payoff):
 $$-C(S(T),T) = - \text{max}\{0,S(T)-K\}$$
+
+  ![Short Call Profit](images/short-call.png "Short Call Profit")
+
+### Long Put Payoff
+
+- A long position in a European put provides the right to sell the underlying for the strike price $K$ at contract expiration $T$.
+- Assuming $S(T) < K$, the payoff from buying the underlying asset at the spot rate and selling to the short position for $K$ at the expiration date is $K - S(T)$.
+- If $S(T) \geq K$ then the option will not be exercised and the payoff will be 0.
+- The long put payoff can be written as follows:
+
+```math
+\begin{aligned}
+P(S(T), T) &=
+\begin{cases}
+K - S(T) &S(T) < K \\
+0 &S(T) \geq K
+\end{cases} \\\\
+&=\text{max}\{0,K-S(T)\}
+\end{aligned}
+```
+
+  ![Long Put Profit](images/long-put.png "Long Put Profit")
+
+### Short Put Payoff
+
+- The short put payoff is the negative of the [long put payoff](#long-put-payoff):
+$$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
+
+  ![Short Put Profit](images/short-put.png "Short Put Profit")
