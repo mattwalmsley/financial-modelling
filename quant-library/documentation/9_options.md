@@ -111,3 +111,31 @@ K - S(T) &S(T) < K \\
 $$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
 
   ![Short Put Profit](images/short-put.png "Short Put Profit")
+
+## Arbitrage Bounds on Option Prices
+
+- From the Law of One Price, the following equalities apply to option prices:
+  - Call prices:
+    - Less than or equal to the underlying price: $C(t) \leq S(t)$
+    - Greater than or equal to the long forward position: $C(t) \geq S(t) -^{-r(T-t)}K$
+  - Put prices:
+    - Less than or equal to the discounted strike price: $P(t) \leq e^{-r(T-t)}K$
+    - Greater than or equal to the short forward position: $P(t) \geq e^{-r(T-t)}K - S(t)$
+
+### Arbitrage Inequality Example 1: Call Price Less Than Underlying Price
+
+- To demonstrate than $C(t) \leq S(t)$ due to arbitrage principles, starting by assuming that the opposite is true, such that $C(t) >S(t)$ at time $t$.
+- The following arbitrage portfolio can be constructed:
+  - Sell/write a call on a stock collecting cash for the price of the call $C(t)$.
+  - Purchase the underlying stock, paying $S(t)$.
+- This results in a cash of holding of $C(t) - S(t) > 0$ due to the (incorrect) earlier assumption.
+  - This cash sum is invested at the risk free rate $r$.
+- At the expiration of the call, the portfolio consists of:
+  - A short position on the call.
+  - A long position on the underlying stock.
+  - A cash holding now worth $e^{-r(T-t)}(C(t) - S(t))$.
+- If, at the expiration, the call is out of the money ($S(T) \leq K$) then the option will **not** be exercised and will expire worthless.
+  - This results in a portfolio worth $e^{-r(T-t)}(C(t) - S(t)) + S(T) > 0$
+- -Alternatively, if the call is in the money ($S(T) > K$) at expiration, the option will be exercised and the long position in the underlying stock will be sold for the strike price $K$.
+  - This results in a portfolio worth $K + e^{-r(T-t)}(C(t) - S(t)) > 0$
+- In both these scenarios, a profit has been retained that is *risk-free* and therefore, if $C(t) > S(t)$, there will be an arbitrage opportunity.
