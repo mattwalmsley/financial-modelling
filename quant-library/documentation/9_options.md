@@ -124,7 +124,7 @@ $$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
 
 ### Arbitrage Inequality Example 1: Call Price Less Than Underlying Price
 
-- To demonstrate than $C(t) \leq S(t)$ due to arbitrage principles, starting by assuming that the opposite is true, such that $C(t) >S(t)$ at time $t$.
+- To demonstrate that $C(t) \leq S(t)$ due to arbitrage principles, start by assuming that the opposite is true: $C(t) >S(t)$ at time $t$.
 - The following arbitrage portfolio can be constructed:
   - Sell/write a call on a stock collecting cash for the price of the call $C(t)$.
   - Purchase the underlying stock, paying $S(t)$.
@@ -136,6 +136,35 @@ $$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
   - A cash holding now worth $e^{-r(T-t)}(C(t) - S(t))$.
 - If, at the expiration, the call is out of the money ($S(T) \leq K$) then the option will **not** be exercised and will expire worthless.
   - This results in a portfolio worth $e^{-r(T-t)}(C(t) - S(t)) + S(T) > 0$
-- -Alternatively, if the call is in the money ($S(T) > K$) at expiration, the option will be exercised and the long position in the underlying stock will be sold for the strike price $K$.
+- Alternatively, if the call is in the money ($S(T) > K$) at expiration, the option will be exercised and the long position in the underlying stock will be sold for the strike price $K$.
   - This results in a portfolio worth $K + e^{-r(T-t)}(C(t) - S(t)) > 0$
 - In both these scenarios, a profit has been retained that is *risk-free* and therefore, if $C(t) > S(t)$, there will be an arbitrage opportunity.
+
+### Arbitrage Inequality Example 2: Call Price Greater Than Long Forward Position
+
+- Similar to example 1, assume that $C(t) \geq S(t) e-^{-r(T-t)}K$ is not true and that if $C(t) < S(t) -e^{-r(T-t)}K$ is true at time $t$, there will be to an arbitrage opportunity present.
+- Rewrite this inequality as $C(t) + e^{-r(T-t)}K < S(t)$ for ease and construct the following arbitrage portfolio:
+  - A short position on the underlying stock, receiving $S(t)$ in cash.
+  - A long position on the call, paying $C(t)$.
+  - Given the inequality, there will be a remaining cash sum equal to $S(t) - C(t)$ which can be invested at the risk-free rate $r$.
+- Now rewrite the inequality as follows:
+
+```math
+\begin{aligned}
+C(t) + e^{-r(T-t)}K &< S(t) \\
+e^{r(T-t)}C(t) + K &< e^{r(T-t)}S(t) \\
+K &< e^{r(T-t)}(S(t) - C(t)) \\
+\end{aligned}
+```
+
+- The inequality now shows that the value of the remaining cash sum $S(t) - C(t)$ at time $T$, having been invested at the risk-free rate $r$, is greater than the strike price $K$.
+- At the expiration of the call option $T$, the arbitrage portfolio contains the following:
+  - The long call position.
+  - The short position on the stock.
+  - The cash investment with value $e^{r(T-t)}(S(t) - C(t))$.
+- If, at the expiration, the call is out of the money ($S(T) \leq K$), which can be written as $S(T) < e^{r(T-t)}(S(t) - C(t))$ using the rearranged inequality, then the option will **not** be exercised and the underlying stock will be bought for $S(T)$ to close the short position in the underlying stock.
+  - This results in a portfolio worth $e^{r(T-t)}(S(t) - C(t)) - S(T) > 0$
+- Alternatively, if the call is in the money ($S(T) > K$) at expiration, the call option will be exercised by paying the strike price $K$ and using the underlying stock received to close the short position in the underlying stock.
+  - This results in a portfolio worth $e^{r(T-t)}(S(t) - C(t)) - K > 0$
+
+- In both these scenarios, a profit has been retained that is *risk-free* and therefore, if $C(t) < S(t) -e^{-r(T-t)}K$, there will be an arbitrage opportunity.
