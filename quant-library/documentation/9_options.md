@@ -197,3 +197,50 @@ K &< e^{r(T-t)}(S(t) - C(t)) \\
   - If after 1 year, the value of the underlying stock is less than the strike price, the option will not be exercised.
     - This will give a risk-free profit of $S(T) + e^{r(1)}(C(t) - S(t)) = S(T) + 10.30$
   - A minimum of 10.30 USD will be received from exploiting this arbitrage opportunity - a risk-free profit.
+
+### Arbitrage Bounds on American Style Options
+
+- The bounds on american options are calculated for an underlying stock that does not pay dividends.
+- The lower bounds for American options are the same as European Options as American style options have more 'optionality' than European style (i.e. American style has the option to be redeemed before the expiry).
+
+#### Intrinsic Value
+
+- The **intrinsic value** of an option is the value that can be recovered from exercising the option at some point in the life of the option.
+  - European style options do not have an intrinsic value as they can only be exercised at expiry.
+  - For American option holders, the decision to exercise the option will be based on whether the intrinsic value is more or less than the market value of the option.
+- Similar to the [long call pay-off](#long-call-payoff) of a European style option, the intrinsic value of a call option is the payoff of the call at time $t$ where $t < T$:
+
+$$C(S(t), t) =\text{max}\{0,S(t)-K\}$$
+
+#### Bounds for American Calls
+
+- An American style call will never be less than a European style call (assuming the same strike and expiry) because of the increased optionality that American options have.
+- Denote $C_{A}(S(t), t)$ as the price of an American call, continue to denote a European call as $C(S(t), t)$ at time $t$.
+- The lower bound for an American call is therefore:
+
+```math
+\begin{aligned}
+C_{A}(S(t),t) &\geq C(S(t),t) \\
+&\geq \text{max}\{0,S(t) - e^{-r(T-t)}K\} \\\\
+\text{With } r > 0 \Longrightarrow \text{max}\{0,S(t) - e^{-r(T-t)}K\} &> \text{max}\{0,S(t)-K\} \\\\
+\therefore C_{A}(S(t),t) &> \text{max}\{0,S(t)-K\} \\
+&\equiv \text{call's intrinsic value}
+\end{aligned}
+```
+
+- The market value of an American style call is always more than the intrinsic value.
+  - This is because the intrinsic value is the amount that will be the realized from exercising the option early.
+
+    ![American Long Call Profit](images/american-long-call.png "American Long Call Profit")
+  - Therefore American options will never be exercised early as their market value (purple line) is greater than their intrinsic value (red and green) - selling the option on the market will return more than exercising the option.
+- For an American call on a non-dividend paying stock, the early exercise functionality is essentially worthless as shown so an American option will be worth the same as a European style option.
+
+#### Bounds for American Puts
+
+- An American put can be exercised at any point during the life of the contract, the same as an American call.
+- Since exercising a put option will always recover its intrinsic value, the value of an American put can never be less than this intrinsic value.
+- Similarly, exercising a put option can never recover more than the strike price due to arbitrage opportunities.
+- Therefore the price of an AMerican put $P_{A}(S(t), t)$ will satisfy the following conditions:
+$$\text{max}\{0, K - S(t)\} \leq P_{A}(S(t), t) \leq K$$
+- Unlike American calls, there are cases where exercising an American put early can be optimal.
+  - This cannot be demonstrated using only arbitrage conditions and so a model for the underlying asset is required.
