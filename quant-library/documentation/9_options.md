@@ -117,7 +117,7 @@ $$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
 - From the Law of One Price, the following equalities apply to option prices:
   - Call prices:
     - Less than or equal to the underlying price: $C(t) \leq S(t)$
-    - Greater than or equal to the long forward position: $C(t) \geq S(t) -^{-r(T-t)}K$
+    - Greater than or equal to the long forward position: $C(t) \geq S(t) - e^{-r(T-t)}K$
   - Put prices:
     - Less than or equal to the discounted strike price: $P(t) \leq e^{-r(T-t)}K$
     - Greater than or equal to the short forward position: $P(t) \geq e^{-r(T-t)}K - S(t)$
@@ -166,5 +166,34 @@ K &< e^{r(T-t)}(S(t) - C(t)) \\
   - This results in a portfolio worth $e^{r(T-t)}(S(t) - C(t)) - S(T) > 0$
 - Alternatively, if the call is in the money ($S(T) > K$) at expiration, the call option will be exercised by paying the strike price $K$ and using the underlying stock received to close the short position in the underlying stock.
   - This results in a portfolio worth $e^{r(T-t)}(S(t) - C(t)) - K > 0$
-
 - In both these scenarios, a profit has been retained that is *risk-free* and therefore, if $C(t) < S(t) -e^{-r(T-t)}K$, there will be an arbitrage opportunity.
+
+### Extending Option Bounds
+
+- The value of an option will never be negative as options will become worthless when the underlying asset moves out of the money.
+  - The largest possible loss for a long position on an option is the price paid to buy the option (the premium).
+  - An option with a negative premium would present an immediate arbitrage opportunity.
+- The following bounds can therefore also be added for option prices:
+  - $C(S(t),t) \geq 0$
+  - $P(S(t),t) \geq 0$
+- This leads to a combined lower bound for options:
+  - $C(S(t),t) \geq \text{max}\{0,S(t) - e^{-r(T-t)}K\}$
+  - $P(S(t),t) \geq \text{max}\{0,e^{-r(T-t)}K - S(t)\}$
+
+### Application of Option Bounds Example
+
+- A 1-year call on a stock is currently trading at 65 USD.
+- The strike price for this call is 45 USD and the risk-free rate is assumed to be 3%.
+- If the call premium is currently 75 USD, there would be an arbitrage opportunity which could be exploited as follows:
+  - Check the bounds for call prices to confirm the arbitrage opportunity:
+    - Less than or equal to the underlying price: $C(t) \leq S(t)$
+    - Greater than or equal to the long forward position: $C(t) \geq S(t) - e^{-r(T-t)}K$
+    - Since the underlying stock price $S(t)$ is currently 65 USD which is less than the current 75 USD call price $C(t)$, there is an arbitrage opportunity present: $75 > 65$ so $C(t) > S(t)$
+  - The call price is too expensive compared to the stock price, so a short position should be taken in the call option.
+  - The cash received from selling the call option can be used to buy the stock, leaving a remaining cash sum of $C(t) - S(t) = 75 - 65 = 10 \text{ USD}$.
+  - The remaining cash sum can be invested at the risk-free rate (3%) so after 1 year this remaining cash sum is equal to $e^{r(1)}(C(t) - S(t)) = e^{0.03(1)}(C(t) - S(t)) = 10.30 \text{ USD}$
+  - If after 1 year, at the contract expiration, the strike price of the call is less than the spot price of the underlying stock, the call option will be exercised and the long position on the underlying asset will be exchanged for the value of the strike price.
+    - This will give a risk-free profit of $K + e^{r(1)}(C(t) - S(t)) = 45 + 10.30 = 55.30 \text{ USD}$
+  - If after 1 year, the value of the underlying stock is less than the strike price, the option will not be exercised.
+    - This will give a risk-free profit of $S(T) + e^{r(1)}(C(t) - S(t)) = S(T) + 10.30$
+  - A minimum of 10.30 USD will be received from exploiting this arbitrage opportunity - a risk-free profit.
