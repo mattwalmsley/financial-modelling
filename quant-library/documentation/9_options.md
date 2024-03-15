@@ -247,7 +247,7 @@ $$\text{max}\{0, K - S(t)\} \leq P_{A}(S(t), t) \leq K$$
 
 ## Put-Call Parity
 
-- Put-call parity is a fundamental concept in options pricing that establishes a relationship between the prices of European call and put options with the same strike price $K$ and expiration date $T$. 
+- Put-call parity is a fundamental concept in options pricing that establishes a relationship between the prices of European call and put options with the same strike price $K$ and expiration date $T$.
 - A long call and a short put position is equal to the long forward position:
 
 $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
@@ -257,7 +257,6 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
     ![Put-Call Parity](images/put-call-parity.png "Put-Call Parity")
 
 ### Deriving the Put Call Parity Using Arbitrage principles
-
 
 - The put-call parity relationship follows from the Law of One Price, and be derived using arbitrage principles.
 - First assume that $C(t) - P(t) > S(t) - e^{-r(T-t)}K$
@@ -273,7 +272,7 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
   - At the expiration date $T$, the debt with original value $e^{-r(T-t)}K$ will have a value of $K$.
   - If $S(T) \leq K$, the call $C(T)$ will expire worthless and the put $P(T)$ will be exercised so a cash value of $K$ will be received in exchange for the long position in the underlying stock $S(T)$.
     - This cash received with value $K$ can be used to close the debt of the same value.
-  - If $S(T) > K$, the call $C(T)$ will be exercised so the long position in the stock can be sold for $S(T) > K$ and the cash received will be used to close the debt position. 
+  - If $S(T) > K$, the call $C(T)$ will be exercised so the long position in the stock can be sold for $S(T) > K$ and the cash received will be used to close the debt position.
     - The put $P(T)$ will expire worthless.
   - In either case the positions are all closed and a risk-free profit of $e^{r(T-t)} \left(C(t) + e^{-r(T-t)}K - P(t) - S(t) \right) > 0$ is retained.
 - Now assume that $C(t) - P(t) < S(t) - e^{-r(T-t)}K$
@@ -293,3 +292,33 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
     - The put $P(T)$ will expire worthless.
   - In either case the positions are all closed and a risk-free profit of $e^{r(T-t)} (P(t) + S(t) - C(t)) - K > 0$ is retained.
 - If either of these inequalities are true, an arbitrage portfolio can be constructed leading to the conclusion that $C(t) - P(t) = S(t) - e^{-r(T-t)}K$ must be true.
+
+## The Binomial Model
+
+- Although mathematical simple, the binomial model is a powerful tool for pricing options and other derivatives.
+- From the binomial model, the [Black-Scholes Option Pricing Model](#the-black-scholes-option-pricing-model) can be derived.
+
+### One-Step Binomial Model
+
+- In the one-step binomial model, there are only two states/times: $t=0$ at the start and $t=1$.
+- Consider a stock with price $S_{0}$ at time $0$ and $S_{t}$ at time $t$ for $t=0,1$.
+  - $S_{t}$ is the convention used to denote $S(t)$ in the binomial model - i.e. the price level $S$ is still a function of time $t$.
+- At time $t=1$, assume the stock can only take two different values, denoted by $S_{1}(+)$ and $S_{1}(-)$ where $S_{1}(-) < S_{1}(+)$.
+  - This assumption is relaxed in later steps.
+- $S_{1}$ is a random variable with the probabilities of $S_{1}(+)$ and $S_{1}(-)$ as follows:
+  - $\text{Prob}(S_{1}=S_{1}(+)) = p$
+  - $\text{Prob}(S_{1}=S_{1}(-)) = q$
+  - Given there are only two outcomes: $p + q = 1$
+
+    ![One-Step Binomial Model](images/one-step-binomial-model.png "One-Step Binomial Model")
+
+- A derivative asset $D$ is also considered which has the aforementioned stock as the underlying asset and a contract expiry at time $t=1$.
+- The values that $D$ can take at time $t=1$, i.e. the payoff of the derivative, are determined by the value of the underlying stock.
+  - $D_{1} = D_{1}(+)$ when $S_{1} = S_{1}(+)$
+  - $D_{1} = D_{1}(-)$ when $S_{1} = S_{1}(-)$
+- $D_{0}$ is the fair value of the derivative at time $t=0$ and must be determined using arbitrage principles.
+  - To apply the arbitrage principles, assumed that a risk-free investment with interest rate $r$ can be introduced.
+  - Also assume that the interest rate $r$ has the same implicit unit of time and compounding period that the time unit for the binomial model has.
+  - Therefore a cash sum with value $K$ invested at the risk-free rate $r$ at time $t=0$ will be worth $K(1+r)$ at time $t=1$, regardless of the value of $S_{1}$
+
+## The Black-Scholes Option Pricing Model
