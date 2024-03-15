@@ -244,3 +244,52 @@ C_{A}(S(t),t) &\geq C(S(t),t) \\
 $$\text{max}\{0, K - S(t)\} \leq P_{A}(S(t), t) \leq K$$
 - Unlike American calls, there are cases where exercising an American put early can be optimal.
   - This cannot be demonstrated using only arbitrage conditions and so a model for the underlying asset is required.
+
+## Put-Call Parity
+
+- Put-call parity is a fundamental concept in options pricing that establishes a relationship between the prices of European call and put options with the same strike price $K$ and expiration date $T$. 
+- A long call and a short put position is equal to the long forward position:
+
+$$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
+
+- This relationship can be shown diagrammatically as follows:
+
+    ![Put-Call Parity](images/put-call-parity.png "Put-Call Parity")
+
+### Deriving the Put Call Parity Using Arbitrage principles
+
+
+- The put-call parity relationship follows from the Law of One Price, and be derived using arbitrage principles.
+- First assume that $C(t) - P(t) > S(t) - e^{-r(T-t)}K$
+  - This inequality can be rewritten as $C(t) + e^{-r(T-t)}K > P(t) + S(t)$
+  - A portfolio can be constructed as follows:
+    - A short position on the call $C(t)$
+    - A debt of $e^{-r(T-t)}K$
+  - By taking these positions, $C(t) + e^{-r(T-t)}K$ will be received in cash.
+  - Respecting the inequality, the following positions may also be taken, leaving a small amount of cash:
+    - A long position on the put $P(t)$
+    - A long position on the stock $S(t)$
+    - The remaining cash is now equal to $C(t) + e^{-r(T-t)}K - P(t) - S(t) > 0$ and can be invested at the risk-free rate $r$.
+  - At the expiration date $T$, the debt with original value $e^{-r(T-t)}K$ will have a value of $K$.
+  - If $S(T) \leq K$, the call $C(T)$ will expire worthless and the put $P(T)$ will be exercised so a cash value of $K$ will be received in exchange for the long position in the underlying stock $S(T)$.
+    - This cash received with value $K$ can be used to close the debt of the same value.
+  - If $S(T) > K$, the call $C(T)$ will be exercised so the long position in the stock can be sold for $S(T) > K$ and the cash received will be used to close the debt position. 
+    - The put $P(T)$ will expire worthless.
+  - In either case the positions are all closed and a risk-free profit of $e^{r(T-t)} \left(C(t) + e^{-r(T-t)}K - P(t) - S(t) \right) > 0$ is retained.
+- Now assume that $C(t) - P(t) < S(t) - e^{-r(T-t)}K$
+  - This inequality can be rewritten as $C(t) + e^{-r(T-t)}K < P(t) + S(t)$
+  - A portfolio can be constructed as follows:
+    - A short position on the put $P(t)$
+    - A short position on the stock $S(t)$
+  - By taking these positions, $P(t) + S(t)$ will be received in cash.
+  - Respecting the inequality, the following position may also be taken, leaving a small amount of cash:
+    - A long position on the call $C(t)$
+    - The remaining cash $P(t) + S(t) - C(t) > e^{-r(T-t)}K$ can be invested at the risk free rate $r$
+  - The inequality can be rewritten as $K < e^{r(T-t)} (P(t) + S(t) - C(t))$
+  - At the expiration date $T$, the cash investment will have a value of $e^{r(T-t)} (P(t) + S(t) - C(t)) > K$.
+  - If $S(T) \leq K$, the call $C(T)$ will expire worthless and the put $P(T)$ will be exercised so the underlying stock $S(T)$ will be bought for $K$ using the cash investment to close the short position in the put.
+    - The short position in the underlying stock can now also be closed.
+  - If $S(T) > K$, the call $C(T)$ will be exercised so the short position in the stock can be closed for $K$ using the cash investment.
+    - The put $P(T)$ will expire worthless.
+  - In either case the positions are all closed and a risk-free profit of $e^{r(T-t)} (P(t) + S(t) - C(t)) - K > 0$ is retained.
+- If either of these inequalities are true, an arbitrage portfolio can be constructed leading to the conclusion that $C(t) - P(t) = S(t) - e^{-r(T-t)}K$ must be true.
