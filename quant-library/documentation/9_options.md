@@ -309,9 +309,6 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
   - $\text{Prob}(S_{1}=S_{1}(+)) = p$
   - $\text{Prob}(S_{1}=S_{1}(-)) = q$
   - Given there are only two outcomes: $p + q = 1$
-
-    ![One-Step Binomial Model](images/one-step-binomial-model.png "One-Step Binomial Model")
-
 - A derivative asset $D$ is also considered which has the aforementioned stock as the underlying asset and a contract expiry at time $t=1$.
 - The values that $D$ can take at time $t=1$, i.e. the payoff of the derivative, are determined by the value of the underlying stock.
   - $D_{1} = D_{1}(+)$ when $S_{1} = S_{1}(+)$
@@ -320,5 +317,11 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
   - To apply the arbitrage principles, assumed that a risk-free investment with interest rate $r$ can be introduced.
   - Also assume that the interest rate $r$ has the same implicit unit of time and compounding period that the time unit for the binomial model has.
   - Therefore a cash sum with value $K$ invested at the risk-free rate $r$ at time $t=0$ will be worth $K(1+r)$ at time $t=1$, regardless of the value of $S_{1}$
+
+![One-Step Binomial Model](images/one-step-binomial-model.png "One-Step Binomial Model")
+
+#### Example: One-Step Binomial Model
+
+- A stock has an initial value ($t=0$) of 50 and at time $t=1$ the probability of the stock value being 65 is $p > 0$
 
 ## The Black-Scholes Option Pricing Model
