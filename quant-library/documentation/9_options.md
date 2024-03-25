@@ -320,8 +320,55 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
 
 ![One-Step Binomial Model](images/one-step-binomial-model.png "One-Step Binomial Model")
 
-#### Example: One-Step Binomial Model
+#### Example 1: One-Step Binomial Model
 
-- A stock has an initial value ($t=0$) of 50 and at time $t=1$ the probability of the stock value being 65 is $p > 0$
+- A stock has an initial value ($t=0$) of 50 and at time $t=1$ the value of the stock has the following probabilities:
+  - A value of 65 is $p > 0$
+  - A value of 40 is $1-p > 0$
+- A call option with strike price 55, expiring at time $t=1$ will have the following payoff values:
+  - $D_{1}(+) = \text{max}\{0,65-55\} = 10$
+  - $D_{1}(-) = \text{max}\{0,40-55\} = 0$
+- Assuming a risk-free interest rate $r$ of 8%, the fair value of the call at time $t=0$ (i.e the premium, denoted as $D_{0}$) can be calculated using arbitrage principles as follows.
+  - An arbitrage portfolio can be constructed by purchasing a portion of the underlying stock and a short position on the call.
+  - Let $\Delta$ denote the allocation of the stock and $D_{t}$ the value of the call at time $t$.
+  - The value of the portfolio at time $t$ is therefore: $V_{t} = \Delta S_{t} - D_{t}$
+  - $\Delta$ can be calculated so that at time $t=1$, the value of the portfolio will be the same in both states: $D_{1}(+)$ and $D_{1}(-)$
+    - Leading to: $\Delta S_{1}(+) - D_{1}(+) = \Delta S_{1}(-) - D_{1}(-)$
+    - This can be rearranged and solved for delta: $\Delta  =  \frac{D_{1}(+)- D_{1}(-)}{S_{1}(+) - S_{1}(-)} = \frac{10 - 0}{65-40}=0.4$
+  - A portfolio consisting of 0.4 shares of the stock and a short position in a call option has the same value in both states at time $t=1$.
+  - The value can be calculated in either state and will be equal to $V_{t} = \Delta S_{t} - D_{t} = 0.4(65) - 10 = 16$.
+  - Therefore $\text{Prob}(V_{1} = 16) = 1$ and the portfolio has the same payoff as an investment at the risk-free rate which has a final value of 16.
+  - Discounting the value of $V_{1}$ from $t=1$ to $t=0$ gives $V_{0}$, the value of the portfolio at $t=0$.
+    - Therefore: $V_{1} = V_{0}(1 + r) \Longrightarrow V_{0} = \frac{V_{1}}{1 + r} = \frac{16}{1+0.08} = 14.81$
+    - At $t=0$, the following is true: $V_{0} = \Delta S_{0} - D_{0}$.
+    - Rearranging to solve for $D_{0}$ gives: $D_{0}= \Delta S_{0} - V_{0} = 0.4(50) - 14.81 = 5.19$
+  - The fair value of the call premium at time $t=0$ is 5.19, as calculated by arbitrage principles.
+  - This technique of applying principles is a simple example of *delta hedging* the option with the underlying asset to create a 'riskless' portfolio.
+
+#### The General Case for the One-Step Binomial Model
+
+- Recapping the arbitrage pricing technique in the [previous example](#example-1-one-step-binomial-model) which assumes the following:
+  - The underlying stock price $S_{t}$ has an initial value $S_{0}$ at $t=0$ and has the following probability of taking values $S_{1}(+)$ and $S_{1}(+)$ at time $t=1$:
+    - $\text{Prob}(S_{1}=S_{1}(+)) = p$
+    - $\text{Prob}(S_{1}=S_{1}(-)) = q$
+  - The probabilities have the following relationships:
+    - $q=1-p$
+    - $0 < p,q$
+  - The risk-free interest rate $r$ is such that a cash investment at time $t=0$ with value $K$ will be worth $K(1+r)$ at time $t=1$.
+- The following notation to relate $S_{0}$ with $S_{1}(+)$ and $S_{1}(+)$ can be added for completeness:
+  - $S_{1}(+) = uS_{0}$
+  - $S_{1}(-) = dS_{0}$
+  - $0 < d < u$
+  - Conceptually, $d < 1 < u$ can also be assumed as generally $S_{1}(-) < S_{0} < S_{1}(+)$
+  - $u$ and $d$ are the *gross returns* in the $+$ and $-$ states respectively.
+- Arbitrage principles require that $d < 1+r < u$ as the return on the stock cannot be more or less than the return on the risk-free interest rate $r$.
+  - If $1+r \leq d$ a risk-free profit could be obtained by borrowing cash at the risk-free rate and purchasing the underlying stock.
+  - Similarly, if $u \leq 1+r$, a risk-free profit could be obtained by taking a short position in the underlying stock and investing the proceeds at the risk-free rate.
+- As with the [previous example](#example-1-one-step-binomial-model), assume that the derivative with value $D_{t}$ at time $t$ has the stock as the underlying asset, an initial value $D_{0}$, and the following states:
+  - $D_{1} = D_{1}(+)$ when $S_{1} = uS_{0}$
+  - $D_{1} = D_{1}(-)$ when $S_{1} = dS_{0}$
+- The values denoted as $D_{1}(+)$ and $D_{1}(-)$ constitute the payoff of the derivative and are assumed to be known values.
+- The fair price for $D_{0}$, the initial value at time $t=0$ of the derivative, can be determined using arbitrage principles for the general case as follows:
+
 
 ## The Black-Scholes Option Pricing Model
