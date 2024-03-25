@@ -347,6 +347,8 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
 
 #### The General Case for the One-Step Binomial Model
 
+##### One-Step Binomial Model Assumptions Recap
+
 - Recapping the arbitrage pricing technique in the [previous example](#example-1-one-step-binomial-model) which assumes the following:
   - The underlying stock price $S_{t}$ has an initial value $S_{0}$ at $t=0$ and has the following probability of taking values $S_{1}(+)$ and $S_{1}(+)$ at time $t=1$:
     - $\text{Prob}(S_{1}=S_{1}(+)) = p$
@@ -368,7 +370,60 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
   - $D_{1} = D_{1}(+)$ when $S_{1} = uS_{0}$
   - $D_{1} = D_{1}(-)$ when $S_{1} = dS_{0}$
 - The values denoted as $D_{1}(+)$ and $D_{1}(-)$ constitute the payoff of the derivative and are assumed to be known values.
-- The fair price for $D_{0}$, the initial value at time $t=0$ of the derivative, can be determined using arbitrage principles for the general case as follows:
 
+##### One-Step Binomial Model General Case Derivation
+
+- The fair price for $D_{0}$, the initial value at time $t=0$ of the derivative, can be determined using arbitrage principles for the general case as follows:
+- Create an arbitrage portfolio with $\Delta$ positions in the underlying stock and a short position in the derivative.
+- Choose a value for $\Delta$ that creates a riskless portfolio - where the value of the portfolio at time $t=1$ in both the $+$ and $-$ cases is the same.
+- Denote the value function of the arbitrage portfolio as $V_{t} = \Delta S_{t} - D_{t}$ and then solve the following equation to find $\Delta$:
+
+```math
+\begin{aligned}
+\Delta uS_{0} - D_{1}(+) &= \Delta dS_{0} - D_{1}(-) \\\\
+\therefore \Delta &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}
+\end{aligned}
+```
+
+```math
+\begin{aligned}
+\Longrightarrow V_{1} &= \Delta S_{1} - D_{1} \\\\
+&= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}S_{1} - D_{1}
+\end{aligned}
+```
+
+- This holds true in both the $+$ and $-$ states due to the derivation for $\Delta$ and can therefore be calculated using either state. Hence, for the $+$ state:
+
+```math
+\begin{aligned}
+\Longrightarrow &S_{1} = uS_{0} \\
+\Longrightarrow &D_{1} = D_{1}(+) \\\\
+V_{1} &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}uS_{0} - D_{1}(+) \\\\
+&= \frac{D_{1}(+) - D_{1}(-)}{(u-d)}u - D_{1}(+) \\\\
+&= \frac{(D_{1}(+) - D_{1}(-))u - (u-d)D_{1}(+)}{u-d} \\\\
+&= \frac{uD_{1}(+) - uD_{1}(-) - uD_{1}(+) + dD_{1}(+)}{u-d} \\\\
+V_{1} &= \boxed{\frac{dD_{1}(+) - uD_{1}(-)}{u-d}}
+\end{aligned}
+```
+
+- The value of $V_{1}$ is a constant value with probability 1 by arbitrage principles and at time $t=0$, discounting can be applied to find the initial value of the portfolio $V_{0}$:
+
+```math
+\begin{aligned}
+V_{0} &= \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+V_{0} &= \Delta S_{0} - D_{0} \\\\
+\Longrightarrow \Delta S_{0} - D_{0} &= \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+D_{0} &= \Delta S_{0} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+\Longrightarrow \Delta &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}} \\\\
+\therefore D_{0} &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}S_{0} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r)(D_{1}(+) - D_{1}(-))}{(1+r)(u-d)} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r)(D_{1}(+) - D_{1}(-)) - dD_{1}(+) + uD_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r-d)D_{1}(+) + (u-1-r)D_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r-d)D_{1}(+)}{(1+r)(u-d)} + \frac{(u-1-r)D_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r-d)}{(u-d)} \underbrace{\frac{D_{1}(+)}{(1+r)}}_{\text{Discounted value of } D_{1}(+)} + \frac{(u-1-r)}{(u-d)} \underbrace{\frac{D_{1}(-)}{(1+r)}}_{\text{Discounted value of } D_{1}(-)} \\\\
+\end{aligned}
+```
+
+- The above formula displays the fair price of the derivative at time $t=0$ as a linear combination of the discounted values it takes at expiry.
 
 ## The Black-Scholes Option Pricing Model
