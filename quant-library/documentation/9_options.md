@@ -320,7 +320,7 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
 
 ![One-Step Binomial Model](images/one-step-binomial-model.png "One-Step Binomial Model")
 
-#### Example 1: One-Step Binomial Model
+#### Example: One-Step Binomial Model
 
 - A stock has an initial value ($t=0$) of 50 and at time $t=1$ the value of the stock has the following probabilities:
   - A value of 65 is $p > 0$
@@ -425,5 +425,83 @@ D_{0} &= \Delta S_{0} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
 ```
 
 - The above formula displays the fair price of the derivative at time $t=0$ as a linear combination of the discounted values it takes at expiry.
+
+#### One-Step Risk Neutral Pricing
+
+- Recalling the following equation as the fair price of a derivative at time $t=0$:
+$$D_{0} = \frac{(1+r-d)}{(u-d)} \frac{D_{1}(+)}{(1+r)} + \frac{(u-1-r)}{(u-d)} \frac{D_{1}(-)}{(1+r)}$$
+- Denote $\tilde{p}$ and $\tilde{q}$ as follows:
+$$\tilde{p} = \frac{(1+r-d)}{(u-d)}$$
+$$\tilde{q} = \frac{(u-1-r)}{(u-d)}$$
+- By definition, $\tilde{p} + \tilde{q} = 1$, as shown below:
+
+```math
+\begin{aligned}
+\tilde{p} + \tilde{q} &\equiv \frac{(1+r-d)}{(u-d)} + \frac{(u-1-r)}{(u-d)} \\\\
+&\equiv \frac{(1+r-d) + (u-1-r)}{(u-d)} \\\\
+&\equiv \frac{-d + u}{(u-d)} \\\\
+&\equiv 1
+\end{aligned}
+```
+
+- $D_{0}$, the fair price of the derivative at time $t=0$, is a weighted average of the possible values discounted from expiry when $t=1$ to the initial time $t=0$.
+$$D_{0} = \tilde{p} \frac{D_{1}(+)}{(1+r)} + \tilde{q} \frac{D_{1}(-)}{(1+r)}$$
+- The probability $\tilde{P} = (\tilde{p},\tilde{q})$ defines a probability distribution on the 2 point set $\{+,-\}$ with the definition for $D_{0}$ as the expected value on this distribution of $D_{1}$ after discounting.
+  - $\tilde{P}$ is the **risk neutral distribution** on this 2 point set $\{+,-\}$.
+- The expected value for $D_{0}$ can be denoted as follow:
+$$D_{0} = E^{\tilde{P}} \left[\frac{D_{1}}{1+r} \right]$$
+- In other words, for the one-step binomial model in the absence of arbitrage, the price of a derivative asset on an underlying stock is the expected value, in the risk neutral distribution, of the derivative asset at time $t=1$ discounted to time $t=0$.
+  - Any derivative can be priced for time $t=0$ using the discounted risk neutral expected price at time $t=1$.
+- For any derivative with value $W(t)$ the price at $t=0$ can be calculated by $W_{0} = E^{\tilde{P}} \left[\frac{W_{1}}{1+r} \right]$.
+  - Given that $W(0)$ and $1+r$ are deterministic, both terms can be moved in/out of the expectation which leads to:
+
+```math
+\begin{aligned}
+1+r &= E^{\tilde{P}} \left[\frac{W(1)}{W(0)} \right] \\\\
+&= E^{\tilde{P}}[\text{Gross Return of } W]
+\end{aligned}
+```
+
+- This concept is also true for the underlying asset, the stock in this case:
+
+```math
+\begin{aligned}
+1+r &= E^{\tilde{P}} \left[\frac{S(1)}{S(0)} \right] \\\\
+&= E^{\tilde{P}}[\text{Gross Return of } S]
+\end{aligned}
+```
+
+- The risk neutral distribution is such that the expected return for any asset is the same as the expected return for a riskless asset, regardless of the risk level of the asset.
+  - The risk neutral distribution is the distribution for asset prices if all investors in the economy were indifferent to risk levels.
+  - However, in a real economy, asset prices are not distributed by a risk neutral distribution as investors expect better returns from riskier investments and generally accept lower returns for lower risk.
+  - The risk neutral distribution is therefore just a mathematical convenience for calculating arbitrage prices.
+  - Real world probabilities are irrelevant for calculating arbitrage based prices.
+
+##### Example: One-Step Risk Neutral Pricing
+
+- Using the same case as the [one-step binomial model example](#example-one-step-binomial-model), which has the following values:
+  - A stock has an initial value ($t=0$) of 50 and at time $t=1$ the value of the stock has the following probabilities:
+    - A value of 65 is $p > 0$
+    - A value of 40 is $1-p > 0$
+  - A call option with strike price 55, expiring at time $t=1$ will have the following payoff values:
+    - $D_{1}(+) = \text{max}\{0,65-55\} = 10$
+    - $D_{1}(-) = \text{max}\{0,40-55\} = 0$
+  - The risk-free interest rate $r$ is 8%.
+- $D_0$ can be determined using the risk neutral distribution as follows:
+
+```math
+\begin{aligned}
+\tilde{p} &= \frac{(1+r-d)}{(u-d)} \\\\
+\tilde{q} &= \frac{(u-1-r)}{(u-d)} \\\\
+&\Longrightarrow u = \frac{S_{1}(+)}{S_{0}} = \frac{65}{50} = 1.3 \\\\
+&\Longrightarrow d = \frac{S_{1}(-)}{S_{0}} = \frac{40}{50} = 0.8 \\\\
+\therefore \tilde{p} &=\frac{1+0.08-0.8}{1.3-0.8} = 0.56 \\\\
+\therefore \tilde{q} &= \frac{1.3-1-0.08}{1.3-0.08} = 0.44 \\\\\\
+D_{0} &= \left[\frac{D_{1}}{1+r} \right] \\\\
+&= \tilde{p} \frac{D_{1}(+)}{(1+r)} + \tilde{q} \frac{D_{1}(-)}{(1+r)} \\\\
+&= 0.56 \frac{10}{1+0.08} + 0.44 \frac{0}{1+0.08} \\\\
+&= 5.19
+\end{aligned}
+```
 
 ## The Black-Scholes Option Pricing Model
