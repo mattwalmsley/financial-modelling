@@ -504,4 +504,29 @@ D_{0} &= \left[\frac{D_{1}}{1+r} \right] \\\\
 \end{aligned}
 ```
 
+### Two-Step Binomial Model
+
+- The [one-step binomial model](#one-step-binomial-model) is extended by considering three times: $t=0$, $t=1$ and $t=2$
+- A stock price $S_{t}$, will be defined as follows:
+  - $S_{0}$ is the initial value and is known at $t=0$.
+  - At $t=1$, the stock price is a random variable $S_{1}$ with two possible values: $S_{1}(+)$ and $S_{1}(-)$.
+  - At $t=2$, the stock price is a random variable $S_{2}$ with three possible values: $S_{2}(++)$, $S_{2}(+-)$ and $S_{2}(--)$.
+- The relationship between the stock prices at the $t=2$ is assumed to be $S_{2}(--) < S_{2}(+-) < S_{2}(++)$.
+- Similar to the one-step model, values $d$ and $u$ exist such that:
+  - $S_{1}(+) = uS_{0}$
+  - $S_{1}(-) = dS_{0}$
+  - $S_{2}(++) = uS_{1}(+) = u^{2}S_{0}$
+  - $S_{2}(+-) = dS_{1}(+) = uS_{1}(-) = udS_{0}$
+  - $S_{2}(--) = dS_{1}(-) = d^{2}S_{0}$
+- Also assume that there is a risk-free interest rate $r$ such that an initial investment $K$ at time $t=0$ will have a value $K(1+r)$ at time $t=1$ and a value of $K(1+r)^{2}$ at $t=2$.
+- A derivative asset, with the stock as the underlying asset and expiration $t=2$, will have a value $D_{t}$ at time $t$.
+  - The value $D_{2}$ is the payoff of the derivative, but the earlier values $D_{1}$ and $D_{0}$ will be determined through arbitrage principles.
+
+![Two-Step Binomial Model](images/two-step-binomial-model.png "Two-Step Binomial Model")
+
+- To calculate the arbitrage value of $D_{1}(+)$, the values for $D_{2}(++)$ and $D_{2}(+-)$ are discounted and then the risk neutral expectation is taken.
+- Similarly, $D_{1}(-)$ is the risk neutral expectation of the discounted values of $D_{2}(+-)$ and $D_{2}(--)$.
+- Finally $D_{0}$ can be calculated by taking the risk neutral expectation of the discounted values of $D_{1}(+)$ and $D_{1}(-)$.
+- Due tp tje relationship between the stock prices values as the descendants of these values in the binomial model (i.e. the same values for $u$ and $d$ are used in both steps), the risk neutral probability are the same fo each step.
+
 ## The Black-Scholes Option Pricing Model
