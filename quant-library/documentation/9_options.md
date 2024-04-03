@@ -527,6 +527,92 @@ D_{0} &= \left[\frac{D_{1}}{1+r} \right] \\\\
 - To calculate the arbitrage value of $D_{1}(+)$, the values for $D_{2}(++)$ and $D_{2}(+-)$ are discounted and then the risk neutral expectation is taken.
 - Similarly, $D_{1}(-)$ is the risk neutral expectation of the discounted values of $D_{2}(+-)$ and $D_{2}(--)$.
 - Finally $D_{0}$ can be calculated by taking the risk neutral expectation of the discounted values of $D_{1}(+)$ and $D_{1}(-)$.
-- Due tp tje relationship between the stock prices values as the descendants of these values in the binomial model (i.e. the same values for $u$ and $d$ are used in both steps), the risk neutral probability are the same fo each step.
+- Due to the relationship between the stock prices values as the descendants of these values in the binomial model (i.e. the same values for $u$ and $d$ are used in both steps), the risk neutral probability are the same fo each step.
+
+#### Asset Price Distribution in the Two-Step Binomial Model
+
+- The risk neutral probability distribution for the asset price $S_{2}$ at time $t=2$ in the two-step binomial model can be calculated.
+- The arbitrage price of any derivative asset contingent on this asset will be expressed as a risk neutral expectation.
+- The terms $\tilde{p}$ and $\tilde{q}$ represent the risk neutral probabilities, similar to the [one-step binomial model risk neutral pricing](#one-step-risk-neutral-pricing), and can be expressed as follows where $r$ is the risk-free rate:
+$$\tilde{p} = \frac{(1+r-d)}{(u-d)}$$
+$$\tilde{q} = \frac{(u-1-r)}{(u-d)}$$
+- The risk neutral expectations for $D_{1}(+)$ and $D_{1}(-)$ can therefore be expressed in terms of the potential values of $D_{2}$ as follows:
+$$D_{1}(+) = \tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r}$$
+$$D_{1}(-) = \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r}$$
+- The risk neutral expectation for $D_{0}$ is then expressed in terms of the potential values of $D_{2}$ as follows:
+
+```math
+\begin{aligned}
+D_{0} &= \tilde{p} \frac{D_{1}(+)}{1+r} + \tilde{q} \frac{D_{1}(-)}{1+r} \\\\
+&= \frac{\tilde{p}}{1+r} \left(\tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r} \right) + \frac{\tilde{q}}{1+r} \left( \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r} \right) \\\\
+&= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + \tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}} \\\\
+&= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + 2\tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}}
+\end{aligned}
+```
+
+- This represents the [binomial distribution from the random walk](./8_stochastic-processes.md#the-binomial-distribution) with binomial probabilities $\text{bin}(k;2,\tilde{p})$ which can be substituted in as follows:
+$$D_{0} = \text{bin}(2;2,\tilde{p}) \frac{D_{2}(++)}{(1+r)^{2}} + \text{bin}(1;2,\tilde{p}) \frac{D_{2}(+-)}{(1+r)^{2}} + \text{bin}(0;2,\tilde{p}) \frac{D_{2}(--)}{(1+r)^{2}}$$
+- The derivative price $D_{0}$ in the two-step binomial model is the binomial expectation of the discounted payoff values:
+$$D_{0} = E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right]$$
+
+#### Example: Two-Step Binomial Model
+
+- A stock with price $S_{t}$ has a derivative asset with price $D_{t}$ and expiration at time $t=2$.
+- The possible payoffs for the derivative asset are:
+  - $D_{2}(++)=-15$
+  - $D_{2}(+-)=10$
+  - $D_{2}(--)=25$
+- The risk-free investment rate $r$ is assumed to be 6%.
+- A two-step binomial model with $u=1.2$ and $d=0.9$ can be used to calculate $D_{0}$, the fair price of the derivative asset at time $t=0$, by applying arbitrage principles to find the risk neutral expectations.
+- The risk neutral probabilities are given by:
+
+```math
+\begin{aligned}
+\tilde{p} &= \frac{(1+r-d)}{(u-d)} \\\\
+&= \frac{1+0.06-0.9}{1.2-0.9} \\\\
+&= 0.5333 \\\\\\
+\tilde{q} &= \frac{(u-1-r)}{(u-d)} \\\\
+&= \frac{1.2-1-0.06}{1.2-0.9} \\\\
+&= 0.4667
+\end{aligned}
+```
+
+- The risk neutral expectations and arbitrage prices for the derivate asset at time $t=1$ can now be calculated as follows:
+
+```math
+\begin{aligned}
+D_{1}(+) &= \tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r} \\\\
+&= 0.5333 \left( \frac{-15}{1+0.06} \right) + 0.4667 \left( \frac{10}{1+0.06} \right) \\\\
+&= -3.145 \\\\\\
+D_{1}(-) &= \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r} \\\\
+&= 0.5333 \left( \frac{10}{1+0.06} \right) + 0.4667 \left( \frac{25}{1+0.06} \right) \\\\
+&= 16.038
+\end{aligned}
+```
+
+- Finally, the risk neutral expectation and arbitrage price for the derivative asset at time $t=0$ can be calculated as follows:
+
+```math
+\begin{aligned}
+D_{0} &= \tilde{p} \frac{D_{1}(+)}{1+r} + \tilde{q} \frac{D_{1}(-)}{1+r} \\\\
+&= 0.5333 \left( \frac{-3.145}{1+0.06} \right) + 0.4667 \left( \frac{16.038}{1+0.06} \right) \\\\
+&= 5.478
+\end{aligned}
+```
+
+- The fair price of the derivative asset at time $t=0$ is 5.478.
+- Alternatively, the risk neutral expectation formula can be used:
+
+```math
+\begin{aligned}
+D_{0} &= E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right] \\\\
+&= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + 2\tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}} \\\\
+&= (0.5333)^{2} \frac{-15}{1.06^{2}} + 2(0.5333)(0.4667) \frac{10}{1.06^{2}} + (0.4667)^{2} \frac{25}{1.06^{2}} \\\\
+&= 5.478
+\end{aligned}
+```
+
+### The Full Binomial Model
+
 
 ## The Black-Scholes Option Pricing Model
