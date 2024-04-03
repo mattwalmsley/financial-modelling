@@ -614,5 +614,14 @@ D_{0} &= E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right] \\\
 
 ### The Full Binomial Model
 
+- The full binomial expands the [two-step binomial model](#two-step-binomial-model) for an arbitrary number of steps $n$ > 0.
+- By extending to three steps, the general case can be derived.
+- At time $t=3$, there will be four potential values for $S_{3}$:
+  - $S_{3}(+++) = u^{3}S_{0}$
+  - $S_{3}(++-) = u^{2}dS_{0}$
+  - $S_{3}(+--) = u^{2}dS_{0}$
+  - $S_{3}(---) = d^{3}S_{0}$
+
+![Full Binomial Model](images/full-binomial-model.png "Full Binomial Model")
 
 ## The Black-Scholes Option Pricing Model
