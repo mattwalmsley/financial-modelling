@@ -621,7 +621,97 @@ D_{0} &= E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right] \\\
   - $S_{3}(++-) = u^{2}dS_{0}$
   - $S_{3}(+--) = u^{2}dS_{0}$
   - $S_{3}(---) = d^{3}S_{0}$
+- At time $t=3$ there is also four potential values for the derivative asset payoff $D_{3}$:
+  - $D_{3}(+++)$
+  - $D_{3}(++-)$
+  - $D_{3}(+--)$
+  - $D_{3}(---)$
 
 ![Full Binomial Model](images/full-binomial-model.png "Full Binomial Model")
+
+- A similar procedure to the two-step case is used to determine $D_{0}$, the fair value of the derivative at time $t=0$, resulting in the following formula:
+
+```math
+\begin{aligned}
+D_{0} &= E^{\text{bin}(;3,\tilde{p})} \left[ \frac{D_{3}}{(1+r)^{3}} \right] \\\\
+&= \text{bin}(3;3,\tilde{p}) \frac{D_{3}(+++)}{(1+r)^{3}} + \text{bin}(2;3,\tilde{p}) \tilde{q} \frac{D_{3}(++-)}{(1+r)^{3}} + \text{bin}(1;3,\tilde{p}) \frac{D_{3}(+--)}{(1+r)^{3}} + \text{bin}(0;3,\tilde{p}) \frac{D_{3}(---)}{(1+r)^{3}} \\\\
+&= \tilde{p}^{3} \frac{D_{3}(+++)}{(1+r)^{3}} + 3\tilde{p}^{2} \tilde{q} \frac{D_{3}(++-)}{(1+r)^{3}} + 3\tilde{p}\tilde{q}^{2} \frac{D_{3}(+--)}{(1+r)^{3}} + \tilde{q}^{3} \frac{D_{3}(---)}{(1+r)^{3}} \\\\
+\end{aligned}
+```
+
+- The notation used becomes unsuitable for a large number of steps so is modified as follows:
+  - The underlying asset price at time $t=k$ is denoted $S_{k}$.
+  - A potential value of $S_{k}$ is denoted as $S_{k}(j) = u^{j}d^{k-j}$ where $j$ is the number of *up* steps and $0 \leq j \leq k$.
+    - The factors $u$ for *up* and $d$ for *down* will remain unchanged.
+- A coordinate system is developed for $S_{k}(j)$ such that $k$ is the horizontal axis (time) and $j$ is the vertical axis (price level).
+- The order in which the steps, either *up* or *down*, are taken is irrelevant to the final price level reached.
+  - Many paths could therefore be followed to reach $S_{k} = S_{k}(j)$.
+- The same notation is applied to the derivative asset as well, such that $D_{k} = D_{k}(j)$ is the derivative value at time $t=k$ when $S_{k} = S_{k}(j)$.
+- The derivative payoff (contract expiration) is at time $t=n$ such that $D_{n} = D_{n}(j)$ is the when $S_{n} = S_{n}(j)$.
+- This leads to the following general case for the binomial model:
+
+```math
+\begin{aligned}
+D_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{D_{n}}{(1+r)^{n}} \right] \\\\
+&= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{D_{n}(j)}{(1+r)^{n}}
+\end{aligned}
+```
+
+### Call Pricing using the Binomial Model
+
+- The call premium can be derived using the binomial model using the following notation:
+  - $C_{0}$ is the price at time $t=0$ of the call option.
+  - The underlying asset has price $S_{j}$ in an $n$-step binomial model.
+  - The call option has an expiration at $t=n$ with strike $K$.
+- The price (premium) of a call at time $t=0$ can be expressed as a risk neutral expectation:
+$$C_{0} = E^{\text{bin}(;n,\tilde{p})} \left[ \frac{C_{n}}{(1+r)^{n}} \right]$$
+- $C_{n}$ is the call payoff where $C_{n} = \text{max}\{S_{n} - K, 0 \}$
+- Substituting in the call payoff and stating explicitly:
+
+```math
+\begin{aligned}
+C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \right] \\\\
+&= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \\\\
+&= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{u^{j}d^{n-j}S_{0} - K, 0 \}}{(1+r)^{n}} \\\\
+\end{aligned}
+```
+
+- For a non-zero result, $u^{j}d^{n-j}S_{0} - K > 0$ due to the $\text{max}$ function which can be solved for $J$:
+
+```math
+\begin{aligned}
+u^{j}d^{n-j}S_{0} - K &> 0 \\
+u^{j}d^{n-j} &> \frac{K}{S_{0}} \\\\
+\text{log}(u^{j}d^{n-j}) &> \text{log} \left(\frac{K}{S_{0}} \right) \\\\
+\text{log}(u^{j}d^{n}d^{-j}) &> \text{log} \left(\frac{K}{S_{0}} \right) \\\\
+j \text{log}(u) + n \text{log}(d) - j \text{log}(d) &> \text{log} \left(\frac{K}{S_{0}} \right) \\\\
+j (\text{log}(u)  - \text{log}(d)) &> \text{log} \left(\frac{K}{S_{0}} \right) - n \text{log}(d) \\\\
+j  &> \frac{\text{log} \left(\frac{K}{S_{0}} \right) - n \text{log}(d)}{\text{log}(\frac{u}{d})} \\\\
+ &> M(K,S_{0}) \equiv M\\\\
+\end{aligned}
+```
+
+- This new condition for $j$ can be applied as follows:
+
+```math
+\begin{aligned}
+C_{0} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{u^{j}d^{n-j}S_{0} - K}{(1+r)^{n}} \\\\
+&= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{u^{j}d^{n-j}S_{0}}{(1+r)^{n}} - \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{K}{(1+r)^{n}} \\\\
+&= \frac{S_{0}}{(1+r)^{n}} \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} u^{j}d^{n-j} - \frac{K}{(1+r)^{n}} \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \\\\
+&= \frac{S_{0}}{(1+r)^{n}} \phi_{1} - \frac{K}{(1+r)^{n}} \phi_{2}
+\end{aligned}
+```
+
+- The values for $\phi_{1}$ and $\phi_{2}$ are related to the cumulative probability distribution function of the binomial distribution and are as follows:
+
+```math
+\begin{aligned}
+\phi_{1} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} u^{j}d^{n-j} \\\\
+\phi_{2} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j}
+\end{aligned}
+```
+
+- $\phi_{2}$ is the probability of being larger than $M$ in the binomial distribution.
+- These formulae can be continued to derived the Black-Scholes formula.
 
 ## The Black-Scholes Option Pricing Model
