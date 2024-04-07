@@ -714,4 +714,58 @@ C_{0} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \fr
 - $\phi_{2}$ is the probability of being larger than $M$ in the binomial distribution.
 - These formulae can be continued to derived the Black-Scholes formula.
 
+## Binomial Model Approximation to a Log-Normal Model
+
+- An underlying asset price $S(t)$ can be modelled by a log-normal process: $S(t) = S(0)e^{\mu t + \sigma W(t)}$ as discussed in the [log-normal model](8_stochastic-processes.md#the-log-normal-model) section in [stochastic processes](./8_stochastic-processes.md).
+  - $W(t)$ is Brownian motion
+  - $\mu$ is the drift parameter
+  - $\sigma$ is the volatility parameter
+- Scaled random walks converge to brownian motion as discussed in the [Brownian motion](./8_stochastic-processes.md#brownian-motion) section in in [stochastic processes](./8_stochastic-processes.md).
+$$S_{t}^{(m)} = \sum_{j=1}^{\lfloor mt \rfloor} \frac{X_{j}}{\sqrt{m}}$$
+- A modified random walk can be shown to converge to Brownian motion with drift, as follows.
+- Let $X_{j}$ for $j=1... \infty$ be a sequence of independent, identically distributed random variables, such that:
+  - $\text{Prob}(X_{j} = +1) = \frac{1}{2}$
+  - $\text{Prob}(X_{j} = -1) = \frac{1}{2}$
+- A modified random variable $Y_{j}^{(n)}$ is also defined as $Y_{j}^{(n)} = \frac{\mu}{n} + \frac{\sigma}{\sqrt{n}}X_{j}$ for as follows for $n>0$.
+- The sequence of modified random walks is therefore defined by:
+$$U^{(n)}(t) = \sum_{j=1}^{\lfloor nt \rfloor} Y_{j}^{(n)}$$
+- Similar to the approximating the original random walk to [Brownian motion](./8_stochastic-processes.md#brownian-motion), the following approximation can be shown for the modified random walk.
+$$\lim_{n \to \infty} U^{(n)}(t) = \mu t + \sigma W(t)$$
+- This is weak converge of stochastic processes and not just convergence at a particular time $t$.
+- The asset price $S(t)$ is modified to be defined as:
+$$S^{(n)}(t) = e^{U^{(n)}(t)}$$
+- The weak convergence alluded to is therefore strong enough to conclude:
+$$S^{(n)}(t) \to e^{\mu t + \sigma W(t)} = S(t)$$
+- $S^{(n)}(t)$ is a discrete process that approximates the log-normal asset price process and is in fact a binomial process, as demonstrated by evaluating the logarithm of $S^{(n)}(t)$ at discrete times $t=\frac{k}{n}$.
+
+```math
+\begin{aligned}
+\text{log} \left( S^{(n)} \left( \frac{k}{n} \right) \right) &= U^{(n)} \left( \frac{k}{n} \right) \\\\
+&= \sum_{j=1}^{k}Y_{j}^{(n)} \\\\
+&= Y_{k}^{(n)} + \sum_{j=1}^{k-1}Y_{j}^{(n)} \\\\
+&= Y_{k}^{(n)} + U^{(n)} \left( \frac{k-1}{n} \right) \\\\
+&= Y_{k}^{(n)} + \text{log} \left( S^{(n)} \left( \frac{k-1}{n} \right) \right) \\\\
+\Longrightarrow S^{(n)} \left( \frac{k}{n} \right) &= e^{Y_{k}^{(n)}}S^{(n)} \left( \frac{k-1}{n} \right)
+\end{aligned}
+```
+
+- Recalling that $Y_{k}^{(n)} = \frac{\mu}{n} + \frac{\sigma}{\sqrt{n}}X_{j}$ takes two values each with probability $\frac{1}{2}$, depending on whether $X_{j}$ takes $+1$ or $-1$, leads to the following:
+  - $Y_{k}^{(n)} = \frac{\mu}{n} + \frac{\sigma}{\sqrt{n}}$ or
+  - $Y_{k}^{(n)} = \frac{\mu}{n} - \frac{\sigma}{\sqrt{n}}$
+- Defining an 'up' factor $u$ and a 'down' factor $d$ such that:
+  - $u = e^{\frac{\mu}{n} + \frac{\sigma}{\sqrt{n}}}$
+  - $d = e^{\frac{\mu}{n} - \frac{\sigma}{\sqrt{n}}}$
+- Therefore, the value of $S^{(n)} \left( \frac{k}{n} \right)$ will take either of the following values, each with probability $\frac{1}{2}$:
+  - $S^{(n)} \left( \frac{k}{n} \right) = uS^{(n)} \left( \frac{k-1}{n} \right)$ or
+  - $S^{(n)} \left( \frac{k}{n} \right) = dS^{(n)} \left( \frac{k-1}{n} \right)$
+- This is exactly a binomial model with steps at discrete times $\frac{k}{n} and number of steps per unit time $n$$.
+  - The binomial model here converges to the origin log-normal price process as the number of steps per unit time goes to infinity $n \to \infty$.
+- Trying to find formulas for option price in the log-normal model by taking the limit as $n \to \infty$ of the binomial call pricing formula will present a problem: the [full binomial model](#the-full-binomial-model) call pricing formula is an expectation in the risk neutral distribution, whereas the convergence of the binomial model to the log-normal model happens in the "real world" distribution.
+- Therefore, to pass the call pricing formula to the limit, the limit of the binomial model in the risk neutral distribution needs to be known as a stochastic process.
+- The risk neutral distribution binomial process converges to a modified log-normal process as follows:
+$$\lim_{n \to \infty} S^{(n)}(t) = S_{0}e^{t \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(t)}$$
+- In the risk neutral distribution, the binomial process $S^{(n)}(t)$ converges to a modified log-normal distribution with a drift value equal to $r - \frac{\sigma ^{2}}{2}$.
+- The identification of the risk neutral limit of the binomial model will be used to derive a formula for the call price when the underlying asset is modelled with a log-normal model.
+  - The result will be the Black-Scholes formula.
+
 ## The Black-Scholes Option Pricing Model
