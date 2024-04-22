@@ -1,8 +1,6 @@
 # Financial Modelling
 
-This repository contains only my own work, open source code, and domain knowledge available online.
-
-The purpose of this repository is for educational purposes only.
+This repository is for educational purposes only and contains only my own work, open source code, and domain knowledge available online.
 
 [License](license.txt)
 

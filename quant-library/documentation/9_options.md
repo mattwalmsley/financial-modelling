@@ -769,3 +769,69 @@ $$\lim_{n \to \infty} S^{(n)}(t) = S_{0}e^{t \left(r-\frac{\sigma^{2}}{2} \right
   - The result will be the Black-Scholes formula.
 
 ## The Black-Scholes Option Pricing Model
+
+- Summarising the models and assumptions derived so far:
+  - The arbitrage determined premium for a call option in an [$n$-step binomial model](#the-full-binomial-model).
+  - As the number of steps in the binomial model goes to infinity, the binomial model converges t a log-normal process as shown in the [binomial model approximation to a log-normal model](#binomial-model-approximation-to-a-log-normal-model).
+  - The [call premium in the binomial model](#call-pricing-using-the-binomial-model) as a risk neutral expectation of the discounted payoff of the call:
+
+  ```math
+  \begin{aligned}
+  C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \right] \\\\
+  &= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \\\\
+  &= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{u^{j}d^{n-j}S_{0} - K, 0 \}}{(1+r)^{n}} \\\\
+  \end{aligned}
+  ```
+
+- Therefore, the value of a call option, when the underlying is assumed to have a log-normal distribution, can be derived by taking the limit, as $n \to \infty$, of the call price in the $n$-step binomial model.
+- The risk neutral expectation for $C_{0}$ can be written in terms of approximating the binomial process to a log-normal process:
+$$C_{0} = E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S^{(n)}(T) - K, 0 \}}{ \left(1+\frac{r}{n}\right)^{\lfloor nT \rfloor} } \right]$$
+- The convergence of $S^{(n)}(t)$ to the log-normal model established in the [binomial model approximation to a log-normal model](#binomial-model-approximation-to-a-log-normal-model) is sufficient to pass this expectation to the same continuum limit.
+  - Specifically, as $n \to \infty$ the binomial process $S^{(n)}(t)$ converges to the log-normal process $S_{0}e^{t \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(t)}$ and more precisely is weak convergence of stochastic processes.
+  - This is related to the central limit theorem.
+- To take the limit of the expectation, find the convergence at time $t=T$ (i.e. weak convergence of the random variable $S^{(n)}(T)$):
+$$S^{(n)}(T) \to S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)}$$
+- This convergence is strong enough to imply the following, where $\text{L.N.}$ is the log-normal distribution:
+
+$$\lim_{n \to \infty} \space E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{(n)}(T) - K, 0 \} \right] \equiv E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)} - K, 0  \right \} \right]$$
+
+- $W(t)$ is Brownian motion and $W(T)$ has a normal distribution with mean $0$ and variance $T$ which leads to $Z = \frac{W(T)}{\sqrt{T}} \sim \mathcal{N}  (0,1)$.
+
+```math
+\begin{aligned}
+&E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}\frac{W(T)}{\sqrt{T}}} - K, 0  \right \} \right] \\\\
+&E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \right]
+\end{aligned}
+```
+
+- The limit of the discounting factor $(1+\frac{r}{n})^{\lfloor nT \rfloor}$ can be taken as follows:
+
+```math
+\begin{aligned}
+\lim_{n \to \infty} \frac{\lfloor nT \rfloor}{n} &= T \\\\
+\text{From calculus: } \lim_{n \to \infty} (1+\frac{r}{n})^{n} &= e^{r} \\\\
+\therefore \lim_{n \to \infty} (1+\frac{r}{n})^{\lfloor nT \rfloor} &= \lim_{n \to \infty} (1+\frac{r}{n})^{n \frac{\lfloor nT \rfloor}{n}} \\\\
+&= \lim_{n \to \infty} \left[ \left( 1+\frac{r}{n} \right)^{n} \right ] ^{\frac{\lfloor nT \rfloor}{n}} \\\\
+&= \left [e^{r} \right]^{T} \\\\
+&= e^{rT}
+\end{aligned}
+```
+
+- The limit of the call price as the number of time steps in the binomial model goes to infinity is derived as follows:
+
+```math
+\begin{aligned}
+\lim_{n \to \infty} C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S^{(n)}(T) - K, 0 \}}{ \left(1+\frac{r}{n}\right)^{\lfloor nT \rfloor} } \right] \\\\
+&= \lim_{n \to \infty} \frac{1}{ \left(1+\frac{r}{n}\right)^{\lfloor nT \rfloor} } E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{(n)}(T) - K, 0 \} \right] \\\\
+\therefore \lim_{n \to \infty} C_{0} &= \frac{1}{e^{rT}} E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)} - K, 0  \right \} \right] \\\\
+&= e^{-rT} E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \right]
+\end{aligned}
+```
+
+- Given the probability density function of $Z$ is a standard normal random variable, the expectation can be written as an explicit integral:
+
+```math
+\begin{aligned}
+\lim_{n \to \infty} C_{0} = e^{-rT} \int _{-\infty}^{\infty} \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \frac{e^{- \frac{z^{2}}{2}}}{\sqrt{2 \pi}} dz
+\end{aligned}
+```
