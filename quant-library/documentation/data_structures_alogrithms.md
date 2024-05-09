@@ -270,6 +270,156 @@ print(numbers)  # Output: [1, 2, 4, 5, 6]
 
 ### Linked Lists
 
+Linked lists are fundamental data structures used for storing collections of elements. Unlike arrays, which store elements in contiguous memory locations, linked lists organize elements as individual nodes, where each node contains a data element and a reference (or pointer) to the next node in the sequence.
+
+#### Components of a Linked List
+
+1. **Node**:
+   - Each node in a linked list consists of two components:
+     - Data: The actual value or payload stored in the node.
+     - Next Pointer: A reference to the next node in the sequence.
+2. **Head Pointer**:
+   - The head pointer points to the first node in the linked list.
+   - It serves as the entry point for accessing elements in the list.
+3. **Tail Pointer**:
+   - The tail pointer points to the last node in the linked list.
+   - It facilitates efficient insertion at the end of the list.
+
+#### Types of Linked Lists
+
+1. **Singly Linked List**:
+   - In a singly linked list, each node points to the next node in the sequence.
+   - Traversal in a singly linked list is forward-only.
+
+| Node  |  Memory Address | Data (Value, Next Pointer) |
+|:-----:|:---------------:|:--------------------------:|
+|   0   |     0x500       |         (10, 0x200)        |
+|   1   |     0x200       |         (20, 0x400)        |
+|   2   |     0x400       |         (30, 0x100)        |
+|   3   |     0x100       |         (40, NULL)         |
+
+1. **Doubly Linked List**:
+   - In a doubly linked list, each node has pointers to both the next and previous nodes.
+   - Traversal in a doubly linked list can be done in both forward and backward directions.
+
+| Node  |  Memory Address | Data (Previous Pointer, Value, Next Pointer) |
+|:-----:|:---------------:|:--------------------------------------------:|
+|   0   |     0x500       |               (NULL, 10, 0x200)              |
+|   1   |     0x200       |               (0x500, 20, 0x400)             |
+|   2   |     0x400       |               (0x200, 30, 0x100)             |
+|   3   |     0x100       |               (0x100, 40, NULL)              |
+
+2. **Circular Linked List**:
+   - In a circular linked list, the last node points back to the first node, forming a circular structure.
+   - Circular linked lists are useful for applications requiring cyclic data structures.
+
+| Node  |  Memory Address | Data (Value, Next Pointer) |
+|:-----:|:---------------:|:--------------------------:|
+|   0   |     0x500       |         (10, 0x200)        |
+|   1   |     0x200       |         (20, 0x400)        |
+|   2   |     0x400       |         (30, 0x100)        |
+|   3   |     0x100       |         (40, 0x500)        |
+
+#### Operations on Linked Lists
+
+1. **Traversal**:
+   - Linked lists are traversed by following the next pointers from the head node to subsequent nodes until reaching the end of the list.
+   - **Time Complexity**: O(n), where n is the number of nodes in the list.
+   - **Explanation**: Traversal requires visiting each node in the list exactly once, resulting in a time complexity proportional to the number of nodes.
+
+2. **Insertion**:
+   - Insertion operations involve creating a new node and updating pointers to include the new node in the list.
+   - Insertion can occur at the beginning, end, or any arbitrary position in the list.
+   - **Time Complexity**:
+     - Insertion at the beginning: O(1)
+     - Insertion at the end (if tail pointer is maintained): O(1)
+     - Insertion at an arbitrary position: O(n), where n is the number of nodes in the list.
+   - **Explanation**:
+     - Insertion at the beginning or end involves updating only a few pointers, resulting in constant time complexity.
+     - Insertion at an arbitrary position requires traversing the list to find the insertion point, resulting in a time complexity proportional to the number of nodes.
+
+3. **Deletion**:
+   - Deletion operations involve removing a node from the list and updating pointers to maintain the integrity of the list structure.
+   - **Time Complexity**:
+     - Deletion at the beginning: O(1)
+     - Deletion at the end (if tail pointer is maintained): O(n)
+     - Deletion at an arbitrary position: O(n), where n is the number of nodes in the list.
+   - **Explanation**:
+     - Deletion at the beginning or end involves updating only a few pointers, resulting in constant time complexity.
+     - Deletion at an arbitrary position requires traversing the list to find the node to be deleted, resulting in a time complexity proportional to the number of nodes.
+
+4. **Search**:
+   - Searching in a linked list requires traversing the list and comparing each node's data with the target value.
+   - **Time Complexity**: O(n), where n is the number of nodes in the list.
+   - **Explanation**:
+     - Searching requires visiting each node in the list until the target value is found or the end of the list is reached, resulting in a time complexity proportional to the number of nodes.
+
+#### Advantages of Linked Lists
+
+- **Dynamic Size**:
+  - Linked lists can dynamically grow or shrink in size, making them suitable for scenarios where the number of elements is unknown or fluctuates.
+
+- **Efficient Insertions and Deletions**:
+  - Insertions and deletions in a linked list can be efficient, especially for large lists, as they involve updating pointers rather than shifting elements.
+
+- **Memory Efficiency**:
+  - Linked lists can optimize memory usage by allocating memory only as needed for each node.
+
+#### Disadvantages of Linked Lists
+
+- **Inefficient Random Access**:
+  - Unlike arrays, linked lists do not support random access to elements. Traversing to a specific node requires linear time O(n).
+
+- **Extra Memory Overhead**:
+  - Each node in a linked list incurs additional memory overhead due to the storage of pointers, which can be inefficient for small data payloads.
+
+- **Lack of Contiguous Memory**:
+  - Linked lists do not store elements in contiguous memory locations, which may lead to cache inefficiencies and increased memory access times.
+
+Linked lists are versatile data structures with various implementations suited for different use cases. Understanding their characteristics and operations is essential for effectively using linked lists in software development.
+
+#### Linked Lists in Python
+
+```python
+import random
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+        last_node.next = new_node
+
+    def print_list(self):
+        current_node = self.head
+        while current_node:
+            print(current_node.data, end=" -> ")
+            current_node = current_node.next
+        print("None")
+
+# Example usage:
+linked_list = LinkedList()
+linked_list.append(10)
+linked_list.append(20)
+linked_list.append(30)
+linked_list.append(40)
+
+print("Linked List:")
+linked_list.print_list()
+```
+
 ### Hashing (Dictionaries)
 
 #### Using Arrays
