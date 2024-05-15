@@ -766,8 +766,8 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 P(t,T) &= e^{-(T-t)y(t,T)} \\
 P(0,T) &= e^{-(T)y(T)} \\
 log(P(0,T)) &= -(T)y(T) \\
-y(T) &= - \frac{log(P(0,T))}{T} \\
-&= - \frac{log(0.98)}{\frac{6}{12}} \\
+y(T) &= - \frac{\log(P(0,T))}{T} \\
+&= - \frac{\log(0.98)}{\frac{6}{12}} \\
 &= 0.0404 \\
 &= \boxed{4.04\%}
 \end{aligned}
@@ -1277,11 +1277,11 @@ P\left(0,\frac{3}{12}\right) &= \frac{1}{1+\left(\frac{3}{12}-0\right)0.013} = 0
 
 ```math
 \begin{aligned}
-y(T) &= -\frac{log(d(T))}{T} \\\\
-\Longrightarrow y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
-y\left(\frac{1}{12}\right) &= -\frac{log(0.99933)}{\left(\frac{1}{12}\right)} = 0.00804 = \boxed{0.804 \%} \\\\
-y\left(\frac{2}{12}\right) &= -\frac{log(0.99834)}{\left(\frac{2}{12}\right)} = 0.009968 = \boxed{0.997 \%} \\\\
-y\left(\frac{3}{12}\right) &= -\frac{log(0.99676)}{\left(\frac{3}{12}\right)} = 0.01298 = \boxed{1.30 \%} \\\\
+y(T) &= -\frac{\log(d(T))}{T} \\\\
+\Longrightarrow y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
+y\left(\frac{1}{12}\right) &= -\frac{\log(0.99933)}{\left(\frac{1}{12}\right)} = 0.00804 = \boxed{0.804 \%} \\\\
+y\left(\frac{2}{12}\right) &= -\frac{\log(0.99834)}{\left(\frac{2}{12}\right)} = 0.009968 = \boxed{0.997 \%} \\\\
+y\left(\frac{3}{12}\right) &= -\frac{\log(0.99676)}{\left(\frac{3}{12}\right)} = 0.01298 = \boxed{1.30 \%} \\\\
 \end{aligned}
 ```
 
@@ -1337,7 +1337,7 @@ P\left(0,\frac{18}{12}\right) &= 0.968 \\\\
 
 ```math
 \begin{aligned}
-y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
+y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
 \Longrightarrow y\left(\frac{6}{12}\right) &= 0.01405 = \boxed{1.41 \%} \\\\
 \Longrightarrow y\left(\frac{9}{12}\right) &= 0.01610 = \boxed{1.61 \%} \\\\
 \Longrightarrow y\left(\frac{12}{12}\right) &= 0.01816 = \boxed{1.82 \%} \\\\
@@ -1374,8 +1374,8 @@ S(2)(P(0,2)) + 2P(0,2) &= 2 - S(2)(P(0,0.5) + P(0,1) + P(0,1.5)) \\\\
 P(0,2) &= \frac{2 - S(2)(P(0,0.5) + P(0,1) + P(0,1.5))}{S(2) + 2} \\\\
 &= \frac{2 - 0.023(0.993 + 0.982 + 0.968)}{0.023 + 2} \\\\
 &= 0.955 \\\\\\
-\Longrightarrow y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
-y(2) &= -\frac{log(0.955)}{2} \\\\
+\Longrightarrow y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
+y(2) &= -\frac{\log(0.955)}{2} \\\\
 &= 0.02302 = \boxed{2.30 \%}
 \end{aligned}
 ```
@@ -1417,8 +1417,8 @@ P(0,4) &= 0.898
 
 ```math
 \begin{aligned}
-\Longrightarrow y(T_{i}) &= -\frac{log(P(0,T_{i}))}{T_{i}} \\\\
-y(4) &= -\frac{log(0.898)}{4} \\\\
+\Longrightarrow y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
+y(4) &= -\frac{\log(0.898)}{4} \\\\
 &= 0.0269 = \boxed{2.69 \%}
 \end{aligned}
 ```

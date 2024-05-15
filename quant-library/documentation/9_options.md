@@ -682,11 +682,11 @@ C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S_{n} - K, 0 \}}{
 \begin{aligned}
 u^{j}d^{n-j}S_{0} - K &> 0 \\
 u^{j}d^{n-j} &> \frac{K}{S_{0}} \\\\
-\text{log}(u^{j}d^{n-j}) &> \text{log} \left(\frac{K}{S_{0}} \right) \\\\
-\text{log}(u^{j}d^{n}d^{-j}) &> \text{log} \left(\frac{K}{S_{0}} \right) \\\\
-j \text{log}(u) + n \text{log}(d) - j \text{log}(d) &> \text{log} \left(\frac{K}{S_{0}} \right) \\\\
-j (\text{log}(u)  - \text{log}(d)) &> \text{log} \left(\frac{K}{S_{0}} \right) - n \text{log}(d) \\\\
-j  &> \frac{\text{log} \left(\frac{K}{S_{0}} \right) - n \text{log}(d)}{\text{log}(\frac{u}{d})} \\\\
+\log(u^{j}d^{n-j}) &> \log \left(\frac{K}{S_{0}} \right) \\\\
+\log(u^{j}d^{n}d^{-j}) &> \log \left(\frac{K}{S_{0}} \right) \\\\
+j \log(u) + n \log(d) - j \log(d) &> \log \left(\frac{K}{S_{0}} \right) \\\\
+j (\log(u)  - \log(d)) &> \log \left(\frac{K}{S_{0}} \right) - n \log(d) \\\\
+j  &> \frac{\log \left(\frac{K}{S_{0}} \right) - n \log(d)}{\log(\frac{u}{d})} \\\\
  &> M(K,S_{0}) \equiv M\\\\
 \end{aligned}
 ```
@@ -740,11 +740,11 @@ $$S^{(n)}(t) \to e^{\mu t + \sigma W(t)} = S(t)$$
 
 ```math
 \begin{aligned}
-\text{log} \left( S^{(n)} \left( \frac{k}{n} \right) \right) &= U^{(n)} \left( \frac{k}{n} \right) \\\\
+\log \left( S^{(n)} \left( \frac{k}{n} \right) \right) &= U^{(n)} \left( \frac{k}{n} \right) \\\\
 &= \sum_{j=1}^{k}Y_{j}^{(n)} \\\\
 &= Y_{k}^{(n)} + \sum_{j=1}^{k-1}Y_{j}^{(n)} \\\\
 &= Y_{k}^{(n)} + U^{(n)} \left( \frac{k-1}{n} \right) \\\\
-&= Y_{k}^{(n)} + \text{log} \left( S^{(n)} \left( \frac{k-1}{n} \right) \right) \\\\
+&= Y_{k}^{(n)} + \log \left( S^{(n)} \left( \frac{k-1}{n} \right) \right) \\\\
 \Longrightarrow S^{(n)} \left( \frac{k}{n} \right) &= e^{Y_{k}^{(n)}}S^{(n)} \left( \frac{k-1}{n} \right)
 \end{aligned}
 ```
@@ -832,6 +832,14 @@ $$\lim_{n \to \infty} \space E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{
 
 ```math
 \begin{aligned}
-\lim_{n \to \infty} C_{0} = e^{-rT} \int _{-\infty}^{\infty} \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \frac{e^{- \frac{z^{2}}{2}}}{\sqrt{2 \pi}} dz
+\lim_{n \to \infty} C_{0} &= e^{-rT} \int _{-\infty}^{\infty} \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \frac{e^{- \frac{z^{2}}{2}}}{\sqrt{2 \pi}} dz \\\\
+&= \boxed{S_{0}N(d_{+}) - Ke^{-rT}N(d_{-})}
 \end{aligned}
 ```
+
+- The variables $d_{+}$ and $d_{-}$ are given by:
+$$d{\pm} = \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S_{0}}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)T \right]$$
+- The normal cumulative distribution function $N(x)$ is given by:
+$$N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz$$
+
+- The core assumption in the Black-Scholes option pricing model is that the call premium is the expected value of the payoff under a log-normal distribution for the underlying asset at expiry.

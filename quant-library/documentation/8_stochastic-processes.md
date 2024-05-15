@@ -136,8 +136,8 @@ $$\text{Kurt}(X) = E \left[ \left( \frac{X - \mu}{\sigma} \right)^4 \right]$$
 
 ```math
 \begin{aligned}
-r(t) &= \text{log} \left( \frac{P(t)}{P(t-1)} \right) \\\\
-&= \text{log}(P(t)) - \text{log}(P(t-1))
+r(t) &= \log \left( \frac{P(t)}{P(t-1)} \right) \\\\
+&= \log(P(t)) - \log(P(t-1))
 \end{aligned}
 ```
 
@@ -145,22 +145,22 @@ r(t) &= \text{log} \left( \frac{P(t)}{P(t-1)} \right) \\\\
 
 ```math
 \begin{aligned}
-r_k(t) &= \text{log} \left( \frac{P(t)}{P(t-k)} \right) \\
-&= \text{log}(P(t)) - \text{log}(P(t-k)) \\\\
+r_k(t) &= \log \left( \frac{P(t)}{P(t-k)} \right) \\
+&= \log(P(t)) - \log(P(t-k)) \\\\
 \end{aligned}
 ```
 
 - The period $k$ should be in the same unit of time as the value for $t$ - this is normally years of days when working with financial models.
-- The continuously compounded return is the $\text{log}$ of the corresponding [gross return](./2_interest-rates.md#gross-return).
+- The continuously compounded return is the $\log$ of the corresponding [gross return](./2_interest-rates.md#gross-return).
 - The continuously compounded returns across a period from $t$ to $t-k$ can be written as the sum of all the intervals within the period as follows:
 
 ```math
 \begin{aligned}
-r_{k}(t) &= \text{log}(P(t)) - \text{log}(P(t-1)) \\
-&+ \text{log}(P(t-1)) - \text{log}(P(t-2)) \\
-&+ \text{log}(P(t-2)) - \text{log}(P(t-3)) \\
+r_{k}(t) &= \log(P(t)) - \log(P(t-1)) \\
+&+ \log(P(t-1)) - \log(P(t-2)) \\
+&+ \log(P(t-2)) - \log(P(t-3)) \\
 &+ ...  \\
-&+ \text{log}(P(t-k+1)) - \text{log}(P(t-k)) \\\\
+&+ \log(P(t-k+1)) - \log(P(t-k)) \\\\
 
 r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + ... + r(t-k+1) \\\\
 r_{k}(t) &= \sum_{i=0}^{k-1}r(t-i)
@@ -180,20 +180,20 @@ r_{k}(t) &= \sum_{i=0}^{k-1}r(t-i)
 |     5     |      107      |
 |     6     |      108      |
 
-- The daily $\text{log}$ returns can be calculated as follows:
+- The daily $\log$ returns can be calculated as follows:
 
 ```math
 \begin{aligned}
-r(t) &= \text{log} \left( \frac{P(t)}{P(t-1)} \right) \\\\
-r(2) &= \text{log} \left( \frac{P(2)}{P(1)} \right) = \text{log} \left( \frac{111}{105} \right) = \boxed{2.41 \%} \\\\
-r(3) &= \text{log} \left( \frac{P(3)}{P(2)} \right) = \text{log} \left( \frac{102}{111} \right) = \boxed{-3.67 \%} \\\\
-r(4) &= \text{log} \left( \frac{P(4)}{P(3)} \right) = \text{log} \left( \frac{109}{102} \right) = \boxed{2.88 \%} \\\\
-r(5) &= \text{log} \left( \frac{P(5)}{P(4)} \right) = \text{log} \left( \frac{107}{109} \right) = \boxed{-0.80 \%} \\\\
-r(6) &= \text{log} \left( \frac{P(6)}{P(5)} \right) = \text{log} \left( \frac{108}{107} \right) = \boxed{0.40 \%} \\\\
+r(t) &= \log \left( \frac{P(t)}{P(t-1)} \right) \\\\
+r(2) &= \log \left( \frac{P(2)}{P(1)} \right) = \log \left( \frac{111}{105} \right) = \boxed{2.41 \%} \\\\
+r(3) &= \log \left( \frac{P(3)}{P(2)} \right) = \log \left( \frac{102}{111} \right) = \boxed{-3.67 \%} \\\\
+r(4) &= \log \left( \frac{P(4)}{P(3)} \right) = \log \left( \frac{109}{102} \right) = \boxed{2.88 \%} \\\\
+r(5) &= \log \left( \frac{P(5)}{P(4)} \right) = \log \left( \frac{107}{109} \right) = \boxed{-0.80 \%} \\\\
+r(6) &= \log \left( \frac{P(6)}{P(5)} \right) = \log \left( \frac{108}{107} \right) = \boxed{0.40 \%} \\\\
 \end{aligned}
 ```
 
-- The weekly $\text{log}$ return can be calculated as follows:
+- The weekly $\log$ return can be calculated as follows:
 
 ```math
 \begin{aligned}
@@ -432,32 +432,32 @@ S(t+1) &= e^{\psi (t+1)} \\
 - The asset price at $t+1$ is calculated by multiplying the asset price at $t$ by the factor $e^{\delta}$.
 - The price jump is therefore: $S(t+1) -S(t) = e^{\delta}S(t) - S(t)$ and this holds regardless of the price level.
   - In other words, the change in price will be equal to  $e^{\delta} -1$ times initial price.
-  - A fixed additive jump in $\text{log}(S(t))$ implies that the price change scales with the price level.
-  - This feature is useful for modelling asset prices and suggests that modelling $\text{log}(S(t))$ as Brownian motion (a random walk) rather than $S(t)$ will be provide a better asset pricing model.
+  - A fixed additive jump in $\log(S(t))$ implies that the price change scales with the price level.
+  - This feature is useful for modelling asset prices and suggests that modelling $\log(S(t))$ as Brownian motion (a random walk) rather than $S(t)$ will be provide a better asset pricing model.
 - Recall the definition of **strict stationarity** from [Time Series Statistics](#time-series-statistics) where the multivariate distribution of returns does not change with time and is true up to the second moments, variances and autocorrelations.
   - Empirically, asset returns tend to be stationary over reasonable periods of time.
   - Asset price changes and asset returns cannot both be stationary as a 10% return implies a 1 USD increase in a 10 USD stock, but a 20 USD increase in a 200 USD stock.
-  - It is therefore reasonable to consider modelling $\text{log}(S(t))$ as Brownian motion rather than $S(t)$ itself, such that $\text{log}(S(t)) = W(t)$.
+  - It is therefore reasonable to consider modelling $\log(S(t))$ as Brownian motion rather than $S(t)$ itself, such that $\log(S(t)) = W(t)$.
 - The asset returns can be modelled as follows:
 
 ```math
 \begin{aligned}
-\text{log} \left(\frac{S(t)}{S(t-1)} \right) &= \text{log}(S(t)) - \text{log}(S(t-1)) \\\\
-\text{log}(S(t)) = W(t) \Longrightarrow \\
+\log \left(\frac{S(t)}{S(t-1)} \right) &= \log(S(t)) - \log(S(t-1)) \\\\
+\log(S(t)) = W(t) \Longrightarrow \\
 &= W(t) - W(t-1)
 \end{aligned}
 ```
 
 - Recall the properties of [Brownian motion](#brownian-motion) and the sequence of Brownian differences $W(t) - W(t-1), W(t+1) - W(t),...,W(t+k) - W(t+k-1)$ that are stationary and uncorrelated (independent).
-  - Therefore, the $\text{log}$ returns will also have these properties.
-- In summary, modelling $\text{log}(S(t))$ as Brownian motion accomplishes the following:
+  - Therefore, the $\log$ returns will also have these properties.
+- In summary, modelling $\log(S(t))$ as Brownian motion accomplishes the following:
   - Average asset price changes are proportional to the price level.
   - Asset returns are stationary and uncorrelated.
 - It is standard practice to add a drift term as discussed in [Brownian Motion with Drift](#brownian-motion-with-drift), a volatility factor $\sigma$, and an initial asset price $S(0)$, such that the log-normal model for an asset price $S(t)$ (also known as geometric Brownian motion) becomes:
 
 ```math
 \begin{aligned}
-\text{log}(S(t)) = \text{log}(S(0)) + \mu t + \sigma W(t) \\\\
+\log(S(t)) = \log(S(0)) + \mu t + \sigma W(t) \\\\
 S(t) = \boxed{S(0) + e^{\mu t + \sigma W(t)}}
 \end{aligned}
 ```

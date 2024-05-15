@@ -66,7 +66,7 @@ $$d(T) = e^{-y(T)T}$$
 - For a term $T$, the present value of 1 USD paid at time $T$ can be represented as $d(T)$.
   - Similarly, a spot rate $y(T)$ can be defined as the interest rate a credit issuer would charge for a loan over a term $T$ (even if there is no such instrument currently trading on the markets).
   - The corresponding spot rate curve $y(T)$ can also be expressed in terms of the discount curve $d(T)$:
-$$y(T) = -\frac{log(d(T))}{T}$$
+$$y(T) = -\frac{\log(d(T))}{T}$$
 
 ### Building a Yield Curve
 
@@ -98,8 +98,8 @@ $$y(T) = -\frac{log(d(T))}{T}$$
 ```math
 P_{1} = d(0.5)(1000)  d(0.5) = \frac{985}{1000} \\ 
 \Longrightarrow \boxed{d(0.5) = 0.985} \\ 
-\text{Using } y(T) = -\frac{log(d(T))}{T} \\ 
-\Longrightarrow y(0.5) = -\frac{log(0.985)}{0.5} \\ 
+\text{Using } y(T) = -\frac{\log(d(T))}{T} \\ 
+\Longrightarrow y(0.5) = -\frac{\log(0.985)}{0.5} \\ 
 \boxed{y(0.5) = 3.0\%}
 ```
 
@@ -110,7 +110,7 @@ P_{1} = d(0.5)(1000)  d(0.5) = \frac{985}{1000} \\
 P_{2} = d(0.5)\left(\frac{10000 \times 5\%}{2}\right) + d(1)\left(\frac{10000 \times 5\%}{2} + 10000\right) \\ 
 d(1) = \frac{10124 - (0.985 \times 250)}{10250} \\ 
 \boxed{d(1) = 0.9637} \\ 
-y(1) = -\frac{log(0.9637)}{1} \\ 
+y(1) = -\frac{\log(0.9637)}{1} \\ 
 \boxed{y(1) = 3.7\%}
 ```
 
@@ -120,7 +120,7 @@ y(1) = -\frac{log(0.9637)}{1} \\
 P_{3} = d(1)(10000 \times 7\%) + d(2)((10000 \times 7\%) + 10000) \\ 
 d(2) = \frac{10507- (0.9637 \times 700)}{10700} \\ 
 \boxed{d(2) = 0.9189} \\ 
-y(2) = -\frac{log(0.9189)}{2} \\ 
+y(2) = -\frac{\log(0.9189)}{2} \\ 
 \boxed{y(2) = 4.2\%}
 ```
 
