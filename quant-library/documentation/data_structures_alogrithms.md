@@ -497,7 +497,7 @@ XOR linked lists, also known as memory-efficient doubly linked lists, are a vari
    - Insertion operations in an XOR linked list involve updating the XOR pointers of adjacent nodes to include the new node.
    - Insertion can occur at the beginning, end, or any arbitrary position in the list.
    - **Time Complexity**: O(1) for insertion at the beginning or end, O(n) for insertion at an arbitrary position.
-   - **Explanation**: 
+   - **Explanation**:
      - Insertion at the beginning or end involves updating only a few pointers, resulting in constant time complexity.
      - Insertion at an arbitrary position requires traversing the list to find the insertion point, resulting in a time complexity proportional to the number of nodes.
 
@@ -505,7 +505,7 @@ XOR linked lists, also known as memory-efficient doubly linked lists, are a vari
    - Deletion operations in an XOR linked list involve updating the XOR pointers of adjacent nodes to bypass the node being deleted.
    - Deletion can occur at the beginning, end, or any arbitrary position in the list.
    - **Time Complexity**: O(1) for deletion at the beginning or end, O(n) for deletion at an arbitrary position.
-   - **Explanation**: 
+   - **Explanation**:
      - Deletion at the beginning or end involves updating only a few pointers, resulting in constant time complexity.
      - Deletion at an arbitrary position requires traversing the list to find the node to be deleted, resulting in a time complexity proportional to the number of nodes.
 

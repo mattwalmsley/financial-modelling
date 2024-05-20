@@ -349,7 +349,7 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
 
 ##### One-Step Binomial Model Assumptions Recap
 
-- Recapping the arbitrage pricing technique in the [previous example](#example-1-one-step-binomial-model) which assumes the following:
+- Recapping the arbitrage pricing technique in the [previous example](#example-one-step-binomial-model) which assumes the following:
   - The underlying stock price $S_{t}$ has an initial value $S_{0}$ at $t=0$ and has the following probability of taking values $S_{1}(+)$ and $S_{1}(+)$ at time $t=1$:
     - $\text{Prob}(S_{1}=S_{1}(+)) = p$
     - $\text{Prob}(S_{1}=S_{1}(-)) = q$
@@ -366,7 +366,7 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
 - Arbitrage principles require that $d < 1+r < u$ as the return on the stock cannot be more or less than the return on the risk-free interest rate $r$.
   - If $1+r \leq d$ a risk-free profit could be obtained by borrowing cash at the risk-free rate and purchasing the underlying stock.
   - Similarly, if $u \leq 1+r$, a risk-free profit could be obtained by taking a short position in the underlying stock and investing the proceeds at the risk-free rate.
-- As with the [previous example](#example-1-one-step-binomial-model), assume that the derivative with value $D_{t}$ at time $t$ has the stock as the underlying asset, an initial value $D_{0}$, and the following states:
+- As with the [previous example](#example-one-step-binomial-model), assume that the derivative with value $D_{t}$ at time $t$ has the stock as the underlying asset, an initial value $D_{0}$, and the following states:
   - $D_{1} = D_{1}(+)$ when $S_{1} = uS_{0}$
   - $D_{1} = D_{1}(-)$ when $S_{1} = dS_{0}$
 - The values denoted as $D_{1}(+)$ and $D_{1}(-)$ constitute the payoff of the derivative and are assumed to be known values.
@@ -843,3 +843,53 @@ $$d{\pm} = \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S_{0}}{K} \right) +
 $$N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz$$
 
 - The core assumption in the Black-Scholes option pricing model is that the call premium is the expected value of the payoff under a log-normal distribution for the underlying asset at expiry.
+
+### Limitations of the Black-Scholes Model
+
+- The formula presented for the [Black-Scholes Option Pricing Model](#the-black-scholes-option-pricing-model) makes many assumptions with the main ones being as follows:
+  - Interest rates are constant
+  - Transaction costs are zero
+  - Volatility ($\sigma$) is a fixed, deterministic number
+  - Asset returns follow a log-normal process
+  - Continuous [delta hedging](#delta-hedging) of an option is possible
+
+#### Constant Interest Rates
+
+- Depending on the circumstances, the assumption that interest rates are fixed will impact the accuracy of the model differently.
+- For short-dated options using the prevailing interest rates at the time the contract is valued/initiated will not cause a serious inaccuracy.
+- When valuing longer-dated options, a range of potential interest rates (based on best estimates) will need to be used to construct a range of option prices using the Black-Scholes model.
+- Interest rates in most developed economies are stables enough that this assumption can be adequately addressed.
+
+#### Transaction Costs are Zero
+
+- Transaction costs are realised as bid-ask spreads on markets.
+- Generally, the more liquid the market, the smaller (tighter) the bid-ask spread.
+- On illiquid markets with wider bid-ask spreads, the zero transaction costs assumption will have a more detrimental impact.
+- Transaction costs increase the cost of delta hedging option positions. With high transaction costs, delta hedging will not be continuous with time which is implicit in the derivation of the Black-Scholes model.
+- Where there are high transaction costs, call prices will be less accurate when calculated using the Black-Scholes model due to the cost of hedging.
+- Other models do exist which more accurately account for transaction costs.
+
+#### Fixed Volatility and Asset Returns following a Log-Normal Process
+
+- The Black-Scholes formula was derived using the limiting case of the binomial call pricing formula and  taking the number of time steps to infinity in 1 unit of time.
+  - The binomial model itself converged to the log-normal model in this same limit.
+- Therefore, it follows that the Black-Scholes formula is the fair value (arbitrage price) of a call option when the underlying price is modelled a as log-normal process.
+- The real asset price series do not follow a log-normal process and that the log-normal model is incompatible with the [stylized facts of real asset returns](./8_stochastic-processes.md#stylized-facts-of-asset-prices-and-returns).
+  - In the log-normal model, returns on successive days (or weeks/months/years) are independent random variables.
+  - The autocorrelation function of any function of the asset returns is therefore zero and volatility clustering will not be exhibited - this is inconsistent with real asset returns.
+- The log-normal model uses a normal distribution for asset returns, where as real asset returns exhibit a fat-tailed distribution.
+  - Extreme asset returns - either positive or negative are a lot less likely in the Black-Scholes model than they are in reality.
+  - Generally, options which are far in or out of the money will be inaccurately valued (usually undervalued) with the Black-Scholes formula.
+- The Black-Scholes formula is at best an approximation to the true fair price of an option.
+
+#### Continuous Portfolio Rebalancing (Delta Hedging)
+
+- The Black-Scholes model gives an arbitrage price based on an arbitrage which is unrealisable in practice.
+- The fair value of an option was derived by rebalancing ([delta hedging](#delta-hedging)) a portfolio containing the option and the underlying at each time step - this made the portfolio value certain at the next time step, removing risk.
+- In the continuous time limit taken to derive the Black-Scholes formula, the delta hedging of the portfolio would need to be carried out continuously in time.
+  - In practice, continuously delta hedging is impossible and prohibitively expensive with non-zero transaction costs.
+  - Large financial institutions with high-frequency trading capabilities may come close to continuous delta hedging so there is an argument that the option prices will never deviate too far form the Black-Scholes fair value, albeit the other limitations of the model are still present.
+
+### The Black-Scholes Theory in Practice
+
+## Delta Hedging
