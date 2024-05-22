@@ -1,5 +1,56 @@
 # Options
 
+- [Options](#options)
+  - [Introduction](#introduction)
+    - [Basic Example: European Call](#basic-example-european-call)
+    - [Assumptions](#assumptions)
+  - [Option Payoffs](#option-payoffs)
+    - [Long Call Payoff](#long-call-payoff)
+    - [Short Call Payoff](#short-call-payoff)
+    - [Long Put Payoff](#long-put-payoff)
+    - [Short Put Payoff](#short-put-payoff)
+  - [Arbitrage Bounds on Option Prices](#arbitrage-bounds-on-option-prices)
+    - [Arbitrage Inequality Example 1: Call Price Less Than Underlying Price](#arbitrage-inequality-example-1-call-price-less-than-underlying-price)
+    - [Arbitrage Inequality Example 2: Call Price Greater Than Long Forward Position](#arbitrage-inequality-example-2-call-price-greater-than-long-forward-position)
+    - [Extending Option Bounds](#extending-option-bounds)
+    - [Application of Option Bounds Example](#application-of-option-bounds-example)
+    - [Arbitrage Bounds on American Style Options](#arbitrage-bounds-on-american-style-options)
+      - [Intrinsic Value](#intrinsic-value)
+      - [Bounds for American Calls](#bounds-for-american-calls)
+      - [Bounds for American Puts](#bounds-for-american-puts)
+  - [Put-Call Parity](#put-call-parity)
+    - [Deriving the Put Call Parity Using Arbitrage principles](#deriving-the-put-call-parity-using-arbitrage-principles)
+  - [The Binomial Model](#the-binomial-model)
+    - [One-Step Binomial Model](#one-step-binomial-model)
+      - [Example: One-Step Binomial Model](#example-one-step-binomial-model)
+      - [The General Case for the One-Step Binomial Model](#the-general-case-for-the-one-step-binomial-model)
+        - [One-Step Binomial Model Assumptions Recap](#one-step-binomial-model-assumptions-recap)
+        - [One-Step Binomial Model General Case Derivation](#one-step-binomial-model-general-case-derivation)
+      - [One-Step Risk Neutral Pricing](#one-step-risk-neutral-pricing)
+        - [Example: One-Step Risk Neutral Pricing](#example-one-step-risk-neutral-pricing)
+    - [Two-Step Binomial Model](#two-step-binomial-model)
+      - [Asset Price Distribution in the Two-Step Binomial Model](#asset-price-distribution-in-the-two-step-binomial-model)
+      - [Example: Two-Step Binomial Model](#example-two-step-binomial-model)
+    - [The Full Binomial Model](#the-full-binomial-model)
+    - [Call Pricing using the Binomial Model](#call-pricing-using-the-binomial-model)
+  - [Binomial Model Approximation to a Log-Normal Model](#binomial-model-approximation-to-a-log-normal-model)
+  - [The Black-Scholes Option Pricing Model](#the-black-scholes-option-pricing-model)
+      - [Call options](#call-options)
+      - [Put Options](#put-options)
+    - [Limitations of the Black-Scholes Model](#limitations-of-the-black-scholes-model)
+      - [Constant Interest Rates](#constant-interest-rates)
+      - [Transaction Costs are Zero](#transaction-costs-are-zero)
+      - [Fixed Volatility and Asset Returns following a Log-Normal Process](#fixed-volatility-and-asset-returns-following-a-log-normal-process)
+      - [Continuous Portfolio Rebalancing (Delta Hedging)](#continuous-portfolio-rebalancing-delta-hedging)
+    - [The Black-Scholes Theory in Practice](#the-black-scholes-theory-in-practice)
+  - [Option Greeks](#option-greeks)
+    - [Delta](#delta)
+    - [Gamma](#gamma)
+    - [Vega](#vega)
+    - [Theta](#theta)
+    - [Ro](#ro)
+  - [Delta Hedging](#delta-hedging)
+
 ## Introduction
 
 - Options are contracts between two counterparties that gives one counterparty *the right but not the obligation* to buy/sell a particular asset to/from the other counterparty at a price agreed to upon entering the contract.
@@ -844,6 +895,48 @@ $$N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz$$
 
 - The core assumption in the Black-Scholes option pricing model is that the call premium is the expected value of the payoff under a log-normal distribution for the underlying asset at expiry.
 
+#### Call options
+
+>For an underlying asset price that evolves under a log-normal distribution with drift $\mu$ and volatility $\sigma$, the fair price of a **call** option at time $t$ on this underlying asset is given by the Black-Scholes formula below.
+
+```math
+\begin{aligned}
+C(S,t;K,T,\sigma,r) &= SN(d_{+}) - Ke^{-r(T-t)}N(d_{-}) \\\\
+\text{Where} \\ 
+&d{\pm} = \frac{1}{\sigma \sqrt{T-t}} \left[ \log \left(\frac{S}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)(T-t) \right] \\\\
+&N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz
+\end{aligned}
+```
+
+> - $t$ is the time of valuation - any point during the life of the option (between contract origination > $t=0$ and expiration $t=T$).
+> - $S$ is the price of the underlying asset at time $t$.
+> - $N(x)$ represents the normal cumulative distribution function.
+> - $K$ is the strike price
+> - $T$ is the expiration date of the call option.
+> - $\sigma$ is the volatility (i.e. standard deviation) of the log-normal distribution of the underlying > asset price.
+> - $r$ is the risk-free interest rate.
+> - **The drift of the underlying asset price log-normal distribution ($\mu$) is independent to the fair > price of the call option and is not present in the Black-Scholes call pricing formula.**
+
+#### Put Options
+
+>Using [put-call parity](#put-call-parity), the fair price of a **put** option is derived using the Black-Scholes formula below.
+>
+
+```math
+\begin{aligned}
+P(S,t) &= C(S,t) - S - e^{-r(T-t)}K \\\\
+&= SN(d_{+}) - Ke^{-r(T-t)}N(d_{-}) - S - e^{-r(T-t)}K \\\\
+&= S(N(d_{+}) - 1) - Ke^{-r(T-t)}(N(d_{-}) - 1) \\\\
+&= S(-N(-d_{+})) - Ke^{-r(T-t)}(-N(-d_{-})) \\\\
+&= \boxed{Ke^{-r(T-t)}N(-d_{-}) - S(-N(-d_{+}))}
+\end{aligned}
+```
+
+>
+> - Noting the use of the following property of the cumulative distribution function $N(x)$:
+> $$N(-x) = 1 - N(x) \Longrightarrow N(x) - 1 = -N(-x)$$
+>
+
 ### Limitations of the Black-Scholes Model
 
 - The formula presented for the [Black-Scholes Option Pricing Model](#the-black-scholes-option-pricing-model) makes many assumptions with the main ones being as follows:
@@ -891,5 +984,57 @@ $$N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz$$
   - Large financial institutions with high-frequency trading capabilities may come close to continuous delta hedging so there is an argument that the option prices will never deviate too far form the Black-Scholes fair value, albeit the other limitations of the model are still present.
 
 ### The Black-Scholes Theory in Practice
+
+- As highlighted by the [limitation of the Black-Scholes model](#limitations-of-the-black-scholes-model), the assumptions made for pricing options need careful consideration.
+- Experienced traders will understand these limitation and make the necessary adjustments to utilise the Black-Scholes models as a tool for pricing options.
+- For exchange traded option products, the actual prices are determined by market forces - supply and demand.
+  - These prices are inputted into the Black-Scholes model to calculate the value of the volatility $\sigma$ - referred to as the **implied volatility**.
+- The implied volatility is often more useful than the outright option price.
+- The Black-Scholes model is also very useful for hedging and risk management purposes through the use of the [option Greeks](#option-greeks) (sensitivities).
+
+## Option Greeks
+
+- The *Greeks* of an option (or more broadly, of any asset or portfolio) are a set of derivatives of the option price with respect to various risk factors, calculated using the principles of calculus.
+- In other words, the Greeks measure the sensitivity of an option's price to a specified risk factor.
+- Option positions can be hedged much more effectively using the Greeks.
+- Denoting $C = C(S,t;K,T,\sigma,r)$ as the price of a call option (not necessarily the price defined by the Black-Scholes model), the Greeks can be defined as follows:
+  > Delta: $\Delta = \frac{\partial C}{\partial S}$
+  >
+  > Gamma: $\Gamma = \frac{\partial^{2} C}{\partial S^{2}}$
+  >
+  > Vega: $\nu = \frac{\partial C}{\partial \sigma}$
+- The Black-Scholes model is used as standard practice to calculate the Greeks as the model has stood the test of time and financial professional fully-understand both its uses and limitations.
+  - Other models, such as stochastic volatility models, do exist and have become more popular in recent years due to the improved accuracy they offer.
+
+### Delta
+
+```math
+\begin{aligned}
+C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
+\Delta = \frac{\partial C}{\partial S} = N(d_{+})
+\end{aligned}
+```
+
+### Gamma
+
+```math
+\begin{aligned}
+C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
+\Gamma = \frac{\partial^{2} C}{\partial S^{2}} = \frac{N'(d_{+})}{S(t) \sigma \sqrt{T-t}}
+\end{aligned}
+```
+
+### Vega
+
+```math
+\begin{aligned}
+C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
+\nu = \frac{\partial C}{\partial \sigma}= S(t) \sqrt{T-t} N'(d_{+})
+\end{aligned}
+```
+
+### Theta
+
+### Ro
 
 ## Delta Hedging
