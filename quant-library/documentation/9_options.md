@@ -51,6 +51,7 @@
       - [Example: Theta and Time Decay](#example-theta-and-time-decay)
     - [Rho](#rho)
   - [Delta Hedging](#delta-hedging)
+    - [Example: Delta Neutral Trading](#example-delta-neutral-trading)
 
 ## Introduction
 
@@ -1135,3 +1136,104 @@ C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 ```
 
 ## Delta Hedging
+
+- The previously mentioned, [futures hedging](./7_forwards_futures_swaps.md#futures-hedging), is an example of *static hedging* which involves taking positions in linear instruments (forward, futures, and swaps) with exposures that offset existing exposures in a given portfolio.
+  - These hedging instruments will be held in the portfolio over a set time period, possibly the entire investment horizon.
+- Options on the other hand have non-static exposure that change as market variables change.
+  - Static hedging is therefore not viable for hedging options exposure.
+- The exposure of an option to the underlying asset price is expressed most directly by [delta](#delta), where the Black-Scholes delta is given by:
+$$\Delta = \frac{\partial C}{\partial S} = N(d_{1})$$
+- Delta is a function of the underlying asset price $S$, which is contained in $d_{1}$, and hence delta changes as the underlying asset price changes in time.
+- To effectively management the risk and exposure of option portfolios, the hedging positions must be updated as delta changes.
+- The standard approach to control exposure to fluctuations in the underlying asset price is to maintain a **delta neutral** portfolio, containing the option and some allocation of the underlying asset.
+- A portfolio containing a call option and some allocation $\delta$ of the underlying asset with value $V(t)$ at time $t$, can be denoted as follows:
+$$V(t) = C(S(t),t) - \delta S(t)$$
+- The portfolio is said to be *delta neutral* if $\frac{\partial V}{\partial S} = 0$ which leads to the following condition:
+
+```math
+\begin{aligned}
+\frac{\partial V}{\partial S} = \frac{\partial C}{\partial S} - \delta &= 0 \\\\
+\Longrightarrow \delta &= \frac{\partial C}{\partial S} = \Delta
+\end{aligned}
+```
+
+- Therefore, to maintain a delta neutral portfolio, a short position (due to the minus sign) in the underlying stock equal to the delta of the option is required.
+  - In other words, delta ($\Delta$) short positions in the underlying asset should be entered into for every long position in the call option.
+- as the Black Scholes delta ($\Delta$) is the cumulative distribution function (CDF) of the normal distribution, delta satisfies the following condition:
+$$0 \leq \Delta \leq 1$$
+- As a result, a fractional value of the underlying asset is required per call option to maintain delta neutrality.
+
+### Example: Delta Neutral Trading
+
+- A call option has a strike price of 50 USD and an expiration date in 6 months.
+- The call option has an underlying stock currently trading at 60 USD and a volatility of 20%.
+- Assuming the risk-free interest rate is 5%, the delta can be calculated as follows.
+  - Spot price $S = 60$
+  - Strike price $K = 50$
+  - Time until expiration $T$ is 6 months so $T=0.5$
+  - Volatility $\sigma = 0.2$
+  - Risk-free rate $r=0.05$
+
+```math
+\begin{aligned}
+\Delta &= N(d_{1}) \\\\
+\Longrightarrow d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{0.5}} \left[ \log \left(\frac{60}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)(0.5) \right] \\\\
+&= 1.536695 \\\\
+\therefore \Delta &= N(1.536695) = 0.9378 = \boxed{93.78\%}
+\end{aligned}
+```
+
+- If a portfolio contains 200 call options, the short position allocation required in the underlying stock to achieve a delta neutral position can be calculated by multiplying delta ($\Delta$) by the number of option contracts: $0.9378 \times 200 = 188$.
+
+- Assuming that after one month the underlying stock has the same volatility, but a price 70 USD, the profit and loss (PnL) of the delta neutral position can be calculated as follows.
+  - The stock has gained 10 USD per share so the short position has lost 10 USD per share, resulting in the total short position losing 1880 USD.
+  - The option's value can be calculated before ($T=0.5$) and after one month ($T=0.5 - \frac{1}{12} = \frac{5}{12}$).
+
+```math
+\begin{aligned}
+\Longrightarrow T=0.5 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{0.5}} \left[ \log \left(\frac{60}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)0.5 \right] \\\\
+&= 1.395274 \\\\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 60N(1.536695) - 50e^{-(0.05)(0.5)}N(1.395274) \\\\
+&= \boxed{11.48} \\\\\\
+
+\Longrightarrow T=\frac{5}{12} \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{70}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 2.832227 \\\\\\
+
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{70}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 2.703127 \\\\
+
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 70N(2.832227) - 50e^{-(0.05)(\frac{5}{12})}N(2.703127) \\\\
+&= \boxed{21.04}
+\end{aligned}
+```
+
+- The PnL can be calculated by: $200(21.04 - 11.48) - 1880 = 32$.
+- If after one month, the underlying stock is trading at 50 USD instead, the PnL can be calculated as follows.
+  - The short position in the stock will have gained 1880 USD.
+
+```math
+\begin{aligned}
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{50}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 0.225924 \\\\\\
+
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{50}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 0.09682458 \\\\
+
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 50N(0.225924) - 50e^{-(0.05)(\frac{5}{12})}N(0.09682458) \\\\
+&= \boxed{3.09}
+\end{aligned}
+```
+
+- The PnL can be calculated by: $200(3.09 - 11.48) + 1880 = 202$.
+- In both cases, delta hedging has protected the portfolio from losing money, regardless of the direction of the stock price.
