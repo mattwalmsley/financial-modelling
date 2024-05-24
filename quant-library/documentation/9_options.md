@@ -35,8 +35,8 @@
     - [Call Pricing using the Binomial Model](#call-pricing-using-the-binomial-model)
   - [Binomial Model Approximation to a Log-Normal Model](#binomial-model-approximation-to-a-log-normal-model)
   - [The Black-Scholes Option Pricing Model](#the-black-scholes-option-pricing-model)
-      - [Call options](#call-options)
-      - [Put Options](#put-options)
+    - [Call options](#call-options)
+    - [Put Options](#put-options)
     - [Limitations of the Black-Scholes Model](#limitations-of-the-black-scholes-model)
       - [Constant Interest Rates](#constant-interest-rates)
       - [Transaction Costs are Zero](#transaction-costs-are-zero)
@@ -48,7 +48,8 @@
     - [Gamma](#gamma)
     - [Vega](#vega)
     - [Theta](#theta)
-    - [Ro](#ro)
+      - [Example: Theta and Time Decay](#example-theta-and-time-decay)
+    - [Rho](#rho)
   - [Delta Hedging](#delta-hedging)
 
 ## Introduction
@@ -884,25 +885,26 @@ $$\lim_{n \to \infty} \space E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{
 ```math
 \begin{aligned}
 \lim_{n \to \infty} C_{0} &= e^{-rT} \int _{-\infty}^{\infty} \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \frac{e^{- \frac{z^{2}}{2}}}{\sqrt{2 \pi}} dz \\\\
-&= \boxed{S_{0}N(d_{+}) - Ke^{-rT}N(d_{-})}
+&= \boxed{S_{0}N(d_{1}) - Ke^{-rT}N(d_{2})}
 \end{aligned}
 ```
 
-- The variables $d_{+}$ and $d_{-}$ are given by:
-$$d{\pm} = \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S_{0}}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)T \right]$$
+- The variables $d_{1}=d_{+}$ and $d_{2}=d_{-}$ are given by:
+$$d_{\pm} = \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S_{0}}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)T \right]$$
 - The normal cumulative distribution function $N(x)$ is given by:
 $$N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz$$
 
 - The core assumption in the Black-Scholes option pricing model is that the call premium is the expected value of the payoff under a log-normal distribution for the underlying asset at expiry.
 
-#### Call options
+### Call options
 
 >For an underlying asset price that evolves under a log-normal distribution with drift $\mu$ and volatility $\sigma$, the fair price of a **call** option at time $t$ on this underlying asset is given by the Black-Scholes formula below.
 
 ```math
 \begin{aligned}
-C(S,t;K,T,\sigma,r) &= SN(d_{+}) - Ke^{-r(T-t)}N(d_{-}) \\\\
+C(S,t;K,T,\sigma,r) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \text{Where} \\ 
+&d_{1}=d_{+} \text{ and } d_{2}=d_{-} \\\\
 &d{\pm} = \frac{1}{\sigma \sqrt{T-t}} \left[ \log \left(\frac{S}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)(T-t) \right] \\\\
 &N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz
 \end{aligned}
@@ -917,7 +919,7 @@ C(S,t;K,T,\sigma,r) &= SN(d_{+}) - Ke^{-r(T-t)}N(d_{-}) \\\\
 > - $r$ is the risk-free interest rate.
 > - **The drift of the underlying asset price log-normal distribution ($\mu$) is independent to the fair > price of the call option and is not present in the Black-Scholes call pricing formula.**
 
-#### Put Options
+### Put Options
 
 >Using [put-call parity](#put-call-parity), the fair price of a **put** option is derived using the Black-Scholes formula below.
 >
@@ -925,10 +927,10 @@ C(S,t;K,T,\sigma,r) &= SN(d_{+}) - Ke^{-r(T-t)}N(d_{-}) \\\\
 ```math
 \begin{aligned}
 P(S,t) &= C(S,t) - S - e^{-r(T-t)}K \\\\
-&= SN(d_{+}) - Ke^{-r(T-t)}N(d_{-}) - S - e^{-r(T-t)}K \\\\
-&= S(N(d_{+}) - 1) - Ke^{-r(T-t)}(N(d_{-}) - 1) \\\\
-&= S(-N(-d_{+})) - Ke^{-r(T-t)}(-N(-d_{-})) \\\\
-&= \boxed{Ke^{-r(T-t)}N(-d_{-}) - S(-N(-d_{+}))}
+&= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) - S - e^{-r(T-t)}K \\\\
+&= S(N(d_{1}) - 1) - Ke^{-r(T-t)}(N(d_{2}) - 1) \\\\
+&= S(-N(-d_{1})) - Ke^{-r(T-t)}(-N(-d_{2})) \\\\
+&= \boxed{Ke^{-r(T-t)}N(-d_{2}) - S(-N(-d_{1}))}
 \end{aligned}
 ```
 
@@ -1003,6 +1005,8 @@ P(S,t) &= C(S,t) - S - e^{-r(T-t)}K \\\\
   > Gamma: $\Gamma = \frac{\partial^{2} C}{\partial S^{2}}$
   >
   > Vega: $\nu = \frac{\partial C}{\partial \sigma}$
+  >
+  > Theta: $\Theta = \frac{\partial C}{\partial t}$
 - The Black-Scholes model is used as standard practice to calculate the Greeks as the model has stood the test of time and financial professional fully-understand both its uses and limitations.
   - Other models, such as stochastic volatility models, do exist and have become more popular in recent years due to the improved accuracy they offer.
 
@@ -1010,8 +1014,8 @@ P(S,t) &= C(S,t) - S - e^{-r(T-t)}K \\\\
 
 ```math
 \begin{aligned}
-C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
-\Delta = \frac{\partial C}{\partial S} = N(d_{+})
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+\Delta = \frac{\partial C}{\partial S} = N(d_{1})
 \end{aligned}
 ```
 
@@ -1019,8 +1023,8 @@ C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
 
 ```math
 \begin{aligned}
-C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
-\Gamma = \frac{\partial^{2} C}{\partial S^{2}} = \frac{N'(d_{+})}{S(t) \sigma \sqrt{T-t}}
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+\Gamma = \frac{\partial^{2} C}{\partial S^{2}} = \frac{N'(d_{1})}{S(t) \sigma \sqrt{T-t}}
 \end{aligned}
 ```
 
@@ -1028,13 +1032,106 @@ C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
 
 ```math
 \begin{aligned}
-C = SN(d_{+}) - Ke^{-r(T-t)}N(d_{-})\\\\
-\nu = \frac{\partial C}{\partial \sigma}= S(t) \sqrt{T-t} N'(d_{+})
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+\nu = \frac{\partial C}{\partial \sigma}= S(t) \sqrt{T-t} N'(d_{1})
 \end{aligned}
 ```
 
 ### Theta
 
-### Ro
+- Theta represents the valuation time derivative of the option's value.
+- Unlike delta, gamma and vega, the theta of an option does not measure the sensitivity of an option's value to a risk factor, but the time decay of the value.
+- As the expiration date of an option approaches, the value of the option usually decreases and hence this phenomenon is known as *time decay*.
+  - This is represented diagrammatically by comparing the call value to the [intrinsic value](#intrinsic-value) of an option.
+  - The closer an option is to expiration date, the less likely the underlying price ends up at a more favourable level with a greater payoff.
+  - The theta of a call is therefore always less than 0 as the fair value of a call decreases as the option expiration approaches, assuming all market factors remain constant.
+  - Consequently, holding a call option in the absence of any favourable market moves is a losing strategy.
+
+```math
+\begin{aligned}
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+\Theta = \frac{\partial C}{\partial t} = -\frac{SN'(d_{1})\sigma}{2 \sqrt{T-t}} - rKe^{-r(T-t)}N(d_{2}) < 0
+\end{aligned}
+```
+
+- The theta for a put option is also usually negative, except for very in-the-money put options, and is calculated as follows.
+
+```math
+\begin{aligned}
+P = Ke^{-r(T-t)}N(-d_{2}) - S(-N(-d_{1})) \\\\
+\Theta = \frac{\partial P}{\partial t} = -\frac{SN'(d_{1})\sigma}{2 \sqrt{T-t}} + rKe^{-r(T-t)}N(-d_{2})
+\end{aligned}
+```
+
+#### Example: Theta and Time Decay
+
+- Calculate the drop in price over one month for fifty call option contracts, assuming the following:
+  - the option contracts have a strike price of 25 USD and expire in 2 months
+  - the underlying stock is currently trading at 30 USD and priced with a volatility of 35%
+  - the risk-free rate is 4%
+- The drop in value for the option contracts can be calculated by either:
+  1. Calculating the theta and scaling to one month
+  2. Repricing the option one month close to expiration
+- Collecting the necessary data for this calculation as follows:
+  - Spot price $S = 30$
+  - Strike price $K = 25$
+  - Time to expiry $T$ is 2 months so $T=\frac{2}{12}$
+  - Volatility $\sigma = 0.35$
+  - Risk-free rate $r = 0.04$
+- Using the method of calculating theta and scaling to one month $\frac{1}{12}$:
+
+```math
+\begin{aligned}
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{2}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 + \frac{0.35^{2}}{2}\right)\frac{2}{12} \right] \\\\
+&= 1.3941 \\\\\\
+
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{2}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 - \frac{0.35^{2}}{2}\right)\frac{2}{12} \right] \\\\
+&= 1.2512 \\\\\\
+
+\Theta &= -\frac{SN'(d_{1})\sigma}{2 \sqrt{T}} - rKe^{-r(T)}N(d_{2}) \\\\
+&= -\frac{30N'(1.3941)(0.35)}{2 \sqrt{\frac{2}{12}}} - (0.04)(25)e^{-0.04\frac{2}{12}}N(1.2512) \\\\
+&= -2.83 \\\\\\
+
+\Theta &= \frac{\partial C(S,t;K,T,\sigma,r)}{\partial t}\Longrightarrow C(S,t+\Delta T) - C(S,t) \approx \Theta \Delta t  \\\\
+\therefore C(S,t+\Delta T) - C(S,t) &= -2.83 \frac{1}{12} \\\\
+&= -0.2358 \\\\\\
+\end{aligned}
+```
+
+- The approximate loss on the fifty option contracts after one month using the theta method would be $50 \times 0.2358 = 11.79$.
+- Using the method of repricing the option contract one month closer to expiration, assuming all market factor remain constant:
+
+```math
+\begin{aligned}
+C(t=0) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+&= 30N(1.3941) - 25e^{-0.04\frac{2}{12}}N(1.2512) \\\\
+&= 5.33 \\\\\\
+
+C \left(t=\frac{1}{12} \right) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+\Longrightarrow d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{1}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 + \frac{0.35^{2}}{2}\right)\frac{1}{12} \right] \\\\
+&= 1.8880 \\\\\\
+
+ d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{1}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 - \frac{0.35^{2}}{2}\right)\frac{1}{12} \right] \\\\
+&= 1.7870\\\\\\
+C \left(t=\frac{1}{12} \right) &= 30N(1.8880) - 25e^{-0.04\frac{1}{12}}N(1.7870) \\\\
+&= 5.12
+\end{aligned}
+```
+
+- The approximate loss on the fifty option contracts after one month using the price recalculation method would be $50 \times (5.33 - 5.12) = 10.50$.
+- The theta approximation has therefore overestimated the loss - this is usually the case.
+
+### Rho
+
+```math
+\begin{aligned}
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+\rho = \frac{\partial C}{\partial r} = (T-t)Ke^{-r(T-t)}N(d_{2})
+\end{aligned}
+```
 
 ## Delta Hedging
