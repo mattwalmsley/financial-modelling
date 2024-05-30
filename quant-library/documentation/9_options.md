@@ -52,6 +52,7 @@
     - [Rho](#rho)
   - [Delta Hedging](#delta-hedging)
     - [Example: Delta Neutral Trading](#example-delta-neutral-trading)
+  - [Volatility Trading](#volatility-trading)
 
 ## Introduction
 
@@ -1237,3 +1238,11 @@ d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left
 
 - The PnL can be calculated by: $200(3.09 - 11.48) + 1880 = 202$.
 - In both cases, delta hedging has protected the portfolio from losing money, regardless of the direction of the stock price.
+
+## Volatility Trading
+
+- As demonstrated in the [options notebook](../python/notebooks/options.ipynb), the value of both call and put options increases with volatility $\sigma$.
+  - Therefore, trading options is equivalent to trading volatility.
+- Long position in an option will benefit from increases in volatility and short positions in options will benefit from decreases in volatility.
+- A *long volatility trade* refers to a long position where the investor wants long exposure to **only** the volatility.
+  - To reduce exposure to movements in the underlying asset's price, the investor must dynamically [delta hedge](#delta-hedging) to ensure the total position is delta neutral.
