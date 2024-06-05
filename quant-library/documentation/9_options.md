@@ -53,6 +53,11 @@
   - [Delta Hedging](#delta-hedging)
     - [Example: Delta Neutral Trading](#example-delta-neutral-trading)
   - [Volatility Trading](#volatility-trading)
+    - [Example: Trading using Volatility Prediciions](#example-trading-using-volatility-prediciions)
+      - [Scenario 1: Stock price at 90 USD](#scenario-1-stock-price-at-90-usd)
+      - [Scenario 2: Stock price at 100 USD](#scenario-2-stock-price-at-100-usd)
+      - [Scenario 3: Stock price at 110 USD](#scenario-3-stock-price-at-110-usd)
+  - [Implied Volatility](#implied-volatility)
 
 ## Introduction
 
@@ -1246,3 +1251,121 @@ d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left
 - Long position in an option will benefit from increases in volatility and short positions in options will benefit from decreases in volatility.
 - A *long volatility trade* refers to a long position where the investor wants long exposure to **only** the volatility.
   - To reduce exposure to movements in the underlying asset's price, the investor must dynamically [delta hedge](#delta-hedging) to ensure the total position is delta neutral.
+
+### Example: Trading using Volatility Prediciions
+
+- A stock is currently trading at 100 USD.
+- A 1 year at-the-money (ATM) call option is currently priced with a volatility of 10%.
+- The volatility of the stock is expected to increase over the next 6 months, but the actual price of the stock itself may increase or decrease.
+- Assuming a risk-free interest rate of 5%, an option position on 1000 shares to benefit from the expected volatility increase can be entered into as follows:
+  - To profit from increases in volatility, a long option position should be taken and then delta hedged to minimise exposure to changes in the underlying stock price.
+  - The initial data given:
+    - Underlying stock spot price $S=100$
+    - Strike price (ATM) $K=100$
+    - Time to expiry (years) $T=1$
+    - Current volatility $\sigma = 0.1$ 
+    - Risk-free interest rate $r=0.05$
+
+```math
+\begin{aligned}
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.1 \sqrt{{1}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 + \frac{0.1^{2}}{2}\right)(1) \right] \\\\
+&= 0.55 \\\\\\
+
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.1 \sqrt{{1}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 - \frac{0.1^{2}}{2}\right)(1) \right] \\\\
+&= 0.45 \\\\
+
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 100N(0.55) - 100e^{-(0.05)(1)}N(0.45) \\\\
+&= \boxed{6.80} \\\\\\
+
+\Longrightarrow \Delta &= N(d_{1}) = N(0.55) = \boxed{0.7088}
+\end{aligned}
+```
+
+- A delta neutral position will consist of 1000 call options and a short on 709 shares in the underlying stock.
+  - This position is then held for 6 months with no further trading.
+- In 6 months, the volatility of the stock has increased as expected and is now 40%.
+- Assuming the delta hedge is unchanged, the PnL for the position can be calculated for three scenarios with these stock prices: 90 USD, 100 USD, and 110 USD.
+
+#### Scenario 1: Stock price at 90 USD
+
+- The short position in the 709 shares will have gained 10 USD per share so a profit of 7090 USD in total on the underlying stock.
+- The option value can be calculated as follows:
+
+```math
+\begin{aligned}
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{90}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= -0.142696 \\\\\\
+
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{90}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= -0.4255387 \\\\
+
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 90N(-0.142696) - 100e^{-(0.05)(0.5)}N(-0.4255387) \\\\
+&= \boxed{7.20} \\\\\\
+\end{aligned}
+```
+
+- The final PnL on the position after 6 months is therefore:
+$$1000 \times (7.20 - 6.80) + 7090 = \boxed{7490 \text{ USD}}$$
+
+#### Scenario 2: Stock price at 100 USD
+
+- The short position in the 709 shares will have remained unchanged so there is no profit or loss.
+- The option value can be calculated as follows:
+
+```math
+\begin{aligned}
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= 0.2298097 \\\\\\
+
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= -0.05303301 \\\\
+
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 100N(0.2298097) - 100e^{-(0.05)(0.5)}N(-0.05303301) \\\\
+&= \boxed{12.39} \\\\\\
+\end{aligned}
+```
+
+- The final PnL on the position after 6 months is therefore:
+$$1000 \times (12.39 - 6.80) = \boxed{5590 \text{ USD}}$$
+
+#### Scenario 3: Stock price at 110 USD
+
+- The short position in the 709 shares will have lost 10 USD per share so a loss of 7090 USD in total on the underlying stock.
+- The option value can be calculated as follows:
+
+```math
+\begin{aligned}
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{110}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= 0.5667821 \\\\\\
+
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{110}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= 0.2839394 \\\\
+
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 110N(0.5667821) - 100e^{-(0.05)(0.5)}N(0.2839394) \\\\
+&= \boxed{18.94} \\\\\\
+\end{aligned}
+```
+
+- The final PnL on the position after 6 months is therefore:
+$$1000 \times (18.94 - 6.80) - 7090 = \boxed{5050 \text{ USD}}$$
+
+## Implied Volatility
+
+- As shown in the [options notebook](../python/notebooks/options.ipynb) the Black-Scholes call (or put) price is a one-to-one function of the underlying volatility.
+- For any Black-Scholes option price, there is a unique volatility value (assuming lal other variables are fixed).
+  - If a particular call price $c$ is observed on the market for a particular call option, there is a unique **implied volatility** value $\sigma_{imp}$ that can be substituted into the Black-Scholes formula to yield the price c:
+$$C(S,t;K,T,\sigma_{imp}, r) = c$$
+- The *Black Scholes Implied Volatility* is commonly used, however other models will also have corresponding implied volatility $\sigma_{imp}$ values.
+- As explained by the [Black-Scholes theory in practice](#the-black-scholes-theory-in-practice), the prices for vanilla options (i.e. standard calls and puts) are negotiated by the supply and demand forces on the markets.
