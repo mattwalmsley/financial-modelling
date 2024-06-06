@@ -58,6 +58,8 @@
       - [Scenario 2: Stock price at 100 USD](#scenario-2-stock-price-at-100-usd)
       - [Scenario 3: Stock price at 110 USD](#scenario-3-stock-price-at-110-usd)
   - [Implied Volatility](#implied-volatility)
+    - [Volatility Surfaces](#volatility-surfaces)
+    - [Greeks using Implied Volatility](#greeks-using-implied-volatility)
 
 ## Introduction
 
@@ -1365,7 +1367,20 @@ $$1000 \times (18.94 - 6.80) - 7090 = \boxed{5050 \text{ USD}}$$
 
 - As shown in the [options notebook](../python/notebooks/options.ipynb) the Black-Scholes call (or put) price is a one-to-one function of the underlying volatility.
 - For any Black-Scholes option price, there is a unique volatility value (assuming lal other variables are fixed).
-  - If a particular call price $c$ is observed on the market for a particular call option, there is a unique **implied volatility** value $\sigma_{imp}$ that can be substituted into the Black-Scholes formula to yield the price c:
+  - If a particular call price $c$ is observed on the market for a particular call option, there is a unique **implied volatility** value $\sigma_{\text{imp}}$ that can be substituted into the Black-Scholes formula to yield the price c:
 $$C(S,t;K,T,\sigma_{imp}, r) = c$$
-- The *Black Scholes Implied Volatility* is commonly used, however other models will also have corresponding implied volatility $\sigma_{imp}$ values.
+- The *Black Scholes Implied Volatility* is commonly used, however other models will also have corresponding implied volatility $\sigma_{\text{imp}}$ values.
 - As explained by the [Black-Scholes theory in practice](#the-black-scholes-theory-in-practice), the prices for vanilla options (i.e. standard calls and puts) are negotiated by the supply and demand forces on the markets.
+
+### Volatility Surfaces
+
+- The implied volatilities for different options on the same underlying asset are found to be a function of the strike price and the expiration date.
+- Differing volatilities for the same underlying asset is inconsistent with the Black-Scholes theory (as $\sigma$ is assumed to be constant).
+- An implied volatility surface, a graph of the function $\sigma_{\text{imp}}(K,T)$, can therefore be constructed.
+  - For a single expiration, the implied volatility graph as a function of the strike price is usually in the shape of a 'smile' or a 'smirk' (skew).
+  - Volatility smiles or smirks suggest that the volatility of out-the-money calls/puts is higher than the Black-Scholes theory implies, relative to the at-the-money volatility.
+- The implied volatility is the market's view of what the future realized volatility is likely to be and traders can take a view as to whether that volatility is too high/low (i.e. mispricing the volatility of an option).
+
+### Greeks using Implied Volatility
+
+- The implied volatility can be used as the volatility parameter $\sigma$ in the Black-Scholes model to derive the implied volatility greeks.
