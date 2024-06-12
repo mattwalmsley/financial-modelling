@@ -16,6 +16,10 @@ This repository is for educational purposes only and contains only my own work, 
 - [Stochastic Processes](quant-library/documentation/8_stochastic-processes.md)
 - [Options](quant-library/documentation/9_options.md)
 
+## Reading List and References
+
+[1] J. Hull, Options, Futures and Other Derivatives. Pearson/Prentice Hall, 2009.
+
 ## Git Commands
 
 View git remotes:
