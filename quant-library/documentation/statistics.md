@@ -80,3 +80,17 @@ $$\text{Net Return} = \frac{P(t)-P(t-1)}{P(t-1)}$$
 $$\text{Net Return} = \frac{P(t)}{P(t-1)} -1$$
 
 #### Example: Calculating Returns on a Financial Time Series
+
+- A price time series is given in the table below.
+
+|   Time    | Value, P(t) |        Daily Net Return        |     Daily Gross Return     |
+| ----------|:-----------:|:------------------------------:|:--------------------------:|
+| **t = 1** |     124     |                 -              |         -                  |
+| **t = 2** |     131     | $\frac{131-124}{124} = 5.65\%$ | $\frac{131}{124} = 5.65\%$ |
+| **t = 3** |     128     |  128  |
+| **t = 4** |     134     |  134  |
+| **t = 5** |     132     |  132  |
+| **t = 6** |     135     |  135  |
+
+- The weekly gross return can be calculated as follows:
+- The weekly net return can be calculated as follows:
