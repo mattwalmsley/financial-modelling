@@ -7,9 +7,10 @@
       - [Marginal Distribution](#marginal-distribution)
       - [Ergodic Theorem](#ergodic-theorem)
     - [Returns](#returns)
-      - [Gross Returns](#gross-returns)
-      - [Net Returns](#net-returns)
-      - [Example: Calculating Returns on a Financial Time Series](#example-calculating-returns-on-a-financial-time-series)
+      - [Gross Rate of Return](#gross-rate-of-return)
+      - [Example 1: Calculating Returns from Values](#example-1-calculating-returns-from-values)
+      - [Example 1: Calculating Weekly Returns from Daily Returns](#example-1-calculating-weekly-returns-from-daily-returns)
+      - [Continuously Compounded Returns](#continuously-compounded-returns)
 
 ## Financial Data
 
@@ -20,8 +21,8 @@
 $$V(t_{1}), V(t_{2}), ...,V(t_{n-1}), V(t_{n})$$
 - The unit of time can vary from milliseconds to years, but should be consistent when working with a time series dataset.
 - For the purpose of financial analysis, **asset returns** are more useful than outright asset values/prices.
-- **Net return** $r(t)$ represents the *percentage change* between two prices at times $t$ and $t-1$, and is calculated by $r(t) = \frac{P(t) - P(t-1)}{P(t-1)}$.
-  - In other words, the net return is a measure of the *relative return* as a fraction of the value at $t-1$ realized on the asset from $t-1$ to $t$.
+- **Gross rate of return** $r(t)$ represents the *percentage change* between two prices at times $t$ and $t-1$, and is calculated by $r(t) = \frac{P(t) - P(t-1)}{P(t-1)}$.
+  - In other words, the gross rate of return is a measure of the *relative return* as a fraction of the value at $t-1$ realized on the asset from $t-1$ to $t$.
 - Many financial time series, in particular returns, can be assumed to be stationary.
 
 ### Key Concepts
@@ -64,33 +65,65 @@ $$V(t_{1}), V(t_{2}), ...,V(t_{n-1}), V(t_{n})$$
 - To define the return on an asset, the *return horizon* must be specified - this is the time period over which the return will be realized.
 - For sake of ease, an investment horizon of 1 period, i.e. 1 day, will be used to initially define return measures.
 
-#### Gross Returns
+#### Gross Rate of Return
 
-- The gross return on an asset is defined by:
-$$\text{Gross Return} = \frac{P(t)}{P(t-1)}$$
-- This is the ratio of the price of an asset at the end of the return horizon to the price at the start.
-
-#### Net Returns
-
-- As mentioned previously, the net return on an asset is defined by:
+- As mentioned previously, the gross rate of return on an asset is defined by:
 $$\text{Net Return} = \frac{P(t)-P(t-1)}{P(t-1)}$$
 - This is the ratio of the change in price of an asset over the return horizon to the price at the start.
-  - The profit or loss (PnL) is represented by $P(t)-P(t-1)$ so the net return is therefore the PnL represented as a fraction/percentage of the value of the investment at the previous time period, $t-1$.
-- The net return can be rearranged to be expressed as:
-$$\text{Net Return} = \frac{P(t)}{P(t-1)} -1$$
+  - The profit or loss (PnL) is represented by $P(t)-P(t-1)$ so the gross rate of return is therefore the PnL represented as a fraction/percentage of the value of the investment at the previous time period, $t-1$.
 
-#### Example: Calculating Returns on a Financial Time Series
+#### Example 1: Calculating Returns from Values
 
 - A price time series is given in the table below.
 
-|   Time    | Value, P(t) |        Daily Net Return        |     Daily Gross Return     |
-| ----------|:-----------:|:------------------------------:|:--------------------------:|
-| **t = 1** |     124     |                 -              |         -                  |
-| **t = 2** |     131     | $\frac{131-124}{124} = 5.65\%$ | $\frac{131}{124} = 5.65\%$ |
-| **t = 3** |     128     |  128  |
-| **t = 4** |     134     |  134  |
-| **t = 5** |     132     |  132  |
-| **t = 6** |     135     |  135  |
+|   Time    | Value, P(t) |   Daily Gross Rate of Return    |
+| ----------|:-----------:|:------------------------------: |
+| **t = 1** |     124     |                 -               |
+| **t = 2** |     131     | $\frac{131-124}{124} = 5.65\%$  |
+| **t = 3** |     128     | $\frac{128-131}{131} = -2.29\%$ |
+| **t = 4** |     134     | $\frac{134-128}{128} = 4.69\%$  |
+| **t = 5** |     132     | $\frac{132-134}{134} = -1.49\%$ |
+| **t = 6** |     135     | $\frac{135-132}{132} = 2.27\%$  |
 
-- The weekly gross return can be calculated as follows:
-- The weekly net return can be calculated as follows:
+- The weekly gross rate of return can be calculated as follows:
+
+```math
+\begin{aligned}
+\text{Gross rate of return} &= \frac{P(t=6)-P(t=1)}{P(t=1)} \\\\
+&= \frac{135-124}{124} \\\\
+&= 8.87\%
+\end{aligned}
+```
+
+#### Example 1: Calculating Weekly Returns from Daily Returns
+
+- The daily gross rates of return are given in the table below for a one week period.
+
+|    Day  | Return |
+| --------|:------:|
+| **Mon** |  0.7%  |
+| **Tue** |  -0.2% |
+| **Wed** |  1.2%  |
+| **Thu** |  0.8%  |
+| **Fri** |  -0.7% |
+
+- The weekly gross rate of return can be calculated by tracking the value of 1 USD
+
+|    Day  | Multiplier |                   Value                 |
+| --------|:----------:|:---------------------------------------:|
+| **Mon** |   1.007    |                $1(1.007)$               |
+| **Tue** |   0.998    |            $1(1.007)(0.998)$            |
+| **Wed** |   1.012    |        $1(1.007)(0.998)(1.012)$         |
+| **Thu** |   1.008    |     $1(1.007)(0.998)(1.012)(1.008)$     |
+| **Fri** |   0.993    |  $1(1.007)(0.998)(1.012)(1.008)(0.993)$ |
+
+- The gross rate of return for week can be calculated by $\frac{1(1.007)(0.998)(1.012)(1.008)(0.993) - 1}{1} = (1.007)(0.998)(1.012)(1.008)(0.993) - 1 = 0.0180 = 1.80\%$
+- The sum of the daily rates of return is therefore equal to the weekly rate of return:
+$$r_{k}(t) = r(t-k+1) + r(t-k+2) +...+ r(t)$$
+
+#### Continuously Compounded Returns
+
+- A one-period continuously compounded return, $r(t)$, is calculated as follows:
+$$P(t) = e^{r(t)}P(t-1)$$
+$$r(t) = \log \left(\frac{P(t)}{P(t-1)} \right)$$
+- Continuously compounded returns are also referred to as *logarithmic returns*.
