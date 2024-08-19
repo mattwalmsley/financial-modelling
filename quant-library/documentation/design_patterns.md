@@ -17,6 +17,7 @@
     - [Dependency Inversion Principle (DIP)](#dependency-inversion-principle-dip)
       - [Simple Example: DIP](#simple-example-dip)
       - [Advanced Example: DIP](#advanced-example-dip)
+    - [SOLID Principles in Practice](#solid-principles-in-practice)
 
 ## SOLID Design Principles
 
@@ -71,24 +72,24 @@ namespace DotNetDesignPatternDemos.SOLID.SRP
   // working with them
   public class Journal
   {
-    private readonly List<string> entries = new List<string>();
+    private readonly List<string> _entries = new List<string>();
 
-    private static int count = 0;
+    private static int _count = 0;
 
     public int AddEntry(string text)
     {
-      entries.Add($"{++count}: {text}");
-      return count; // memento pattern!
+      _entries.Add($"{++_count}: {text}");
+      return _count; // memento pattern!
     }
 
     public void RemoveEntry(int index)
     {
-      entries.RemoveAt(index);
+      _entries.RemoveAt(index);
     }
 
     public override string ToString()
     {
-      return string.Join(Environment.NewLine, entries);
+      return string.Join(Environment.NewLine, _entries);
     }
 
     // Save and Load methods break single responsibility principle
@@ -202,7 +203,7 @@ namespace DotNetDesignPatternDemos.SOLID.OCP
 
   public enum Size
   {
-    Small, Medium, Large, Yuge
+    Small, Medium, Large, Huge
   }
 
   public class Product
@@ -712,7 +713,7 @@ using static System.Console;
 
 namespace DotNetDesignPatternDemos.SOLID.DependencyInversionPrinciple
 {
-  // hl modules should not depend on low-level; both should depend on abstractions
+  // high-level modules should not depend on low-level; both should depend on abstractions
   // abstractions should not depend on details; details should depend on abstractions
 
   public enum Relationship
@@ -735,20 +736,20 @@ namespace DotNetDesignPatternDemos.SOLID.DependencyInversionPrinciple
 
   public class Relationships : IRelationshipBrowser // low-level
   {
-    private List<(Person,Relationship,Person)> relations
+    private List<(Person,Relationship,Person)> _relations
       = new List<(Person, Relationship, Person)>();
 
     public void AddParentAndChild(Person parent, Person child)
     {
-      relations.Add((parent, Relationship.Parent, child));
-      relations.Add((child, Relationship.Child, parent));
+      _relations.Add((parent, Relationship.Parent, child));
+      _relations.Add((child, Relationship.Child, parent));
     }
 
-    public List<(Person, Relationship, Person)> Relations => relations;
+    public List<(Person, Relationship, Person)> Relations => _relations;
 
     public IEnumerable<Person> FindAllChildrenOf(string name)
     {
-      return relations
+      return _relations
         .Where(x => x.Item1.Name == name
                     && x.Item2 == Relationship.Parent).Select(r => r.Item3);
     }
@@ -792,3 +793,196 @@ namespace DotNetDesignPatternDemos.SOLID.DependencyInversionPrinciple
   }
 }
 ```
+
+### SOLID Principles in Practice
+
+```csharp
+// Step 1: Define the core entities and interfaces
+
+// SRP: Each class has a single responsibility
+public class Order
+{
+    public int Id { get; set; }
+    public List<OrderItem> Items { get; set; }
+    public decimal TotalAmount { get; set; }
+
+    public void CalculateTotal()
+    {
+        TotalAmount = Items.Sum(item => item.Price * item.Quantity);
+    }
+}
+
+public class OrderItem
+{
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public int Quantity { get; set; }
+}
+
+// OCP: Payment methods can be extended without modifying existing code
+public interface IPaymentMethod
+{
+    void Pay(decimal amount);
+}
+
+public class CreditCardPayment : IPaymentMethod
+{
+    public void Pay(decimal amount)
+    {
+        // Process credit card payment
+        Console.WriteLine($"Paid {amount} using Credit Card.");
+    }
+}
+
+public class PayPalPayment : IPaymentMethod
+{
+    public void Pay(decimal amount)
+    {
+        // Process PayPal payment
+        Console.WriteLine($"Paid {amount} using PayPal.");
+    }
+}
+
+// LSP: Derived classes can replace base classes without altering behaviour
+public abstract class Discount
+{
+    public abstract decimal Apply(decimal amount);
+}
+
+public class NoDiscount : Discount
+{
+    public override decimal Apply(decimal amount)
+    {
+        return amount;
+    }
+}
+
+public class PercentageDiscount : Discount
+{
+    private readonly decimal _percentage;
+
+    public PercentageDiscount(decimal percentage)
+    {
+        _percentage = percentage;
+    }
+
+    public override decimal Apply(decimal amount)
+    {
+        return amount - (amount * _percentage / 100);
+    }
+}
+
+// ISP: Interfaces are split into smaller ones so that classes implement only what they need
+public interface IOrderService
+{
+    void ProcessOrder(Order order, IPaymentMethod paymentMethod);
+}
+
+public interface IOrderNotificationService
+{
+    void NotifyOrderProcessed(Order order);
+}
+
+public interface IOrderDiscountService
+{
+    decimal ApplyDiscount(Order order, Discount discount);
+}
+
+// DIP: High-level modules depend on abstractions, not concrete implementations
+public class OrderService : IOrderService
+{
+    private readonly IOrderNotificationService _notificationService;
+    private readonly IOrderDiscountService _discountService;
+
+    public OrderService(IOrderNotificationService notificationService, IOrderDiscountService discountService)
+    {
+        _notificationService = notificationService;
+        _discountService = discountService;
+    }
+
+    public void ProcessOrder(Order order, IPaymentMethod paymentMethod)
+    {
+        order.CalculateTotal();
+
+        // Apply a discount
+        decimal totalAmount = _discountService.ApplyDiscount(order, new PercentageDiscount(10));
+
+        // Process payment
+        paymentMethod.Pay(totalAmount);
+
+        // Notify the customer
+        _notificationService.NotifyOrderProcessed(order);
+    }
+}
+
+// Notification service (demonstrating DIP)
+public class EmailNotificationService : IOrderNotificationService
+{
+    public void NotifyOrderProcessed(Order order)
+    {
+        // Send notification
+        Console.WriteLine($"Order {order.Id} processed. Notification sent via Email.");
+    }
+}
+
+// Discount service (demonstrating DIP)
+public class OrderDiscountService : IOrderDiscountService
+{
+    public decimal ApplyDiscount(Order order, Discount discount)
+    {
+        return discount.Apply(order.TotalAmount);
+    }
+}
+
+// Usage example
+class Program
+{
+    static void Main(string[] args)
+    {
+        var order = new Order
+        {
+            Id = 1,
+            Items = new List<OrderItem>
+            {
+                new OrderItem { Name = "Laptop", Price = 1000, Quantity = 1 },
+                new OrderItem { Name = "Mouse", Price = 50, Quantity = 2 }
+            }
+        };
+
+        var notificationService = new EmailNotificationService();
+        var discountService = new OrderDiscountService();
+
+        var orderService = new OrderService(notificationService, discountService);
+
+        // Process the order using a Credit Card
+        orderService.ProcessOrder(order, new CreditCardPayment());
+
+        // Process the order using PayPal
+        orderService.ProcessOrder(order, new PayPalPayment());
+    }
+}
+```
+
+1. Single Responsibility Principle (SRP):
+
+   - `Order` and `OrderItem` classes handle only order-related data.
+   - `OrderService` class handles order processing.
+   - `EmailNotificationService` handles sending notifications.
+   - `OrderDiscountService` handles applying discounts.
+
+2. Open/Closed Principle (OCP):
+
+    - The `IPaymentMethod` interface allows for new payment methods (e.g., `CreditCardPayment`, `PayPalPayment`) without modifying the existing code.
+    - The `Discount` class can be extended with new discount types (e.g., `PercentageDiscount`, `NoDiscount`) without changing existing functionality.
+
+3. Liskov Substitution Principle (LSP):
+
+   - The Discount subclasses (NoDiscount, PercentageDiscount) can be used interchangeably without altering the correctness of the program.
+
+4. Interface Segregation Principle (ISP):
+
+   - Interfaces `IOrderService`, `IOrderNotificationService`, and `IOrderDiscountService` are specific, ensuring that classes implementing them only need to focus on relevant responsibilities.
+
+5. Dependency Inversion Principle (DIP):
+
+    - The `OrderService` class depends on the abstractions (`IOrderNotificationService`, `IOrderDiscountService`, `IPaymentMethod`) rather than concrete implementations, promoting flexibility and testability.
