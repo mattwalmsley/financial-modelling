@@ -18,7 +18,9 @@ This repository is for educational purposes only and contains only my own work, 
 
 ## Reading List and References
 
-[1] J. Hull, Options, Futures and Other Derivatives. Pearson/Prentice Hall, 2009.
+- [1] J. Hull, Options, Futures and Other Derivatives. Pearson/Prentice Hall, 2009.
+- [2] R. C. Martin and M. Martin, Agile Principles, Patterns, and Practices in C#. Pearson Education, 2006.
+
 
 ## Git Commands
 
