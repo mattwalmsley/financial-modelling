@@ -1037,6 +1037,7 @@ F(t,T,T+0.25) &= 100 - P \\
   - **Currency Swaps**: an interest payment in one currency is exchanged for an interest rate in another currency.
   - **Equity Swaps**: a fixed payment is exchanged for the return on some stock or stock index.
   - **Commodity Swaps**: a fixed payment is exchanged for a payment related to a commodity price.
+    - The non-fixed payment of a commodity swap is often based on an average price over a month/term as this hedges against daily price fluctuations. These average price swaps are often referred to as *Asian swaps*.
 - Historically, the swap market has been an over-the-counter (OTC) market with two main types of participants: **dealers** (investment banks, broker/dealers, etc.) and **end users** (non-financial businesses and individuals).
   - As with most OTC products, counterparty credit risk is a major concern for swaps that are traded over-the-counter.
 - Following the 2008 financial crisis, global regulators transitioned swaps to become more standardised products that could be traded in exchange-like environments.

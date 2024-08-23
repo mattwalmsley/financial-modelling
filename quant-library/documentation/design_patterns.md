@@ -18,6 +18,10 @@
       - [Simple Example: DIP](#simple-example-dip)
       - [Advanced Example: DIP](#advanced-example-dip)
     - [SOLID Principles in Practice](#solid-principles-in-practice)
+  - [Gamma Categorization](#gamma-categorization)
+    - [Creational](#creational)
+    - [Structural](#structural)
+    - [Behavioural](#behavioural)
 
 ## SOLID Design Principles
 
@@ -986,3 +990,24 @@ class Program
 5. Dependency Inversion Principle (DIP):
 
     - The `OrderService` class depends on the abstractions (`IOrderNotificationService`, `IOrderDiscountService`, `IPaymentMethod`) rather than concrete implementations, promoting flexibility and testability.
+
+## Gamma Categorization
+
+Design patterns are typically split into one of the following three categories: *creational*, *structural*, and *behavioural*.
+
+### Creational
+
+- Focus on the creation (construction) of objects.
+- Explicit (constructor) versus implicit (dependency injection, reflection, etc.)
+- Wholesale (single statement) versus piecewise (step-by-step)
+
+### Structural
+
+- Concerned with the structure of code - e.g. class members.
+- Wrappers which mimic the underlying class's interface.
+- Stress the importance of good API design.
+
+### Behavioural
+
+- No central theme to these patterns, each will solve specific problems.
+
