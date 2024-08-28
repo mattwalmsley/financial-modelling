@@ -22,6 +22,16 @@
     - [Creational](#creational)
     - [Structural](#structural)
     - [Behavioural](#behavioural)
+  - [Builder Pattern](#builder-pattern)
+    - [Builder Benefits](#builder-benefits)
+    - [Builder Use Cases](#builder-use-cases)
+    - [Builder Components](#builder-components)
+    - [Builder Pattern Example](#builder-pattern-example)
+  - [Factory Pattern](#factory-pattern)
+    - [Factory Benefits](#factory-benefits)
+    - [Factory Use Cases](#factory-use-cases)
+    - [Factory Components](#factory-components)
+    - [Factory Pattern Example](#factory-pattern-example)
 
 ## SOLID Design Principles
 
@@ -1011,3 +1021,270 @@ Design patterns are typically split into one of the following three categories: 
 
 - No central theme to these patterns, each will solve specific problems.
 
+## Builder Pattern
+
+The Builder Pattern is a design pattern that provides a way to construct complex objects step-by-step. It allows for the construction process to be separated from the actual representation of the object, making it easier to create different representations of an object using the same construction process.
+
+### Builder Benefits
+
+- **Separation of Concerns:**
+  - The Builder Pattern separates the construction logic from the representation of a complex object.
+  - Makes the code easier to manage and understand by isolating construction from representation.
+
+- **Flexibility in Object Construction:**
+  - Allows for creating different representations of an object using the same construction process.
+  - Enables different configurations of an object without modifying the construction code.
+
+- **Immutability:**
+  - Facilitates the creation of immutable objects (if designed this way).
+  - Ensures that once an object is built, it cannot be altered, reducing bugs related to unintended modifications.
+
+- **Enhanced Readability:**
+  - Improves code readability by providing a clear, step-by-step construction process.
+  - Makes it apparent which components are being added and in what order.
+
+- **Encapsulation of Construction Logic:**
+  - Encapsulates complex construction logic within the builder.
+  - Simplifies client code by hiding intricate details of object creation.
+
+- **Ease of Maintenance:**
+  - Changes to the construction process or representation are managed in one place (within the builder or director).
+  - Simplifies maintenance and modification by centralizing construction logic.
+
+### Builder Use Cases
+
+- **Complex Object Creation:**
+  - Suitable for constructing objects with many optional components or configurations.
+  - Example: Creating a configuration object with multiple settings.
+
+- **Different Representations of an Object:**
+  - Useful for building different versions of an object with varying details.
+  - Example: Generating summary and detailed reports using a common construction process.
+
+- **Immutable Objects:**
+  - Ideal for designing objects that should not change after creation.
+  - Example: Creating a settings object where all necessary fields are set during the build process.
+
+- **Constructing Complex Strings:**
+  - Effective for building complex strings or documents with multiple sections.
+  - Example: Creating a formatted email or report with various parts (e.g., subject, body, signature).
+
+- **Fluent Interface Design:**
+  - Supports a fluent interface, allowing method chaining for object construction.
+  - Example: Using a builder with method chaining to construct an object in a clean and readable manner.
+
+- **Encapsulation of Construction Logic:**
+  - Encapsulates intricate construction logic within a builder, keeping it separate from the rest of the code.
+  - Example: Managing complex object creation within a dedicated builder class.
+
+- **Testing and Mocking:**
+  - Simplifies unit testing and mocking by allowing specific configurations of objects.
+  - Example: Creating objects with particular settings for test scenarios.
+
+### Builder Components
+
+1. **Builder**: An interface or abstract class that defines the steps required to build a product.
+2. **ConcreteBuilder**: A class that implements the `Builder` interface and constructs the product.
+3. **Product**: The complex object that is being constructed.
+4. **Director**: A class that constructs an object using the `Builder` interface. It directs the building process.
+
+### Builder Pattern Example
+
+Let's say we want to construct a report with different sections such as a title, introduction, body, and conclusion. Using the Builder Pattern, we can build this report step-by-step with various configurations.
+
+```csharp
+using System.Text;
+
+// Product
+public class Report
+{
+    private StringBuilder _stringBuilder = new StringBuilder();
+
+    public void AddTitle(string title) => _stringBuilder.AppendLine($"Title: {title}");
+    public void AddIntroduction(string introduction) => _stringBuilder.AppendLine($"Introduction: {introduction}");
+    public void AddBody(string body) => _stringBuilder.AppendLine($"Body: {body}");
+    public void AddConclusion(string conclusion) => _stringBuilder.AppendLine($"Conclusion: {conclusion}");
+
+    public override string ToString() => _stringBuilder.ToString();
+}
+
+// Builder Interface
+public interface IReportBuilder
+{
+    void SetTitle(string title);
+    void SetIntroduction(string introduction);
+    void SetBody(string body);
+    void SetConclusion(string conclusion);
+    Report Build();
+}
+
+// Concrete Builder
+public class DetailedReportBuilder : IReportBuilder
+{
+    private Report _report = new Report();
+
+    public void SetTitle(string title) => _report.AddTitle(title);
+    public void SetIntroduction(string introduction) => _report.AddIntroduction(introduction);
+    public void SetBody(string body) => _report.AddBody(body);
+    public void SetConclusion(string conclusion) => _report.AddConclusion(conclusion);
+
+    public Report Build() => _report;
+}
+
+// Director
+public class ReportDirector
+{
+    private readonly IReportBuilder _builder;
+
+    public ReportDirector(IReportBuilder builder)
+    {
+        _builder = builder;
+    }
+
+    public void ConstructFullReport()
+    {
+        _builder.SetTitle("Annual Report");
+        _builder.SetIntroduction("This is the introduction to the annual report.");
+        _builder.SetBody("This section contains the main body of the report.");
+        _builder.SetConclusion("This is the conclusion of the report.");
+    }
+}
+
+// Client Code
+class Program
+{
+    static void Main(string[] args)
+    {
+        IReportBuilder builder = new DetailedReportBuilder();
+        ReportDirector director = new ReportDirector(builder);
+
+        director.ConstructFullReport();
+        Report report = builder.Build();
+
+        Console.WriteLine(report);
+    }
+}
+```
+
+## Factory Pattern
+
+The Factory Pattern is a design pattern used to create objects without specifying the exact class of the object that will be created. It provides a way to delegate the instantiation logic to a factory method or class, allowing for more flexible and maintainable object creation.
+
+### Factory Benefits
+
+- **Encapsulation of Object Creation:**
+  - Encapsulates the instantiation logic of objects in a factory method or class.
+  - Hides the details of the object's creation from the client code.
+
+- **Flexibility:**
+  - Allows for the creation of objects based on varying conditions or configurations.
+  - Makes it easier to introduce new types of objects without changing the client code.
+
+- **Decoupling:**
+  - Reduces the coupling between the client code and the concrete classes.
+  - The client code interacts with an abstract factory or interface rather than specific implementations.
+
+- **Centralized Object Creation:**
+  - Centralizes the logic for creating objects, making it easier to manage and update.
+  - Facilitates changes to object creation logic in one place without affecting the client code.
+
+- **Promotes Open/Closed Principle:**
+  - Supports the Open/Closed Principle by allowing the system to be open for extension (new products) but closed for modification (existing client code).
+
+### Factory Use Cases
+
+- **Complex Object Creation:**
+  - Useful when creating objects involves complex initialization or configuration.
+  - Example: Creating different types of documents (e.g., PDFs, Word documents) with specific formats.
+
+- **Object Creation Based on Input:**
+  - Ideal for creating objects based on user input or other runtime conditions.
+  - Example: Creating different shapes (e.g., circles, squares) based on user selection in a drawing application.
+
+- **Polymorphic Object Creation:**
+  - Useful when different classes share a common interface or base class, and the specific class to instantiate is determined at runtime.
+  - Example: Creating different types of vehicles (e.g., cars, trucks) based on user input.
+
+- **Code Decoupling:**
+  - Helps in decoupling the code that uses the objects from the code that creates the objects.
+  - Example: Separating the object creation logic from the business logic that uses the objects.
+
+- **Testing and Mocking:**
+  - Facilitates testing and mocking by providing a way to easily swap out concrete implementations with mock objects or stubs.
+  - Example: Using a factory to create mock services for unit testing.
+
+### Factory Components
+
+- **Factory Interface:**
+  - Defines a method for creating objects. The method typically returns an abstract type or interface.
+
+- **ConcreteFactory:**
+  - Implements the factory interface and provides the logic for creating concrete objects.
+
+- **Product Interface:**
+  - Defines the interface or abstract class that the products must adhere to.
+
+- **ConcreteProduct:**
+  - Implements the product interface or extends the abstract class. These are the actual objects created by the factory.
+
+### Factory Pattern Example
+
+Consider a scenario where we need to create different types of notifications, such as email and SMS notifications. We can use the Factory Pattern to create these notifications based on user preferences.
+
+```csharp
+// Product Interface
+public interface INotification
+{
+    void Send(string message);
+}
+
+// Concrete Products
+public class EmailNotification : INotification
+{
+    public void Send(string message) => Console.WriteLine($"Sending email with message: {message}");
+}
+
+public class SmsNotification : INotification
+{
+    public void Send(string message) => Console.WriteLine($"Sending SMS with message: {message}");
+}
+
+// Factory Interface
+public interface INotificationFactory
+{
+    INotification CreateNotification();
+}
+
+// Concrete Factories
+public class EmailNotificationFactory : INotificationFactory
+{
+    public INotification CreateNotification() => new EmailNotification();
+}
+
+public class SmsNotificationFactory : INotificationFactory
+{
+    public INotification CreateNotification() => new SmsNotification();
+}
+
+// Client Code
+class Program
+{
+    static void Main(string[] args)
+    {
+        INotificationFactory factory;
+        string notificationType = "Email"; // This could be input from user or configuration
+
+        if (notificationType == "Email")
+        {
+            factory = new EmailNotificationFactory();
+        }
+        else
+        {
+            factory = new SmsNotificationFactory();
+        }
+
+        INotification notification = factory.CreateNotification();
+        notification.Send("Hello, Factory Pattern!");
+    }
+}
+```
