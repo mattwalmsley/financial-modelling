@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform", "Platform\Platfo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform.Tests", "Platform.Tests\Platform.Tests.csproj", "{D1F7E0E4-2298-46EA-8C9D-24193A6FAB36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricerServer", "PricerServer\PricerServer.csproj", "{A2392189-755B-4844-A04F-2A8101D4483D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{8D4D3C5A-C7D3-4F19-BD38-DE8073C1BFDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{D1F7E0E4-2298-46EA-8C9D-24193A6FAB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1F7E0E4-2298-46EA-8C9D-24193A6FAB36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1F7E0E4-2298-46EA-8C9D-24193A6FAB36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2392189-755B-4844-A04F-2A8101D4483D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2392189-755B-4844-A04F-2A8101D4483D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2392189-755B-4844-A04F-2A8101D4483D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2392189-755B-4844-A04F-2A8101D4483D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D4D3C5A-C7D3-4F19-BD38-DE8073C1BFDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D4D3C5A-C7D3-4F19-BD38-DE8073C1BFDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D4D3C5A-C7D3-4F19-BD38-DE8073C1BFDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D4D3C5A-C7D3-4F19-BD38-DE8073C1BFDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
