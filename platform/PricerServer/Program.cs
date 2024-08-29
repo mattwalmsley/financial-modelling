@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using PricerServer.Factories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
+builder.Services.AddSingleton<IQuoteRequestFactory, QuoteRequestFactory>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PricerServer.Builders;
-using PricerServer.Models;
+using PricerServer.Factories;
+using PricerServer.Models.QuoteRequests;
 
 namespace PricerServer.Controllers;
 
@@ -8,17 +8,17 @@ namespace PricerServer.Controllers;
 [ApiController]
 public class QuoteRequestController : ControllerBase
 {
-    [HttpPost("create-option")]
-    public ActionResult CreateOptionQuote([FromBody] OptionQuoteRequest request)
-    {
-        var builder = new OptionQuoteRequestBuilder()
-            .SetSpotPrice(request.SpotPrice)
-            .SetStrikePrice(request.StrikePrice)
-            .SetRiskFreeRate(request.RiskFreeRate)
-            .SetVolatility(request.Volatility)
-            .SetTimeToMaturity(request.TimeToMaturity);
+    private readonly IQuoteRequestFactory _quoteRequestFactory;
 
-        var quoteRequest = builder.GetQuoteRequest();
+    public QuoteRequestController(IQuoteRequestFactory quoteRequestFactory)
+    {
+        _quoteRequestFactory = quoteRequestFactory;
+    }
+
+    [HttpPost("create-quote")]
+    public ActionResult CreateQuote([FromQuery] string type, [FromBody] IQuoteRequest request)
+    {
+        var quoteRequest = _quoteRequestFactory.CreateQuoteRequest(type, request);
         var price = quoteRequest.GetPrice();
 
         return Ok(new
