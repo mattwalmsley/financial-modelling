@@ -14,6 +14,11 @@
       - [Ternary Conditional Operator](#ternary-conditional-operator)
     - [Functions](#functions)
       - [Built-in Functions](#built-in-functions)
+      - [Lambda Functions](#lambda-functions)
+    - [Loops](#loops)
+      - [`while` Loops](#while-loops)
+      - [`for` Loops](#for-loops)
+    - [Exception Handling](#exception-handling)
   - [Data Types](#data-types)
     - [Integers](#integers)
     - [Floating Points](#floating-points)
@@ -242,6 +247,219 @@ Python has many built-in functions that are readily available for use. Some comm
     ```
 
 For a comprehensive list of built-in functions in Python, visit the official documentation: [Python Built-in Functions](https://docs.python.org/3/library/functions.html).
+
+#### Lambda Functions
+
+A **lambda function** is a small anonymous function defined using the `lambda` keyword. It can take any number of arguments but has only one expression. Lambda functions are useful when you need a short, throwaway function.
+
+```python
+lambda arguments: expression
+```
+
+The function evaluates the expression and returns the result.
+
+```python
+# Lambda to add two numbers
+add = lambda x, y: x + y
+
+# Calling the lambda function
+print(add(3, 5))  # Output: 8
+```
+
+Lambda functions are commonly used with higher-order functions such as `map()`, `filter()`, and `sorted()`.
+
+```python
+numbers = [1, 2, 3, 4]
+squares = list(map(lambda x: x ** 2, numbers))
+
+print(squares)  # Output: [1, 4, 9, 16]
+```
+
+```python
+numbers = [1, 2, 3, 4, 5, 6]
+even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+
+print(even_numbers)  # Output: [2, 4, 6]
+```
+
+### Loops
+
+Loops in Python are used to iterate over a block of code multiple times. The two main types of loops are `while` loops and `for` loops.
+
+#### `while` Loops
+
+A `while` loop repeatedly executes a block of code as long as the specified condition is `True`.
+
+```python
+while condition:
+    # code to execute
+
+i = 1
+while i <= 5:
+    print(i)
+    i += 1
+# This will output:
+# 1
+# 2
+# 3
+# 4
+# 5
+```
+
+A `while True` loop is an infinite loop because the condition is always True. It keeps running until a break statement is encountered, which is often used to exit the loop based on some condition.
+
+```python
+while True:
+    user_input = input("Enter something (or 'q' to quit): ")
+    if user_input == 'q':
+        break
+    print(f"You entered: {user_input}")
+# In this example, the loop will continue indefinitely until the user enters 'q'.
+```
+
+The `break` statement exits the loop prematurely when a certain condition is met.
+
+```python
+i = 1
+while i <= 5:
+    if i == 3:
+        break
+    print(i)
+    i += 1
+# Output:
+# 1
+# 2
+```
+
+The `continue` statement skips the rest of the code in the current iteration and moves to the next iteration.
+
+```python
+i = 0
+while i < 5:
+    i += 1
+    if i == 3:
+        continue
+    print(i)
+# Output:
+# 1
+# 2
+# 4
+# 5
+```
+
+#### `for` Loops
+
+A `for` loop iterates over a sequence (like a `list`, `tuple`, or `string`) or any iterable object. It repeats the block of code once for each item in the sequence.
+
+```python
+for variable in iterable:
+    # code to execute
+
+for i in range(1, 6):
+    print(i)
+# Output:
+# 1
+# 2
+# 3
+# 4
+# 5
+```
+
+You can use `break` to exit a for loop early.
+
+``` python
+for i in range(1, 6):
+    if i == 3:
+        break
+    print(i)
+# Output:
+# 1
+# 2
+```
+
+The `continue` statement skips the current iteration and moves to the next one.
+
+```python
+for i in range(1, 6):
+    if i == 3:
+        continue
+    print(i)
+# Output:
+# 1
+# 2
+# 4
+# 5
+```
+
+Both `while` and `for` loops can have an `else` clause. The `else` block executes if the loop finishes normally (i.e., without hitting a break).
+
+```python
+for i in range(1, 4):
+    print(i)
+else:
+    print("Loop finished")
+# Output:
+# 1
+# 2
+# 3
+# Loop finished
+
+i = 1
+while i <= 3:
+    print(i)
+    i += 1
+else:
+    print("Loop finished")
+# Output:
+# 1
+# 2
+# 3
+# Loop finished
+```
+
+### Exception Handling
+
+The `try`, `except`, `else`, `finally` blocks in Python provide a powerful way to handle exceptions and ensure that certain code runs regardless of whether an error occurs. They allow for structured error handling and clean up of resources.
+
+1. **`try` block**: Contains code that may potentially raise an exception.
+2. **`except` block**: This handles the exception if one occurs in the `try` block.
+3. **`else` block** (Optional): Runs if no exceptions are raised in the `try` block.
+4. **`finally` block** (Optional): Always runs, regardless of whether an exception was raised or not. Typically used for clean-up tasks.
+
+```python
+try:
+    # Code that might raise an exception
+except ExceptionType:
+    # Code that runs if the specific exception occurs
+else:
+    # Code that runs if no exceptions were raised
+finally:
+    # Code that always runs
+
+try:
+    result = 10 / 2  # This will not raise an exception
+except ZeroDivisionError:
+    print("Cannot divide by zero.")
+else:
+    print(f"Division successful, result is {result}")
+finally:
+    print("This always runs.")
+# Output:
+# Division successful, result is 5.0
+# This always runs.
+
+try:
+    result = 10 / 0  # This raises a ZeroDivisionError
+except ZeroDivisionError:
+    print("Cannot divide by zero.")
+else:
+    print(f"Division successful, result is {result}")
+finally:
+    print("This always runs.")
+# Output:
+# Cannot divide by zero.
+# This always runs.
+```
 
 ## Data Types
 
