@@ -18,6 +18,7 @@
     - [Loops](#loops)
       - [`while` Loops](#while-loops)
       - [`for` Loops](#for-loops)
+      - [Loops with `else`](#loops-with-else)
     - [Exception Handling](#exception-handling)
   - [Data Types](#data-types)
     - [Integers](#integers)
@@ -391,11 +392,15 @@ for i in range(1, 6):
 # 5
 ```
 
+#### Loops with `else`
+
 Both `while` and `for` loops can have an `else` clause. The `else` block executes if the loop finishes normally (i.e., without hitting a break).
 
 ```python
 for i in range(1, 4):
     print(i)
+    if i % 5 == 0:
+        break
 else:
     print("Loop finished")
 # Output:
@@ -403,6 +408,16 @@ else:
 # 2
 # 3
 # Loop finished
+
+for i in range(1, 4):
+    print(i)
+    if i % 2 == 0:
+        break
+else:
+    print("Loop finished")
+# Output:
+# 1
+# 2
 
 i = 1
 while i <= 3:
@@ -415,6 +430,18 @@ else:
 # 2
 # 3
 # Loop finished
+
+i = 1
+while i <= 3:
+    print(i)
+    if i % 2 == 0:
+        break
+    i += 1
+else:
+    print("Loop finished")
+# Output:
+# 1
+# 2
 ```
 
 ### Exception Handling
