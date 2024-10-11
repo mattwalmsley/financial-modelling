@@ -17,7 +17,7 @@
 
 ## Introduction to Derivative Products
 
-In commodities trading, forward contracts, futures , swaps, and options are used to speculate and secure prices for delivery at a future point in time, offering price certainty and risk management. These products are discussed more generally in sections: [Forwards, Futures, and Swaps](./7_forwards_futures_swaps.md) as well as [Options](./9_options.md)
+In commodities trading, forward contracts, futures , swaps, and options are used to speculate and secure prices for delivery at a future point in time, offering price certainty and risk management. These products are discussed more generally in sections: [Forwards, Futures, and Swaps](../7_forwards_futures_swaps.md) as well as [Options](../9_options.md)
 
 ### Forward Contracts
 
