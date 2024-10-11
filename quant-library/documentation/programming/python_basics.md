@@ -20,6 +20,16 @@
       - [`for` Loops](#for-loops)
       - [Loops with `else`](#loops-with-else)
     - [Exception Handling](#exception-handling)
+    - [Classes](#classes)
+      - [Creating an Instance (Object)](#creating-an-instance-object)
+      - [Class Attributes vs Instance Attributes](#class-attributes-vs-instance-attributes)
+      - [Methods](#methods)
+      - [Special Methods (*Dunder* Methods)](#special-methods-dunder-methods)
+      - [Inheritance](#inheritance)
+      - [The `super()` Function](#the-super-function)
+      - [Encapsulation and Access Modifiers](#encapsulation-and-access-modifiers)
+        - [Accessing Private Attributes](#accessing-private-attributes)
+      - [Class and Static Methods](#class-and-static-methods)
   - [Data Types](#data-types)
     - [Integers](#integers)
     - [Floating Points](#floating-points)
@@ -486,6 +496,219 @@ finally:
 # Output:
 # Cannot divide by zero.
 # This always runs.
+```
+
+### Classes
+
+In Python, classes are used to create user-defined data structures. A class defines a blueprint for objects, encapsulating data (attributes) and behaviour (methods). Objects created from a class are called **instances**.
+
+Classes in Python are defined using the `class` keyword, followed by the class name and a colon. By convention, class names are written in *PascalCase*.
+
+```python
+class ClassName:
+    # Class attributes (optional)
+    
+    # Constructor
+    def __init__(self, parameters):
+        # Instance attributes
+        self.attribute = value
+    
+    # Methods
+    def method_name(self, parameters):
+        # Code for method
+
+# Example
+class Dog:
+    # Constructor to initialize the class
+    def __init__(self, name, breed):
+        self.name = name  # Instance attribute
+        self.breed = breed
+
+    # Method to describe the dog
+    def describe(self):
+        return f"{self.name} is a {self.breed}."
+
+    # Method to make the dog bark
+    def bark(self):
+        return f"{self.name} says woof!"
+```
+
+- `__init__` is the constructor method used to initialize the `Dog` class with attributes `name` and `breed`.
+- `describe` and `bark` are methods that provide behaviour for `Dog` instances.
+
+#### Creating an Instance (Object)
+
+To create an instance of a class, call the class using parentheses `()`. This triggers the `__init__` method.
+
+```python
+dog1 = Dog("Buddy", "Golden Retriever")
+print(dog1.describe())  # Output: Buddy is a Golden Retriever.
+print(dog1.bark())      # Output: Buddy says woof!
+```
+
+- `dog1` is an instance of the `Dog` class.
+- The methods of `Dog` using the dot notation `dog1.describe()`
+
+#### Class Attributes vs Instance Attributes
+
+- Instance attributes are unique to each instance (object) and are defined inside the `__init__` method using `self`.
+- Class attributes are shared among all instances of a class. They are defined directly inside the class body.
+
+```python
+class Dog:
+    species = "Canine"  # Class attribute, shared by all instances.
+
+    def __init__(self, name):
+        self.name = name  # Instance attribute, unique to each instance.
+
+# Accessing Attributes
+dog1 = Dog("Buddy")
+dog2 = Dog("Max")
+
+print(dog1.species)  # Output: Canine
+print(dog2.species)  # Output: Canine
+print(dog1.name)     # Output: Buddy
+print(dog2.name)     # Output: Max
+```
+
+#### Methods
+
+Methods are functions that are defined inside a class and belong to class instances. They always take self as the first parameter, which refers to the instance calling the method.
+
+```python
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+    
+    # Method to calculate area
+    def area(self):
+        return 3.14 * self.radius ** 2
+
+# Calling Methods
+circle = Circle(5)
+print(circle.area())  # Output: 78.5
+```
+
+#### Special Methods (*Dunder* Methods)
+
+Special methods (also called dunder methods, short for "double underscore") define behaviour for built-in Python operations, such as initialization, representation, addition, and more. They are surrounded by double underscores (e.g., `__init__`, `__str__`, `__add__`).
+
+- `__init__` Constructor method that initializes an object.
+- `__str__` Defines how an object is represented as a string.
+- `__repr__` Provides a formal string representation of the object (often used for debugging).
+
+```python
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+    
+    def __str__(self):
+        return f"'{self.title}' by {self.author}"
+
+    def __repr__(self):
+        return f"Book({self.title}, {self.author})"
+
+# Using Dunder Methods
+book = Book("1984", "George Orwell")
+print(book)            # Output: '1984' by George Orwell
+print(repr(book))      # Output: Book(1984, George Orwell)
+```
+
+#### Inheritance
+
+Inheritance allows a class to inherit attributes and methods from another class. The class that is inherited from is called the parent or superclass, and the class that inherits is called the child or subclass.
+
+```python
+class ParentClass:
+    # Parent class code
+
+class ChildClass(ParentClass):
+    # Child class code
+
+# Example
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        return f"{self.name} makes a sound."
+
+class Dog(Animal):  # Dog inherits from Animal
+    def speak(self):
+        return f"{self.name} barks."
+
+# Using Inheritance
+dog = Dog("Buddy")
+print(dog.speak())  # Output: Buddy barks
+# Here, the Dog class overrides the speak method from the Animal class.
+```
+
+#### The `super()` Function
+
+The `super()` function allows you to call methods from the parent class in a child class. This is useful for extending or modifying behaviour in subclasses without completely overriding the parent method.
+
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name)  # Call the parent constructor
+        self.breed = breed
+# super() is used to call the __init__ method of the parent class Animal.
+```
+
+#### Encapsulation and Access Modifiers
+
+Encapsulation is the concept of bundling data (attributes) and methods together and restricting access to certain components of an object.
+
+- Public attributes/methods: Accessible from outside the class (default behaviour).
+- Private attributes/methods: Prefixed with a double underscore (__), making them inaccessible from outside the class.
+
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name  # Public attribute
+        self.__age = age  # Private attribute
+    
+    def get_age(self):
+        return self.__age
+
+person = Person("Alice", 30)
+print(person.name)     # Output: Alice
+print(person.get_age())  # Output: 30
+```
+
+##### Accessing Private Attributes
+
+Private attributes cannot be directly accessed from outside the class. However, Python allows you to access private attributes using a **name-mangling** mechanism:
+
+```python
+print(person._Person__age)  # Output: 30
+```
+
+#### Class and Static Methods
+
+Utility methods related to the class that do not modify its state.
+
+- Class methods: Defined using the `@classmethod` decorator and take the class (cls) as the first parameter. They can modify class-level attributes.
+- Static methods: Defined using the `@staticmethod` decorator and do not take self or cls as a parameter.
+
+```python
+class MathOperations:
+    @staticmethod
+    def add(a, b):
+        return a + b
+    
+    @classmethod
+    def multiply(cls, a, b):
+        return a * b
+
+# Using Class and Static Methods
+print(MathOperations.add(5, 3))       # Output: 8
+print(MathOperations.multiply(5, 3))  # Output: 15
 ```
 
 ## Data Types
