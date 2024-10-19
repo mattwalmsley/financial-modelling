@@ -143,7 +143,7 @@ $$V(T) = S(T) - K_{\tau}$$
 $$-V(T) = K_{\tau} - S(T)$$
 - Graphically, this can be represented as follows:
 
-    ![Forward Payoff](images/forward-payoff.png "Forward Payoff")
+    ![Forward Payoff](../images/forward-payoff.png "Forward Payoff")
 
 ### Pricing Contracts on an Underlying Asset with No Income
 
@@ -1070,7 +1070,7 @@ $$(t_{i}-t_{i-1})L_{i-1}N$$
 
 #### Swap Cash Flows
 
-![Swap Cash Flows](images/swap-cash-flows.png "Swap Cash Flows")
+![Swap Cash Flows](../images/swap-cash-flows.png "Swap Cash Flows")
 
 #### Interest Rate Swaps Example
 
@@ -1426,4 +1426,4 @@ y(4) &= -\frac{\log(0.898)}{4} \\\\
 
 - The final curve can then be plotted as follows:
 
-  ![LIBOR Curve](images/libor-curve-example.png "LIBOR Curve")
+  ![LIBOR Curve](../images/libor-curve-example.png "LIBOR Curve")

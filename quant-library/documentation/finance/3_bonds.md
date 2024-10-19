@@ -17,7 +17,7 @@
 - The price of the bond represents the amount loaned to the bond issuer by the bond holder - i.e. the debt.
 - The price of a bond (i.e. the principal of the loan) is called the **par value** or **face value**.
 
-  ![Bond Process](images/bond-process.png "Bond Process")
+  ![Bond Process](../images/bond-process.png "Bond Process")
 
 - Bonds can be bought and sold after issue on the markets and will have a **market value** - this is rarely the same as the par value.
 
@@ -53,7 +53,7 @@ $$P = \sum_{j=1}^{J}\frac{c_j}{(1 + \frac{y}{m})^{mT_j}}$$
 - A yield curve quantifies the relationship between the return of a fixed income security and its term.
 - On any single yield curve, the different instruments displayed should be *equivalent* (have the same credit quality), differing only by maturity. For example, yields on US Treasury Bonds should not be displayed on the same yield curve as yields for highly distressed corporate bonds.
 
-  ![Typical Yield Curve](images/yield-curve.png "Typical Yield Curve")
+  ![Typical Yield Curve](../images/yield-curve.png "Typical Yield Curve")
 
 - **N.B.** The commonly referenced US Treasury yield curve is constructed using yields to maturity and is ***not*** a spot rate curve.
 

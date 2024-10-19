@@ -137,14 +137,14 @@ S(T) - K &S(T) > K \\
 \end{aligned}
 ```
 
-  ![Long Call Profit](images/long-call.png "Long Call Profit")
+  ![Long Call Profit](../images/long-call.png "Long Call Profit")
 
 ### Short Call Payoff
 
 - The short call payoff is the negative of the [long call payoff](#long-call-payoff):
 $$-C(S(T),T) = - \text{max}\{0,S(T)-K\}$$
 
-  ![Short Call Profit](images/short-call.png "Short Call Profit")
+  ![Short Call Profit](../images/short-call.png "Short Call Profit")
 
 ### Long Put Payoff
 
@@ -164,14 +164,14 @@ K - S(T) &S(T) < K \\
 \end{aligned}
 ```
 
-  ![Long Put Profit](images/long-put.png "Long Put Profit")
+  ![Long Put Profit](../images/long-put.png "Long Put Profit")
 
 ### Short Put Payoff
 
 - The short put payoff is the negative of the [long put payoff](#long-put-payoff):
 $$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
 
-  ![Short Put Profit](images/short-put.png "Short Put Profit")
+  ![Short Put Profit](../images/short-put.png "Short Put Profit")
 
 ## Arbitrage Bounds on Option Prices
 
@@ -292,7 +292,7 @@ C_{A}(S(t),t) &\geq C(S(t),t) \\
 - The market value of an American style call is always more than the intrinsic value.
   - This is because the intrinsic value is the amount that will be the realized from exercising the option early.
 
-    ![American Long Call Profit](images/american-long-call.png "American Long Call Profit")
+    ![American Long Call Profit](../images/american-long-call.png "American Long Call Profit")
   - Therefore American options will never be exercised early as their market value (purple line) is greater than their intrinsic value (red and green) - selling the option on the market will return more than exercising the option.
 - For an American call on a non-dividend paying stock, the early exercise functionality is essentially worthless as shown so an American option will be worth the same as a European style option.
 
@@ -315,7 +315,7 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
 
 - This relationship can be shown diagrammatically as follows:
 
-    ![Put-Call Parity](images/put-call-parity.png "Put-Call Parity")
+    ![Put-Call Parity](../images/put-call-parity.png "Put-Call Parity")
 
 ### Deriving the Put Call Parity Using Arbitrage principles
 
@@ -379,7 +379,7 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
   - Also assume that the interest rate $r$ has the same implicit unit of time and compounding period that the time unit for the binomial model has.
   - Therefore a cash sum with value $K$ invested at the risk-free rate $r$ at time $t=0$ will be worth $K(1+r)$ at time $t=1$, regardless of the value of $S_{1}$
 
-![One-Step Binomial Model](images/one-step-binomial-model.png "One-Step Binomial Model")
+![One-Step Binomial Model](../images/one-step-binomial-model.png "One-Step Binomial Model")
 
 #### Example: One-Step Binomial Model
 
@@ -583,7 +583,7 @@ D_{0} &= \left[\frac{D_{1}}{1+r} \right] \\\\
 - A derivative asset, with the stock as the underlying asset and expiration $t=2$, will have a value $D_{t}$ at time $t$.
   - The value $D_{2}$ is the payoff of the derivative, but the earlier values $D_{1}$ and $D_{0}$ will be determined through arbitrage principles.
 
-![Two-Step Binomial Model](images/two-step-binomial-model.png "Two-Step Binomial Model")
+![Two-Step Binomial Model](../images/two-step-binomial-model.png "Two-Step Binomial Model")
 
 - To calculate the arbitrage value of $D_{1}(+)$, the values for $D_{2}(++)$ and $D_{2}(+-)$ are discounted and then the risk neutral expectation is taken.
 - Similarly, $D_{1}(-)$ is the risk neutral expectation of the discounted values of $D_{2}(+-)$ and $D_{2}(--)$.
@@ -688,7 +688,7 @@ D_{0} &= E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right] \\\
   - $D_{3}(+--)$
   - $D_{3}(---)$
 
-![Full Binomial Model](images/full-binomial-model.png "Full Binomial Model")
+![Full Binomial Model](../images/full-binomial-model.png "Full Binomial Model")
 
 - A similar procedure to the two-step case is used to determine $D_{0}$, the fair value of the derivative at time $t=0$, resulting in the following formula:
 
@@ -1265,7 +1265,7 @@ d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left
     - Underlying stock spot price $S=100$
     - Strike price (ATM) $K=100$
     - Time to expiry (years) $T=1$
-    - Current volatility $\sigma = 0.1$ 
+    - Current volatility $\sigma = 0.1$
     - Risk-free interest rate $r=0.05$
 
 ```math

@@ -94,7 +94,7 @@ Exotic options differ from standard American and European options, featuring uni
 
 These involve a standard option that can be either cancelled (knock-out) or activated (knock-in) if the underlying asset's price hits a certain level, known as a barrier or trigger. Barriers can be standard (placed out-of-the-money) or reverse (placed in-the-money).
 
-![Barrier Options](images/barrier-options.png "Barrier Options")
+![Barrier Options](../../images/barrier-options.png "Barrier Options")
 
 #### Spread Options
 

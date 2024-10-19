@@ -42,7 +42,7 @@
 - Applying stochastic processes to finance can be done by denoting $S(t)$ as the price of an asset at time $t$ where $t \geq 0$. Whilst $S(0)$ is known, $S(t)$ will evolve over time and take a random/uncertain path such that $S(t)$ will be a collection of random values.
   - For times where $t \geq 0$, the value $S(t)$ is said to be a stochastic process.
 
-    ![Stochastic Processes](images/stochastic-processes.png "Stochastic Processes")
+    ![Stochastic Processes](../images/stochastic-processes.png "Stochastic Processes")
 
 ## Formal Definitions
 
@@ -98,7 +98,7 @@ $$f(x) = \frac{1}{\sqrt{2 \pi {\sigma}^{2}}}e^{-\frac{(x- \mu)^{2}}{2 {\sigma}^{
 - **Fat-tailed** distributions are probability distributions with densities that decay to 0 slower than exponentially and typically, will decay algebraically by $\frac{1}{x^{k}}$.
   - For example, the density of the [Student T-Distribution](https://www.investopedia.com/terms/t/tdistribution.asp) with $\nu$ degrees of freedom decays by $\frac{1}{|x|^{\nu + 1}} \text{ as } x \rightarrow \plusmn \infty$.
 
-  ![Normal Distribution vs Fat-Tailed T-Distribution](images/t-distribution.png "Normal Distribution vs Fat-Tailed T-Distribution")
+  ![Normal Distribution vs Fat-Tailed T-Distribution](../images/t-distribution.png "Normal Distribution vs Fat-Tailed T-Distribution")
 
 - As shown, outlier values of x are much more likely with fat-tailed distributions.
 
@@ -109,7 +109,7 @@ $$f(x) = \frac{1}{\sqrt{2 \pi {\sigma}^{2}}}e^{-\frac{(x- \mu)^{2}}{2 {\sigma}^{
 - If a random sample $\{x_{i}\}_{i=1}^{N}$ is from a normal distribution, the its normal q-q plot will resemble a straight line.
 - For a fat-tailed distribution, the q-q plot will deviate from resembling a straight line at the extreme/outlier values:
 
-  ![Normal Distribution vs Fat-Tailed T-Distribution Q-Q Plot](images/t-distribution-q-q.png "Normal Distribution vs Fat-Tailed T-Distribution Q-Q Plot")
+  ![Normal Distribution vs Fat-Tailed T-Distribution Q-Q Plot](../images/t-distribution-q-q.png "Normal Distribution vs Fat-Tailed T-Distribution Q-Q Plot")
 
 ### Moments of a Distribution
 
@@ -232,7 +232,7 @@ r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
   - The starting point is level 0.
   - The levels are assumed to be a range of integers $...,-2,-1,0,1,2,...$
 
-  ![Random Walks](images/random-walk.png "Random Walks")
+  ![Random Walks](../images/random-walk.png "Random Walks")
 
 - Let the probability of a move up (heads) be $p$ and the probability of a move down (tails) is $q=1-p$:
 
