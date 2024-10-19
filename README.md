@@ -6,15 +6,16 @@ This repository is for educational purposes only and contains only my own work, 
 
 ## Documentation
 
-- [Introduction](quant-library/documentation/1_introduction.md)
-- [Interest Rates](quant-library/documentation/2_interest-rates.md)
-- [Bonds](quant-library/documentation/3_bonds.md)
-- [Equities](quant-library/documentation/4_equities.md)
-- [Commodities](quant-library/documentation/5_commodities.md)
-- [Arbitrage](quant-library/documentation/6_arbitrage.md)
-- [Forwards, Futures, and Swaps](quant-library/documentation/7_forwards_futures_swaps.md)
-- [Stochastic Processes](quant-library/documentation/8_stochastic-processes.md)
-- [Options](quant-library/documentation/9_options.md)
+- [Introduction](quant-library/documentation/finance/1_introduction.md)
+- [Interest Rates](quant-library/documentation/finance/2_interest-rates.md)
+- [Bonds](quant-library/documentation/finance/3_bonds.md)
+- [Equities](quant-library/documentation/finance/4_equities.md)
+- [Commodities](quant-library/documentation/finance/5_commodities.md)
+  - [Commodity Derivatives](quant-library/documentation/finance/commodities/commodity_derivatives.md)
+- [Arbitrage](quant-library/documentation/finance/6_arbitrage.md)
+- [Forwards, Futures, and Swaps](quant-library/documentation/finance/7_forwards_futures_swaps.md)
+- [Stochastic Processes](quant-library/documentation/finance/8_stochastic-processes.md)
+- [Options](quant-library/documentation/finance/9_options.md)
 
 ## Reading List and References
 
