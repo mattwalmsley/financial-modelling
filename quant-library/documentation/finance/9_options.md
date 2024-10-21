@@ -444,7 +444,6 @@ $$
 \Delta uS_{0} - D_{1}(+) &= \Delta dS_{0} - D_{1}(-) \\\\
 \therefore \Delta &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}
 \end{aligned}
-
 $$
 
 $$
@@ -820,7 +819,7 @@ $$
 - Therefore, the value of $S^{(n)} \left( \frac{k}{n} \right)$ will take either of the following values, each with probability $\frac{1}{2}$:
   - $S^{(n)} \left( \frac{k}{n} \right) = uS^{(n)} \left( \frac{k-1}{n} \right)$ or
   - $S^{(n)} \left( \frac{k}{n} \right) = dS^{(n)} \left( \frac{k-1}{n} \right)$
-- This is exactly a binomial model with steps at discrete times $\frac{k}{n} and number of steps per unit time $n$$.
+- This is exactly a binomial model with steps at discrete times $\frac{k}{n}$ and number of steps per unit time $n$.
   - The binomial model here converges to the origin log-normal price process as the number of steps per unit time goes to infinity $n \to \infty$.
 - Trying to find formulas for option price in the log-normal model by taking the limit as $n \to \infty$ of the binomial call pricing formula will present a problem: the [full binomial model](#the-full-binomial-model) call pricing formula is an expectation in the risk neutral distribution, whereas the convergence of the binomial model to the log-normal model happens in the "real world" distribution.
 - Therefore, to pass the call pricing formula to the limit, the limit of the binomial model in the risk neutral distribution needs to be known as a stochastic process.
