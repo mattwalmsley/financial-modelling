@@ -87,13 +87,13 @@ $$\text{Net Return} = \frac{P(t)-P(t-1)}{P(t-1)}$$
 
 - The weekly gross rate of return can be calculated as follows:
 
-```math
+$$
 \begin{aligned}
 \text{Gross rate of return} &= \frac{P(t=6)-P(t=1)}{P(t=1)} \\\\
 &= \frac{135-124}{124} \\\\
 &= 8.87\%
 \end{aligned}
-```
+$$
 
 #### Example 1: Calculating Weekly Returns from Daily Returns
 

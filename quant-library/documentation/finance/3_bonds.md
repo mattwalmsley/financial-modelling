@@ -95,52 +95,52 @@ $$y(T) = -\frac{\log(d(T))}{T}$$
 - The tenors for the yield curve will be the maturities of the bonds: $T_{1} = 0.5$, $T_{2} = 1$ and $T_{3} = 2$.
 - The market prices of the bonds are used to calibrate the discount factors $d(T_{1})$, $d(T_{2})$ and $d(T_{3})$, or equivalently, the yields $y(T_{1})$, $y(T_{2})$ and $y(T_{3})$.
 
-```math
-P_{1} = d(0.5)(1000)  d(0.5) = \frac{985}{1000} \\ 
-\Longrightarrow \boxed{d(0.5) = 0.985} \\ 
-\text{Using } y(T) = -\frac{\log(d(T))}{T} \\ 
-\Longrightarrow y(0.5) = -\frac{\log(0.985)}{0.5} \\ 
+$$
+P_{1} = d(0.5)(1000)  d(0.5) = \frac{985}{1000} \\
+\Longrightarrow \boxed{d(0.5) = 0.985} \\
+\text{Using } y(T) = -\frac{\log(d(T))}{T} \\
+\Longrightarrow y(0.5) = -\frac{\log(0.985)}{0.5} \\
 \boxed{y(0.5) = 3.0\%}
-```
+$$
 
 - Bond 2 has a semi-annual coupon of 5% so there is a payment in 6 months ($T = 0.5$) and a payment in 1 year ($T = 1$).
 - Using the discount factor $d(0.5)$ to discount the coupon payment in 6 months, and then using the bond price to calibrate the discount factor $d(1)$:
 
-```math
-P_{2} = d(0.5)\left(\frac{10000 \times 5\%}{2}\right) + d(1)\left(\frac{10000 \times 5\%}{2} + 10000\right) \\ 
-d(1) = \frac{10124 - (0.985 \times 250)}{10250} \\ 
-\boxed{d(1) = 0.9637} \\ 
-y(1) = -\frac{\log(0.9637)}{1} \\ 
+$$
+P_{2} = d(0.5)\left(\frac{10000 \times 5\%}{2}\right) + d(1)\left(\frac{10000 \times 5\%}{2} + 10000\right) \\
+d(1) = \frac{10124 - (0.985 \times 250)}{10250} \\
+\boxed{d(1) = 0.9637} \\
+y(1) = -\frac{\log(0.9637)}{1} \\
 \boxed{y(1) = 3.7\%}
-```
+$$
 
 - Similar to bond 2, the discounting equation for the market price of bond 3 is:
 
-```math
+$$
 P_{3} = d(1)(10000 \times 7\%) + d(2)((10000 \times 7\%) + 10000) \\ 
 d(2) = \frac{10507- (0.9637 \times 700)}{10700} \\ 
 \boxed{d(2) = 0.9189} \\ 
 y(2) = -\frac{\log(0.9189)}{2} \\ 
 \boxed{y(2) = 4.2\%}
-```
+$$
 
 - The discount factor for $d(1.5)$ can now be linearly interpolated using the yield curve values $y(1)$ and $y(2)$:
 
-```math
-Using \space d(T) = e^{-y(T)T} \\ 
-d(1.5) = e^{-y(1.5) \times 1.5} \\ 
-y(1.5) = \frac{y(1) + y(2)}{2} \\ 
-\boxed{y(1.5) = 3.95\%} \\ 
-d(1.5) = e^{-(0.0395 \times 1.5)} \\ 
+$$
+Using \space d(T) = e^{-y(T)T} \\
+d(1.5) = e^{-y(1.5) \times 1.5} \\
+y(1.5) = \frac{y(1) + y(2)}{2} \\
+\boxed{y(1.5) = 3.95\%} \\
+d(1.5) = e^{-(0.0395 \times 1.5)} \\
 \boxed{d(1.5) = 0.942}
-```
+$$
 
 - The price of a 2 year bond with a 100,000 USD face value and a 7% coupon paid semi-annually can be calculated as follows:
 
-```math
+$$
 \begin{aligned}
 P_{1.5} &= d(0.5)\left(\frac{100000 \times 7\%}{2}\right) + d(1)\left(\frac{100000 \times 7\%}{2}\right) + d(1.5)\left(\frac{100000 \times 7\%}{2}\right)+ d(2)\left(\frac{100000 \times 7\%}{2} + 100000\right) \\
 &= (0.985 \times 3500) + (0.9637 \times 3500) + (0.942 \times 3500) + (0.9189 \times 103500) \\
 &= \boxed{105,224 \text{ USD}}
 \end{aligned}
-```
+$$
