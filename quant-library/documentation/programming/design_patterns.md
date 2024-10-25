@@ -32,6 +32,12 @@
     - [Factory Use Cases](#factory-use-cases)
     - [Factory Components](#factory-components)
     - [Factory Pattern Example](#factory-pattern-example)
+  - [Prototype Pattern](#prototype-pattern)
+    - [Prototype Benefits](#prototype-benefits)
+    - [Deep Copy vs. Shallow Copy](#deep-copy-vs-shallow-copy)
+    - [Prototype Use Cases](#prototype-use-cases)
+    - [Prototype Pattern Components](#prototype-pattern-components)
+    - [Prototype Pattern Example](#prototype-pattern-example)
 
 ## SOLID Design Principles
 
@@ -74,79 +80,70 @@ public class ActivityLogger
 #### Advanced Example: SRP
 
 ```csharp
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using static System.Console;
-
-namespace DotNetDesignPatternDemos.SOLID.SRP
-{
   // just stores a couple of journal entries and ways of
   // working with them
-  public class Journal
+public class Journal
+{
+  private readonly List<string> _entries = new List<string>();
+
+  private static int _count = 0;
+
+  public int AddEntry(string text)
   {
-    private readonly List<string> _entries = new List<string>();
-
-    private static int _count = 0;
-
-    public int AddEntry(string text)
-    {
-      _entries.Add($"{++_count}: {text}");
-      return _count; // memento pattern!
-    }
-
-    public void RemoveEntry(int index)
-    {
-      _entries.RemoveAt(index);
-    }
-
-    public override string ToString()
-    {
-      return string.Join(Environment.NewLine, _entries);
-    }
-
-    // Save and Load methods break single responsibility principle
-    public void Save(string filename, bool overwrite = false)
-    {
-      File.WriteAllText(filename, ToString());
-    }
-
-    public void Load(string filename)
-    {
-      
-    }
-
-    public void Load(Uri uri)
-    {
-      
-    }
+    _entries.Add($"{++_count}: {text}");
+    return _count; // memento pattern!
   }
 
-  // handles the responsibility of persisting objects
-  public class Persistence
+  public void RemoveEntry(int index)
   {
-    public void SaveToFile(Journal journal, string filename, bool overwrite = false)
-    {
-      if (overwrite || !File.Exists(filename))
-        File.WriteAllText(filename, journal.ToString());
-    }
+    _entries.RemoveAt(index);
   }
 
-  public class Demo
+  public override string ToString()
   {
-    static void Main(string[] args)
-    {
-      var j = new Journal();
-      j.AddEntry("I cried today.");
-      j.AddEntry("I ate a bug.");
-      WriteLine(j);
+    return string.Join(Environment.NewLine, _entries);
+  }
 
-      var p = new Persistence();
-      var filename = @"c:\temp\journal.txt";
-      p.SaveToFile(j, filename);
-      Process.Start(filename);
-    }
+  // Save and Load methods break single responsibility principle
+  public void Save(string filename, bool overwrite = false)
+  {
+    File.WriteAllText(filename, ToString());
+  }
+
+  public void Load(string filename)
+  {
+    
+  }
+
+  public void Load(Uri uri)
+  {
+    
+  }
+}
+
+// handles the responsibility of persisting objects
+public class Persistence
+{
+  public void SaveToFile(Journal journal, string filename, bool overwrite = false)
+  {
+    if (overwrite || !File.Exists(filename))
+      File.WriteAllText(filename, journal.ToString());
+  }
+}
+
+public class Demo
+{
+  static void Main(string[] args)
+  {
+    var j = new Journal();
+    j.AddEntry("I cried today.");
+    j.AddEntry("I ate a bug.");
+    WriteLine(j);
+
+    var p = new Persistence();
+    var filename = @"c:\temp\journal.txt";
+    p.SaveToFile(j, filename);
+    Process.Start(filename);
   }
 }
 ```
@@ -204,167 +201,160 @@ public class PaymentProcessor
 #### Advanced Example: OCP
 
 ```csharp
-using System;
-using System.Collections.Generic;
-using static System.Console;
-
-namespace DotNetDesignPatternDemos.SOLID.OCP
+public enum Color
 {
-  public enum Color
+  Red, Green, Blue
+}
+
+public enum Size
+{
+  Small, Medium, Large, Huge
+}
+
+public class Product
+{
+  public string Name;
+  public Color Color;
+  public Size Size;
+
+  public Product(string name, Color color, Size size)
   {
-    Red, Green, Blue
+    Name = name ?? throw new ArgumentNullException(paramName: nameof(name));
+    Color = color;
+    Size = size;
+  }
+}
+
+public class ProductFilter
+{
+  // let's suppose we don't want ad-hoc queries on products
+  public static IEnumerable<Product> FilterByColor(IEnumerable<Product> products, Color color)
+  {
+    foreach (var p in products)
+      if (p.Color == color)
+        yield return p;
+  }
+  
+  public static IEnumerable<Product> FilterBySize(IEnumerable<Product> products, Size size)
+  {
+    foreach (var p in products)
+      if (p.Size == size)
+        yield return p;
   }
 
-  public enum Size
+  public static IEnumerable<Product> FilterBySizeAndColor(IEnumerable<Product> products, Size size, Color color)
   {
-    Small, Medium, Large, Huge
+    foreach (var p in products)
+      if (p.Size == size && p.Color == color)
+        yield return p;
+  } // state space explosion - the number of possible configurations or states in a system increases exponentially as the number of variables/parameters grows. 
+    // 3 criteria = 7 methods
+
+  // OCP = open for extension but closed for modification
+}
+
+// we introduce two new interfaces that are open for extension
+
+public interface ISpecification<T>
+{
+  bool IsSatisfied(Product p);
+}
+
+public interface IFilter<T>
+{
+  IEnumerable<T> Filter(IEnumerable<T> items, ISpecification<T> spec);
+}
+
+public class ColorSpecification : ISpecification<Product>
+{
+  private Color _color;
+
+  public ColorSpecification(Color color)
+  {
+    _color = color;
   }
 
-  public class Product
+  public bool IsSatisfied(Product p)
   {
-    public string Name;
-    public Color Color;
-    public Size Size;
+    return p.Color == _color;
+  }
+}
 
-    public Product(string name, Color color, Size size)
-    {
-      Name = name ?? throw new ArgumentNullException(paramName: nameof(name));
-      Color = color;
-      Size = size;
-    }
+public class SizeSpecification : ISpecification<Product>
+{
+  private Size _size;
+
+  public SizeSpecification(Size size)
+  {
+    _size = size;
   }
 
-  public class ProductFilter
+  public bool IsSatisfied(Product p)
   {
-    // let's suppose we don't want ad-hoc queries on products
-    public static IEnumerable<Product> FilterByColor(IEnumerable<Product> products, Color color)
-    {
-      foreach (var p in products)
-        if (p.Color == color)
-          yield return p;
-    }
-    
-    public static IEnumerable<Product> FilterBySize(IEnumerable<Product> products, Size size)
-    {
-      foreach (var p in products)
-        if (p.Size == size)
-          yield return p;
-    }
+    return p.Size == _size;
+  }
+}
 
-    public static IEnumerable<Product> FilterBySizeAndColor(IEnumerable<Product> products, Size size, Color color)
-    {
-      foreach (var p in products)
-        if (p.Size == size && p.Color == color)
-          yield return p;
-    } // state space explosion - the number of possible configurations or states in a system increases exponentially as the number of variables/parameters grows. 
-      // 3 criteria = 7 methods
+// combinator
+public class AndSpecification<T> : ISpecification<T>
+{
+  private ISpecification<T> _first, _second;
 
-    // OCP = open for extension but closed for modification
+  public AndSpecification(ISpecification<T> first, ISpecification<T> second)
+  {
+    _first = first ?? throw new ArgumentNullException(paramName: nameof(first));
+    _second = second ?? throw new ArgumentNullException(paramName: nameof(second));
   }
 
-  // we introduce two new interfaces that are open for extension
-
-  public interface ISpecification<T>
+  public bool IsSatisfied(Product p)
   {
-    bool IsSatisfied(Product p);
+    return _first.IsSatisfied(p) && _second.IsSatisfied(p);
   }
+}
 
-  public interface IFilter<T>
+public class BetterFilter : IFilter<Product>
+{
+  public IEnumerable<Product> Filter(IEnumerable<Product> items, ISpecification<Product> spec)
   {
-    IEnumerable<T> Filter(IEnumerable<T> items, ISpecification<T> spec);
+    foreach (var i in items)
+      if (spec.IsSatisfied(i))
+        yield return i;
   }
+}
 
-  public class ColorSpecification : ISpecification<Product>
+public class Demo
+{
+  static void Main(string[] args)
   {
-    private Color _color;
+    var apple = new Product("Apple", Color.Green, Size.Small);
+    var tree = new Product("Tree", Color.Green, Size.Large);
+    var house = new Product("House", Color.Blue, Size.Large);
 
-    public ColorSpecification(Color color)
+    Product[] products = {apple, tree, house};
+
+    // BEFORE
+    var pf = new ProductFilter();
+    WriteLine("Green products (old):");
+    foreach (var p in pf.FilterByColor(products, Color.Green))
+      WriteLine($" - {p.Name} is green");
+
+
+    // vv AFTER
+    var bf = new BetterFilter();
+    WriteLine("Green products (new):");
+    foreach (var p in bf.Filter(products, new ColorSpecification(Color.Green)))
+      WriteLine($" - {p.Name} is green");
+
+    WriteLine("Large products");
+    foreach (var p in bf.Filter(products, new SizeSpecification(Size.Large)))
+      WriteLine($" - {p.Name} is large");
+
+    WriteLine("Large blue items");
+    foreach (var p in bf.Filter(products,
+      new AndSpecification<Product>(new ColorSpecification(Color.Blue), new SizeSpecification(Size.Large)))
+    )
     {
-      _color = color;
-    }
-
-    public bool IsSatisfied(Product p)
-    {
-      return p.Color == _color;
-    }
-  }
-
-  public class SizeSpecification : ISpecification<Product>
-  {
-    private Size _size;
-
-    public SizeSpecification(Size size)
-    {
-      _size = size;
-    }
-
-    public bool IsSatisfied(Product p)
-    {
-      return p.Size == _size;
-    }
-  }
-
-  // combinator
-  public class AndSpecification<T> : ISpecification<T>
-  {
-    private ISpecification<T> _first, _second;
-
-    public AndSpecification(ISpecification<T> first, ISpecification<T> second)
-    {
-      _first = first ?? throw new ArgumentNullException(paramName: nameof(first));
-      _second = second ?? throw new ArgumentNullException(paramName: nameof(second));
-    }
-
-    public bool IsSatisfied(Product p)
-    {
-      return _first.IsSatisfied(p) && _second.IsSatisfied(p);
-    }
-  }
-
-  public class BetterFilter : IFilter<Product>
-  {
-    public IEnumerable<Product> Filter(IEnumerable<Product> items, ISpecification<Product> spec)
-    {
-      foreach (var i in items)
-        if (spec.IsSatisfied(i))
-          yield return i;
-    }
-  }
-
-  public class Demo
-  {
-    static void Main(string[] args)
-    {
-      var apple = new Product("Apple", Color.Green, Size.Small);
-      var tree = new Product("Tree", Color.Green, Size.Large);
-      var house = new Product("House", Color.Blue, Size.Large);
-
-      Product[] products = {apple, tree, house};
-
-      // BEFORE
-      var pf = new ProductFilter();
-      WriteLine("Green products (old):");
-      foreach (var p in pf.FilterByColor(products, Color.Green))
-        WriteLine($" - {p.Name} is green");
-
-
-      // vv AFTER
-      var bf = new BetterFilter();
-      WriteLine("Green products (new):");
-      foreach (var p in bf.Filter(products, new ColorSpecification(Color.Green)))
-        WriteLine($" - {p.Name} is green");
-
-      WriteLine("Large products");
-      foreach (var p in bf.Filter(products, new SizeSpecification(Size.Large)))
-        WriteLine($" - {p.Name} is large");
-
-      WriteLine("Large blue items");
-      foreach (var p in bf.Filter(products,
-        new AndSpecification<Product>(new ColorSpecification(Color.Blue), new SizeSpecification(Size.Large)))
-      )
-      {
-        WriteLine($" - {p.Name} is big and blue");
-      }
+      WriteLine($" - {p.Name} is big and blue");
     }
   }
 }
@@ -413,73 +403,68 @@ public class Penguin : Bird
 #### Advanced Example: LSP
 
 ```csharp
-using static System.Console;
-
-namespace DotNetDesignPatternDemos.SOLID.LiskovSubstitutionPrinciple
+// using a classic example
+public class Rectangle
 {
-  // using a classic example
-  public class Rectangle
+  //public int Width { get; set; }
+  //public int Height { get; set; }
+
+  public virtual int Width { get; set; }
+  public virtual int Height { get; set; }
+
+  public Rectangle()
   {
-    //public int Width { get; set; }
-    //public int Height { get; set; }
-
-    public virtual int Width { get; set; }
-    public virtual int Height { get; set; }
-
-    public Rectangle()
-    {
-      
-    }
-
-    public Rectangle(int width, int height)
-    {
-      Width = width;
-      Height = height;
-    }
-
-    public override string ToString()
-    {
-      return $"{nameof(Width)}: {Width}, {nameof(Height)}: {Height}";
-    }
+    
   }
 
-  public class Square : Rectangle
+  public Rectangle(int width, int height)
   {
-    //public new int Width
-    //{
-    //  set { base.Width = base.Height = value; }
-    //}
-
-    //public new int Height
-    //{ 
-    //  set { base.Width = base.Height = value; }
-    //}
-
-    public override int Width // nasty side effects
-    {
-      set { base.Width = base.Height = value; }
-    }
-
-    public override int Height
-    { 
-      set { base.Width = base.Height = value; }
-    }
+    Width = width;
+    Height = height;
   }
 
-  public class Demo
+  public override string ToString()
   {
-    static public int Area(Rectangle r) => r.Width * r.Height;
+    return $"{nameof(Width)}: {Width}, {nameof(Height)}: {Height}";
+  }
+}
 
-    static void Main(string[] args)
-    {
-      Rectangle rc = new Rectangle(2,3);
-      WriteLine($"{rc} has area {Area(rc)}");
+public class Square : Rectangle
+{
+  //public new int Width
+  //{
+  //  set { base.Width = base.Height = value; }
+  //}
 
-      // should be able to substitute a base type for a subtype
-      /*Square*/ Rectangle sq = new Square();
-      sq.Width = 4;
-      WriteLine($"{sq} has area {Area(sq)}");
-    }
+  //public new int Height
+  //{ 
+  //  set { base.Width = base.Height = value; }
+  //}
+
+  public override int Width // nasty side effects
+  {
+    set { base.Width = base.Height = value; }
+  }
+
+  public override int Height
+  { 
+    set { base.Width = base.Height = value; }
+  }
+}
+
+public class Demo
+{
+  static public int Area(Rectangle r) => r.Width * r.Height;
+
+  static void Main(string[] args)
+  {
+    Rectangle rc = new Rectangle(2,3);
+    WriteLine($"{rc} has area {Area(rc)}");
+
+    // should be able to substitute a base type for a subtype
+    /*Square*/ Rectangle sq = new Square();
+    sq.Width = 4;
+    WriteLine($"{sq} has area {Area(sq)}");
   }
 }
 ```
@@ -535,123 +520,118 @@ public class Robot : IWorkable
 #### Advanced Example: ISP
 
 ```csharp
-using System;
-
-namespace DotNetDesignPatternDemos.SOLID.InterfaceSegregationPrinciple
+public class Document
 {
-  public class Document
+}
+
+public interface IMachine
+{
+  void Print(Document d);
+  void Fax(Document d);
+  void Scan(Document d);
+}
+
+// ok if you need a multifunction machine
+public class MultiFunctionPrinter : IMachine
+{
+  public void Print(Document d)
   {
+    //
   }
 
-  public interface IMachine
+  public void Fax(Document d)
   {
-    void Print(Document d);
-    void Fax(Document d);
-    void Scan(Document d);
+    //
   }
 
-  // ok if you need a multifunction machine
-  public class MultiFunctionPrinter : IMachine
+  public void Scan(Document d)
   {
-    public void Print(Document d)
-    {
-      //
-    }
+    //
+  }
+}
 
-    public void Fax(Document d)
-    {
-      //
-    }
-
-    public void Scan(Document d)
-    {
-      //
-    }
+public class OldFashionedPrinter : IMachine
+{
+  public void Print(Document d)
+  {
+    // yep
   }
 
-  public class OldFashionedPrinter : IMachine
+  public void Fax(Document d)
   {
-    public void Print(Document d)
-    {
-      // yep
-    }
-
-    public void Fax(Document d)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    public void Scan(Document d)
-    {
-      throw new System.NotImplementedException();
-    }
+    throw new System.NotImplementedException();
   }
 
-  public interface IPrinter
+  public void Scan(Document d)
   {
-    void Print(Document d);
+    throw new System.NotImplementedException();
   }
+}
 
-  public interface IScanner
-  {
-    void Scan(Document d);
-  }
+public interface IPrinter
+{
+  void Print(Document d);
+}
 
-  public class Printer : IPrinter
-  {
-    public void Print(Document d)
-    {
-      
-    }
-  }
+public interface IScanner
+{
+  void Scan(Document d);
+}
 
-  public class Photocopier : IPrinter, IScanner
-  {
-    public void Print(Document d)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    public void Scan(Document d)
-    {
-      throw new System.NotImplementedException();
-    }
-  }
-
-  public interface IMultiFunctionDevice : IPrinter, IScanner //
+public class Printer : IPrinter
+{
+  public void Print(Document d)
   {
     
   }
+}
 
-  public struct MultiFunctionMachine : IMultiFunctionDevice
+public class Photocopier : IPrinter, IScanner
+{
+  public void Print(Document d)
   {
-    // compose this out of several modules
-    private IPrinter _printer;
-    private IScanner _scanner;
+    throw new System.NotImplementedException();
+  }
 
-    public MultiFunctionMachine(IPrinter printer, IScanner scanner)
-    {
-      if (printer == null)
-      {
-        throw new ArgumentNullException(paramName: nameof(printer));
-      }
-      if (scanner == null)
-      {
-        throw new ArgumentNullException(paramName: nameof(scanner));
-      }
-      _printer = printer;
-      _scanner = scanner;
-    }
+  public void Scan(Document d)
+  {
+    throw new System.NotImplementedException();
+  }
+}
 
-    public void Print(Document d)
-    {
-      _printer.Print(d);
-    }
+public interface IMultiFunctionDevice : IPrinter, IScanner //
+{
+  
+}
 
-    public void Scan(Document d)
+public struct MultiFunctionMachine : IMultiFunctionDevice
+{
+  // compose this out of several modules
+  private IPrinter _printer;
+  private IScanner _scanner;
+
+  public MultiFunctionMachine(IPrinter printer, IScanner scanner)
+  {
+    if (printer == null)
     {
-      _scanner.Scan(d);
+      throw new ArgumentNullException(paramName: nameof(printer));
     }
+    if (scanner == null)
+    {
+      throw new ArgumentNullException(paramName: nameof(scanner));
+    }
+    _printer = printer;
+    _scanner = scanner;
+  }
+
+  public void Print(Document d)
+  {
+    _printer.Print(d);
+  }
+
+  public void Scan(Document d)
+  {
+    _scanner.Scan(d);
   }
 }
 ```
@@ -720,90 +700,82 @@ public class UserService
 #### Advanced Example: DIP
 
 ```csharp
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Console;
+// high-level modules should not depend on low-level; both should depend on abstractions
+// abstractions should not depend on details; details should depend on abstractions
 
-namespace DotNetDesignPatternDemos.SOLID.DependencyInversionPrinciple
+public enum Relationship
 {
-  // high-level modules should not depend on low-level; both should depend on abstractions
-  // abstractions should not depend on details; details should depend on abstractions
+  Parent,
+  Child,
+  Sibling
+}
 
-  public enum Relationship
+public class Person
+{
+  public string Name;
+  // public DateTime DateOfBirth;
+}
+
+public interface IRelationshipBrowser
+{
+  IEnumerable<Person> FindAllChildrenOf(string name);
+}
+
+public class Relationships : IRelationshipBrowser // low-level
+{
+  private List<(Person,Relationship,Person)> _relations
+    = new List<(Person, Relationship, Person)>();
+
+  public void AddParentAndChild(Person parent, Person child)
   {
-    Parent,
-    Child,
-    Sibling
+    _relations.Add((parent, Relationship.Parent, child));
+    _relations.Add((child, Relationship.Child, parent));
   }
 
-  public class Person
+  public List<(Person, Relationship, Person)> Relations => _relations;
+
+  public IEnumerable<Person> FindAllChildrenOf(string name)
   {
-    public string Name;
-    // public DateTime DateOfBirth;
+    return _relations
+      .Where(x => x.Item1.Name == name
+                  && x.Item2 == Relationship.Parent).Select(r => r.Item3);
+  }
+}
+
+public class Research
+{
+  public Research(Relationships relationships) 
+  {
+    // high-level: find all of john's children
+    //var relations = relationships.Relations;
+    //foreach (var r in relations
+    //  .Where(x => x.Item1.Name == "John"
+    //              && x.Item2 == Relationship.Parent))
+    //{
+    //  WriteLine($"John has a child called {r.Item3.Name}");
+    //}
   }
 
-  public interface IRelationshipBrowser
-  {
-    IEnumerable<Person> FindAllChildrenOf(string name);
-  }
-
-  public class Relationships : IRelationshipBrowser // low-level
-  {
-    private List<(Person,Relationship,Person)> _relations
-      = new List<(Person, Relationship, Person)>();
-
-    public void AddParentAndChild(Person parent, Person child)
+  public Research(IRelationshipBrowser browser) {
+    foreach (var p in browser.FindAllChildrenOf("John"))
     {
-      _relations.Add((parent, Relationship.Parent, child));
-      _relations.Add((child, Relationship.Child, parent));
-    }
-
-    public List<(Person, Relationship, Person)> Relations => _relations;
-
-    public IEnumerable<Person> FindAllChildrenOf(string name)
-    {
-      return _relations
-        .Where(x => x.Item1.Name == name
-                    && x.Item2 == Relationship.Parent).Select(r => r.Item3);
+      WriteLine($"John has a child called {p.Name}");
     }
   }
 
-  public class Research
+  static void Main(string[] args)
   {
-    public Research(Relationships relationships) 
-    {
-      // high-level: find all of john's children
-      //var relations = relationships.Relations;
-      //foreach (var r in relations
-      //  .Where(x => x.Item1.Name == "John"
-      //              && x.Item2 == Relationship.Parent))
-      //{
-      //  WriteLine($"John has a child called {r.Item3.Name}");
-      //}
-    }
+    var parent = new Person {Name = "John"};
+    var child1 = new Person {Name = "Chris"};
+    var child2 = new Person {Name = "Matt"};
 
-    public Research(IRelationshipBrowser browser) {
-      foreach (var p in browser.FindAllChildrenOf("John"))
-      {
-        WriteLine($"John has a child called {p.Name}");
-      }
-    }
+    // low-level module
+    var relationships = new Relationships();
+    relationships.AddParentAndChild(parent, child1);
+    relationships.AddParentAndChild(parent, child2);
 
-    static void Main(string[] args)
-    {
-      var parent = new Person {Name = "John"};
-      var child1 = new Person {Name = "Chris"};
-      var child2 = new Person {Name = "Matt"};
-
-      // low-level module
-      var relationships = new Relationships();
-      relationships.AddParentAndChild(parent, child1);
-      relationships.AddParentAndChild(parent, child2);
-
-      new Research(relationships);
-      
-    }
+    new Research(relationships);
+    
   }
 }
 ```
@@ -1286,5 +1258,182 @@ class Program
         INotification notification = factory.CreateNotification();
         notification.Send("Hello, Factory Pattern!");
     }
+}
+```
+
+## Prototype Pattern
+
+- The Prototype Pattern is a creational design pattern that enables object creation by cloning existing instances.
+- Instead of creating new objects from scratch, this pattern allows copying an existing object to create new instances with similar properties.
+- This reduces the overhead associated with instantiating objects and provides a way to create objects efficiently.
+
+### Prototype Benefits
+
+- Efficient Object Creation:
+  - Reduces the cost of creating objects from scratch by cloning an existing instance.
+  - Saves resources when complex objects or large data structures are involved.
+- Dynamic Object Creation:
+  - Provides flexibility to create new objects dynamically without knowing their exact class.
+  - Enables runtime object creation without tightly coupling code to specific implementations.
+- Decoupling from Concrete Classes:
+  - Decouples the code from concrete classes by interacting with cloned instances.
+  - Allows the system to work with abstractions, enhancing flexibility and maintainability.
+- Object State Preservation:
+  - Ensures that cloned objects maintain the state of the original instance.
+  - Facilitates the creation of objects with similar initial states.
+
+### Deep Copy vs. Shallow Copy
+
+- Shallow Copy:
+  - Copies the values and references on an object without duplicating the referenced objects.
+  - The cloned object shares references with the original, leading to shared mutable data.
+  - Changes made to mutable objects in one instance affect the other instance.
+- Deep Copy:
+  - Copies an object along with all nested objects it references, creating independent copies.
+  - Ensures that cloned objects do not share mutable data with the original instance.
+  - Changes to nested objects in one instance do not impact the other instance.
+
+### Prototype Use Cases
+
+- Object Creation with Varying States:
+  - Useful when there is a need to create objects with slightly different states but similar structures.
+  - Example: Creating multiple types of trees with the same basic structure but different leaf colors.
+- Expensive Object Creation:
+  - Ideal for creating objects that involve costly or resource-intensive instantiation processes.
+  - Example: Duplicating large graphical objects in a game to avoid complex recalculations.
+- Preserving Original Object State:
+  - Useful when the original state of an object needs to be preserved, while creating similar objects for modifications.
+  - Example: Cloning a complex document to apply changes while keeping the original version unchanged.
+
+### Prototype Pattern Components
+
+- Prototype Interface:
+  - Defines a method for cloning objects, typically named Clone or Copy.
+- Concrete Prototype:
+  - Implements the prototype interface and defines how the cloning should be performed.
+- Client:
+  - Uses the prototype to create new instances by cloning an existing object.
+
+### Prototype Pattern Example
+
+```csharp
+public interface IDeepCopyable<T> where T : new()
+{
+  void CopyTo(T target);
+  
+  public T DeepCopy()
+  {
+    T t = new T();
+    CopyTo(t);
+    return t;
+  }
+}
+
+public class Address : IDeepCopyable<Address>
+{
+  public string StreetName { get; set; }
+  public int HouseNumber { get; set; }
+
+  public Address(string streetName, int houseNumber)
+  {
+    StreetName = streetName;
+    HouseNumber = houseNumber;
+  }
+
+  public Address()
+  {
+    
+  }
+
+  public override string ToString()
+  {
+    return $"{nameof(StreetName)}: {StreetName}, {nameof(HouseNumber)}: {HouseNumber}";
+  }
+
+  public void CopyTo(Address target)
+  {
+    target.StreetName = StreetName;
+    target.HouseNumber = HouseNumber;
+  }
+}
+
+
+
+public class Person : IDeepCopyable<Person>
+{
+  public string[] Names { get; set; }
+  public Address Address { get; set; }
+
+  public Person()
+  {
+    
+  }
+  
+  public Person(string[] names, Address address)
+  {
+    Names = names;
+    Address = address;
+  }
+
+  public override string ToString()
+  {
+    return $"{nameof(Names)}: {string.Join(",", Names)}, {nameof(Address)}: {Address}";
+  }
+
+  public virtual void CopyTo(Person target)
+  {
+    target.Names = (string[]) Names.Clone();
+    target.Address = Address.DeepCopy();
+  }
+}
+
+public class Employee : Person, IDeepCopyable<Employee>
+{
+  public int Salary { get; set; }
+
+  public void CopyTo(Employee target)
+  {
+    base.CopyTo(target);
+    target.Salary = Salary;
+  }
+
+  public override string ToString()
+  {
+    return $"{base.ToString()}, {nameof(Salary)}: {Salary}";
+  }
+}
+
+public static class DeepCopyExtensions
+{
+  public static T DeepCopy<T>(this IDeepCopyable<T> item) 
+    where T : new()
+  {
+    return item.DeepCopy();
+  }
+
+  public static T DeepCopy<T>(this T person)
+    where T : Person, new()
+  {
+    return ((IDeepCopyable<T>) person).DeepCopy();
+  }
+}
+
+public static class Demo
+{
+  static void Main()
+  {
+    var john = new Employee();
+    john.Names = new[] {"John", "Doe"};
+    john.Address = new Address {HouseNumber = 123, StreetName = "London Road"};
+    john.Salary = 321000;
+    var copy = john.DeepCopy();
+
+    copy.Names[1] = "Smith";
+    copy.Address.HouseNumber++;
+    copy.Salary = 123000;
+    
+    Console.WriteLine(john);
+    Console.WriteLine(copy);
+  }
 }
 ```
