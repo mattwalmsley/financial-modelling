@@ -38,6 +38,7 @@
     - [Prototype Use Cases](#prototype-use-cases)
     - [Prototype Pattern Components](#prototype-pattern-components)
     - [Prototype Pattern Example](#prototype-pattern-example)
+      - [Copying through Serialization](#copying-through-serialization)
 
 ## SOLID Design Principles
 
@@ -1321,7 +1322,7 @@ public interface IDeepCopyable<T> where T : new()
 {
   void CopyTo(T target);
   
-  public T DeepCopy()
+  public T DeepCopy() // default interface method
   {
     T t = new T();
     CopyTo(t);
@@ -1343,11 +1344,6 @@ public class Address : IDeepCopyable<Address>
   public Address()
   {
     
-  }
-
-  public override string ToString()
-  {
-    return $"{nameof(StreetName)}: {StreetName}, {nameof(HouseNumber)}: {HouseNumber}";
   }
 
   public void CopyTo(Address target)
@@ -1375,11 +1371,6 @@ public class Person : IDeepCopyable<Person>
     Address = address;
   }
 
-  public override string ToString()
-  {
-    return $"{nameof(Names)}: {string.Join(",", Names)}, {nameof(Address)}: {Address}";
-  }
-
   public virtual void CopyTo(Person target)
   {
     target.Names = (string[]) Names.Clone();
@@ -1395,11 +1386,6 @@ public class Employee : Person, IDeepCopyable<Employee>
   {
     base.CopyTo(target);
     target.Salary = Salary;
-  }
-
-  public override string ToString()
-  {
-    return $"{base.ToString()}, {nameof(Salary)}: {Salary}";
   }
 }
 
@@ -1434,6 +1420,73 @@ public static class Demo
     
     Console.WriteLine(john);
     Console.WriteLine(copy);
+  }
+}
+```
+
+#### Copying through Serialization
+
+- Copying through serialization involves creating a deep copy of an object by serializing it into a data format (such as JSON, XML, or binary) and then deserializing it back into a new object.
+- This method creates an exact replica of the original object, including all nested objects, ensuring that the new copy is independent of the original.
+- Benefits
+  - Automatic Deep Copy:
+    - Automatically handles nested objects, creating completely independent copies.
+    - Ideal when objects have complex nested structures or when creating deep copies manually is cumbersome.
+  - No Need for Manual Copy Logic:
+    - Relieves developers from writing manual deep copy logic, reducing maintenance and potential errors.
+- Drawbacks
+  - Performance Overhead:
+    - Serialization and deserialization can be slower compared to manual copying techniques, especially for large or complex objects.
+    - Involves memory overhead due to the temporary serialized format.
+  - Serializable Restrictions:
+    - Requires objects to be marked as serializable, and all nested objects must also support serialization.
+    - May not work with non-serializable objects or those with transient fields.
+
+```csharp
+public static class ExtensionMethods
+{
+  public static T DeepCopy<T>(this T self)
+  {
+    MemoryStream stream = new MemoryStream();
+    BinaryFormatter formatter = new BinaryFormatter();
+    formatter.Serialize(stream, self);
+    stream.Seek(0, SeekOrigin.Begin);
+    object copy = formatter.Deserialize(stream);
+    stream.Close();
+    return (T)copy;
+  }
+
+  public static T DeepCopyXml<T>(this T self)
+  {
+    using (var ms = new MemoryStream())
+    {
+      XmlSerializer s = new XmlSerializer(typeof(T));
+      s.Serialize(ms, self);
+      ms.Position = 0;
+      return (T) s.Deserialize(ms);
+    }
+  }
+}
+
+[Serializable] // this is, unfortunately, required
+public class Foo
+{
+  public uint Stuff { get; set; }
+  public string Whatever { get; set; }
+}
+
+public static class CopyThroughSerialization
+{
+  static void Main()
+  {
+    Foo foo = new Foo {Stuff = 42, Whatever = "abc"};
+
+    //Foo foo2 = foo.DeepCopy(); // crashes without [Serializable]
+    Foo foo2 = foo.DeepCopyXml();
+
+    foo2.Whatever = "xyz";
+    WriteLine(foo);
+    WriteLine(foo2);
   }
 }
 ```
