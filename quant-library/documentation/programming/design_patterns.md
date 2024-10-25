@@ -38,7 +38,7 @@
     - [Prototype Use Cases](#prototype-use-cases)
     - [Prototype Pattern Components](#prototype-pattern-components)
     - [Prototype Pattern Example](#prototype-pattern-example)
-      - [Copying through Serialization](#copying-through-serialization)
+    - [Copying through Serialization](#copying-through-serialization)
 
 ## SOLID Design Principles
 
@@ -1424,7 +1424,7 @@ public static class Demo
 }
 ```
 
-#### Copying through Serialization
+### Copying through Serialization
 
 - Copying through serialization involves creating a deep copy of an object by serializing it into a data format (such as JSON, XML, or binary) and then deserializing it back into a new object.
 - This method creates an exact replica of the original object, including all nested objects, ensuring that the new copy is independent of the original.
