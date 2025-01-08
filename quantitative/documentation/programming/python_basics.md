@@ -27,9 +27,15 @@
       - [Special Methods (*Dunder* Methods)](#special-methods-dunder-methods)
       - [Inheritance](#inheritance)
       - [The `super()` Function](#the-super-function)
+      - [Method Resolution Order (MRO)](#method-resolution-order-mro)
       - [Encapsulation and Access Modifiers](#encapsulation-and-access-modifiers)
         - [Accessing Private Attributes](#accessing-private-attributes)
-      - [Class and Static Methods](#class-and-static-methods)
+      - [Decorators in Python](#decorators-in-python)
+        - [Function Decorators](#function-decorators)
+        - [Class Decorators](#class-decorators)
+        - [Method Decorators](#method-decorators)
+          - [The `@property` Decorator](#the-property-decorator)
+          - [`@classmethod` and `@staticmethod` Decorators](#classmethod-and-staticmethod-decorators)
   - [Data Types](#data-types)
     - [Integers](#integers)
     - [Floating Points](#floating-points)
@@ -534,6 +540,7 @@ class Dog:
 ```
 
 - `__init__` is the constructor method used to initialize the `Dog` class with attributes `name` and `breed`.
+- The `self` parameter represents the specific instance of the class that is being created or accessed.
 - `describe` and `bark` are methods that provide behaviour for `Dog` instances.
 
 #### Creating an Instance (Object)
@@ -660,25 +667,73 @@ class Dog(Animal):
 # super() is used to call the __init__ method of the parent class Animal.
 ```
 
+#### Method Resolution Order (MRO)
+
+When using `super()`, Python follows the Method Resolution Order (MRO) to determine the order in which classes are searched for a method. The MRO is especially important in multiple inheritance scenarios.
+
+The MRO can be viewed using the `__mro__` attribute or the `mro()` method.
+It ensures that each class in the hierarchy is only called once.
+
+```python
+class A:
+    def method(self):
+        print("A method")
+
+class B(A):
+    def method(self):
+        print("B method")
+        super().method()
+
+class C(A):
+    def method(self):
+        print("C method")
+        super().method()
+
+class D(B, C):
+    def method(self):
+        print("D method")
+        super().method()
+
+d = D()
+d.method()
+# Output:
+# D method
+# B method
+# C method
+# A method
+
+# The MRO for class D is D -> B -> C -> A
+print(D.__mro__)  # Output: (<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>)
+```
+
 #### Encapsulation and Access Modifiers
 
 Encapsulation is the concept of bundling data (attributes) and methods together and restricting access to certain components of an object.
 
 - Public attributes/methods: Accessible from outside the class (default behaviour).
-- Private attributes/methods: Prefixed with a double underscore (__), making them inaccessible from outside the class.
+- Protected attributes/methods: Prefixed with a single underscore (`_`), indicating they are intended for internal use or subclasses but not enforced as private.
+- Private attributes/methods: Prefixed with a double underscore (`__`), making them inaccessible from outside the class.
 
 ```python
 class Person:
-    def __init__(self, name, age):
+    def __init__(self, name, address, ssn):
         self.name = name  # Public attribute
-        self.__age = age  # Private attribute
+        self._address = address  # Public attribute
+        self.__ssn = ssn  # Private attribute
     
-    def get_age(self):
-        return self.__age
+    def get_ssn(self):
+        return self.__ssn
 
-person = Person("Alice", 30)
-print(person.name)     # Output: Alice
-print(person.get_age())  # Output: 30
+person = Person("Alice", "30 Garden Street", "123-45-6789")
+
+# Public attribute
+print(person.name)              # Output: Alice
+
+# Protected attribute (accessible, but not recommended directly)
+print(person._age)              # Output: 30 Garden Street
+
+# Private attribute (accessed via public method)
+print(person.get_ssn())         # Output: 123-45-6789
 ```
 
 ##### Accessing Private Attributes
@@ -689,26 +744,131 @@ Private attributes cannot be directly accessed from outside the class. However, 
 print(person._Person__age)  # Output: 30
 ```
 
-#### Class and Static Methods
+#### Decorators in Python
+
+Decorators are a powerful feature in Python that allow you to modify the behaviour of functions or methods. They are often used to add functionality to existing code in a clean and readable way.
+
+- **Function Decorators**: Used to modify or enhance functions.
+- **Class Decorators**: Used to modify or enhance classes.
+- **Method Decorators**: Used to modify or enhance methods within a class.
+
+##### Function Decorators
+
+A function decorator is a function that takes another function as an argument and returns a new function with added or modified behaviour.
+
+Example:
+
+```python
+def my_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        func()
+        print("Something is happening after the function is called.")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+# Output:
+# Something is happening before the function is called.
+# Hello!
+# Something is happening after the function is called.
+```
+
+##### Class Decorators
+
+A class decorator is a function that takes a class as an argument and returns a new class with added or modified behaviour.
+
+```python
+def my_class_decorator(cls):
+    class WrappedClass(cls):
+        def new_method(self):
+            return "New method added!"
+    return WrappedClass
+
+@my_class_decorator
+class MyClass:
+    def original_method(self):
+        return "Original method"
+
+obj = MyClass()
+print(obj.original_method())  # Output: Original method
+print(obj.new_method())       # Output: New method added!
+```
+
+##### Method Decorators
+
+Method decorators are used to modify or enhance methods within a class.
+
+###### The `@property` Decorator
+
+The `@property` decorator allows you to define methods in a class that can be accessed like attributes. This is useful for implementing getters and setters in a Pythonic way.
+
+- **Getter**: Use the `@property` decorator to define a method that will be accessed like an attribute.
+- **Setter**: Use the `@<property_name>.setter` decorator to define a method that sets the value of the property.
+  - Validation can then be implemented when setting the property.
+
+Example:
+
+```python
+class Person:
+    def __init__(self, name):
+        self._name = name
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if not value:
+            raise ValueError("Name cannot be empty")
+        self._name = value
+
+person = Person("Alice")
+
+# Accessing the property
+print(person.name)  # Output: Alice
+
+# Setting the property
+person.name = "Bob"
+print(person.name)  # Output: Bob
+
+# Attempting to set an invalid value
+try:
+    person.name = ""
+except ValueError as e:
+    print(e)  # Output: Name cannot be empty
+```
+
+###### `@classmethod` and `@staticmethod` Decorators
 
 Utility methods related to the class that do not modify its state.
 
-- Class methods: Defined using the `@classmethod` decorator and take the class (cls) as the first parameter. They can modify class-level attributes.
-- Static methods: Defined using the `@staticmethod` decorator and do not take self or cls as a parameter.
+- Class Methods: Use the `@classmethod`decorator.
+  - Take the class (`cls`) as the first parameter.
+  - Used to modify class-level attributes, create alternative constructors, or provide behaviour tied to the class rather than any instance.
+- Static Methods: Use the `@staticmethod` decorator.
+  - Do not take `self` or `cls`.
+  - Used for utility functions that are logically related to the class but don't require access to instance or class-specific data.
 
 ```python
 class MathOperations:
+    pi = 3.14
+
+    @classmethod
+    def circle_area(cls, radius):
+        return cls.pi * radius ** 2
+
     @staticmethod
     def add(a, b):
         return a + b
-    
-    @classmethod
-    def multiply(cls, a, b):
-        return a * b
 
 # Using Class and Static Methods
+print(MathOperations.circle_area(5))  # Output: 78.5
 print(MathOperations.add(5, 3))       # Output: 8
-print(MathOperations.multiply(5, 3))  # Output: 15
 ```
 
 ## Data Types
