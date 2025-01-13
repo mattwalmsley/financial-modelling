@@ -20,22 +20,23 @@
       - [`for` Loops](#for-loops)
       - [Loops with `else`](#loops-with-else)
     - [Exception Handling](#exception-handling)
-    - [Classes](#classes)
-      - [Creating an Instance (Object)](#creating-an-instance-object)
-      - [Class Attributes vs Instance Attributes](#class-attributes-vs-instance-attributes)
-      - [Methods](#methods)
+  - [Classes](#classes)
+    - [Creating an Instance (Object)](#creating-an-instance-object)
+    - [Class Attributes vs Instance Attributes](#class-attributes-vs-instance-attributes)
+    - [Methods](#methods)
       - [Special Methods (*Dunder* Methods)](#special-methods-dunder-methods)
-      - [Inheritance](#inheritance)
-      - [The `super()` Function](#the-super-function)
-      - [Method Resolution Order (MRO)](#method-resolution-order-mro)
-      - [Encapsulation and Access Modifiers](#encapsulation-and-access-modifiers)
-        - [Accessing Private Attributes](#accessing-private-attributes)
-      - [Decorators in Python](#decorators-in-python)
-        - [Function Decorators](#function-decorators)
-        - [Class Decorators](#class-decorators)
-        - [Method Decorators](#method-decorators)
-          - [The `@property` Decorator](#the-property-decorator)
-          - [`@classmethod` and `@staticmethod` Decorators](#classmethod-and-staticmethod-decorators)
+    - [Inheritance](#inheritance)
+    - [The `super()` Function](#the-super-function)
+    - [Method Resolution Order (MRO)](#method-resolution-order-mro)
+    - [Encapsulation and Access Modifiers](#encapsulation-and-access-modifiers)
+      - [Accessing Private Attributes](#accessing-private-attributes)
+  - [Decorators](#decorators)
+    - [Function Decorators](#function-decorators)
+    - [Class Decorators](#class-decorators)
+    - [Method Decorators](#method-decorators)
+      - [The `@property` Decorator](#the-property-decorator)
+      - [`@classmethod` and `@staticmethod` Decorators](#classmethod-and-staticmethod-decorators)
+  - [Variables](#variables)
   - [Data Types](#data-types)
     - [Integers](#integers)
     - [Floating Points](#floating-points)
@@ -504,7 +505,7 @@ finally:
 # This always runs.
 ```
 
-### Classes
+## Classes
 
 In Python, classes are used to create user-defined data structures. A class defines a blueprint for objects, encapsulating data (attributes) and behaviour (methods). Objects created from a class are called **instances**.
 
@@ -543,7 +544,7 @@ class Dog:
 - The `self` parameter represents the specific instance of the class that is being created or accessed.
 - `describe` and `bark` are methods that provide behaviour for `Dog` instances.
 
-#### Creating an Instance (Object)
+### Creating an Instance (Object)
 
 To create an instance of a class, call the class using parentheses `()`. This triggers the `__init__` method.
 
@@ -556,7 +557,7 @@ print(dog1.bark())      # Output: Buddy says woof!
 - `dog1` is an instance of the `Dog` class.
 - The methods of `Dog` using the dot notation `dog1.describe()`
 
-#### Class Attributes vs Instance Attributes
+### Class Attributes vs Instance Attributes
 
 - Instance attributes are unique to each instance (object) and are defined inside the `__init__` method using `self`.
 - Class attributes are shared among all instances of a class. They are defined directly inside the class body.
@@ -578,7 +579,7 @@ print(dog1.name)     # Output: Buddy
 print(dog2.name)     # Output: Max
 ```
 
-#### Methods
+### Methods
 
 Methods are functions that are defined inside a class and belong to class instances. They always take self as the first parameter, which refers to the instance calling the method.
 
@@ -622,7 +623,7 @@ print(book)            # Output: '1984' by George Orwell
 print(repr(book))      # Output: Book(1984, George Orwell)
 ```
 
-#### Inheritance
+### Inheritance
 
 Inheritance allows a class to inherit attributes and methods from another class. The class that is inherited from is called the parent or superclass, and the class that inherits is called the child or subclass.
 
@@ -651,7 +652,7 @@ print(dog.speak())  # Output: Buddy barks
 # Here, the Dog class overrides the speak method from the Animal class.
 ```
 
-#### The `super()` Function
+### The `super()` Function
 
 The `super()` function allows you to call methods from the parent class in a child class. This is useful for extending or modifying behaviour in subclasses without completely overriding the parent method.
 
@@ -667,7 +668,7 @@ class Dog(Animal):
 # super() is used to call the __init__ method of the parent class Animal.
 ```
 
-#### Method Resolution Order (MRO)
+### Method Resolution Order (MRO)
 
 When using `super()`, Python follows the Method Resolution Order (MRO) to determine the order in which classes are searched for a method. The MRO is especially important in multiple inheritance scenarios.
 
@@ -706,7 +707,7 @@ d.method()
 print(D.__mro__)  # Output: (<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>)
 ```
 
-#### Encapsulation and Access Modifiers
+### Encapsulation and Access Modifiers
 
 Encapsulation is the concept of bundling data (attributes) and methods together and restricting access to certain components of an object.
 
@@ -736,7 +737,7 @@ print(person._age)              # Output: 30 Garden Street
 print(person.get_ssn())         # Output: 123-45-6789
 ```
 
-##### Accessing Private Attributes
+#### Accessing Private Attributes
 
 Private attributes cannot be directly accessed from outside the class. However, Python allows you to access private attributes using a **name-mangling** mechanism:
 
@@ -744,7 +745,7 @@ Private attributes cannot be directly accessed from outside the class. However, 
 print(person._Person__age)  # Output: 30
 ```
 
-#### Decorators in Python
+## Decorators
 
 Decorators are a powerful feature in Python that allow you to modify the behaviour of functions or methods. They are often used to add functionality to existing code in a clean and readable way.
 
@@ -752,7 +753,7 @@ Decorators are a powerful feature in Python that allow you to modify the behavio
 - **Class Decorators**: Used to modify or enhance classes.
 - **Method Decorators**: Used to modify or enhance methods within a class.
 
-##### Function Decorators
+### Function Decorators
 
 A function decorator is a function that takes another function as an argument and returns a new function with added or modified behaviour.
 
@@ -777,7 +778,7 @@ say_hello()
 # Something is happening after the function is called.
 ```
 
-##### Class Decorators
+### Class Decorators
 
 A class decorator is a function that takes a class as an argument and returns a new class with added or modified behaviour.
 
@@ -798,11 +799,11 @@ print(obj.original_method())  # Output: Original method
 print(obj.new_method())       # Output: New method added!
 ```
 
-##### Method Decorators
+### Method Decorators
 
 Method decorators are used to modify or enhance methods within a class.
 
-###### The `@property` Decorator
+#### The `@property` Decorator
 
 The `@property` decorator allows you to define methods in a class that can be accessed like attributes. This is useful for implementing getters and setters in a Pythonic way.
 
@@ -843,7 +844,7 @@ except ValueError as e:
     print(e)  # Output: Name cannot be empty
 ```
 
-###### `@classmethod` and `@staticmethod` Decorators
+#### `@classmethod` and `@staticmethod` Decorators
 
 Utility methods related to the class that do not modify its state.
 
@@ -870,6 +871,8 @@ class MathOperations:
 print(MathOperations.circle_area(5))  # Output: 78.5
 print(MathOperations.add(5, 3))       # Output: 8
 ```
+
+## Variables
 
 ## Data Types
 
