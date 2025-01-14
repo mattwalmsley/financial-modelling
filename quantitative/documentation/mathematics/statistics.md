@@ -15,6 +15,7 @@
     - [Probability Concepts](#probability-concepts)
     - [Set Theory in Probability](#set-theory-in-probability)
       - [Set Theory Definitions](#set-theory-definitions)
+        - [Set Notation](#set-notation)
       - [Set Theory Examples](#set-theory-examples)
     - [Finite Probability](#finite-probability)
       - [Axioms of Probability](#axioms-of-probability)
@@ -22,7 +23,6 @@
       - [Finite Probability Examples](#finite-probability-examples)
         - [Single Die Roll](#single-die-roll)
         - [Hiring Example](#hiring-example)
-  - [Notational Remark](#notational-remark)
 
 ## Financial Data
 
@@ -201,6 +201,12 @@ In probability, outcomes of a random experiment are modelled as sets, which are 
    - A subset of the sample space.
    - Example: In a single die roll, the event $A$ of rolling an even number is $A = \{2, 4, 6\}$.
 
+##### Set Notation
+
+The common practice is to denote intersections in probabilities using commas. For example:
+$$P(S_1 \cap S_2) = P(S_1, S_2)$$
+Both notations are context-dependent, and familiarity with both is important.
+
 #### Set Theory Examples
 
 1. **Coin Toss**:
@@ -268,9 +274,3 @@ $$P(A) = P(2) + P(4) + P(6) = \frac{1}{6} + \frac{1}{6} + \frac{1}{6} = \frac{1}
     $$P(A) = P(A \cap B) + P(A \cap B^C)$$
    - Solving for $P(A \cap B^C)$:
      $$P(A \cap B^C) = P(A) - P(A \cap B) = 0.4 - 0.2 = 0.2$$
-
-## Notational Remark
-
-We adopt the common practice of denoting intersections in probabilities by commas. For example:
-$$P(S_1 \cap S_2) = P(S_1, S_2)$$
-Both notations are context-dependent, and familiarity with both is important.
