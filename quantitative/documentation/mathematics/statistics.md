@@ -2,7 +2,7 @@
 
 - [Statistics](#statistics)
   - [Financial Data](#financial-data)
-    - [Key Concepts](#key-concepts)
+    - [Financial Statistics Concepts](#financial-statistics-concepts)
       - [Stationary](#stationary)
       - [Marginal Distribution](#marginal-distribution)
       - [Ergodic Theorem](#ergodic-theorem)
@@ -11,6 +11,18 @@
       - [Example 1: Calculating Returns from Values](#example-1-calculating-returns-from-values)
       - [Example 1: Calculating Weekly Returns from Daily Returns](#example-1-calculating-weekly-returns-from-daily-returns)
       - [Continuously Compounded Returns](#continuously-compounded-returns)
+  - [Probability Theory](#probability-theory)
+    - [Probability Concepts](#probability-concepts)
+    - [Set Theory in Probability](#set-theory-in-probability)
+      - [Set Theory Definitions](#set-theory-definitions)
+      - [Set Theory Examples](#set-theory-examples)
+    - [Finite Probability](#finite-probability)
+      - [Axioms of Probability](#axioms-of-probability)
+      - [Properties of Probability](#properties-of-probability)
+      - [Finite Probability Examples](#finite-probability-examples)
+        - [Single Die Roll](#single-die-roll)
+        - [Hiring Example](#hiring-example)
+  - [Notational Remark](#notational-remark)
 
 ## Financial Data
 
@@ -19,13 +31,13 @@
 - Fundamentally, financial entities are looking to profit from changes in asset values whilst minimising the risk of loss.
 - **Time series** is the main form of financial data, with a time-dependent variable $V$ representing an asset's value at a time $t$.
 $$V(t_{1}), V(t_{2}), ...,V(t_{n-1}), V(t_{n})$$
-- The unit of time can vary from milliseconds to years, but should be consistent when working with a time series dataset.
+- The unit of time can vary from miliseconds to years, but should be consistent when working with a time series dataset.
 - For the purpose of financial analysis, **asset returns** are more useful than outright asset values/prices.
 - **Gross rate of return** $r(t)$ represents the *percentage change* between two prices at times $t$ and $t-1$, and is calculated by $r(t) = \frac{P(t) - P(t-1)}{P(t-1)}$.
   - In other words, the gross rate of return is a measure of the *relative return* as a fraction of the value at $t-1$ realized on the asset from $t-1$ to $t$.
 - Many financial time series, in particular returns, can be assumed to be stationary.
 
-### Key Concepts
+### Financial Statistics Concepts
 
 #### Stationary
 
@@ -127,3 +139,138 @@ $$r_{k}(t) = r(t-k+1) + r(t-k+2) +...+ r(t)$$
 $$P(t) = e^{r(t)}P(t-1)$$
 $$r(t) = \log \left(\frac{P(t)}{P(t-1)} \right)$$
 - Continuously compounded returns are also referred to as *logarithmic returns*.
+
+## Probability Theory
+
+Probability theory has evolved to model uncertainty, providing both an abstract system of thought and practical tools for quantifying likelihoods. While it can be studied as a purely theoretical branch of mathematics, its significance is closely tied to real-world applications.
+
+### Probability Concepts
+
+1. **Random Experiments**:
+   - A random experiment is any process with an uncertain outcome but well-defined possible results. Examples include:
+     - Tossing a coin: outcomes are heads or tails.
+     - Rolling a die: outcomes range from 1 to 6.
+     - Dealing a poker hand: possible hands from a standard deck.
+     - Measuring daily temperatures: results in a sequence of real numbers.
+
+2. **Probability Numbers**:
+   - Probability assigns a value between 0 and 1 to outcomes or sets of outcomes (events):
+     - **0**: Certainty that the outcome will not occur.
+     - **1**: Certainty that the outcome will occur.
+   - These numbers formalize intuitions about uncertainty and likelihood.
+
+3. **Interpretations of Probability**:
+   - **Frequentist View**:
+     - Probability represents the long-run frequency of an outcome in repeated experiments.
+     - Example: A coin with a probability of 0.7 for heads means that in many tosses, about 70% will show heads.
+   - **Challenges**:
+     - Not all scenarios, such as estimating the likelihood of a rare event (e.g., nuclear war), lend themselves to repeatable experiments.
+   - **Subjective Bayesian View**:
+     - Probability is seen as a degree of belief, often used in Bayesian statistics.
+     - This approach accommodates single-event probabilities but requires further study for in-depth understanding.
+
+### Set Theory in Probability
+
+In probability, outcomes of a random experiment are modelled as sets, which are collections of elements. These sets help formalize and analyze the behaviour of random experiments and their possible outcomes.
+
+#### Set Theory Definitions
+
+1. **Set**:
+   - A collection of elements, which could be anything from numbers to abstract objects.
+   - Example: The set of positive integers less than 10 is $S = \{1, 2, 3, 4, 5, 6, 7, 8, 9\}$.
+
+2. **Set Operations**:
+   - **Union $(A \cup B)$**: All elements in either $(A)$ or $(B)$.
+     - Example: $A = \{2, 5, 8\}, B = \{4, 5, 9\}, A \cup B = \{2, 4, 5, 8, 9\}$.
+   - **Intersection $(A \cap B)$**: Elements common to $(A)$ and $(B)$.
+     - Example: $A = \{2, 4, 6\}, B = \{6, 9\}, A \cap B = \{6\}$.
+   - **Complement $(A^C)$**: All elements not in $A$, relative to a universal set $\Omega$.
+     - $A^C = \{x \in \Omega : x \notin A\}$.
+   - **Relative Complement $(A / B)$**: Elements in $A$ but not in $B$.
+     - $A / B = A \cap B^C$.
+   - **De Morgan’s Laws**:
+     - $(A \cup B)^C = A^C \cap B^C$
+     - $(A \cap B)^C = A^C \cup B^C$
+
+3. **Sample Space** $(S)$:
+   - The set of all possible outcomes of a random experiment.
+   - Example: For rolling a six-sided die once, $S = \{1, 2, 3, 4, 5, 6\}$.
+   - For rolling the die twice, $S = \{(i, j) : i, j \in \{1, 2, 3, 4, 5, 6\}\}$.
+
+4. **Event**:
+   - A subset of the sample space.
+   - Example: In a single die roll, the event $A$ of rolling an even number is $A = \{2, 4, 6\}$.
+
+#### Set Theory Examples
+
+1. **Coin Toss**:
+   - Sample space for a single toss: $S = \{H, T\}$.
+   - For three tosses: $S = \{(H, H, H), (H, H, T), (H, T, H), \dots, (T, T, T)\}$.
+   - Event $B$: At least two heads in three tosses.
+     - $B = \{(H, H, T), (H, T, H), (T, H, H), (H, H, H)\}$.
+
+2. **Die Roll**:
+   - Sample space: $S = \{1, 2, 3, 4, 5, 6\}$.
+   - Event $A$: Rolling an even number.
+     - $A = \{2, 4, 6\}$.
+
+### Finite Probability
+
+In the finite case, **probability** is modelled as a function $P(A)$ that assigns real numbers between $0$ and $1$ to subsets of a **sample space** $S$. The function $P$ is defined using the following axioms:
+
+#### Axioms of Probability
+
+1. **Non-negativity**: For any event $A \subseteq S$, $P(A) \geq 0$.
+2. **Total Probability**: $P(S) = 1$.
+3. **Additivity**: For disjoint events $A$ and $B$, $P(A \cup B) = P(A) + P(B)$.
+
+#### Properties of Probability
+
+These axioms lead to several useful properties:
+
+1. **Finite Additivity**: For disjoint events $A_1, A_2, \dots, A_n$:
+   $$P\left ( \bigcup_{i=1}^{n}A_{i} \right ) = \sum_{i=1}^{n}P(A_{i})$$
+
+2. **Complement Rule**: For any event $A$:
+   $$P(A^C) = 1 - P(A)$$
+
+3. **Subset Property**: If $B \subseteq A$, then $P(B) \leq P(A)$.
+
+4. **Range of Probability**: $0 \leq P(A) \leq 1$ for any $A$.
+
+5. **Inclusion-Exclusion Law**:
+   $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+
+#### Finite Probability Examples
+
+##### Single Die Roll
+
+- **Sample space**: $S = \{1, 2, 3, 4, 5, 6\}$.
+- For a balanced die, each outcome has $P(i) = \frac{1}{6}$.
+- **Event**: $A = \{2, 4, 6\}$ (rolling an even number).
+
+Using finite additivity:
+$$P(A) = P(2) + P(4) + P(6) = \frac{1}{6} + \frac{1}{6} + \frac{1}{6} = \frac{1}{2}$$
+
+##### Hiring Example
+
+- **Events**: $A$: You are hired, $B$: Your cousin is hired.
+- **Given**: $P(A) = 0.4$, $P(B) = 0.3$, $P((A \cup B)^C) = 0.5$.
+
+1. Using the complement rule:
+   $$P(A \cup B) = 1 - P((A \cup B)^C) = 1 - 0.5 = 0.5$$
+
+2. From the inclusion-exclusion law:
+   $$P(A \cap B) = P(A) + P(B) - P(A \cup B) = 0.4 + 0.3 - 0.5 = 0.2$$
+
+3. To calculate $P(A \cap B^C)$:
+   - The union $A = (A \cap B) \cup (A \cap B^C)$ is disjoint, so:
+    $$P(A) = P(A \cap B) + P(A \cap B^C)$$
+   - Solving for $P(A \cap B^C)$:
+     $$P(A \cap B^C) = P(A) - P(A \cap B) = 0.4 - 0.2 = 0.2$$
+
+## Notational Remark
+
+We adopt the common practice of denoting intersections in probabilities by commas. For example:
+$$P(S_1 \cap S_2) = P(S_1, S_2)$$
+Both notations are context-dependent, and familiarity with both is important.
