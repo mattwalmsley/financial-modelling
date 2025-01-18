@@ -18,6 +18,16 @@
       - [`SortedDictionary`](#sorteddictionary)
     - [Indexers](#indexers)
   - [Python](#python)
+    - [Mutable and Immutable Types](#mutable-and-immutable-types)
+    - [Time Complexity of Common Python Data Structures](#time-complexity-of-common-python-data-structures)
+      - [List](#list)
+      - [Dictionary](#dictionary)
+        - [Notes on Common Dictionary Operations](#notes-on-common-dictionary-operations)
+        - [Other Dictionary Operations](#other-dictionary-operations)
+        - [Valid Keys for Dictionary Types](#valid-keys-for-dictionary-types)
+      - [Set](#set)
+        - [Set Operations and Time Complexity](#set-operations-and-time-complexity)
+        - [Note on Set Sizes](#note-on-set-sizes)
 
 ## Data Structures
 
@@ -142,5 +152,134 @@ public class SampleCollection
 }
 ```
 
-
 ## Python
+
+### Mutable and Immutable Types
+
+- **Mutable Types**: Objects that can be changed after they are created. Examples include lists, dictionaries, and sets.
+  - Example:
+
+    ```python
+    my_list = [1, 2, 3]
+    my_list.append(4)  # my_list is now [1, 2, 3, 4]
+    ```
+
+- **Immutable Types**: Objects that cannot be changed after they are created. Examples include integers, floats, strings, and tuples.
+  - Example:
+
+    ```python
+    my_tuple = (1, 2, 3)
+    # my_tuple[0] = 4  # This will raise a TypeError
+    ```
+
+### Time Complexity of Common Python Data Structures
+
+#### List
+
+| Operation                 | Time Complexity | Notes                                |
+|---------------------------|-----------------|--------------------------------------|
+| `my_list.append(item)`    | **O(1)**        | Fast                                |
+| `my_list.pop()`           | **O(1)**        | Fast                                |
+| `my_list.insert(0, item)` | **O(n)**        | Slow (shifts all items)             |
+| `my_list.pop(0)`          | **O(n)**        | Slow (shifts all items)             |
+| `my_list[index]`          | **O(1)**        | Fast                                |
+| `item in my_list`         | **O(n)**        | Slow (requires looping)             |
+
+Use `collections.deque` for fast operations at the beginning of a sequence.
+
+#### Dictionary
+
+Dictionaries are meant for grouping or accumulating values based on a key. Python "dictionaries" are called hash maps (or sometimes "associative arrays") in many other programming languages.
+
+| Operation                     | Time Complexity | Notes                    |
+|-------------------------------|-----------------|--------------------------|
+| `mapping[key] = value`        | **O(1)**        | Inserting/updating       |
+| `mapping[key]`                | **O(1)**        | Reading/Lookup           |
+| `mapping.get(key)`            | **O(1)**        | Safe Lookup              |
+| `mapping.pop(key)`            | **O(1)**        | Remove and Return        |
+| `key in mapping`              | **O(1)**        | Membership test          |
+| `for k, v in mapping.items()` | **O(n)**        | Explicit looping is slow |
+
+Hashing ensures dictionaries are very fast at all operations related to key lookups.
+
+##### Notes on Common Dictionary Operations
+
+- **Inserting/updating** requires a hash lookup to find the key's position, and if it's a new key, it might involve updating the hash table's structure slightly.
+- **Reading/Lookup** is extremely efficient. It's a direct lookup and is nearly as fast as the membership test.
+- **Safe Lookup** is similar to `mapping[key]`, but with a slight overhead due to the default value handling mechanism.
+- **Remove and Return** involves a lookup to find the key, removal from the hash table, and sometimes reorganization, which can make it marginally slower than the others.
+- **Membership tests** are typically the fastest operation. This involves a direct hash lookup without modifying the dictionary.
+
+##### Other Dictionary Operations
+
+| Operation                     | Time Complexity | Explanation       |
+|-------------------------------|-----------------|-------------------|
+| `next(iter(mapping))`         | **O(1)**        | Get first item    |
+| `next(reversed(mapping))`     | **O(1)**        | Get last item     |
+| `value in mapping.values()`   | **O(n)**        | Value containment |
+| `mapping.update(iterable)`    | **O(k)**        | Add **k** items   |
+
+Key lookups are **O(1)**, but value lookups (`value in my_dict.values()`) are **O(n)** due to looping over the whole dictionary.
+
+##### Valid Keys for Dictionary Types
+
+- Dictionary keys must be of a type that is hashable and immutable. Common valid key types include:
+  - Integers
+  - Floats
+  - Strings
+  - Tuples (if they contain only hashable types)
+
+  - Example:
+
+    ```python
+    my_dict = {
+        1: "integer key",
+        3.14: "float key",
+        "key": "string key",
+        (1, 2): "tuple key"
+    }
+    ```
+
+  - Invalid keys:
+
+    ```python
+    # my_dict = {[1, 2]: "list key"}  # This will raise a TypeError because lists are mutable
+    ```
+
+#### Set
+
+| Operation                 | Time Complexity | Notes                 |
+|---------------------------|-----------------|-----------------------|
+| `my_set.add(item)`       | **O(1)**         | Add (no error raised) |
+| `my_set.remove(item)`    | **O(1)**         | Remove (error raised) |
+| `my_set.discard(item)`   | **O(1)**         | Safe Remove           |
+| `item in my_set`         | **O(1)**         | Membership test       |
+| `for item in my_set:`    | **O(n)**         | For sets of size n    |
+
+##### Set Operations and Time Complexity
+
+| Big O    | Operation      | Explanation               |
+|----------|----------------|---------------------------|
+| **O(n)** | `set1 & set2`  | **Intersection**          |
+| **O(n)** | `set1 \| set2` | **Union**                 |
+| **O(n)** | `set1 ^ set2`  | **Symmetric Difference**  |
+| **O(n)** | `set1 - set2`  | **Asymmetric Difference** |
+
+##### Note on Set Sizes
+
+The `O(n)` complexity of these operations assumes that the sets are of the same size. If the sets are different sizes:
+
+- **Intersection (`set1 & set2`)**:
+  - Returns elements common to both sets. The complexity depends on the size of the smaller set.
+  - The operation only needs to iterate through the smaller set and check for membership in the larger set. Therefore, complexity is proportional to the size of the smaller set.
+- **Union (`set1 | set2`)**:
+  - Combines all unique elements from both sets. The complexity depends on the size of the larger set.
+  - The operation combines all elements from both sets. Complexity depends on the larger set because all elements must be added to the result.
+- **Symmetric Difference (`set1 ^ set2`)**:
+  - Returns elements in either set but not in both. Complexity depends on the size of both sets.
+  - The complexity depends on both set sizes since all elements from both sets are checked and processed.
+- **Asymmetric Difference (`set1 - set2`)**:
+  - Returns elements in `set1` that are not in `set2`. Complexity depends on the size of `set1`.
+  - The operation iterates through `set1` and removes elements present in `set2`. Complexity depends on the size of `set1`.
+
+Using smaller or well-partitioned sets can improve efficiency for large-scale computations.
