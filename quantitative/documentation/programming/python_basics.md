@@ -59,8 +59,6 @@
       - [The `@property` Decorator](#the-property-decorator)
       - [`@classmethod` and `@staticmethod` Decorators](#classmethod-and-staticmethod-decorators)
 
-
-
 ## Style and Syntax
 
 See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) for best practices.
