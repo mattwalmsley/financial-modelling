@@ -2,6 +2,14 @@
 
 - [Python: Basics](#python-basics)
   - [Style and Syntax](#style-and-syntax)
+    - [Integers](#integers)
+    - [Floating Points](#floating-points)
+    - [Strings](#strings)
+    - [Lists](#lists)
+    - [Dictionaries](#dictionaries)
+    - [Tuples](#tuples)
+    - [Sets](#sets)
+    - [Booleans](#booleans)
     - [Naming Conventions](#naming-conventions)
     - [Python Comments](#python-comments)
     - [Multi-Line Statements in Python](#multi-line-statements-in-python)
@@ -20,6 +28,20 @@
       - [`for` Loops](#for-loops)
       - [Loops with `else`](#loops-with-else)
     - [Exception Handling](#exception-handling)
+  - [Variables](#variables)
+    - [Immutable Types](#immutable-types)
+      - [Examples of immutable types](#examples-of-immutable-types)
+    - [Mutable Types](#mutable-types)
+      - [Examples of mutable types](#examples-of-mutable-types)
+    - [Garbage Collection](#garbage-collection)
+      - [Reference Counting](#reference-counting)
+        - [Example of Reference Counting](#example-of-reference-counting)
+      - [Cyclic Garbage Collector](#cyclic-garbage-collector)
+        - [Example of Cyclic Garbage Collection](#example-of-cyclic-garbage-collection)
+    - [The `None` Object](#the-none-object)
+      - [Effects of Setting a Variable to `None`](#effects-of-setting-a-variable-to-none)
+      - [When to Use `None`](#when-to-use-none)
+      - [`None` with Booleans](#none-with-booleans)
   - [Classes](#classes)
     - [Creating an Instance (Object)](#creating-an-instance-object)
     - [Class Attributes vs Instance Attributes](#class-attributes-vs-instance-attributes)
@@ -36,20 +58,84 @@
     - [Method Decorators](#method-decorators)
       - [The `@property` Decorator](#the-property-decorator)
       - [`@classmethod` and `@staticmethod` Decorators](#classmethod-and-staticmethod-decorators)
-  - [Variables](#variables)
-  - [Data Types](#data-types)
-    - [Integers](#integers)
-    - [Floating Points](#floating-points)
-    - [Strings](#strings)
-    - [Lists](#lists)
-    - [Dictionaries](#dictionaries)
-    - [Tuples](#tuples)
-    - [Sets](#sets)
-    - [Booleans](#booleans)
+
+
 
 ## Style and Syntax
 
 See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) for best practices.
+
+### Integers
+
+```code
+int
+
+3
+300
+3000
+```
+
+### Floating Points
+
+```python
+float
+
+2.3
+4.7
+23.21
+```
+
+### Strings
+
+```python
+str
+
+"hello"
+"hello world"
+```
+
+### Lists
+
+```python
+list
+
+[10, 20, 30] # homogenous types
+[10, "hello", 2.3] # heterogeneous type
+```
+
+### Dictionaries
+
+```python
+dict
+
+{"key1": "value1",
+"key2": "value2"}
+```
+
+### Tuples
+
+```python
+tuple
+
+(10, "hello", 2.3) # usually heterogeneous
+```
+
+### Sets
+
+```python
+set
+
+{"a", "b", "c"}
+```
+
+### Booleans
+
+```python
+bool
+
+True
+False
+```
 
 ### Naming Conventions
 
@@ -93,7 +179,7 @@ Comments start with a hash symbol `#` and extend to the end of the line. Multipl
 # This is a 
 # multi-line comment
 
-x = 42  # You can also comment at the end of a line
+x = 42  # Can also comment at the end of a line
 ```
 
 ### Multi-Line Statements in Python
@@ -117,7 +203,7 @@ my_dict = {'a': 1, 'b': 2,
 
 #### Explicit Line Continuation
 
-Python uses the backslash `\` character to explicitly continue a statement onto the next line. This is useful when a statement is long but does not fit into the implicit categories (like when you're outside of parentheses or brackets).
+Python uses the backslash `\` character to explicitly continue a statement onto the next line. This is useful when a statement is long but does not fit into the implicit categories (like when outside of parentheses or brackets).
 
 ```python
 total = 1 + 2 + 3 + \
@@ -268,7 +354,7 @@ For a comprehensive list of built-in functions in Python, visit the official doc
 
 #### Lambda Functions
 
-A **lambda function** is a small anonymous function defined using the `lambda` keyword. It can take any number of arguments but has only one expression. Lambda functions are useful when you need a short, throwaway function.
+A **lambda function** is a small anonymous function defined using the `lambda` keyword. It can take any number of arguments but has only one expression. Lambda functions are useful for short, throwaway functions.
 
 ```python
 lambda arguments: expression
@@ -383,7 +469,7 @@ for i in range(1, 6):
 # 5
 ```
 
-You can use `break` to exit a for loop early.
+Use `break` to exit a for loop early.
 
 ``` python
 for i in range(1, 6):
@@ -503,6 +589,178 @@ finally:
 # Output:
 # Cannot divide by zero.
 # This always runs.
+```
+
+## Variables
+
+- In Python, every variable refers to an object stored in memory
+  - Variables are therefore references (or pointers) to memory addresses.
+  - Multiple variables can reference the same object, and changes to the object through one variable will be reflected in all variables that reference it.
+- Python objects are classified as *mutable* or *immutable* based on whether their content can be modified after creation.
+- The `id()` function can be used to find the memory address (*base-10*) of a variable.
+  - The `hex()` function can change the *base-10* number to *hexadecimal*.
+
+### Immutable Types
+
+Immutable objects cannot be changed after they are created, i.e. if an immutable type is modified, a new object is created in memory.
+
+#### Examples of immutable types
+
+- Numeric types: `int`, `float`, `complex`
+- Strings: `str`
+- Tuples
+- Frozen sets
+
+```python
+x = 10  # Immutable integer created at memory address 0x1000
+y = x # y and x both reference the same object at memory address 0x1000
+
+y = 20  # A new object at memory address 0x2000 is created for y with the value 20
+print(hex(id(x))) # x remains as 10 at memory address 0x1000
+```
+
+### Mutable Types
+
+Mutable objects can be modified after they are created, i.e. no new object is created when a mutable object is modified.
+
+#### Examples of mutable types
+
+- Lists
+- Dictionaries
+- Sets
+- User-defined objects (if their class allows mutation)
+
+```python
+my_list = [1, 2, 3]  # Mutable list created at memory address 0x1000
+my_list_2 = my_list # my_list_2 and my_list both reference the same object at memory address 0x1000
+
+my_list_2.append(4)  # The same list object at 0x1000 is modified
+```
+
+### Garbage Collection
+
+- Garbage collection in Python is the process of automatically freeing memory by deleting objects that are no longer in use. Python primarily uses reference counting and a cyclic garbage collector to manage memory.
+- When the reference count drops to zero, the memory for the object is immediately deallocated.
+- However, reference counting cannot handle circular references, where two or more objects refer to each other but are no longer accessible from the rest of the program.
+- Python includes a cyclic garbage collector as part of its GC module to detect and collect objects involved in reference cycles.
+  - This collector works in addition to reference counting to clean up circular references.
+
+#### Reference Counting
+
+Reference counting is a technique where each object has an associated counter that tracks the number of references to it. When an object's reference count drops to zero, it means the object is no longer in use and can be safely deleted.
+
+##### Example of Reference Counting
+
+```python
+import sys
+
+# Create an object
+a = [1, 2, 3]
+print(sys.getrefcount(a))  # Output: 2 (one from 'a' and one from getrefcount)
+
+# Create another reference to the same object
+b = a
+print(sys.getrefcount(a))  # Output: 3 (one from 'a', one from 'b', and one from getrefcount)
+
+# Delete one reference
+del b
+print(sys.getrefcount(a))  # Output: 2 (one from 'a' and one from getrefcount)
+
+# Delete the remaining reference
+del a
+# Now the reference count is 0, and the object is garbage collected
+```
+
+**Note**: The `sys.getrefcount()` function creates an additional reference to the object when it is called, which can affect the reference count. To avoid this, use the `ctypes` module to get the reference count without creating an additional reference:
+
+```python
+import ctypes
+
+# Create an object
+a = [1, 2, 3]
+
+# Get the reference count without creating an additional reference
+memory_address = id(a) # this does create a reference to a, but this reference is removed upon id() returning the address
+ref_count = ctypes.c_long.from_address(memory_address).value 
+print(ref_count)  # Output: 1 (only one reference from 'a')
+```
+
+#### Cyclic Garbage Collector
+
+- Python's cyclic garbage collector is designed to detect and collect objects that are part of reference cycles (i.e., objects that reference each other but are not reachable from any other part of the program).
+- The garbage collector periodically identifies unreachable objects and reclaims their memory.
+- Objects with a `__del__` method require special handling, as finalizers can complicate garbage collection.
+
+##### Example of Cyclic Garbage Collection
+
+```python
+import gc
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+# Create a circular reference
+node1 = Node(1)
+node2 = Node(2)
+node1.next = node2
+node2.next = node1
+
+# Manually break the circular reference
+node1 = None
+node2 = None
+
+# Force garbage collection
+gc.collect()
+```
+
+In this example, `node1` and `node2` reference each other, creating a cycle. When `node1` and `node2` are set to `None`, the reference count for both objects drops, but they are not immediately collected because they reference each other. The cyclic garbage collector detects this cycle and collects the objects.
+
+### The `None` Object
+
+`None` is a built-in *singleton* object that represents the absence of a value or a null reference. Assigning `None` to a variable does not delete the variable but changes its reference to point to the `None` object in memory.
+
+#### Effects of Setting a Variable to `None`
+
+- Breaks the variable's reference to the original memory address
+  - The variable no longer references its original object.
+  - If no other references to the original object exist, it becomes eligible for garbage collection.
+- Updates the variable's reference
+  - The variable now points to the memory location of the `None` object.
+  - The `None` object is a singleton, meaning it always occupies the same memory address.
+- Does not delete the variable
+  - Setting a variable to `None` does not remove it. The variable still exists and can be reassigned to a new value later.
+
+```python
+x = [1, 2, 3] # x references a list (mutable)
+y = 10  # y references an int (immutable)
+
+id(my_int) == id(my_array) # false
+
+my_int = None
+my_array = None
+id(my_int) == id(my_array) # true, as x and y reference None object
+```
+
+#### When to Use `None`
+
+- Initialize Variables
+  - Use `None` as a placeholder for variables before assigning them meaningful values.
+- Explicitly reset a variable to indicate it is no longer being used.
+- Function Defaults
+  - Use `None` as a default argument in functions to indicate the absence of a value.
+
+#### `None` with Booleans
+
+- In a boolean context (e.g., inside an if statement), None evaluates to False.
+- This should be used with caution as `None`, `True`, and `False` are distinct singleton objects in Python.
+
+```python
+None is False # False, identity (memory address) is different
+None == False # False, value equality is different
+if not None:
+    print("None evaluates to False in boolean context")
 ```
 
 ## Classes
@@ -654,7 +912,7 @@ print(dog.speak())  # Output: Buddy barks
 
 ### The `super()` Function
 
-The `super()` function allows you to call methods from the parent class in a child class. This is useful for extending or modifying behaviour in subclasses without completely overriding the parent method.
+The `super()` function allows methods from the parent class to be called in a child class. This is useful for extending or modifying behaviour in subclasses without completely overriding the parent method.
 
 ```python
 class Animal:
@@ -739,7 +997,7 @@ print(person.get_ssn())         # Output: 123-45-6789
 
 #### Accessing Private Attributes
 
-Private attributes cannot be directly accessed from outside the class. However, Python allows you to access private attributes using a **name-mangling** mechanism:
+Private attributes cannot be directly accessed from outside the class. However, Python allows access to private attributes using a **name-mangling** mechanism:
 
 ```python
 print(person._Person__age)  # Output: 30
@@ -747,7 +1005,7 @@ print(person._Person__age)  # Output: 30
 
 ## Decorators
 
-Decorators are a powerful feature in Python that allow you to modify the behaviour of functions or methods. They are often used to add functionality to existing code in a clean and readable way.
+Decorators are a powerful feature in Python that modify the behaviour of functions or methods. They are often used to add functionality to existing code in a clean and readable way.
 
 - **Function Decorators**: Used to modify or enhance functions.
 - **Class Decorators**: Used to modify or enhance classes.
@@ -805,7 +1063,7 @@ Method decorators are used to modify or enhance methods within a class.
 
 #### The `@property` Decorator
 
-The `@property` decorator allows you to define methods in a class that can be accessed like attributes. This is useful for implementing getters and setters in a Pythonic way.
+The `@property` decorator defines methods in a class that can be accessed like attributes. This is useful for implementing getters and setters in a Pythonic way.
 
 - **Getter**: Use the `@property` decorator to define a method that will be accessed like an attribute.
 - **Setter**: Use the `@<property_name>.setter` decorator to define a method that sets the value of the property.
@@ -870,80 +1128,4 @@ class MathOperations:
 # Using Class and Static Methods
 print(MathOperations.circle_area(5))  # Output: 78.5
 print(MathOperations.add(5, 3))       # Output: 8
-```
-
-## Variables
-
-## Data Types
-
-### Integers
-
-```code
-int
-
-3
-300
-3000
-```
-
-### Floating Points
-
-```python
-float
-
-2.3
-4.7
-23.21
-```
-
-### Strings
-
-```python
-str
-
-"hello"
-"hello world"
-```
-
-### Lists
-
-```python
-list
-
-[10, 20, 30] # homogenous types
-[10, "hello", 2.3] # heterogeneous type
-```
-
-### Dictionaries
-
-```python
-dict
-
-{"key1": "value1",
-"key2": "value2"}
-```
-
-### Tuples
-
-```python
-tuple
-
-(10, "hello", 2.3) # usually heterogeneous
-```
-
-### Sets
-
-```python
-set
-
-{"a", "b", "c"}
-```
-
-### Booleans
-
-```python
-bool
-
-True
-False
 ```

@@ -23,7 +23,7 @@ Install required packages for venv from file:
 
 Add the following to workspace settings for VS Code - [settings.json](../../.vscode/settings.json):
 
-    "python.defaultInterpreterPath": "${workspaceFolder}/quant-library/python/.venv"
+    "python.defaultInterpreterPath": "${workspaceFolder}/quantitative/quant_platform/.venv"
 
 </br>
 
