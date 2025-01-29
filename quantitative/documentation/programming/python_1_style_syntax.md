@@ -3,8 +3,18 @@
 See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) for best practices.
 
 - [Python Style and Syntax](#python-style-and-syntax)
+  - [Objects](#objects)
   - [Data Types](#data-types)
+    - [Introduction](#introduction)
     - [Integers](#integers)
+      - [Types of Integers](#types-of-integers)
+      - [Integer Operations](#integer-operations)
+      - [Large Integers](#large-integers)
+      - [Conversion to Integer](#conversion-to-integer)
+      - [Integer Comparison Operations](#integer-comparison-operations)
+      - [Integer Bitwise Operations](#integer-bitwise-operations)
+      - [Integer Common Methods](#integer-common-methods)
+      - [Integer Overflow](#integer-overflow)
     - [Floating Points](#floating-points)
     - [Strings](#strings)
     - [Lists](#lists)
@@ -23,6 +33,9 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
     - [Logical Operators](#logical-operators)
     - [Ternary Conditional Operator](#ternary-conditional-operator)
   - [Functions](#functions)
+    - [Functions as Objects](#functions-as-objects)
+      - [`my_func` versus `my_func()`](#my_func-versus-my_func)
+    - [Higher-Order Functions](#higher-order-functions)
     - [Built-in Functions](#built-in-functions)
     - [Lambda Functions](#lambda-functions)
   - [Loops](#loops)
@@ -31,17 +44,164 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Loops with `else`](#loops-with-else)
   - [Exception Handling](#exception-handling)
 
+## Objects
+
+- In Python, *almost everything* is an object, including numbers, strings, functions, and even classes.
+- Every object is an instance of a class, which defines its behaviour and attributes:
+  - Functions are instances of `function`.
+  - Built-in types (`int`, `str`, `list`, etc.) and user-defined classes are instances of `type`.
+- Objects have the following properties:
+  - **Identity** - A unique memory address, retrievable with `id(obj)`.
+  - **Type** - The class it is an instance of, given by `type(obj)`.
+  - **Value** - The data it holds, which may be *mutable* or *immutable*.
+- Python treats all objects as *first-class objects*, meaning they can be:
+  - Assigned to variables.
+  - Passed as arguments to functions.
+  - Returned from functions.
+  - Stored in data structures such as lists and dictionaries.
+- Variables store references to objects rather than the objects themselves.
+- Since functions are objects, they can be passed as arguments and returned from other functions.
+
 ## Data Types
+
+### Introduction
+
+- Numerical Python types:
+  - **Boolean truth values** where $0$ is `False` and $1$ is `True` are `bool` types.
+  - **Integer numbers** ($\mathbb{Z}$) such as $0, \pm1, \pm2, \pm3,...$ are `int` types.
+  - **Rational numbers** ($\mathbb{Q}$) where $\left\{ \frac{p}{q} \mid p, q \in \mathbb{Z}, q \neq 0 \right\}$ are `fractions.Fraction` types.
+  - **Real numbers** ($\mathbb{R}$) such as $0, -1, 0.125, \frac{1}{3}, \pi$ are `float` or `decimal.Decimal` types.
+  - **Integer numbers** ($\mathbb{C}$) where $\{a + bi \mid a,b \in \mathbb{R}\}$ are `complex` types.
 
 ### Integers
 
-```code
-int
+- An integer in Python is a whole number without a decimal point.
+- Integers can be positive, negative, or zero.
+- Integers in Python are immutable, so that their value cannot be changed once they are created. Any operation on an integer creates a new object.
 
-3
-300
-3000
+Integers are created by simply assigning a number to a variable.
+
+```python
+a = 42  # Positive integer
+b = -10  # Negative integer
+c = 0  # Zero
 ```
+
+#### Types of Integers
+
+- **Decimal**: Regular base-10 integers (`5`, `100`, `-3`).
+- **Binary**: Represented by prefix `0b` or `0B` (`0b1010`).
+- **Octal**: Represented by prefix `0o` or `0O` (`0o12`).
+- **Hexadecimal**: Represented by prefix `0x` or `0X` (`0x1f`).
+
+```python
+binary = 0b1010  # 10 in decimal
+octal = 0o12  # 10 in decimal
+hexadecimal = 0x1f  # 31 in decimal
+```
+
+#### Integer Operations
+
+- Addition: `+`
+- Subtraction: `-`
+- Multiplication: `*`
+- Division: `/`
+- Modulus: `%`
+- Exponentiation: `**`
+- Floor division: `//`
+
+```python
+a = 10
+b = 3
+sum_a_b = a + b  # 13
+diff_a_b = a - b  # 7
+prod_a_b = a * b  # 30
+div_a_b = a / b  # 3.333...
+floor_div_a_b = a // b  # 3
+mod_a_b = a % b  # 1
+exp_a_b = a ** b  # 1000
+```
+
+#### Large Integers
+
+- Python supports arbitrarily large integers, allowing them to grow beyond typical 32-bit or 64-bit integer limits.
+- No need for special data types or libraries to handle large numbers.
+
+```python
+large_num = 123456789123456789123456789
+print(large_num)
+```
+
+#### Conversion to Integer
+
+Integers can be converted from strings or floats.
+
+```python
+str_num = "42"
+int_num = int(str_num)  # 42
+
+float_num = 3.14
+int_from_float = int(float_num)  # 3
+```
+
+#### Integer Comparison Operations
+
+- Equals: `==`
+- Not equals: `!=`
+- Greater than: `>`
+- Less than: `<`
+- Great than or equal: `>=`
+- Less than or equal: `<=`
+
+```python
+a = 10
+b = 20
+print(a == b)  # False
+print(a < b)  # True
+```
+
+#### Integer Bitwise Operations
+
+Integers support bitwise operations:
+- AND: `&`
+- OR: `|`
+- XOR: `^`
+- NOT: `~`
+- left shift: `<<`
+- right shift: `>>`
+
+```python
+a = 5  # 0b0101
+b = 3  # 0b0011
+and_op = a & b  # 0b0001 (1 in decimal)
+or_op = a | b  # 0b0111 (7 in decimal)
+xor_op = a ^ b  # 0b0110 (6 in decimal)
+```
+
+#### Integer Common Methods
+
+`abs(x)`: Returns the absolute value of x.
+
+```python
+abs(-10)  # 10
+```
+
+`pow(x, y)`: Returns x raised to the power y.
+
+```python
+pow(2, 3)  # 8
+```
+
+`divmod(x, y)`: Returns a tuple (quotient, remainder) for integer division.
+
+```python
+divmod(10, 3)  # (3, 1)
+```
+
+#### Integer Overflow
+
+- Python's integers automatically scale to accommodate larger values, so there's no risk of overflow.
+- However, operations on large integers can be slower due to the need for more memory and processing.
 
 ### Floating Points
 
@@ -276,6 +436,46 @@ def square(x):
 
 result = square(4)
 print(result)  # Output: 16
+```
+
+### Functions as Objects
+
+Functions in Python are objects of type function. This allows functions to be assigned to variables, stored in data structures, or passed around like any other object:
+
+```python
+def multiply(x, y):
+    return x * y
+
+# Assigning function to a variable
+operation = multiply
+print(operation(3, 4))  # Output: 12
+```
+
+#### `my_func` versus `my_func()`
+
+- `my_func` refers to the function object itself. It can be assigned to a variable or passed as an argument without executing it.
+- `my_func()` calls the function, executing its code and returning the result.
+
+```python
+def say_hello():
+    return "Hello!"
+
+print(say_hello)   # Output: <function say_hello at 0x...> (Function object)
+print(say_hello()) # Output: Hello! (Function executed)
+```
+
+### Higher-Order Functions
+
+Since functions are objects, they can be passed as arguments to other functions and returned as results:
+
+```python
+def apply_twice(func, value):
+    return func(func(value))
+
+def increment(x):
+    return x + 1
+
+print(apply_twice(increment, 3))  # Output: 5 (3 → 4 → 5)
 ```
 
 ### Built-in Functions

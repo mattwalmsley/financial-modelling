@@ -10,7 +10,6 @@
     - [Strings: String Interning](#strings-string-interning)
     - [Tuples: Shared References for Immutable Components](#tuples-shared-references-for-immutable-components)
     - [Explicit Interning with `sys.intern`](#explicit-interning-with-sysintern)
-    - [Objects Created Dynamically](#objects-created-dynamically)
   - [Equality](#equality)
     - [`==` Operator](#-operator)
     - [`is` Operator](#is-operator)
@@ -25,6 +24,13 @@
     - [Effects of Setting a Variable to `None`](#effects-of-setting-a-variable-to-none)
     - [When to Use `None`](#when-to-use-none)
     - [`None` with Booleans](#none-with-booleans)
+  - [Peephole Optimisation](#peephole-optimisation)
+    - [Examples of Peephole Optimisations](#examples-of-peephole-optimisations)
+      - [Constant Folding](#constant-folding)
+      - [Unused Code Removal](#unused-code-removal)
+      - [Redundant Operations Elimination](#redundant-operations-elimination)
+      - [Simplifying Expressions](#simplifying-expressions)
+      - [Membership Test Optimisations](#membership-test-optimisations)
 
 ## Introduction
 
@@ -111,8 +117,11 @@ print(my_tuple)  # Output: ([1, 2, 3], [3])
 
 ### Small Integers: Object Interning
 
-- Python caches integers in the range `[-5, 256]` during startup.
+- Python caches a global list of integers in the range `[-5, 256]` during startup.
+- Integers in this range are *singleton* objects.
 - When variables are assigned values within this range, Python reuses the same object in memory.
+
+Small integers are frequently used, so caching them reduces memory overhead and speeds up execution.
 
 ```python
 a = 10
@@ -120,8 +129,7 @@ b = 10
 print(id(a), id(b))  # Same memory address
 ```
 
-Small integers are frequently used, so caching them reduces memory overhead and speeds up execution.
-Counterexample:
+Integers outside the [-5, 256] range are not interned and are created as separate objects.
 
 ```python
 x = 257
@@ -129,7 +137,33 @@ y = 257
 print(id(x), id(y))  # Different memory addresses
 ```
 
-Integers outside the [-5, 256] range are not interned and are created as separate objects.
+Dynamically creating small integers will still point to the same interned integer object.
+
+```python
+# Static Creation (Interned Object)
+x = 10 # Interned small integer
+y = 10 # Points to the same interned integer object as x
+
+# a and b also points to the same interned integer object in memory as x and y
+a = int("10")
+b = int("10")
+print(id(x), id(y), id(a), id(b))  # Same memory address
+
+def get_half(n: str) -> int:
+    return int(n) / 2
+
+x = get_half("20")  # Created float from a string
+y = get_half("20")  # Another float created from a string
+
+print(x,y) # 10.0 10.0 # Same values
+
+# Different memory addresses due to being floats
+print(id(x), id(y))  # Different memory addresses
+print(type(x), type(y))
+
+# converted to an int, will point to same memory address
+print(id(int(x)), id(int(y)))  # Same memory addresses
+```
 
 ### Strings: String Interning
 
@@ -175,34 +209,7 @@ s2 = sys.intern("long string that is not automatically interned")
 print(id(s1), id(s2))  # Same memory address
 ```
 
-Explicit interning can be helpful for performance when working with large datasets of repetitive strings.
-
-### Objects Created Dynamically
-
-- For objects created dynamically (e.g., via operations or function calls), Python does not reuse memory unless explicitly optimized.
-
-```python
-# Static Creation (Interned Object)
-x = 10 # Interned small integer
-y = 10 # Points to the same interned integer object as x
-a = int("10")  # Also an interned small integer
-b = int("10")  # Points to the same interned integer object as a
-print(id(x), id(y))  # Same memory address
-print(id(a), id(b))  # Same memory address
-
-# Dynamic Creation (Non-Interned Object)
-def get_integer(n: str) -> int:
-    return int(n) / 2
-
-x = get_integer("10")  # Created dynamically from a string
-y = get_integer("10")  # Another dynamically created integer from a string
-
-print(x,y) # 5.0 5.0 # Same values
-print(id(x), id(y))  # Different memory addresses
-```
-
-- Even though x and y have the same value (`10`), the `int()` function in combination with the `/` operator creates new objects during runtime.
-- N.B. The `int()` function by itself will still create a shared reference.
+Explicit interning can be helpful for performance when working with large datasets of repetitive strings or for quickly comparing two strings by checking for identity equality instead of a slower character-by-character value equality check.
 
 ## Equality
 
@@ -312,7 +319,7 @@ print(ref_count)  # Output: 1 (only one reference from 'a')
 
 - Python's cyclic garbage collector is designed to detect and collect objects that are part of reference cycles (i.e., objects that reference each other but are not reachable from any other part of the program).
 - The garbage collector periodically identifies unreachable objects and reclaims their memory.
-- Objects with a `__del__` method require special handling, as finalizers can complicate garbage collection.
+- Objects with a `__del__` method require special handling, as finalisers can complicate garbage collection.
 
 #### Example of Cyclic Garbage Collection
 
@@ -369,7 +376,7 @@ my_int is my_array # true, as same reference
 
 ### When to Use `None`
 
-- Initialize Variables
+- Initialise Variables
   - Use `None` as a placeholder for variables before assigning them meaningful values.
 - Explicitly reset a variable to indicate it is no longer being used.
 - Function Defaults
@@ -386,3 +393,103 @@ None == False # False, value equality is different
 if not None:
     print("None evaluates to False in boolean context")
 ```
+
+## Peephole Optimisation
+
+- Python (specifically CPython) performs small-scale optimizations at the bytecode level, known as *peephole* optimizations.
+- These optimisations occur at the *bytecode compilation phase*, before the code is executed, and aim to make the generated bytecode more efficient.
+- Peephole optimisation works by looking at a "window" of a few instructions at a time (a "peephole") in the generated bytecode.
+- The optimiser analyses and possibly replaces these instructions with more efficient or simplified equivalents.
+
+### Examples of Peephole Optimisations
+
+#### Constant Folding
+
+If a Python expression involves constants, the optimiser will precompute the result and replace the expression with the computed constant.
+
+```python
+ # numeric calculations
+x = 3 + 4
+
+# short sequences with length < 20
+y = (1, 2) * 3
+z = 'abc' * 2
+```
+
+After peephole optimisation, it would be replaced with:
+
+```python
+x = 7
+y = (1, 2, 1, 2, 1, 2)
+z = 'abcabc'
+```
+
+#### Unused Code Removal
+
+If there is code that does not affect the program's output (e.g., an unused variable or operation), the peephole optimiser will remove it.
+
+```python
+x = 5
+y = 10
+s = x + y  # This will not be used anywhere else
+```
+
+After optimisation, the code might become:
+
+```python
+x = 5
+y = 10
+```
+
+#### Redundant Operations Elimination
+
+If there are redundant or repeated operations, the optimiser will attempt to eliminate them to save processing time.
+
+```python
+x = 5 * 1  # Redundant multiplication by 1
+```
+
+After optimisation, the code will become:
+
+```python
+x = 5
+```
+
+#### Simplifying Expressions
+
+Some expressions, like certain arithmetic operations, may be simplified to a more efficient form.
+
+```python
+x = (a * 2) + (a * 2)
+```
+
+After optimisation, it could be simplified to:
+
+```python
+x = a * 4
+```
+
+#### Membership Test Optimisations
+
+When performing a membership test using the `in` operator, Python checks if a value exists within a sequence, such as a list.
+
+```python
+e in [1, 2, 3] #list
+```
+
+Peephole optimization can help simplify a list membership test expressions by converting the relevant list into a tuple.
+
+```python
+e in (1, 2, 3)
+```
+
+- Lists are mutable, meaning the interpreter needs to account for possible modifications.
+- Tuples are immutable, and optimisations can be made during the bytecode compilation phase, such as faster hash-based membership checks.
+
+Python will optimize membership tests on mutable objects by converting mutable data structures to immutable ones. Constant lists will be converted to tuples and constant sets will be converted to frozensets.
+
+However, sets and dictionaries offer faster membership tests than both lists and tuples:
+
+- Sets and dicts in Python use a hash table internally.
+- When checking membership (key in set or key in dict), Python can perform the lookup in $O(1)$ average time complexity, which is significantly faster than the $O(n)$ complexity of list or tuple membership tests.
+- Lists and tuples require scanning through each element one-by-one to check if the item is present, whereas sets and dicts use their hash-based structure to quickly determine if an element exists.
