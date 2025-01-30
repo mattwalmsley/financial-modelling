@@ -6,19 +6,17 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
   - [Objects](#objects)
   - [Data Types](#data-types)
     - [Introduction](#introduction)
-    - [Integers](#integers)
+    - [Integers (`int`)](#integers-int)
       - [Types of Integers](#types-of-integers)
       - [Integer Operations](#integer-operations)
       - [Large Integers](#large-integers)
+      - [Integer Size \& Memory Usage](#integer-size--memory-usage)
       - [Conversion to Integer](#conversion-to-integer)
-      - [Integer Comparison Operations](#integer-comparison-operations)
-      - [Integer Bitwise Operations](#integer-bitwise-operations)
       - [Integer Common Methods](#integer-common-methods)
-      - [Integer Overflow](#integer-overflow)
-    - [Floating Points](#floating-points)
-    - [Strings](#strings)
-    - [Lists](#lists)
-    - [Dictionaries](#dictionaries)
+    - [Floating Points (`float`)](#floating-points-float)
+    - [Strings (`str`)](#strings-str)
+    - [Lists (`list`)](#lists-list)
+    - [Dictionaries (`dict`)](#dictionaries-dict)
     - [Tuples](#tuples)
     - [Sets](#sets)
     - [Booleans](#booleans)
@@ -73,7 +71,7 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
   - **Real numbers** ($\mathbb{R}$) such as $0, -1, 0.125, \frac{1}{3}, \pi$ are `float` or `decimal.Decimal` types.
   - **Integer numbers** ($\mathbb{C}$) where $\{a + bi \mid a,b \in \mathbb{R}\}$ are `complex` types.
 
-### Integers
+### Integers (`int`)
 
 - An integer in Python is a whole number without a decimal point.
 - Integers can be positive, negative, or zero.
@@ -102,35 +100,91 @@ hexadecimal = 0x1f  # 31 in decimal
 
 #### Integer Operations
 
-- Addition: `+`
-- Subtraction: `-`
-- Multiplication: `*`
-- Division: `/`
-- Modulus: `%`
-- Exponentiation: `**`
-- Floor division: `//`
+- Arithmetic operations:
+  - Addition: `+`
+  - Subtraction: `-`
+  - Multiplication: `*`
+  - Division: `/`
+  - Modulus: `%`
+  - Exponentiation: `**`
+  - Floor division: `//`
 
-```python
-a = 10
-b = 3
-sum_a_b = a + b  # 13
-diff_a_b = a - b  # 7
-prod_a_b = a * b  # 30
-div_a_b = a / b  # 3.333...
-floor_div_a_b = a // b  # 3
-mod_a_b = a % b  # 1
-exp_a_b = a ** b  # 1000
-```
+    ```python
+    a = 10
+    b = 2
+    
+    c1 = a + b  # 12 (int)
+    c2 = a - b  # 8 (int)
+    c3 = a * b  # 20 (int)
+    c4 = a / b  # 5.0 (float)
+
+    x = 10
+    y = 3
+    z1 = a // b  # 3 (int)
+    z2 = a % b  # 1 (int)
+    z3 = a ** b  # 1000 (int)
+    ```
+
+The equation: `a = b * (a // b) + a % b` is helpful to remember when dealing with modulus and floor divisions integer operations (holds for both positive and negative integers).
+
+- Comparison operators:
+  - Equals: `==`
+  - Not equals: `!=`
+  - Greater than: `>`
+  - Less than: `<`
+  - Great than or equal: `>=`
+  - Less than or equal: `<=`
+
+    ```python
+    a = 10
+    b = 20
+    print(a == b)  # False
+    print(a < b)  # True
+    ```
+
+- Bitwise operations:
+  - AND: `&`
+  - OR: `|`
+  - XOR: `^`
+  - NOT: `~`
+  - left shift: `<<`
+  - right shift: `>>`
+
+    ```python
+    a = 5  # 0b0101
+    b = 3  # 0b0011
+    and_op = a & b  # 0b0001 (1 in decimal)
+    or_op = a | b  # 0b0111 (7 in decimal)
+    xor_op = a ^ b  # 0b0110 (6 in decimal)
+    ```
 
 #### Large Integers
 
 - Python supports arbitrarily large integers, allowing them to grow beyond typical 32-bit or 64-bit integer limits.
 - No need for special data types or libraries to handle large numbers.
+- Operations on large integers take more time due to increased memory usage and processing.
 
 ```python
 large_num = 123456789123456789123456789
 print(large_num)
 ```
+
+#### Integer Size & Memory Usage
+
+- Arbitrary Precision: Python 3 integers (`int`) have no fixed size limit; they grow dynamically as needed.
+- No Overflow: Unlike languages with `int32` or `int64`, Python automatically expands integers beyond typical limits.
+- Memory Overhead: Python integers use more memory than C/C++ integers due to object metadata and dynamic storage.
+- Memory Growth: Larger integers require more memory; use `sys.getsizeof(x)` to check storage size.
+
+```python
+import sys
+print(sys.getsizeof(0))       # 24
+print(sys.getsizeof(1))       # 28
+print(sys.getsizeof(10**10))  # 32
+print(sys.getsizeof(10**100)) # Increases with size
+```
+
+Python's integer system is flexible but comes at the cost of memory and performance for very large numbers.
 
 #### Conversion to Integer
 
@@ -142,40 +196,6 @@ int_num = int(str_num)  # 42
 
 float_num = 3.14
 int_from_float = int(float_num)  # 3
-```
-
-#### Integer Comparison Operations
-
-- Equals: `==`
-- Not equals: `!=`
-- Greater than: `>`
-- Less than: `<`
-- Great than or equal: `>=`
-- Less than or equal: `<=`
-
-```python
-a = 10
-b = 20
-print(a == b)  # False
-print(a < b)  # True
-```
-
-#### Integer Bitwise Operations
-
-Integers support bitwise operations:
-- AND: `&`
-- OR: `|`
-- XOR: `^`
-- NOT: `~`
-- left shift: `<<`
-- right shift: `>>`
-
-```python
-a = 5  # 0b0101
-b = 3  # 0b0011
-and_op = a & b  # 0b0001 (1 in decimal)
-or_op = a | b  # 0b0111 (7 in decimal)
-xor_op = a ^ b  # 0b0110 (6 in decimal)
 ```
 
 #### Integer Common Methods
@@ -198,12 +218,7 @@ pow(2, 3)  # 8
 divmod(10, 3)  # (3, 1)
 ```
 
-#### Integer Overflow
-
-- Python's integers automatically scale to accommodate larger values, so there's no risk of overflow.
-- However, operations on large integers can be slower due to the need for more memory and processing.
-
-### Floating Points
+### Floating Points (`float`)
 
 ```python
 float
@@ -213,7 +228,7 @@ float
 23.21
 ```
 
-### Strings
+### Strings (`str`)
 
 ```python
 str
@@ -222,7 +237,7 @@ str
 "hello world"
 ```
 
-### Lists
+### Lists (`list`)
 
 ```python
 list
@@ -231,7 +246,7 @@ list
 [10, "hello", 2.3] # heterogeneous type
 ```
 
-### Dictionaries
+### Dictionaries (`dict`)
 
 ```python
 dict
