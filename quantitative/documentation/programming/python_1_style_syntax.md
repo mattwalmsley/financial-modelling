@@ -11,7 +11,7 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Integer Operations](#integer-operations)
       - [Large Integers](#large-integers)
       - [Integer Size \& Memory Usage](#integer-size--memory-usage)
-      - [Conversion to Integer](#conversion-to-integer)
+      - [Integer Representation](#integer-representation)
       - [Integer Common Methods](#integer-common-methods)
     - [Floating Points (`float`)](#floating-points-float)
     - [Strings (`str`)](#strings-str)
@@ -93,9 +93,9 @@ c = 0  # Zero
 - **Hexadecimal**: Represented by prefix `0x` or `0X` (`0x1f`).
 
 ```python
-binary = 0b1010  # 10 in decimal
-octal = 0o12  # 10 in decimal
-hexadecimal = 0x1f  # 31 in decimal
+binary = 0b1010  # 10 in decimal/base-10
+octal = 0o12  # 10 in decimal/base-10
+hexadecimal = 0x1f  # 31 in decimal/base-10
 ```
 
 #### Integer Operations
@@ -186,19 +186,48 @@ print(sys.getsizeof(10**100)) # Increases with size
 
 Python's integer system is flexible but comes at the cost of memory and performance for very large numbers.
 
-#### Conversion to Integer
+#### Integer Representation
 
-Integers can be converted from strings or floats.
+- The built-in `int()` function can represent a value as an integer.
+- If the argument is a string, it must represent a valid integer (base-10 by default). Otherwise, it raises a `ValueError`.
+  - `int()` takes a second parameter for the `base`.
+- When applied to a float, `int()` truncates the decimal portion (does not round).
+- Booleans values, `True` and `False`, are also accepted by `int()`.
 
 ```python
-str_num = "42"
-int_num = int(str_num)  # 42
+int("42") # 42 (base-10 by default)
+int("1010", 2) # 10 (base-2)
+int("A12F", base=16) # 41263 (base-16)
 
-float_num = 3.14
-int_from_float = int(float_num)  # 3
+int("B", 11) # ValueError
+
+int(3.14) # 3
+int(10.9) # 10
+int(-10.9) # -10
+
+int(True) # 1
+int(False) # 0
 ```
 
 #### Integer Common Methods
+
+`bin(x)`: Returns the binary representation of an integer
+
+```python
+bin(10) # 0b1010
+```
+
+`oct(x)`: Returns the octal representation of an integer
+
+```python
+oct(10) # 0o12
+```
+
+`hex(x)`: Returns the hexadecimal representation of an integer
+
+```python
+hex(10) # 0xa
+```
 
 `abs(x)`: Returns the absolute value of x.
 
