@@ -18,7 +18,11 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Operations with Fractions](#operations-with-fractions)
       - [Fractions Use Cases](#fractions-use-cases)
       - [Representing Irrational Numbers with Fractions](#representing-irrational-numbers-with-fractions)
-    - [Floating Points (`float`)](#floating-points-float)
+    - [Floating-Points (`float`)](#floating-points-float)
+      - [Float Bit Layout Example](#float-bit-layout-example)
+      - [Floats Precision and Rounding Errors](#floats-precision-and-rounding-errors)
+      - [Special Floating-Point Values](#special-floating-point-values)
+      - [Float Use Cases](#float-use-cases)
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
     - [Dictionaries (`dict`)](#dictionaries-dict)
@@ -303,15 +307,70 @@ print(approx_pi)  # Output: 355/113 (a well-known approximation of π)
 - The `limit_denominator(n)` method finds the best fractional approximation within a given denominator limit.
 - $\frac{355}{113}$ is a well-known close approximation of $\pi$.
 
-### Floating Points (`float`)
+### Floating-Points (`float`)
+
+- Python's `float` type is based on the *IEEE 754 double-precision (64-bit)* floating-point standard, which represents real numbers approximately using binary fractions.
+- This allows for a wide range of values but introduces precision limitations due to finite storage.
+- A 64-bit (8-byte) float consists of:
+  - 1-bit sign (positive or negative)
+  - 11-bit exponent (scales the number, e.g. -5 is the exponent in 1.5E-5)
+  - 52-bit fraction (mantissa) (stores significant digits)
+
+    | **Component**       | **Bit Length** | **Purpose** |
+    |---------------------|----------------|-------------|
+    | Sign Bit            | 1 bit          | Determines whether the number is positive (`0`) or negative (`1`). |
+    | Exponent            | 11 bits        | Stores the exponent with a **bias of 1023** (used for scaling). |
+    | Mantissa (Fraction) | 52 bits        | Stores the significant digits of the number (in binary). |
+
+This structure enables approximately 15 - 17 significant decimal digits of precision and an exponent range of about $\pm10^{308}$.
+
+#### Float Bit Layout Example
+
+- Step 1: Convert `-13.625` to binary
+  - Integer part: `13` → `1101` in binary  
+  - Fractional part: `0.625` → `0.101` in binary  
+  - Combined: `1101.101`  
+- Step 2: Normalize to scientific notation
+  - Convert to binary scientific notation:  $1101.101_2 = 1.101101_2 \times 2^3$
+  - Mantissa: `1.101101...` (drop leading `1`, store `101101...`)
+  - Exponent: `3` (biased using *bias 1023* → `3 + 1023 = 1026`)
+- Step 3: Encode into *IEEE 754* format
+
+    | **Component**             | **Binary Representation**                              | **Value** |
+    |---------------------------|--------------------------------------------------------|-------------|
+    | Sign Bit                  | `1`                                                    | Negative number |
+    | Exponent (11-bit, biased) | `10000000010`                                          | $1026_{10} = 10000000010_{2}$|
+    | Mantissa (52-bit)         | `1011010000000000000000000000000000000000000000000000` | Fractional part |
+
+#### Floats Precision and Rounding Errors
+
+Some decimal numbers cannot be exactly represented as binary fractions, leading to small rounding errors.
 
 ```python
-float
-
-2.3
-4.7
-23.21
+print(0.1 + 0.2)  # Output: 0.30000000000000004
 ```
+
+- `0.1` and `0.2` do not have exact binary representations, causing slight inaccuracies.
+- `math.isclose(a, b)` is recommended for float comparisons instead of `==`.
+
+#### Special Floating-Point Values
+
+```python
+import math
+
+print(math.inf)  # Infinity
+print(-math.inf)  # Negative Infinity
+print(math.nan)  # Not-a-Number (NaN)
+```
+
+- Infinity (`inf`) results from division by zero (`1.0 / 0.0`).
+- `NaN` (Not-a-Number) represents undefined operations (`0.0 / 0.0`).
+
+#### Float Use Cases
+
+- Scientific computing where approximate real-number arithmetic is sufficient.
+- Machine learning, simulations, and graphics where fast computations matter more than perfect precision.
+- When exact values are needed, alternatives like decimal.Decimal or fractions.Fraction should be used.
 
 ### Strings (`str`)
 
