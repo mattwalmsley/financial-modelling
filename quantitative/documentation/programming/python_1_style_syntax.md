@@ -13,6 +13,11 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Integer Size \& Memory Usage](#integer-size--memory-usage)
       - [Integer Representation](#integer-representation)
       - [Integer Common Methods](#integer-common-methods)
+    - [Fractions (`fractions.Fraction`)](#fractions-fractionsfraction)
+      - [Creating Fractions](#creating-fractions)
+      - [Operations with Fractions](#operations-with-fractions)
+      - [Fractions Use Cases](#fractions-use-cases)
+      - [Representing Irrational Numbers with Fractions](#representing-irrational-numbers-with-fractions)
     - [Floating Points (`float`)](#floating-points-float)
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
@@ -246,6 +251,57 @@ pow(2, 3)  # 8
 ```python
 divmod(10, 3)  # (3, 1)
 ```
+
+### Fractions (`fractions.Fraction`)
+
+- The `fractions.Fraction` class in Python provides exact rational number representation by storing numbers as numerator/denominator pairs.
+- Unlike floating-point numbers (`float`), which can introduce precision errors, `Fraction` maintains precise arithmetic results.
+
+#### Creating Fractions
+
+A Fraction object can be created from integers (`int`), strings (`str`), floats (`float`), or another `Fraction`:
+
+```python
+from fractions import Fraction
+
+f1 = Fraction(3, 4)  # 3/4
+f2 = Fraction("1.5")  # 3/2
+f2 = Fraction("1/5")  # 1/5
+f3 = Fraction(0.1)  # Approximates 0.1 as a fraction
+```
+
+#### Operations with Fractions
+
+Fractions support arithmetic operations while maintaining exact values:
+
+```python
+sum_f = Fraction(1, 3) + Fraction(1, 6)  # 1/2
+prod_f = Fraction(2, 5) * Fraction(3, 4)  # 6/20 -> 3/10
+```
+
+`Fraction` also supports comparison, reduction to simplest form, and conversion to floats (`float(f)`).
+
+#### Fractions Use Cases
+
+- Financial and scientific calculations requiring precision.
+- Mathematical problems involving fractions without floating-point rounding errors.
+- Converting recurring decimals into exact fractions.
+
+#### Representing Irrational Numbers with Fractions
+
+- Irrational numbers like $\pi$ and $\sqrt{2}$ cannot be exactly represented as Fraction because they have non-repeating, infinite decimal expansions.
+- `Fraction` can however approximate irrational numbers to a desired accuracy using float or decimal values.
+
+```python
+from fractions import Fraction
+import math
+
+approx_pi = Fraction(math.pi).limit_denominator(1000)  # Best fraction approximation within denominator ≤ 1000
+print(approx_pi)  # Output: 355/113 (a well-known approximation of π)
+```
+
+- The `limit_denominator(n)` method finds the best fractional approximation within a given denominator limit.
+- $\frac{355}{113}$ is a well-known close approximation of $\pi$.
 
 ### Floating Points (`float`)
 
