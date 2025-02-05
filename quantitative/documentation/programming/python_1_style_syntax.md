@@ -21,6 +21,9 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
     - [Floating-Points (`float`)](#floating-points-float)
       - [Float Bit Layout Example](#float-bit-layout-example)
       - [Floats Precision and Rounding Errors](#floats-precision-and-rounding-errors)
+      - [Float Equality Testing](#float-equality-testing)
+      - [Coercing Floats to Integers](#coercing-floats-to-integers)
+      - [Rounding Floats (`round()`)](#rounding-floats-round)
       - [Special Floating-Point Values](#special-floating-point-values)
       - [Float Use Cases](#float-use-cases)
     - [Strings (`str`)](#strings-str)
@@ -352,6 +355,149 @@ print(0.1 + 0.2)  # Output: 0.30000000000000004
 
 - `0.1` and `0.2` do not have exact binary representations, causing slight inaccuracies.
 - `math.isclose(a, b)` is recommended for float comparisons instead of `==`.
+
+#### Float Equality Testing
+
+- Floating-point numbers in Python follow the IEEE 754 standard, which can introduce small precision errors.
+- As a result, direct equality comparisons using == can be unreliable.
+- Due to floating-point rounding, 0.1 + 0.2 evaluates to 0.30000000000000004, not exactly 0.3.
+
+    ```python
+    print(0.1 + 0.2 == 0.3)  # False
+    ```
+
+- The `math.isclose()` function allows for tolerance-based comparisons and is the recommended approach for float comparisons.
+  - Accepts a *relative* tolerance or an *absolute* tolerance.
+  - Absolute Tolerance (`abs_tol`) ensures numbers are close within a fixed range, useful for very small values.
+  - Relative Tolerance (`rel_tol`) ensures numbers are close relative to their size, useful for large values.
+  - The default is `rel_tol`$=1e-9$ and `abs_tol`$=0.0$.
+
+    ```python
+    import math
+
+    print(math.isclose(0.1 + 0.2, 0.3))  # True
+
+    a = 1000000.0
+    b = 1000000.1
+
+    # Absolute tolerance: checks if |a - b| < abs_tol
+    print(math.isclose(a, b, abs_tol=0.2))  # True (difference is 0.1, within 0.2)
+
+    # Relative tolerance: checks if |a - b| / max(|a|, |b|) < rel_tol
+    print(math.isclose(a, b, rel_tol=1e-7))  # False (relative difference too large)
+
+    # Relative tolerance: 1e-5 (checks relative difference)
+    # Absolute tolerance: 1e-7 (ensures a small fixed margin)
+    print(math.isclose(0.0000001, 0.0000002, rel_tol=1e-5, abs_tol=1e-7))  # True
+
+    # Here, relative tolerance alone would fail, but abs_tol allows for small absolute differences.
+    print(math.isclose(1000000.0, 1000000.1, rel_tol=1e-9, abs_tol=0.2))  # True
+    ```
+
+- `abs()` can be used to compare the absolute difference with a small tolerance threshold.
+  - This can work well when the floats being compared have a similar scale.
+
+    ```python
+    def nearly_equal(a, b, tol=1e-9):
+        return abs(a - b) < tol
+
+    print(nearly_equal(0.1 + 0.2, 0.3))  # True
+    ```
+
+- The direct value equality comparison (`==`) can be used to compare integers with floats and when numbers are the exact result of a computation
+When comparing integers stored as floats:
+
+    ```python
+    print(1.0 == 1)  # True
+
+    x = 0.5 * 2
+    print(x == 1.0)  # True
+    ```
+
+#### Coercing Floats to Integers
+
+Python provides multiple ways to handle floating-point numbers when converting them to integers or adjusting their values.
+
+- Truncation `math.trunc()`
+  - Removes the decimal part and returns the integer portion (toward zero).
+  - Equivalent to `int()` in behaviour.
+  - python
+- Floor `math.floor()`
+  - Rounds down to the nearest integer.
+  - Works for both positive and negative numbers.
+- Ceiling `math.ceil()`
+  - Rounds up to the nearest integer
+
+```python
+import math
+
+# Truncation
+print(math.trunc(4.9))  # 4
+print(math.trunc(-4.9)) # -4
+print(int(-4.9)) # -4 (same as truncation)
+
+# Floor
+print(math.floor(4.9)) # 4
+print(math.floor(-4.9)) # -5
+
+# Ceiling
+print(math.ceil(4.1)) # 5
+print(math.ceil(-4.1)) # -4
+```
+
+#### Rounding Floats (`round()`)
+
+- `round(x, ndigits)` rounds to the nearest integer (or specified decimal places).
+- When `ndigits` is negative, rounds to the nearest multiple of `10`, `100`, etc.
+- Ties/halfway values ($.5$) round to the nearest even least significant digit (Bankers' rounding).
+  - As defined in *IEEE 754* standard.
+- Return types:
+  - `round(x)` returns an `int`
+  - `round(x, n)` returns the same type as `x` (even if `n` is `0`)
+- Floating point precision also needs to be considered.
+  - Python rounds `-12.35` to `-12.3` because `-12.35` is internally represented in binary as `-12.349999999999998`, which is slightly below `-12.35`.
+
+```python
+import decimal
+
+# Rounding
+print(round(4.6)) # 5  (normal rounding)
+print(round(4.456, 2)) # 4.46 (round to 2 decimal places)
+
+# Rounding with negative ndigits
+print(round(12345, -1))  # 12350  (round to nearest 10)
+print(round(12345, -2))  # 12300  (round to nearest 100)
+print(round(12345, -3))  # 12000  (round to nearest 1000)
+print(round(12345, -4))  # 10000  (round to nearest 10000)
+print(round(-12345, -2))  # -12300
+print(round(-98765, -3))  # -99000
+
+# Rounding Ties (Bankers' Rounding)
+print(round(5.5)) # 6  (rounds up, 6 is even)
+print(round(4.5)) # 4  (rounds down, 4 is even)
+print(round(1.35, 1)) # 1.4 (round up to 1 decimal places, 4 is even)
+print(round(1.25, 1)) # 1.2 (round down to 1 decimal places, 2 is even)
+print(round(-1.25, 1)) # -1.2 (round up to 1 decimal places, 2 is even)
+print(round(-1.35, 1)) # -1.4 (round down to 1 decimal places, 4 is even)
+
+# Rounding Return Types
+print(round(10.0, 0)) # 10.0 (float)
+print(round(10.0, 1)) # 10.0 (float)
+print(round(10.0)) # 10 (int)
+
+# Floating point precision with rounding instead of bankers' rounding
+x = 12.35
+print(decimal.Decimal(x)) # 12.3499999999999996447286321199499070644378662109375
+print(round(x, 1)) # 12.3
+
+y = 12.55
+print(decimal.Decimal(y)) # 12.550000000000000710542735760100185871124267578125
+print(round(y, 1)) # 12.6
+
+z = 12.25
+print(decimal.Decimal(z)) # 12.25 (can be accurately stored in binary)
+print(round(z, 1)) # 12.2 (uses bankers' rounding)
+```
 
 #### Special Floating-Point Values
 
