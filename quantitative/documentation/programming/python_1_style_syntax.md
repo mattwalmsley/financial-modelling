@@ -26,6 +26,11 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Rounding Floats (`round()`)](#rounding-floats-round)
       - [Special Floating-Point Values](#special-floating-point-values)
       - [Float Use Cases](#float-use-cases)
+    - [Decimals (`decimals.Decimal`)](#decimals-decimalsdecimal)
+      - [Decimal Context and Precision/Rounding Settings](#decimal-context-and-precisionrounding-settings)
+      - [Rounding Mechanisms in `decimal.Decimal`](#rounding-mechanisms-in-decimaldecimal)
+      - [Decimal Arithmetic Operations](#decimal-arithmetic-operations)
+      - [Comparing Decimals with Floating-Points](#comparing-decimals-with-floating-points)
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
     - [Dictionaries (`dict`)](#dictionaries-dict)
@@ -517,6 +522,196 @@ print(math.nan)  # Not-a-Number (NaN)
 - Scientific computing where approximate real-number arithmetic is sufficient.
 - Machine learning, simulations, and graphics where fast computations matter more than perfect precision.
 - When exact values are needed, alternatives like decimal.Decimal or fractions.Fraction should be used.
+
+### Decimals (`decimals.Decimal`)
+
+- `Decimal` class in Python (from the `decimal` module) provides arbitrary precision arithmetic.
+- Repeated arithmetic operations on floating-points will result i precision issues.
+  - Using `float` types to sum a billion financial transactions of £100.01 will lead to a result that is off by over £1000.
+- Constructing from a String (Recommended)
+  - Ensures exact representation without floating-point errors.
+  - Best practice for financial and high-precision applications.
+
+    ```python
+    from decimal import Decimal
+
+    d1 = Decimal("0.1")  # Exact 0.1
+    d2 = Decimal("3.14159265358979323846")  # Arbitrary precision
+    print(d1, d2)  # 0.1  3.14159265358979323846
+    ```
+
+- Constructing from an Integer
+  - Converts an `int` directly to `Decimal` without precision issues.
+
+    ```python
+    d3 = Decimal(42)  # Exact integer conversion
+    print(d3)  # 42
+    ```
+
+- Constructing from a Float (Not Recommended)
+  - Using a `float` introduces floating-point errors because `float` is stored in binary.
+
+    ```python
+    d4 = Decimal(0.1)  # Not exact
+    print(d4)  # 0.10000000000000000555111512312578 (Precision issue)
+    ```
+
+- Constructing from a Tuple
+  - Uses a tuple `(sign, digits, exponent)` where:
+    - `sign`: `0` for positive, `1` for negative.
+    - `digits`: Tuple of integer digits.
+    - `exponent`: Power of ten for scaling.
+
+    ```python
+    d5 = Decimal((0, (1, 2, 3, 4, 5), -2))  # 123.45
+    print(d5)  # 123.45
+    ```
+
+#### Decimal Context and Precision/Rounding Settings
+
+- Custom precision and rounding modes can be set globally using `decimal.getcontext()`.
+  - `decimal.getcontext()` has return type `decimal.Context`
+- A local context can also be set to use a temporary precision/rounding setting.
+  - This is done by `decimal.localcontext(ctx=None)` which has return type `decimal.ContextManager`.
+  - `ctx` is copied to create a new context.
+  - If `ctx` is `None`, a copy of the default context is used.
+- Context precision affects mathematical operations on `Decimal` types but not the `Decimal()` constructor.
+
+```python
+import decimal
+from decimal import Decimal
+
+a = Decimal('0.12345')
+b = Decimal('0.12345')
+print(a) # 0.12345 precision=2 does not affect storage
+
+x = Decimal('1.25')
+y = Decimal('1.35')
+
+# global context
+g_ctx = decimal.getcontext()
+g_ctx.prec = 5  # Set precision to 5 significant digits
+g_ctx.rounding = decimal.ROUND_HALF_EVEN # Set rounding mechanism
+g_ctx.rounding = 'ROUND_HALF_EVEN' # Set rounding mechanism from string
+
+# local context
+with decimal.localcontext() as ctx:
+    type(ctx) # ctx has type decimal.Context when used with a with statement
+    ctx.prec = 2
+    ctx.rounding = decimal.ROUND_HALF_UP
+    decimal.getcontext() # returns the local context when called from the with block
+    print(id(ctx) == id(decimal.getcontext())) # true
+
+    c = a + b
+    print(c) = 0.25 # addition operation is affected by precision (s significant digits)
+
+    print(round(x, 1)) # 1.3 - rounds half up (local)
+    print(round(y, 1)) # 1.4 - rounds half up (local)
+
+print(round(x, 1)) # 1.2 - rounds half even (global)
+print(round(y, 1)) # 1.4 - rounds half even (global)
+
+print(c) # 0.25
+# c was created in a context with precision=2 so is still 0.25 even though precision in global context is 5 significant digits
+```
+
+#### Rounding Mechanisms in `decimal.Decimal`
+
+Different rounding modes can be specified in Decimal operations:
+
+- `ROUND_CEILING`: Rounds towards positive infinity (always up).
+
+    ```python
+    from decimal import Decimal, ROUND_CEILING
+    print(Decimal('1.1').to_integral_value(rounding=ROUND_CEILING))  # 2
+    print(Decimal('-1.1').to_integral_value(rounding=ROUND_CEILING))  # -1
+    ```
+
+- `ROUND_DOWN`: Rounds towards zero (truncates the decimal part).
+
+    ```python
+    from decimal import Decimal, ROUND_DOWN
+    print(Decimal('1.9').to_integral_value(rounding=ROUND_DOWN))  # 1
+    print(Decimal('-1.9').to_integral_value(rounding=ROUND_DOWN))  # -1
+    ```
+
+- `ROUND_FLOOR`: Rounds towards negative infinity (always down).
+
+    ```python
+    from decimal import Decimal, ROUND_FLOOR
+    print(Decimal('-1.1').to_integral_value(rounding=ROUND_FLOOR))  # -2
+    ```
+
+- `ROUND_HALF_DOWN`: Rounds to the nearest neighbour, ties go towards zero.
+
+    ```python
+    from decimal import Decimal, ROUND_HALF_DOWN
+    print(Decimal('1.5').quantize(Decimal('1'), rounding=ROUND_HALF_DOWN))  # 1
+    print(Decimal('-2.5').quantize(Decimal('1'), rounding=ROUND_HALF_DOWN))  # -2
+    ```
+
+- `ROUND_HALF_EVEN` (Bankers' Rounding): Rounds to the nearest neighbour, ties go to the nearest even number.
+
+    ```python
+    from decimal import Decimal, ROUND_HALF_EVEN
+    print(Decimal('1.5').quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))  # 2
+    print(Decimal('2.5').quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))  # 2
+    ```
+
+- `ROUND_HALF_UP`: Rounds to the nearest neighbour, ties go away from zero.
+
+    ```python
+    from decimal import Decimal, ROUND_HALF_UP
+    print(Decimal('1.5').quantize(Decimal('1'), rounding=ROUND_HALF_UP))  # 2
+    print(Decimal('-2.5').quantize(Decimal('1'), rounding=ROUND_HALF_UP))  # -3
+    ```
+
+- `ROUND_UP`: Rounds away from zero (like ceil for positives, floor for negatives).
+
+    ```python
+    from decimal import Decimal, ROUND_UP
+    print(Decimal('1.1').to_integral_value(rounding=ROUND_UP))  # 2
+    print(Decimal('-1.1').to_integral_value(rounding=ROUND_UP))  # -2
+    ```
+
+- `ROUND_05UP`: Rounds away from zero only if the last digit before rounding is 0 or 5; otherwise, rounds towards zero.
+
+    ```python
+    from decimal import Decimal, ROUND_05UP
+    print(Decimal('1.05').quantize(Decimal('1'), rounding=ROUND_05UP))  # 2
+    print(Decimal('1.04').quantize(Decimal('1'), rounding=ROUND_05UP))  # 1
+    ```
+
+- Use `.to_integral_value(rounding=...)` when rounding to an integer.
+- Use `.quantize(Decimal('X'), rounding=...)` when rounding to a specific decimal place.
+
+#### Decimal Arithmetic Operations
+
+`Decimal` supports addition, subtraction, multiplication, division, and exponentiation, all with exact precision.
+
+```python
+a = Decimal("1.1")
+b = Decimal("2.2")
+
+print(a + b)  # 3.3 (exact, unlike float)
+print(a - b)  # -1.1
+print(a * b)  # 2.42
+print(a / b)  # 0.5 (exact division)
+print(a ** 2) # 1.21
+```
+
+Unlike floats, `Decimal` prevents rounding errors in calculations.
+
+Uses Bankers' rounding (round half to even) by default.
+
+#### Comparing Decimals with Floating-Points
+
+```python
+print(Decimal("0.1") + Decimal("0.2") == Decimal("0.3"))  # True
+print(0.1 + 0.2 == 0.3)  # False (float precision issue)
+```
+
+Decimal is recommended for precise financial calculations where floating-point errors are unacceptable.
 
 ### Strings (`str`)
 
