@@ -28,6 +28,7 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Float Use Cases](#float-use-cases)
     - [Decimals (`decimals.Decimal`)](#decimals-decimalsdecimal)
       - [Decimal Context and Precision/Rounding Settings](#decimal-context-and-precisionrounding-settings)
+      - [Working with `Decimal` Rounding Methods](#working-with-decimal-rounding-methods)
       - [Rounding Mechanisms in `decimal.Decimal`](#rounding-mechanisms-in-decimaldecimal)
       - [Decimal Arithmetic Operations](#decimal-arithmetic-operations)
       - [Comparing Decimals with Floating-Points](#comparing-decimals-with-floating-points)
@@ -615,9 +616,49 @@ print(c) # 0.25
 # c was created in a context with precision=2 so is still 0.25 even though precision in global context is 5 significant digits
 ```
 
+#### Working with `Decimal` Rounding Methods
+
+- `Decimal` provides precise control over rounding using methods such as `quantize()` and `to_integral_value()`.
+- These allow rounding to specific decimal places or whole numbers with different rounding modes.
+
+- `quantize()`
+  - Rounds a `Decimal` to a fixed number of decimal places.
+  - Requires a `Decimal` argument specifying the target precision.
+  - A `rounding` mode must be specified if the result is ambiguous.
+
+  ```python
+  from decimal import Decimal, ROUND_HALF_EVEN
+  print(Decimal('1.235').quantize(Decimal('0.01'), rounding=ROUND_HALF_EVEN))  # 1.24
+  print(Decimal('-1.235').quantize(Decimal('0.01'), rounding=ROUND_HALF_EVEN))  # -1.24
+  ```
+
+- `to_integral_value()`
+  - Rounds a `Decimal` to an integer using the specified rounding mode.
+  - Equivalent to `quantize(Decimal('1'), rounding=...)` but more efficient.
+
+  ```python
+  from decimal import Decimal, ROUND_FLOOR
+  print(Decimal('2.9').to_integral_value(rounding=ROUND_FLOOR))  # 2
+  print(Decimal('-2.9').to_integral_value(rounding=ROUND_FLOOR))  # -3
+  ```
+
+- `normalize()`
+  - Removes trailing zeros while maintaining precision.
+
+  ```python
+  print(Decimal('1.2300').normalize())  # 1.23
+  ```
+
+- `adjusted()`
+  - Returns the exponent of the `Decimal`, useful for understanding magnitude.
+
+  ```python
+  print(Decimal('123.45').adjusted())  # 2 (since 1.2345 × 10^2)
+  ```
+
 #### Rounding Mechanisms in `decimal.Decimal`
 
-Different rounding modes can be specified in Decimal operations:
+`Decimal` uses Bankers' rounding (round half to even) by default, but different rounding modes can be specified:
 
 - `ROUND_CEILING`: Rounds towards positive infinity (always up).
 
@@ -631,8 +672,8 @@ Different rounding modes can be specified in Decimal operations:
 
     ```python
     from decimal import Decimal, ROUND_DOWN
-    print(Decimal('1.9').to_integral_value(rounding=ROUND_DOWN))  # 1
-    print(Decimal('-1.9').to_integral_value(rounding=ROUND_DOWN))  # -1
+    print(Decimal('1.99').to_integral_value(rounding=ROUND_DOWN))  # 1
+    print(Decimal('-1.99').to_integral_value(rounding=ROUND_DOWN))  # -1
     ```
 
 - `ROUND_FLOOR`: Rounds towards negative infinity (always down).
@@ -646,27 +687,27 @@ Different rounding modes can be specified in Decimal operations:
 
     ```python
     from decimal import Decimal, ROUND_HALF_DOWN
-    print(Decimal('1.5').quantize(Decimal('1'), rounding=ROUND_HALF_DOWN))  # 1
-    print(Decimal('-2.5').quantize(Decimal('1'), rounding=ROUND_HALF_DOWN))  # -2
+    print(Decimal('1.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_DOWN))  # 1.5
+    print(Decimal('-2.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_DOWN))  # -2.5
     ```
 
-- `ROUND_HALF_EVEN` (Bankers' Rounding): Rounds to the nearest neighbour, ties go to the nearest even number.
+- `ROUND_HALF_EVEN`: Rounds to the nearest neighbour, ties go to the nearest even number (Bankers' Rounding).
 
     ```python
     from decimal import Decimal, ROUND_HALF_EVEN
-    print(Decimal('1.5').quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))  # 2
-    print(Decimal('2.5').quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))  # 2
+    print(Decimal('1.25').quantize(Decimal('0.1'), rounding=ROUND_HALF_EVEN))  # 1.2
+    print(Decimal('2.25').quantize(Decimal('0.1'), rounding=ROUND_HALF_EVEN))  # 2.2
     ```
 
 - `ROUND_HALF_UP`: Rounds to the nearest neighbour, ties go away from zero.
 
     ```python
     from decimal import Decimal, ROUND_HALF_UP
-    print(Decimal('1.5').quantize(Decimal('1'), rounding=ROUND_HALF_UP))  # 2
-    print(Decimal('-2.5').quantize(Decimal('1'), rounding=ROUND_HALF_UP))  # -3
+    print(Decimal('1.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_UP))  # 1.6
+    print(Decimal('-2.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_UP))  # -2.6
     ```
 
-- `ROUND_UP`: Rounds away from zero (like ceil for positives, floor for negatives).
+- `ROUND_UP`: Rounds away from zero (like `ceil` for positives, `floor` for negatives).
 
     ```python
     from decimal import Decimal, ROUND_UP
@@ -678,12 +719,9 @@ Different rounding modes can be specified in Decimal operations:
 
     ```python
     from decimal import Decimal, ROUND_05UP
-    print(Decimal('1.05').quantize(Decimal('1'), rounding=ROUND_05UP))  # 2
-    print(Decimal('1.04').quantize(Decimal('1'), rounding=ROUND_05UP))  # 1
+    print(Decimal('1.05').quantize(Decimal('0.1'), rounding=ROUND_05UP))  # 1.1
+    print(Decimal('1.04').quantize(Decimal('0.1'), rounding=ROUND_05UP))  # 1.0
     ```
-
-- Use `.to_integral_value(rounding=...)` when rounding to an integer.
-- Use `.quantize(Decimal('X'), rounding=...)` when rounding to a specific decimal place.
 
 #### Decimal Arithmetic Operations
 
@@ -700,9 +738,28 @@ print(a / b)  # 0.5 (exact division)
 print(a ** 2) # 1.21
 ```
 
-Unlike floats, `Decimal` prevents rounding errors in calculations.
+- The div `//` and mod `%` operators work differently with `Decimal` types.
+- The following equation is still satisfied: `n = d * (n // d) + (n % d)`
+  - The div operator `//` performs truncation division, which always rounds towards zero.
+  - The result for the mod operator will then satisfy the above equation.
 
-Uses Bankers' rounding (round half to even) by default.
+```python
+from decimal import Decimal
+
+print(10 // 3) # 3 for integer
+print(Decimal(10) // Decimal(3)) # 3 for Decimal
+
+print(-10 // 3) # -4 for integer (floor division)
+print(Decimal(-10) // Decimal(3)) # -3 for Decimal (truncation division)
+
+print(-135 // 4) # -34 for integer
+print(Decimal(-135) // Decimal(4)) # -33 for Decimal
+
+print(-135 % 4) # 1 for integer
+print(Decimal(-135) // Decimal(4)) # -3 for Decimal
+```
+
+The `math` module can accept `Decimal` types but will convert `Decimal` types to `float` types so introduce floating-point precision errors.
 
 #### Comparing Decimals with Floating-Points
 
