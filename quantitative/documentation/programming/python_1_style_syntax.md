@@ -768,8 +768,6 @@ print(Decimal("0.1") + Decimal("0.2") == Decimal("0.3"))  # True
 print(0.1 + 0.2 == 0.3)  # False (float precision issue)
 ```
 
-Decimal is recommended for precise financial calculations where floating-point errors are unacceptable.
-
 ### Strings (`str`)
 
 ```python
