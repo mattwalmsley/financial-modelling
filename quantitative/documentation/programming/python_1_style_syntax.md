@@ -32,6 +32,7 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Rounding Mechanisms in `decimal.Decimal`](#rounding-mechanisms-in-decimaldecimal)
       - [Decimal Arithmetic Operations](#decimal-arithmetic-operations)
       - [Comparing Decimals with Floating-Points](#comparing-decimals-with-floating-points)
+      - [Performance Considerations When Using Decimal](#performance-considerations-when-using-decimal)
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
     - [Dictionaries (`dict`)](#dictionaries-dict)
@@ -767,6 +768,20 @@ The `math` module can accept `Decimal` types but will convert `Decimal` types to
 print(Decimal("0.1") + Decimal("0.2") == Decimal("0.3"))  # True
 print(0.1 + 0.2 == 0.3)  # False (float precision issue)
 ```
+
+#### Performance Considerations When Using Decimal
+
+- Slower than `float`
+  - Decimal provides higher precision but at the cost of performance.
+  - Operations on Decimal are significantly slower than equivalent float operations.
+- Higher memory usage
+  - Decimal stores numbers as a tuple of sign, coefficient, and exponent, requiring more memory than `float`.
+- Context overhead
+  - `decimal.getcontext()` manages precision, rounding, and traps, which adds processing overhead.
+  - Changing context settings frequently can further impact performance.
+- Conversion cost
+  - Converting between `float` and `Decimal` is expensive due to internal representation differences.
+  - Prefer constructing `Decimal` directly from strings to avoid floating-point inaccuracies.
 
 ### Strings (`str`)
 
