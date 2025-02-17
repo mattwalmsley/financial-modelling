@@ -33,6 +33,13 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Decimal Arithmetic Operations](#decimal-arithmetic-operations)
       - [Comparing Decimals with Floating-Points](#comparing-decimals-with-floating-points)
       - [Performance Considerations When Using Decimal](#performance-considerations-when-using-decimal)
+    - [Complex Numbers (`complex`)](#complex-numbers-complex)
+      - [Creating Complex Numbers](#creating-complex-numbers)
+      - [Accessing Complex Number Components](#accessing-complex-number-components)
+      - [Complex Number Operations](#complex-number-operations)
+      - [Conjugate and Magnitude of Complex Numbers](#conjugate-and-magnitude-of-complex-numbers)
+      - [Complex Functions (`cmath`)](#complex-functions-cmath)
+      - [Complex Number Performance Considerations](#complex-number-performance-considerations)
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
     - [Dictionaries (`dict`)](#dictionaries-dict)
@@ -782,6 +789,73 @@ print(0.1 + 0.2 == 0.3)  # False (float precision issue)
 - Conversion cost
   - Converting between `float` and `Decimal` is expensive due to internal representation differences.
   - Prefer constructing `Decimal` directly from strings to avoid floating-point inaccuracies.
+
+### Complex Numbers (`complex`)
+
+The complex type in Python represents numbers with a real and an imaginary part, following the form $z = a + bj$ where $a$ is the *real* part and $b$ is the *imaginary* part.
+
+#### Creating Complex Numbers
+
+Defined using `j`, `J` or `complex(real, imag)`.
+
+```python
+z1 = 3 + 4j
+z2 = complex(3, 4)  # Equivalent to 3 + 4j
+```
+
+#### Accessing Complex Number Components
+
+Use `.real` and `.imag` attributes.
+
+```python
+print(z1.real)  # 3.0
+print(z1.imag)  # 4.0
+```
+
+#### Complex Number Operations
+
+Supports arithmetic like addition, subtraction, multiplication, and division.
+
+```python
+z1 = 1 + 2j
+z2 = 3 + 4j
+print(z1 + z2)   # (4+6j)
+print(z1 * z2)   # (5+10j)
+print(z1 + 3)   # (4+2j)
+print(z1 * 3)   # (3+6j)
+```
+
+Equality operators `==` and `!=` are supported but are subject to similar precious errors that `float` types are.
+
+#### Conjugate and Magnitude of Complex Numbers
+
+- `conjugate()` returns the complex conjugate.
+- `abs(z)` computes the magnitude (modulus).
+
+```python
+z = 3 + 4j
+print(z.conjugate())  # (3-4j)
+print(abs(z))         # 5.0
+```
+
+#### Complex Functions (`cmath`)
+
+The `cmath` module provides mathematical functions for complex numbers, as opposed to `math` functions which will not work with complex numbers.
+
+```python
+import cmath
+
+z = 1 + 1j
+print(cmath.exp(z))   # e^(1 + j)
+print(cmath.sqrt(z))  # sqrt(1 + j)
+print(cmath.phase(z)) # Argument (angle in radians)
+```
+
+#### Complex Number Performance Considerations
+
+- Uses two float values internally.
+- More computationally expensive than real-only arithmetic.
+- Avoid unnecessary conversions between float and complex.
 
 ### Strings (`str`)
 
