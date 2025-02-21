@@ -5,23 +5,36 @@
     - [Single Responsibility Principle (SRP)](#single-responsibility-principle-srp)
       - [Simple Example: SRP](#simple-example-srp)
       - [Advanced Example: SRP](#advanced-example-srp)
+      - [Python Example: SRP](#python-example-srp)
     - [Open/Closed Principle (OCP)](#openclosed-principle-ocp)
       - [Simple Example: OCP](#simple-example-ocp)
       - [Advanced Example: OCP](#advanced-example-ocp)
+      - [Python Example: OCP](#python-example-ocp)
     - [Liskov Substitution Principle (LSP)](#liskov-substitution-principle-lsp)
       - [Simple Example: LSP](#simple-example-lsp)
       - [Advanced Example: LSP](#advanced-example-lsp)
+      - [Python Example: LSP](#python-example-lsp)
     - [Interface Segregation Principle (ISP)](#interface-segregation-principle-isp)
       - [Simple Example: ISP](#simple-example-isp)
       - [Advanced Example: ISP](#advanced-example-isp)
+      - [Python Example: ISP](#python-example-isp)
     - [Dependency Inversion Principle (DIP)](#dependency-inversion-principle-dip)
       - [Simple Example: DIP](#simple-example-dip)
       - [Advanced Example: DIP](#advanced-example-dip)
+      - [Python Example: DIP](#python-example-dip)
     - [SOLID Principles in Practice](#solid-principles-in-practice)
   - [Gamma Categorization](#gamma-categorization)
-    - [Creational](#creational)
-    - [Structural](#structural)
-    - [Behavioural](#behavioural)
+    - [Creational Patterns](#creational-patterns)
+    - [Structural Patterns](#structural-patterns)
+    - [Behavioural Patterns](#behavioural-patterns)
+  - [Singleton Pattern](#singleton-pattern)
+    - [Singleton Benefits](#singleton-benefits)
+    - [Singleton Use Cases](#singleton-use-cases)
+    - [Singleton Components](#singleton-components)
+    - [Singleton Pattern Example](#singleton-pattern-example)
+    - [Python Eager Loading Singleton Example](#python-eager-loading-singleton-example)
+    - [Python Metaclass Singleton (Lazy Loading) Example](#python-metaclass-singleton-lazy-loading-example)
+    - [Python Module Import Singleton Example](#python-module-import-singleton-example)
   - [Builder Pattern](#builder-pattern)
     - [Builder Benefits](#builder-benefits)
     - [Builder Use Cases](#builder-use-cases)
@@ -42,7 +55,7 @@
 
 ## SOLID Design Principles
 
-SOLID is an acronym that stands for five key design principles aimed at making software designs more understandable, flexible, and maintainable. These principles were introduced by Robert C. Martin [[2]](../../README.md) and are widely applied in object-oriented programming.
+SOLID is an acronym that stands for five key design principles aimed at making software designs more understandable, flexible, and maintainable. These principles were introduced by Robert C. Martin [[2]](../../../README.md) and are widely applied in object-oriented programming.
 
 ### Single Responsibility Principle (SRP)
 
@@ -81,8 +94,7 @@ public class ActivityLogger
 #### Advanced Example: SRP
 
 ```csharp
-  // just stores a couple of journal entries and ways of
-  // working with them
+// just stores a couple of journal entries and ways of working with them
 public class Journal
 {
   private readonly List<string> _entries = new List<string>();
@@ -147,6 +159,35 @@ public class Demo
     Process.Start(filename);
   }
 }
+```
+
+#### Python Example: SRP
+
+```python
+# Only manages invoice data
+class Invoice:
+    """Handles invoice data"""
+    def __init__(self, customer, amount):
+        self.customer = customer
+        self.amount = amount
+
+    def calculate_total(self):
+        """Calculates total amount"""
+        return self.amount * 1.2  # Apply 20% tax
+
+# Handles printing, not saving invoices.
+class InvoicePrinter:
+    """Handles printing the invoice"""
+    def print_invoice(self, invoice: Invoice):
+        print(f"Invoice for {invoice.customer}: ${invoice.calculate_total()}")
+
+# Responsible only for saving.
+class InvoiceSaver:
+    """Handles saving invoice data"""
+    def save_to_file(self, invoice: Invoice):
+        with open("invoice.txt", "w") as f:
+            f.write(f"Invoice for {invoice.customer}: ${invoice.calculate_total()}")
+
 ```
 
 ### Open/Closed Principle (OCP)
@@ -228,7 +269,7 @@ public class Product
 
 public class ProductFilter
 {
-  // let's suppose we don't want ad-hoc queries on products
+  // assume there are no ad-hoc queries on products
   public static IEnumerable<Product> FilterByColor(IEnumerable<Product> products, Color color)
   {
     foreach (var p in products)
@@ -254,7 +295,7 @@ public class ProductFilter
   // OCP = open for extension but closed for modification
 }
 
-// we introduce two new interfaces that are open for extension
+// introduce two new interfaces that are open for extension
 
 public interface ISpecification<T>
 {
@@ -359,6 +400,48 @@ public class Demo
     }
   }
 }
+```
+
+#### Python Example: OCP
+
+```python
+from abc import ABC, abstractmethod
+
+class DiscountPolicy(ABC):
+    """Abstract base class for discount policies"""
+    @abstractmethod
+    def apply_discount(self, price: float) -> float:
+        pass
+
+# Extend the DiscountPolicy class without modifying it
+class NoDiscount(DiscountPolicy):
+    """Applies no discount"""
+    def apply_discount(self, price: float) -> float:
+        return price
+
+# New discount strategies can be added without modifying existing code.
+class TenPercentDiscount(DiscountPolicy):
+    """Applies a 10% discount"""
+    def apply_discount(self, price: float) -> float:
+        return price * 0.9
+
+class Invoice:
+    """Handles invoice with a discount policy"""
+    def __init__(self, customer, amount, discount_policy: DiscountPolicy):
+        self.customer = customer
+        self.amount = amount
+        self.discount_policy = discount_policy
+
+    def calculate_total(self):
+        return self.discount_policy.apply_discount(self.amount)
+
+# Usage
+invoice1 = Invoice("Alice", 100, NoDiscount())
+invoice2 = Invoice("Bob", 100, TenPercentDiscount())
+
+print(invoice1.calculate_total())  # Output: 100
+print(invoice2.calculate_total())  # Output: 90
+
 ```
 
 ### Liskov Substitution Principle (LSP)
@@ -468,6 +551,38 @@ public class Demo
     WriteLine($"{sq} has area {Area(sq)}");
   }
 }
+```
+
+#### Python Example: LSP
+
+```python
+# Subclasses can replace the base class without changing behaviour
+class Bird:
+    """Base class for birds"""
+    def fly(self):
+        return "Flying"
+
+class Sparrow(Bird):
+    """A Sparrow can fly"""
+    pass  # Inherits fly() from Bird
+
+# Penguins cannot fly so Penguin being a subclass of Bird violates LSP
+class Penguin(Bird):
+    """A Penguin cannot fly"""
+    def fly(self):
+        raise NotImplementedError("Penguins cannot fly")
+
+# Function that expects a Bird, consider having a new class 'FlyingBird' as a subclass to Bird
+def make_bird_fly(bird: Bird):
+    print(bird.fly())
+
+# Usage
+sparrow = Sparrow()
+penguin = Penguin()
+
+make_bird_fly(sparrow)  # Works fine
+make_bird_fly(penguin)  # Function raises error
+
 ```
 
 ### Interface Segregation Principle (ISP)
@@ -637,6 +752,117 @@ public struct MultiFunctionMachine : IMultiFunctionDevice
 }
 ```
 
+#### Python Example: ISP
+
+- Python does not have built-in interfaces like Java or C# but supports similar functionality using *Abstract Base Classes* (ABCs).
+- ABCs enforce the presence of specific methods and attributes in subclasses, ensuring that required functionality is implemented.
+
+```python
+from abc import ABC, abstractmethod
+
+class Workable(ABC):
+    """Defines working behaviour"""
+    @abstractmethod
+    def work(self):
+        pass
+
+class Eatable(ABC):
+    """Defines eating behaviour"""
+    @abstractmethod
+    def eat(self):
+        pass
+
+class Human(Workable, Eatable):
+    """A Human can both work and eat"""
+    def work(self):
+        print("Working...")
+
+    def eat(self):
+        print("Eating...")
+
+class Robot(Workable):
+    """A Robot can work but not eat"""
+    def work(self):
+        print("Working...")
+
+# Usage
+human = Human()
+robot = Robot()
+
+human.work()  # Working...
+human.eat()   # Eating...
+robot.work()  # Working...
+```
+
+Duck typing enables ISP without requiring explicit interfaces—as long as an object provides the expected method, it can be used.
+
+> If it looks like a duck and quacks like a duck, it must be a duck.
+
+- Python focuses on an object's behaviour rather than its explicit type.
+- Objects are used based on the methods they provide rather than their class hierarchy.
+- Unlike statically typed languages, Python allows objects to be passed into functions as long as they implement the expected behaviour.
+- Since method existence is assumed, calling a missing method leads to runtime errors rather than compile-time safety.
+- Can be combined with `hasattr()` or **EAFP** *(Easier to Ask for Forgiveness than Permission)*: Checking if an object has a specific method before calling it can make duck typing safer.
+
+```python
+class Human:
+    def work(self):
+        print("Working...")
+
+class Robot:
+    def work(self):
+        print("Working...")
+
+class Dog:
+    def bark(self):
+        print("Barking...")
+
+def start_work(entity):
+    if hasattr(entity, "work"):
+        entity.work()
+    else:
+        print("Cannot perform work.")
+
+start_work(Human())  # Working...
+start_work(Robot())  # Working...
+start_work(Dog())    # Cannot perform work."
+```
+
+`Protocol` from `typing` can also be used to create structure for classes without subclasses having to explicitly inherit the method or attribute.
+
+- A class is considered a match if it implements the required methods/attributes, even without explicit inheritance.
+- Provides a lightweight alternative to Abstract Base Classes (ABCs) when method enforcement is needed without sub-classing.
+
+```python
+from typing import Protocol
+
+# Define a Protocol that requires a `speak` method
+class Speaker(Protocol):
+    def speak(self) -> str:
+        ...
+
+# Class that conforms to the Speaker protocol (duck typing)
+class Dog:
+    def speak(self) -> str:
+        return "Woof!"
+
+# Another class that conforms to the Speaker protocol
+class Human:
+    def speak(self) -> str:
+        return "Hello!"
+
+# Function that works with any object that follows the Speaker protocol
+def make_speak(entity: Speaker) -> None:
+    print(entity.speak())
+
+# Instances of Dog and Human conform to the protocol without explicit inheritance
+dog = Dog()
+human = Human()
+
+make_speak(dog)   # Output: Woof!
+make_speak(human) # Output: Hello!
+```
+
 ### Dependency Inversion Principle (DIP)
 
 > A. High-level modules should not depend on low-level modules. Both should depend on abstractions.
@@ -781,10 +1007,52 @@ public class Research
 }
 ```
 
+#### Python Example: DIP
+
+```python
+from abc import ABC, abstractmethod
+
+# Abstract Logger Interface
+class Logger(ABC):
+    @abstractmethod
+    def log(self, message: str):
+        pass
+
+# Concrete Implementations
+class ConsoleLogger(Logger):
+    """Logs messages to the console"""
+    def log(self, message: str):
+        print(f"LOG: {message}")
+
+class FileLogger(Logger):
+    """Logs messages to a file"""
+    def log(self, message: str):
+        with open("log.txt", "a") as file:
+            file.write(f"{message}\n")
+
+# High-level module depends on abstraction (Logger), not concrete classes
+class UserService:
+    def __init__(self, logger: Logger):
+        self.logger = logger  # Uses abstraction
+
+    def register_user(self, username):
+        self.logger.log(f"User {username} registered successfully.")
+
+# Usage
+console_logger = ConsoleLogger()
+file_logger = FileLogger()
+
+user_service1 = UserService(console_logger)
+user_service2 = UserService(file_logger)
+
+user_service1.register_user("Alice")  # Logs to console
+user_service2.register_user("Bob")    # Logs to file
+```
+
 ### SOLID Principles in Practice
 
 ```csharp
-// Step 1: Define the core entities and interfaces
+// Define the core entities and interfaces
 
 // SRP: Each class has a single responsibility
 public class Order
@@ -976,23 +1244,310 @@ class Program
 
 ## Gamma Categorization
 
-Design patterns are typically split into one of the following three categories: *creational*, *structural*, and *behavioural*.
+Design patterns are generally classified into three categories: *creational*, *structural*, and *behavioural*.
 
-### Creational
+### Creational Patterns
 
-- Focus on the creation (construction) of objects.
-- Explicit (constructor) versus implicit (dependency injection, reflection, etc.)
-- Wholesale (single statement) versus piecewise (step-by-step)
+- Focus on object creation mechanisms to increase flexibility and reuse.
+- Can be explicit (e.g., constructors) or implicit (e.g., dependency injection, reflection).
+- May involve wholesale creation (single-step instantiation) or piecewise construction (step-by-step initialization).
 
-### Structural
+### Structural Patterns
 
-- Concerned with the structure of code - e.g. class members.
-- Wrappers which mimic the underlying class's interface.
-- Stress the importance of good API design.
+- Concerned with the composition of classes and objects to form larger structures.
+- Often involve wrappers or adapters that provide a modified interface while preserving the underlying functionality.
+- Emphasize clear and maintainable API design.
 
-### Behavioural
+### Behavioural Patterns
 
-- No central theme to these patterns, each will solve specific problems.
+- Focus on communication and interactions between objects.
+- Address specific problems related to object collaboration, responsibilities, and control flow.
+- Do not follow a single overarching principle but instead provide targeted solutions for recurring design challenges.
+
+## Singleton Pattern
+
+- The Singleton Pattern ensures a class has only one instance and provides a global point of access to it.
+- It is often used when a single shared resource, like a configuration object or database connection, is required throughout the application.
+
+### Singleton Benefits
+
+- **Controlled Access to Sole Instance:**
+  - Ensures only one instance of a class exists and is globally accessible.
+  - Provides a consistent point of access for the instance.
+- **Global Access Point:**
+  - The Singleton instance can be accessed globally, simplifying access to the resource it manages.
+- **Lazy Initialization:**
+  - The instance can be created lazily, meaning it’s only created when it’s needed, saving memory and resources until then.
+- **Prevents Multiple Instances:**
+  - The pattern ensures no multiple instances of a class are created, which can be crucial in situations like managing database connections.
+- **Simplifies Object Management:**
+  - Centralized management of the object makes it easier to track and maintain.
+
+### Singleton Use Cases
+
+- **Resource Management**:
+  - When a resource like a configuration, database connection, or logging service needs to be shared across the entire application.
+- **Global State**:
+  - When an application needs to manage a global state or settings that are accessed throughout different parts of the system.
+- **Caching**:
+  - Can be used for caching where only one instance of the cache object is needed to store frequently accessed data.
+
+### Singleton Components
+
+- **Singleton Class**:
+  - The class that ensures only one instance is created and provides global access to that instance.
+- **Client**:
+  - Any part of the system that accesses the singleton instance.
+
+### Singleton Pattern Example
+
+```csharp
+public interface IDatabase
+  {
+    int GetPopulation(string name);
+  }
+
+  public class SingletonDatabase : IDatabase
+  {
+    private Dictionary<string, int> capitals;
+    private static int instanceCount;
+    public static int Count => instanceCount;
+
+    private SingletonDatabase() //private constructor
+    {
+      WriteLine("Initializing database");
+
+      capitals = File.ReadAllLines(
+        Path.Combine(
+          new FileInfo(typeof(IDatabase).Assembly.Location).DirectoryName, "capitals.txt")
+        )
+        .Batch(2)
+        .ToDictionary(
+          list => list.ElementAt(0).Trim(),
+          list => int.Parse(list.ElementAt(1)));
+    }
+
+    public int GetPopulation(string name)
+    {
+      return capitals[name];
+    }
+
+    // laziness + thread safety
+    private static Lazy<SingletonDatabase> instance = new Lazy<SingletonDatabase>(() =>
+    {
+      instanceCount++;
+      return new SingletonDatabase();
+    });
+
+    public static IDatabase Instance => instance.Value; // static Instance
+  }
+
+  public class SingletonRecordFinder
+  {
+    public int TotalPopulation(IEnumerable<string> names)
+    {
+      int result = 0;
+      foreach (var name in names)
+        result += SingletonDatabase.Instance.GetPopulation(name);
+      return result;
+    }
+  }
+
+  public class ConfigurableRecordFinder
+  {
+    private IDatabase database;
+
+    public ConfigurableRecordFinder(IDatabase database)
+    {
+      this.database = database;
+    }
+
+    public int GetTotalPopulation(IEnumerable<string> names)
+    {
+      int result = 0;
+      foreach (var name in names)
+        result += database.GetPopulation(name);
+      return result;
+    }
+  }
+
+  public class DummyDatabase : IDatabase
+  {
+    public int GetPopulation(string name)
+    {
+      return new Dictionary<string, int>
+      {
+        ["alpha"] = 1,
+        ["beta"] = 2,
+        ["gamma"] = 3
+      }[name];
+    }
+  }
+
+  public class SingletonTests
+  {
+    [Test]
+    public void IsSingletonTest()
+    {
+      var db = SingletonDatabase.Instance;
+      var db2 = SingletonDatabase.Instance;
+      Assert.That(db, Is.SameAs(db2));
+      Assert.That(SingletonDatabase.Count, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void SingletonTotalPopulationTest()
+    {
+      // testing on a live database
+      var rf = new SingletonRecordFinder();
+      var names = new[] {"Seoul", "Mexico City"};
+      int tp = rf.TotalPopulation(names);
+      Assert.That(tp, Is.EqualTo(17500000 + 17400000));
+    }
+
+    [Test]
+    public void DependantTotalPopulationTest()
+    {
+      var db = new DummyDatabase();
+      var rf = new ConfigurableRecordFinder(db);
+      Assert.That(
+        rf.GetTotalPopulation(new[]{"alpha", "gamma"}),
+        Is.EqualTo(4));
+    }
+  }
+
+  public class Demo
+  {
+    static void Main()
+    {
+      var db = SingletonDatabase.Instance;
+
+      // works just fine while you're working with a real database.
+      var city = "Tokyo";
+      WriteLine($"{city} has population {db.GetPopulation(city)}");
+
+      // now some tests
+    }
+  }
+```
+
+- Lazy Initialization: Uses `Lazy<T>` to create the singleton instance only when accessed, ensuring thread safety.
+- Private Constructor: Prevents external instantiation to enforce the singleton pattern.
+- Single Instance Guarantee: The `Instance` property ensures only one instance of `SingletonDatabase` is used.
+- File Initialization: Populates data from a file (`capitals.txt`) during the first access, simulating a real database.
+
+### Python Eager Loading Singleton Example
+
+- With *eager loading*, the instance is created at the time of class definition or module import.
+- This ensures availability of the singleton instance immediately.
+- Consumes memory upfront, even if the instance is never used.
+- Simple to implement and avoids multi-threading issues.
+
+```python
+class EagerSingleton:
+    _instance = None
+
+    def __init__(self):
+        if not EagerSingleton._instance:
+            print("Initializing singleton instance")
+            EagerSingleton._instance = self
+
+    @staticmethod
+    def get_instance():
+        return EagerSingleton._instance
+
+# Instance is created on class definition
+singleton = EagerSingleton.get_instance()
+```
+
+### Python Metaclass Singleton (Lazy Loading) Example
+
+- With *lazy loading*, the instance is created only when needed (on first access).
+- This improves performance by deferring initialization until required.
+- Useful when the singleton contains resource-intensive operations.
+- Needs thread safety when accessed in multi-threaded environments
+
+```python
+class SingletonMeta(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+from threading import Lock
+class ThreadSafeSingletonMeta(type):
+    _instances = {}
+    _lock = Lock() # class-level lock to ensure thread safety
+
+    def __call__(cls, *args, **kwargs):
+        with cls._lock:  # Ensures only one thread enters at a time
+            if cls not in cls._instances:
+                cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls] # release lock and return instance
+
+class LazySingleton(metaclass=SingletonMeta):
+    def __init__(self):
+        self.config = "Singleton Configuration"
+        print("Initializing Singleton...")
+
+# Instance is only created when first accessed
+obj1 = LazySingleton()  # Initialization happens here
+obj2 = LazySingleton()  # Same instance is returned
+
+print(obj1.config)  # Output: Singleton Configuration
+print(obj1 is obj2)  # Output: True, both are the same instance
+
+obj2.config = "Updated Singleton Configuration"
+print(obj1.config)  # Output: Updated Singleton Configuration
+```
+
+- Metaclass `SingletonMeta`: This metaclass is responsible for controlling the instance creation of the Singleton class.
+- The `__call__` method ensures that only one instance of the class is created. When trying to instantiate a class, it checks if an instance already exists in the `_instances` dictionary. If not, it creates the instance and stores it in the dictionary.
+- Singleton Class: The `LazySingleton` class uses `SingletonMeta` as its `metaclass`. The `config` attribute and initialization logic are similar to the previous example.
+- Client Code: The client code creates two instances of the `LazySingleton` class, but both refer to the same instance, confirming that only one instance is created.
+
+### Python Module Import Singleton Example
+
+```python
+# config.py
+class Config:
+    def __init__(self):
+        self._settings = {}
+
+    def set(self, key, value):
+        self._settings[key] = value
+
+    def get(self, key):
+        return self._settings.get(key)
+
+# Create an instance to be shared across imports
+config = Config()
+```
+
+- `config.config` is the shared instance across multiple imports.
+- Changes made to config in one part of the application are reflected in all other parts because it is the same instance.
+
+```python
+# main.py
+import config
+
+# Set configuration settings
+config.config.set('API_KEY', '12345')
+
+# Access configuration settings
+print(config.config.get('API_KEY'))  # Output: 12345
+
+# Importing again returns the same instance
+import config
+print(config.config.get('API_KEY'))  # Output: 12345 (same instance)
+```
+
+- In Python, modules are singletons by default. When a module is imported, it is initialized once and its state persists across imports.
+- Subsequent imports of the module return the same instance, ensuring shared state.
+- Variables and functions within the module maintain their values between uses, making it behave like a singleton.
+- Example Use: Storing configuration settings or database connections in a module to ensure only one instance is used across the application.
 
 ## Builder Pattern
 
@@ -1063,7 +1618,7 @@ The Builder Pattern is a design pattern that provides a way to construct complex
 
 ### Builder Pattern Example
 
-Let's say we want to construct a report with different sections such as a title, introduction, body, and conclusion. Using the Builder Pattern, we can build this report step-by-step with various configurations.
+To construct a report with different sections such as a title, introduction, body, and conclusion. Using the Builder Pattern, this report can be built step-by-step with various configurations.
 
 ```csharp
 using System.Text;
@@ -1202,7 +1757,7 @@ The Factory Pattern is a design pattern used to create objects without specifyin
 
 ### Factory Pattern Example
 
-Consider a scenario where we need to create different types of notifications, such as email and SMS notifications. We can use the Factory Pattern to create these notifications based on user preferences.
+Consider a scenario where different types of notifications need to be created, such as email and SMS notifications. The Factory Pattern can be used to create these notifications based on user preferences.
 
 ```csharp
 // Product Interface
