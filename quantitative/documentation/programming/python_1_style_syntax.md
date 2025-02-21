@@ -40,12 +40,17 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Conjugate and Magnitude of Complex Numbers](#conjugate-and-magnitude-of-complex-numbers)
       - [Complex Functions (`cmath`)](#complex-functions-cmath)
       - [Complex Number Performance Considerations](#complex-number-performance-considerations)
+    - [Booleans (`bool`)](#booleans-bool)
+      - [Creating Boolean Values](#creating-boolean-values)
+      - [Boolean Operators](#boolean-operators)
+      - [Boolean Comparison Operators](#boolean-comparison-operators)
+      - [Using Booleans in Control Flow](#using-booleans-in-control-flow)
+      - [Performance Considerations](#performance-considerations)
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
     - [Dictionaries (`dict`)](#dictionaries-dict)
     - [Tuples](#tuples)
     - [Sets](#sets)
-    - [Booleans](#booleans)
   - [Naming Conventions](#naming-conventions)
   - [Python Comments](#python-comments)
   - [Multi-Line Statements in Python](#multi-line-statements-in-python)
@@ -857,6 +862,83 @@ print(cmath.phase(z)) # Argument (angle in radians)
 - More computationally expensive than real-only arithmetic.
 - Avoid unnecessary conversions between float and complex.
 
+### Booleans (`bool`)
+
+- The `bool` type in Python represents Boolean values:
+  - `True` (equivalent to `1`)
+  - `False` (equivalent to `0`)
+- `bool` as a subclass of `int`
+  - `True` behaves like `1` and `False` behaves like `0`.
+  - This allows Boolean values to be used in arithmetic operations.
+
+```python
+print(issubclass(bool, int))  # True
+print(isinstance(True, bool)) # True
+print(isinstance(True, int)) # True
+
+print(True + 2)   # 3
+print(False * 5)  # 0
+print(True == 1)  # True
+print(False == 0) # True
+print(False < True) # True
+```
+
+#### Creating Boolean Values
+
+- `True` and `False` are built-in constants and point to fixed memory addresses over the lifetime of the application (singletons).
+  - Comparing `bool` types can be done with the identity operator (`is`) or the value equality operator (`==`).
+  - `True` and `1` are not the same objects, they have different memory addresses.
+- The `bool()` constructor converts values to `True` or `False` based on their *truthiness*.
+
+```python
+print(id(True) == id(1)) # False
+print(id(False) == id(0)) # False
+
+print(bool(0))      # False
+print(bool(1))      # True
+print(bool([]))     # False (empty list)
+print(bool([1, 2])) # True (non-empty list)
+print(bool(None))   # False
+print(bool('abc'))  # True
+```
+
+#### Boolean Operators
+
+Logical operations return Boolean values.
+
+```python
+print(True and False)  # False
+print(True or False)   # True
+print(not True)        # False
+```
+
+#### Boolean Comparison Operators
+
+Comparisons return Boolean values.
+
+```python
+print(5 > 3)   # True
+print(10 == 5) # False
+print(2 != 4)  # True
+```
+
+#### Using Booleans in Control Flow
+
+`if`, `while`, and other control structures rely on Boolean evaluation.
+
+```python
+if True:
+    print("This executes")  # Runs
+
+if 0:
+    print("This does not execute")  # Doesn't run
+```
+
+#### Performance Considerations
+
+- `bool` operations are optimized in Python.
+- Since `True` and `False` are just `1` and `0`, they require minimal storage.
+
 ### Strings (`str`)
 
 ```python
@@ -898,15 +980,6 @@ tuple
 set
 
 {"a", "b", "c"}
-```
-
-### Booleans
-
-```python
-bool
-
-True
-False
 ```
 
 ## Naming Conventions
