@@ -12,6 +12,10 @@
     - [Method Resolution Order (MRO)](#method-resolution-order-mro)
     - [Encapsulation and Access Modifiers](#encapsulation-and-access-modifiers)
       - [Accessing Private Attributes](#accessing-private-attributes)
+  - [Truthiness](#truthiness)
+    - [`__bool__` Method](#__bool__-method)
+    - [`__len__` Method](#__len__-method)
+    - [Default Truthiness Behaviour](#default-truthiness-behaviour)
 
 ## Four Principles of Object-Orientated Programming
 
@@ -262,4 +266,56 @@ Private attributes cannot be directly accessed from outside the class. However, 
 
 ```python
 print(person._Person__age)  # Output: 30
+```
+
+## Truthiness
+
+- Objects are evaluated for truthiness when used in conditions (`if`, `while`, etc.).
+  - Instances of most classes are considered `True` unless explicitly defined otherwise.
+  - Objects can define their own truthiness using `__bool__` or `__len__`.
+
+### `__bool__` Method
+
+- Defines explicit truthiness for an object.
+- Should return `True` or `False`.
+- If `__bool__` is defined, it takes precedence over `__len__`.
+
+```python
+class AlwaysFalse:
+    def __bool__(self):
+        return False
+
+obj = AlwaysFalse()
+print(bool(obj))  # False
+```
+
+### `__len__` Method
+
+- If `__bool__` is not defined, Python checks `__len__`.
+- Objects with `__len__` returning `0` are `False`, otherwise `True`.
+
+```python
+class Container:
+    def __init__(self, items):
+        self.items = items
+
+    def __len__(self):
+        return len(self.items)
+
+empty_container = Container([])
+non_empty_container = Container([1, 2, 3])
+
+print(bool(empty_container))  # False
+print(bool(non_empty_container))  # True
+```
+
+### Default Truthiness Behaviour
+
+If neither `__bool__` nor `__len__` are defined, the object is always `True`.
+
+```python
+class DefaultTrue:
+    pass
+
+print(bool(DefaultTrue()))  # True
 ```
