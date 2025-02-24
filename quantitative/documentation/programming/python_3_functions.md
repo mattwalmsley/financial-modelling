@@ -3,6 +3,7 @@
 - [Python Functions](#python-functions)
   - [Introduction](#introduction)
   - [Argument Passing](#argument-passing)
+    - [Positional and Keyword Arguments](#positional-and-keyword-arguments)
     - [Passing Immutable Objects as Arguments (Pass-by-Value-like Behaviour)](#passing-immutable-objects-as-arguments-pass-by-value-like-behaviour)
     - [Passing Mutable Objects as Arguments (Pass-by-Reference-like Behaviour)](#passing-mutable-objects-as-arguments-pass-by-reference-like-behaviour)
     - [Reassignment of Arguments](#reassignment-of-arguments)
@@ -20,6 +21,10 @@ print(greet("Alice"))  # Output: Hello, Alice!
 print(greet("Bob", "Hi"))  # Output: Hi, Bob!
 ```
 
+- `name` and `message` are the **parameters** of the `greet` function.
+  - Parameters are variables, local to their function.
+- `"Alice"`, `"Bob"`, and `"Hi"` are the **arguments** that get passed to `greet` in this example.
+
 ## Argument Passing
 
 - Python does not implement **pure** pass-by-value or pass-by-reference.
@@ -28,6 +33,24 @@ print(greet("Bob", "Hi"))  # Output: Hi, Bob!
 - Mutability determines behaviour.
   - If the object is mutable, modifications within the function can affect the original object.
   - If the object is immutable, the function cannot alter the original object.
+
+### Positional and Keyword Arguments
+
+- The most common way of assigning arguments to parameters is using the *order* that the arguments are passed.
+- A positional argument can be made optional by specifying a *default value* using `=`.
+  - Parameters *without* a default value **cannot** be defined **after** parameters *with* a default value.
+- Keyword arguments (named arguments) can be specified by using the parameter name with `=`, regardless of position and default argument.
+  - Named arguments **cannot** be defined **after** unnamed arguments.
+
+```python
+def my_func(a, b, c = 100, d = 4):
+    print(f"a={a} b={b} c={c} d={d}")
+
+my_func(10, 20) # a=10 b=20 c=100 d=4
+my_func(20, 10, 200) # a=20 b=10 c=200 d=4
+my_func(20, b=10, d=10) # a=20 b=10 c=100 d=10
+my_func(1, c=20, b=2, d=10) # a=1 b=2 c=20 d=10
+```
 
 ### Passing Immutable Objects as Arguments (Pass-by-Value-like Behaviour)
 
