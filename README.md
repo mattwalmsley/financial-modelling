@@ -45,3 +45,41 @@ If Git repo breaks run the following:
     find .git/objects/ -size 0 -exec rm -f {} \;
 
     git fetch origin
+
+## PostgreSQL Commands
+
+To stop the PostgreSQL service:
+
+    sudo systemctl stop postgresql
+
+To start PostgreSQL:
+
+    sudo systemctl start postgresql
+
+To restart PostgreSQL (useful after configuration changes):
+
+    sudo systemctl restart postgresql
+
+To check whether PostgreSQL is running or stopped:
+
+    sudo systemctl status postgresql
+
+Disable automatic startup on boot:
+
+    sudo systemctl disable postgresql
+
+Enable automatic startup on boot:
+
+    sudo systemctl enable postgresql
+
+Check active PostgreSQL connections:
+
+    sudo -u postgres psql -c "SELECT datname, pid, usename, application_name, client_addr FROM pg_stat_activity;"
+
+Find PostgreSQL port and listen addresses:
+
+    sudo cat /etc/postgresql/*/main/postgresql.conf | grep -E 'listen_addresses|port'
+
+Check PostgreSQL processes:
+
+    ps aux | grep postgres

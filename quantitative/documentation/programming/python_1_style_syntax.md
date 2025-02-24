@@ -43,9 +43,15 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
     - [Booleans (`bool`)](#booleans-bool)
       - [Creating Boolean Values](#creating-boolean-values)
       - [Boolean Operators](#boolean-operators)
-      - [Boolean Comparison Operators](#boolean-comparison-operators)
+      - [Boolean Algebra Properties in Python](#boolean-algebra-properties-in-python)
+        - [Commutativity](#commutativity)
+        - [Associativity](#associativity)
+        - [Distributivity](#distributivity)
+        - [De Morgan’s Theorem](#de-morgans-theorem)
+      - [Chained Boolean Comparisons](#chained-boolean-comparisons)
+      - [Boolean Precedence](#boolean-precedence)
+      - [Short-Circuiting](#short-circuiting)
       - [Using Booleans in Control Flow](#using-booleans-in-control-flow)
-      - [Performance Considerations](#performance-considerations)
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
     - [Dictionaries (`dict`)](#dictionaries-dict)
@@ -58,8 +64,6 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
     - [Explicit Line Continuation](#explicit-line-continuation)
     - [Multi-line Strings in Python](#multi-line-strings-in-python)
   - [Conditionals](#conditionals)
-    - [Comparison Operators](#comparison-operators)
-    - [Logical Operators](#logical-operators)
     - [Ternary Conditional Operator](#ternary-conditional-operator)
   - [Functions](#functions)
     - [Functions as Objects](#functions-as-objects)
@@ -700,8 +704,8 @@ print(c) # 0.25
 
     ```python
     from decimal import Decimal, ROUND_HALF_DOWN
-    print(Decimal('1.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_DOWN))  # 1.5
-    print(Decimal('-2.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_DOWN))  # -2.5
+    print(Decimal('1.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_DOWN)) # 1.5
+    print(Decimal('-2.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_DOWN)) # -2.5
     ```
 
 - `ROUND_HALF_EVEN`: Rounds to the nearest neighbour, ties go to the nearest even number (Bankers' Rounding).
@@ -716,24 +720,24 @@ print(c) # 0.25
 
     ```python
     from decimal import Decimal, ROUND_HALF_UP
-    print(Decimal('1.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_UP))  # 1.6
-    print(Decimal('-2.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_UP))  # -2.6
+    print(Decimal('1.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_UP)) # 1.6
+    print(Decimal('-2.55').quantize(Decimal('0.1'), rounding=ROUND_HALF_UP)) # -2.6
     ```
 
 - `ROUND_UP`: Rounds away from zero (like `ceil` for positives, `floor` for negatives).
 
     ```python
     from decimal import Decimal, ROUND_UP
-    print(Decimal('1.1').to_integral_value(rounding=ROUND_UP))  # 2
-    print(Decimal('-1.1').to_integral_value(rounding=ROUND_UP))  # -2
+    print(Decimal('1.1').to_integral_value(rounding=ROUND_UP)) # 2
+    print(Decimal('-1.1').to_integral_value(rounding=ROUND_UP)) # -2
     ```
 
 - `ROUND_05UP`: Rounds away from zero only if the last digit before rounding is 0 or 5; otherwise, rounds towards zero.
 
     ```python
     from decimal import Decimal, ROUND_05UP
-    print(Decimal('1.05').quantize(Decimal('0.1'), rounding=ROUND_05UP))  # 1.1
-    print(Decimal('1.04').quantize(Decimal('0.1'), rounding=ROUND_05UP))  # 1.0
+    print(Decimal('1.05').quantize(Decimal('0.1'), rounding=ROUND_05UP)) # 1.1
+    print(Decimal('1.04').quantize(Decimal('0.1'), rounding=ROUND_05UP)) # 1.0
     ```
 
 #### Decimal Arithmetic Operations
@@ -744,10 +748,10 @@ print(c) # 0.25
 a = Decimal("1.1")
 b = Decimal("2.2")
 
-print(a + b)  # 3.3 (exact, unlike float)
-print(a - b)  # -1.1
-print(a * b)  # 2.42
-print(a / b)  # 0.5 (exact division)
+print(a + b) # 3.3 (exact, unlike float)
+print(a - b) # -1.1
+print(a * b) # 2.42
+print(a / b) # 0.5 (exact division)
 print(a ** 2) # 1.21
 ```
 
@@ -805,7 +809,7 @@ Defined using `j`, `J` or `complex(real, imag)`.
 
 ```python
 z1 = 3 + 4j
-z2 = complex(3, 4)  # Equivalent to 3 + 4j
+z2 = complex(3, 4) # Equivalent to 3 + 4j
 ```
 
 #### Accessing Complex Number Components
@@ -813,8 +817,8 @@ z2 = complex(3, 4)  # Equivalent to 3 + 4j
 Use `.real` and `.imag` attributes.
 
 ```python
-print(z1.real)  # 3.0
-print(z1.imag)  # 4.0
+print(z1.real) # 3.0
+print(z1.imag) # 4.0
 ```
 
 #### Complex Number Operations
@@ -824,10 +828,10 @@ Supports arithmetic like addition, subtraction, multiplication, and division.
 ```python
 z1 = 1 + 2j
 z2 = 3 + 4j
-print(z1 + z2)   # (4+6j)
-print(z1 * z2)   # (5+10j)
-print(z1 + 3)   # (4+2j)
-print(z1 * 3)   # (3+6j)
+print(z1 + z2) # (4+6j)
+print(z1 * z2) # (5+10j)
+print(z1 + 3) # (4+2j)
+print(z1 * 3) # (3+6j)
 ```
 
 Equality operators `==` and `!=` are supported but are subject to similar precious errors that `float` types are.
@@ -840,7 +844,7 @@ Equality operators `==` and `!=` are supported but are subject to similar precio
 ```python
 z = 3 + 4j
 print(z.conjugate())  # (3-4j)
-print(abs(z))         # 5.0
+print(abs(z)) # 5.0
 ```
 
 #### Complex Functions (`cmath`)
@@ -851,8 +855,8 @@ The `cmath` module provides mathematical functions for complex numbers, as oppos
 import cmath
 
 z = 1 + 1j
-print(cmath.exp(z))   # e^(1 + j)
-print(cmath.sqrt(z))  # sqrt(1 + j)
+print(cmath.exp(z)) # e^(1 + j)
+print(cmath.sqrt(z)) # sqrt(1 + j)
 print(cmath.phase(z)) # Argument (angle in radians)
 ```
 
@@ -872,13 +876,13 @@ print(cmath.phase(z)) # Argument (angle in radians)
   - This allows Boolean values to be used in arithmetic operations.
 
 ```python
-print(issubclass(bool, int))  # True
+print(issubclass(bool, int)) # True
 print(isinstance(True, bool)) # True
 print(isinstance(True, int)) # True
 
-print(True + 2)   # 3
-print(False * 5)  # 0
-print(True == 1)  # True
+print(True + 2) # 3
+print(False * 5) # 0
+print(True == 1) # True
 print(False == 0) # True
 print(False < True) # True
 ```
@@ -888,39 +892,200 @@ print(False < True) # True
 - `True` and `False` are built-in constants and point to fixed memory addresses over the lifetime of the application (singletons).
   - Comparing `bool` types can be done with the identity operator (`is`) or the value equality operator (`==`).
   - `True` and `1` are not the same objects, they have different memory addresses.
-- The `bool()` constructor converts values to `True` or `False` based on their *truthiness*.
+- The `bool()` constructor converts objects to `True` or `False` based on their [truthiness](./python_4_object_orientated.md#truthiness).
+  - Most values will evaluate to `True` other than those which evaluate to `False`:
+    - The None object: `None`
+    - Zero in any numeric type: `0`, `0.0`, `0+0j` etc.
+    - Empty sequences (lists, tuples, string etc.): `[]`, `()`, `""` etc.
+    - Empty mapping types (dictionary, set etc.): `{}`
+    - Custom classes that implements a `__bool__` or  `__len__` method that returns `False` or `0`.
 
 ```python
 print(id(True) == id(1)) # False
 print(id(False) == id(0)) # False
 
-print(bool(0))      # False
-print(bool(1))      # True
-print(bool([]))     # False (empty list)
+print(bool(0)) # False
+print(bool(1)) # True
+print(bool(-1)) # True
+print(bool([])) # False (empty list)
 print(bool([1, 2])) # True (non-empty list)
-print(bool(None))   # False
-print(bool('abc'))  # True
+print(bool(None)) # False
+print(bool('abc')) # True
 ```
 
 #### Boolean Operators
 
-Logical operations return Boolean values.
+Boolean operators are used to perform logical operations and comparisons in Python. They evaluate expressions and return `True` or `False` based on the conditions.
+
+- **Comparison Operators**: These operators compare two values and return a Boolean result.
+
+  - `==` Equal to
+  - `!=` Not equal to
+  - `>` Greater than
+  - `<` Less than
+  - `>=` Greater than or equal to
+  - `<=` Less than or equal to
+
+  ```python
+  print(5 > 3)   # True
+  print(10 == 5) # False
+  print(2 != 4)  # True
+
+  print(5 > 3 == True) # True
+  print(id(5 > 3) == id(True)) # True
+  print(5 > 3 is True) # True
+  ```
+
+- **Logical Operators** `not`, `and` and `or`: These operators combine multiple Boolean expressions and return a Boolean result.
+  - `not x`: Evaluates the statement (`bool(x)`) and then inverts the boolean result. Returns `True` if the statement evaluates to `False` (and vice versa).
+  - `x and y`: Evaluates `x` first. If `x` is falsy (i.e., evaluates to `False`), returns `x` immediately. Otherwise, evaluates and returns `y`. This is known as [short-circuiting](#short-circuiting).
+  - `x or y`: Evaluates `x` first. If `x` is truthy (i.e., evaluates to `True`), returns `x` immediately. Otherwise, evaluates and returns `y`. This is also [short-circuiting](#short-circuiting) behaviour.
+
+  ```python
+  print(True and False)  # False
+  print(True or False)   # True
+  print(not True)        # False
+
+  print(not 'abc') # False
+  print(1 or 0) # 1
+  print([1,0] and ['a']) # ['a']
+  ```
+
+These operators are essential for control flow and decision-making in Python programs.
+
+#### Boolean Algebra Properties in Python
+
+These transformations are useful in simplifying boolean expressions and logical conditions in Python programs.
+
+##### Commutativity
+
+The commutative property states that the order of operands does not affect the result. This applies to both `and` and `or`:
 
 ```python
-print(True and False)  # False
-print(True or False)   # True
-print(not True)        # False
+A = True
+B = False
+
+print(A and B == B and A)  # True
+print(A or B == B or A)  # True
 ```
 
-#### Boolean Comparison Operators
+##### Associativity
 
-Comparisons return Boolean values.
+The associative property states that grouping of operations does not affect the result. This allows parentheses to be rearranged without changing the output:
 
 ```python
-print(5 > 3)   # True
-print(10 == 5) # False
-print(2 != 4)  # True
+A = True
+B = False
+C = True
+
+print((A and B) and C == A and (B and C))  # True
+print((A or B) or C == A or (B or C))  # True
 ```
+
+##### Distributivity
+
+The distributive property allows expansion of expressions using and over or (or vice versa), similar to algebraic distribution:
+
+```python
+Copy
+Edit
+A = True
+B = False
+C = True
+
+print(A and (B or C) == (A and B) or (A and C))  # True
+print(A or (B and C) == (A or B) and (A or C))  # True
+```
+
+##### De Morgan’s Theorem
+
+De Morgan’s laws describe how negation (`not`) interacts with `and` and `or`:
+
+- `not (A and B) == (not A) or (not B)`
+- `not (A or B) == (not A) and (not B)`
+
+```python
+A = True
+B = False
+
+print(not (A and B) == (not A or not B))  # True
+print(not (A or B) == (not A and not B))  # True
+```
+
+#### Chained Boolean Comparisons
+
+Python allows chaining of comparison operators, providing a more concise and readable alternative to multiple boolean expressions.
+
+
+
+```python
+# Instead of writing:
+if 3 < x and x < 5:
+  pass
+
+# it can be written as:
+if 3 < x < 5:
+  pass
+```
+
+The expression `3 < x < 5` is equivalent to `(3 < x) and (x < 5)`, but avoids redundant evaluation of `x`.
+
+This syntax is valid for any number of comparisons, e.g.:
+
+```python
+if 1 <= x < 10 != y:
+  pass
+
+# which expands to:
+if (1 <= x) and (x < 10) and (10 != y):
+  pass
+```
+
+#### Boolean Precedence
+
+Python evaluates boolean expressions based on the following precedence order (highest to lowest):
+
+  1. Parentheses: `()`
+  2. Comparison Operators: `<`, `>`, `<=`, `>=`, `==`, `!=`, `in`, `is`
+  3. Logical NOT: `not` (logical NOT)
+  4. Logical AND: `and` (logical AND)
+  5. Logical OR: `or` (logical OR)
+
+Since `and` has higher precedence than `or`, combed expressions must be carefully structured:
+
+```python
+print(True or False and False)  # True (AND first, then OR)
+print(not True or True)  # True (NOT first, then OR)
+print(not (True or False))  # False (Parentheses change order)
+```
+
+Using parentheses is important for the readability of code - do not rely on boolean precedence alone.
+
+#### Short-Circuiting
+
+Short-circuiting is an optimization where Python stops evaluating an expression as soon as the result is determined:
+
+- `and` short-circuits (stops early) if the first operand is `False` (since the result must be `False`).
+- `or` short-circuits (stops early) if the first operand is `True` (since the result must be `True`).
+
+```python
+def expensive_check():
+    print("Expensive check executed")
+    return True
+
+print(False and expensive_check())  # False (Short-circuits, function not called)
+print(True or expensive_check())  # True (Short-circuits, function not called)
+```
+
+This behaviour improves efficiency by avoiding unnecessary function calls or computations. It is also useful when checking conditions safely:
+
+```python
+value = None
+if value is not None and value > 10:  # Avoids TypeError if value is None
+    print("Greater than 10")
+```
+
+Short-circuiting ensures that `value > 10` is never evaluated when value is `None`, preventing an error.
 
 #### Using Booleans in Control Flow
 
@@ -934,10 +1099,48 @@ if 0:
     print("This does not execute")  # Doesn't run
 ```
 
-#### Performance Considerations
+Short-circuiting allows conditional execution in a compact form, replacing traditional `if`...`else` statements.
 
-- `bool` operations are optimized in Python.
-- Since `True` and `False` are just `1` and `0`, they require minimal storage.
+```python
+a = 1
+b = 4
+if b:
+    print(a / b)
+else:
+    print(0)  # Default behavior
+
+# Shortened equivalent:
+print(b and a/b)
+```
+
+- If `b` is truthy, `a/b` is evaluated and returned.
+- If `b` is falsy (`0`, `None`, etc.), `b` itself is returned, preventing division by zero.
+- This approach relies on short-circuiting to ensure that `a/b` is never evaluated when `b` is zero.
+
+However, if `b` is `0`, the expression returns `0`, which may not be the intended output so a safer alternative using *undefined* can be defined:
+
+```python
+a = 1
+b = 0
+print((b and a/b) or "undefined") # undefined
+```
+
+- If `b` is `0`, `"undefined"` (or any fallback value) is returned instead.
+- The `or` operator ensures that if `b` and `a/b` evaluates to `0` or `None`, the alternative value is used.
+
+```python
+s1 = None
+s2 = ''
+s3 = 'abc'
+print((s1 and s1[0]) or 'n/a') # n/a
+print((s2 and s2[0]) or 'n/a') # n/a
+print((s3 and s3[0]) or 'n/a') # a
+```
+
+- If `s1` is `None`, `'n/a'` (or any fallback value) is returned instead.
+- If `s2` is an empty string, `'n/a'` (or any fallback value) is returned instead.
+- If `s3` is a non-empty string, the first character of `s3` is returned.
+- The `or` operator ensures that if `s1` and `s1[0]`, or `s2` and `s2[0]`, evaluates to `None` or an empty string, the alternative value `'n/a'` is used.
 
 ### Strings (`str`)
 
@@ -1095,21 +1298,6 @@ elif x == 5:
 else:
     print("x is greater than 5")
 ```
-
-### Comparison Operators
-
-- `==` Equal to
-- `!=` Not equal to
-- `>` Greater than
-- `<` Less than
-- `>=` Greater than or equal to
-- `<=` Less than or equal to
-
-### Logical Operators
-
-- `and` Returns `True` if both statements are true.
-- `or` Returns `True` if at least one statement is true.
-- `not` Returns `True` if the statement is false.
 
 ### Ternary Conditional Operator
 
