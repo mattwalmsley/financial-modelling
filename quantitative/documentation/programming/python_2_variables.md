@@ -2,6 +2,7 @@
 
 - [Python Variables](#python-variables)
   - [Introduction](#introduction)
+  - [Introduction](#introduction-1)
   - [Immutable Types](#immutable-types)
   - [Mutable Types](#mutable-types)
   - [Mixing Mutable and Immutable Types](#mixing-mutable-and-immutable-types)
@@ -31,6 +32,21 @@
       - [Redundant Operations Elimination](#redundant-operations-elimination)
       - [Simplifying Expressions](#simplifying-expressions)
       - [Membership Test Optimisations](#membership-test-optimisations)
+  - [Packing and Unpacking Iterables](#packing-and-unpacking-iterables)
+    - [Packed Values](#packed-values)
+    - [Unpacking Values](#unpacking-values)
+      - [Unpacking in Loops](#unpacking-in-loops)
+      - [Unpacking with Dictionaries and Sets](#unpacking-with-dictionaries-and-sets)
+      - [Variable Reassignment Using Unpacking](#variable-reassignment-using-unpacking)
+      - [Extended Unpacking (`*`  and `**` Operators)](#extended-unpacking---and--operators)
+    - [Nested Unpacking](#nested-unpacking)
+
+## Introduction
+
+- [5 6](#5-6)
+- [Output:](#output-1)
+- [a 1 2](#a-1-2)
+- [b 3 4](#b-3-4)
 
 ## Introduction
 
@@ -493,3 +509,214 @@ However, sets and dictionaries offer faster membership tests than both lists and
 - Sets and dicts in Python use a hash table internally.
 - When checking membership (key in set or key in dict), Python can perform the lookup in $O(1)$ average time complexity, which is significantly faster than the $O(n)$ complexity of list or tuple membership tests.
 - Lists and tuples require scanning through each element one-by-one to check if the item is present, whereas sets and dicts use their hash-based structure to quickly determine if an element exists.
+
+## Packing and Unpacking Iterables
+
+### Packed Values
+
+- Packed values refer to values that are bundled together within an iterable.
+- Any iterable is considered a packed value.
+- Common examples of packed values include:
+  - `list` and `tuple`: Ordered collections where elements are stored sequentially.
+  - `dict` and `set`: Unordered collections that can still be unpacked.
+  - Strings (`str`): Treated as sequences of characters.
+- Packing occurs when multiple values are grouped together into a single variable.
+
+### Unpacking Values
+
+- *Unpacking* is the process of extracting individual elements from a packed value and assigning them to variables.
+- The number of variables on the left side of the assignment must match the number of elements in the iterable.
+- Assignment follows the positional order of elements in the packed value.
+  - Similar to how a function assigns values to positional arguments.
+
+```python
+ # unpacking a list (right) with three values into a tuple (left) with three variables a, b, c
+a, b, c = [1, 2, 3]
+
+a, b, c = 10, 20, 'hello' # a = 10, b = 20, c = 'hello'
+
+a, b, c = 'XYZ' # a = 'X', b = 'Y', c = 'Z'
+```
+
+#### Unpacking in Loops
+
+Unpacking works with `for` loops to iterate over elements efficiently.
+
+```python
+for x in 10, 20, 'hello':
+  print(x)
+# 10
+# 20
+# 'hello'
+```
+
+Unpacking inside loops can handle tuples or lists of multiple values:
+
+```python
+for x, y in [(1, 2), (3, 4), (5, 6)]:
+    print(x, y)
+# 1 2
+# 3 4
+# 5 6
+```
+
+Unpacking a string character-by-character:
+
+```python
+for e in 'XYZ':
+    print(e)
+# X
+# Y
+# Z
+```
+
+#### Unpacking with Dictionaries and Sets
+
+Dictionaries and sets are unordered, so unpacking may not always yield elements in a predictable order.
+
+```python
+d = {'key1': 1, 'key2': 2, 'key3': 3}
+
+for e in d: # iterates through (unpacks) the keys
+    print(e)
+# key1
+# key2
+# key3
+
+for e in d.values(): # iterates through the values
+    print(e)
+# 1
+# 2
+# 3
+
+for e in d.items(): # iterates through the key-value pairs
+    print(e)
+# ('key1', 1)
+# ('key2', 2)
+# ('key3', 3)
+
+s = {'python', 'java', 'c++'}
+
+for e in s: # iterates through the elements
+    print(e)
+# python
+# c++ (prints before java yet is defined after)
+# java
+```
+
+#### Variable Reassignment Using Unpacking
+
+Unpacking can be used to swap variable values efficiently.
+
+```python
+a = 10
+b = 20
+
+# traditional approach (Java/C# etc.)
+tmp = a
+a = b
+b = tmp
+
+# pythonic approach
+a, b = b, a
+
+# unpacking is done before assignment, hence d can be reassigned
+a = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+a, b, c, d = a
+print(a, b, c, d) # a b c d
+```
+
+#### Extended Unpacking (`*`  and `**` Operators)
+
+- The `*` operator can be used to unpack multiple elements into a single variable.
+- This allows for flexible unpacking of iterables with varying lengths.
+  - For example, unpacking the first element of a list while storing the rest in a separate variable.
+
+```python
+a, *b = [1, 2, 3, 4, 5]
+print(a)  # Output: 1
+print(b)  # Output: [2, 3, 4, 5]
+
+a, *middle, b = [10, 20, 30, 40, 50]
+print(a)       # Output: 10
+print(middle)  # Output: [20, 30, 40]
+print(b)       # Output: 50
+```
+
+The`*` can also be used to unpack the right-hand side:
+
+```python
+l1 = [1, 2, 3]
+l2 = [4, 5, 6]
+l = [*l1, *l2]
+print(l) # [1, 2, 3, 4, 5, 6]
+```
+
+With unordered types such as `dict` and `set`, the order of unpacked elements may vary:
+
+```python
+s1 = {'a', 'b', 'c'}
+a, *b = s1
+print(a) # a
+print(b) # ['b', 'c']
+
+d1 = {'key1': 1, 'key2': 2, 'key3': 3}
+d2 = {'key3': 3.5, 'key4': 4, 'key5': 5}
+keys = {*d1, *d2}
+print(keys) # {'key1', 'key2', 'key3', 'key4', 'key5'} (only one key3)
+```
+
+`**` can be used to unpack dictionaries and **cannot** be used on the left-hand side of an assignment:
+
+```python
+d1 = {'key1': 1, 'key2': 2, 'key3': 3}
+d2 = {'key3': 3.5, 'key4': 4, 'key5': 5}
+items = {**d1, **d2}
+print(items) # {'key1': 1, 'key2': 2, 'key3': 3.5, 'key4': 4, 'key5': 5} (key3 overridden: last key3 value is used)
+
+d = {'a': 1, 'b': 2}
+print({'a': 10, 'c': 3, **d}) # {'a': 1, 'c': 3, 'b': 2} (d is unpacked and d overrides 'a' value)
+print({**d, 'a': 10, 'c': 3}) # {'a': 10, 'b': 2, 'c': 3} (d is unpacked and 'a' value from d is overridden)
+```
+
+### Nested Unpacking
+
+- Nested unpacking allows extracting values from nested iterables (lists, tuples, etc.) in a single step.
+- Useful when working with structured data like lists of tuples or tuples of lists.
+
+```python
+Copy
+Edit
+(a, (b, c)) = (1, (2, 3))
+print(a, b, c)  # Output: 1 2 3
+```
+
+Nested unpacking in loops works well when iterating over structured data:
+
+```python
+data = [(1, 2), (3, 4), (5, 6)]
+for (a, b) in data:
+    print(a, b)
+# Output:
+# 1 2
+# 3 4
+# 5 6
+```
+
+Using * in nested unpacking to capture extra values:
+
+```python
+(a, *b), c = (1, [2, 3, 4]), 5
+print(a, b, c)  # Output: 1 [2, 3, 4] 5
+```
+
+Nested unpacking in dictionaries for extracting key-value pairs using `.items()`:
+
+```python
+d = {'a': (1, 2), 'b': (3, 4)}
+for key, (x, y) in d.items():
+    print(key, x, y)
+# Output:
+# a 1 2
+# b 3 4
+```

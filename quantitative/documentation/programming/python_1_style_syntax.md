@@ -55,7 +55,15 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
     - [Strings (`str`)](#strings-str)
     - [Lists (`list`)](#lists-list)
     - [Dictionaries (`dict`)](#dictionaries-dict)
-    - [Tuples](#tuples)
+    - [Tuples (`tuple`)](#tuples-tuple)
+      - [Creating Tuples](#creating-tuples)
+      - [Empty Tuple Exception](#empty-tuple-exception)
+      - [Tuple Properties](#tuple-properties)
+      - [Accessing Tuple Elements](#accessing-tuple-elements)
+      - [Tuple Packing and Unpacking](#tuple-packing-and-unpacking)
+    - [Tuples vs Lists](#tuples-vs-lists)
+    - [Common Uses of Tuples](#common-uses-of-tuples)
+    - [Tuple Methods](#tuple-methods)
     - [Sets](#sets)
   - [Naming Conventions](#naming-conventions)
   - [Python Comments](#python-comments)
@@ -1169,13 +1177,104 @@ dict
 "key2": "value2"}
 ```
 
-### Tuples
+### Tuples (`tuple`)
+
+- A tuple is an immutable ordered collection of elements.
+- Tuples are defined by commas (`,`), not parentheses as commonly assumed.
+- Parentheses are optional but improve readability and are required in some cases (e.g., empty tuples or for grouping expressions).
+
+#### Creating Tuples
+
+Basic tuple definition:
 
 ```python
-tuple
-
-(10, "hello", 2.3) # usually heterogeneous
+t = 1, 2, 3  # A tuple with three elements
 ```
+
+Using parentheses for clarity:
+
+```python
+t = (1, 2, 3)  # Same as above, parentheses improve readability
+```
+
+Single-element tuple (comma required):
+
+```python
+t = (42,)  # Correct: tuple with one element
+t = 42,    # Also correct
+```
+
+```python
+t = (42)   # Incorrect: This is just an integer
+```
+
+#### Empty Tuple Exception
+
+The only case where a tuple is not defined by a comma is an empty tuple.
+
+```python
+t = ()  # The only way to define an empty tuple
+```
+
+Without parentheses, an empty tuple cannot exist since a single comma alone does not form a valid expression.
+
+#### Tuple Properties
+
+- **Ordered**: Elements maintain their position.
+- **Immutable**: Cannot be changed after creation.
+- **Heterogeneous**: Can contain different data types.
+- **Hashable (if elements are hashable)**: Can be used as dictionary keys.
+
+#### Accessing Tuple Elements
+
+**Indexing:**
+
+```python
+t = (10, 20, 30)
+print(t[1])  # Output: 20
+```
+
+**Slicing:**
+
+```python
+print(t[:2])  # Output: (10, 20)
+```
+
+#### Tuple Packing and Unpacking
+
+**Packing**: Assigning multiple values to a tuple at once.
+
+```python
+t = "apple", "banana", "cherry"  # Tuple packing
+```
+
+**Unpacking**: Extracting values into variables.
+
+```python
+a, b, c = t  # a = "apple", b = "banana", c = "cherry"
+```
+
+### Tuples vs Lists
+
+| Feature                | Tuple | List |
+|------------------------|-------|------|
+| Mutable?               | ❌ No | ✅ Yes |
+| Ordered?               | ✅ Yes | ✅ Yes |
+| Faster?                | ✅ Yes (due to immutability) | ❌ No |
+| Uses less memory?      | ✅ Yes | ❌ No |
+
+### Common Uses of Tuples
+
+- Returning multiple values from functions.
+- As dictionary keys (since they are immutable).
+- Representing fixed collections of data.
+
+### Tuple Methods
+
+Since tuples are immutable, they have limited methods:
+
+- `.count(x)`: Returns the number of times x appears in the tuple.
+- `.index(x)`: Returns the index of the first occurrence of x.
 
 ### Sets
 
