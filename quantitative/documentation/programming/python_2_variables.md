@@ -703,7 +703,7 @@ for (a, b) in data:
 # 5 6
 ```
 
-Using * in nested unpacking to capture extra values:
+Using `*` in nested unpacking to capture extra values:
 
 ```python
 (a, *b), c = (1, [2, 3, 4]), 5
