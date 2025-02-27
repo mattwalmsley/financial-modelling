@@ -404,19 +404,20 @@ log_message("Second log")  # Uses a fresh timestamp
 - These annotations do not affect the function's behaviour but provide additional information about the types of arguments or the return value.
 - They are often used for documentation purposes, type checking, and to improve code readability.
 
-
 ### Function Annotation Syntax
 
 Function annotations are written using a colon (`:`) after the parameter name for argument annotations, and an arrow (`->`) after the parameter list for return value annotations.
 
 ```python
-def example_function(a: int, b: float, name: str = "Output") -> str:
+def example_function(a: int, b: float, name: "Name for the output" = "Output") -> str:
     return f"{name} is {a + b}"
+
+print(example_function(5, 10.5))  # Output: Output is 15.5
 ```
 
 - `a: int` means the argument `a` is expected to be an integer.
 - `b: float` means the argument `b` is expected to be a float.
-- `name: str = "Output"` Annotations can be combined with default parameter values.
+- `name: "Name for the output" = "Output"` Annotations can be combined with default parameter values.
 - `-> str` indicates that the function is expected to return a string.
 
 Function annotations are not enforced at runtime.
