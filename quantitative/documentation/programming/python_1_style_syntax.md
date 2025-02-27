@@ -1444,7 +1444,7 @@ print(result)  # Output: 16
 
 ### Functions as Objects
 
-Functions in Python are objects of type function. This allows functions to be assigned to variables, stored in data structures, or passed around like any other object:
+Functions in Python are objects of type `function`. This allows functions to be assigned to variables, stored in data structures, or passed around like any other object:
 
 ```python
 def multiply(x, y):

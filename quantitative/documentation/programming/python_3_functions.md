@@ -18,7 +18,8 @@
     - [Passing Immutable Objects as Arguments (Pass-by-Value-like Behaviour)](#passing-immutable-objects-as-arguments-pass-by-value-like-behaviour)
     - [Passing Mutable Objects as Arguments (Pass-by-Reference-like Behaviour)](#passing-mutable-objects-as-arguments-pass-by-reference-like-behaviour)
     - [Reassignment of Arguments](#reassignment-of-arguments)
-    - [Behaviour of Default Mutable Arguments](#behaviour-of-default-mutable-arguments)
+    - [Behaviour of Mutable Default Arguments](#behaviour-of-mutable-default-arguments)
+    - [Behaviour of Dynamic Default Arguments](#behaviour-of-dynamic-default-arguments)
 
 ## Introduction
 
@@ -325,12 +326,12 @@ print("Outside function:", my_list)  # Original list remains unchanged
 # Outside function: [1, 2, 3]
 ```
 
-### Behaviour of Default Mutable Arguments
+### Behaviour of Mutable Default Arguments
 
-Default mutable arguments can lead to unexpected behaviour, as they are shared across function calls.
+Mutable default arguments can lead to unexpected behaviour, as they are shared across function calls.
 
 ```python
-# Poor implementation
+# Incorrect implementation
 def append_to_list(value, lst=[]):
     lst.append(value)  # Modifies the shared default list
     return lst
@@ -339,7 +340,14 @@ result1 = append_to_list(1)
 result2 = append_to_list(2)
 print(result1)  # [1, 2]
 print(result2)  # [1, 2]
+```
 
+- `lst` is initialized as an empty list only once, during the function definition.
+- Subsequent calls to `append_to_list` modify the same list object in memory, leading to unexpected results.
+
+Use `None` as a placeholder and create a new instance of the mutable type inside the function.
+
+```python
 # Correct implementation:
 def append_to_list(value, lst=None):
     if lst is None:
@@ -351,4 +359,38 @@ result1 = append_to_list(1)
 result2 = append_to_list(2)
 print(result1)  # [1]
 print(result2)  # [2]
+```
+
+- By using `None` as the default and creating a new list if `lst` is `None`, the function ensure that each call operates on its own independent list.
+- This avoids the shared state problem.
+
+### Behaviour of Dynamic Default Arguments
+
+- Functions' default arguments are evaluated once when the modules is imported, not at each function call.
+- This can lead to unintended behaviour when using mutable or dynamic default arguments.
+
+```python
+# Incorrect implementation
+from datetime import datetime
+
+def log_message(message: str, *, timestamp=datetime.utcnow()):  # Evaluated once at definition
+    print(f"{timestamp}: {message}")
+
+log_message("First log")  # Logs the same timestamp for every call
+log_message("Second log")  # Still uses the old timestamp
+```
+
+- `datetime.utcnow()` is evaluated when the function is defined, not when it's called.
+- Calls to `log_message()` without timestamp use the same stale value.
+
+Use `None` as a placeholder and assign the value inside the function.
+
+```python
+# Correct implementation
+def log_message(message: str, *, timestamp=None):  # Fresh value per call
+    timestamp = timestamp or datetime.utcnow()  
+    print(f"{timestamp}: {message}")
+
+log_message("First log")  # Correctly logs the actual current timestamp
+log_message("Second log")  # Uses a fresh timestamp
 ```
