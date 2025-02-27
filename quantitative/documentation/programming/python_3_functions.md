@@ -20,6 +20,11 @@
     - [Reassignment of Arguments](#reassignment-of-arguments)
     - [Behaviour of Mutable Default Arguments](#behaviour-of-mutable-default-arguments)
     - [Behaviour of Dynamic Default Arguments](#behaviour-of-dynamic-default-arguments)
+  - [Function Annotations](#function-annotations)
+    - [Function Annotation Syntax](#function-annotation-syntax)
+    - [Accessing Annotations](#accessing-annotations)
+    - [Typing Module and Advanced Annotations](#typing-module-and-advanced-annotations)
+      - [Expression Function Annotations](#expression-function-annotations)
 
 ## Introduction
 
@@ -92,8 +97,6 @@ greet(**name_dict)  # Hello, Jane Doe!
 - The name `args` is a convention; any other name can be used.
 
 ```python
-Copy
-Edit
 def add_numbers(*args):
     return sum(args)
 
@@ -394,3 +397,105 @@ def log_message(message: str, *, timestamp=None):  # Fresh value per call
 log_message("First log")  # Correctly logs the actual current timestamp
 log_message("Second log")  # Uses a fresh timestamp
 ```
+
+## Function Annotations
+
+- Function annotations are a way to attach metadata to the parameters and return value of a function.
+- These annotations do not affect the function's behaviour but provide additional information about the types of arguments or the return value.
+- They are often used for documentation purposes, type checking, and to improve code readability.
+
+
+### Function Annotation Syntax
+
+Function annotations are written using a colon (`:`) after the parameter name for argument annotations, and an arrow (`->`) after the parameter list for return value annotations.
+
+```python
+def example_function(a: int, b: float, name: str = "Output") -> str:
+    return f"{name} is {a + b}"
+```
+
+- `a: int` means the argument `a` is expected to be an integer.
+- `b: float` means the argument `b` is expected to be a float.
+- `name: str = "Output"` Annotations can be combined with default parameter values.
+- `-> str` indicates that the function is expected to return a string.
+
+Function annotations are not enforced at runtime.
+
+- Python does not check whether the function arguments match their annotations.
+- They are primarily used for documentation or by external tools (e.g., linters, type checkers like `mypy`).
+
+```python
+def divide(a: int, b: int) -> float:
+    return a / b
+
+# No error if 'b' is passed as a string
+divide(5, "10")  # The program will run without error, but this is not recommended
+```
+
+### Accessing Annotations
+
+- Function annotations are stored in the `__annotations__` attribute, which is a dictionary.
+- This allows access to the annotations programmatically.
+
+```python
+def my_func(x: int, y: float) -> str:
+    return str(x + y)
+
+print(my_func.__annotations__)
+# Output: {'x': <class 'int'>, 'y': <class 'float'>, 'return': <class 'str'>}
+```
+
+### Typing Module and Advanced Annotations
+
+- The `typing` module allows more complex annotations, such as:
+  - `Union`: To specify that a value could be one of multiple types.
+  - `Optional`: A shorthand for `Union[X, None]`.
+  - `Callable`: For annotating function signatures.
+  - `List`, `Dict`, `Tuple`: For generic collections.
+
+```python
+from typing import Union, List
+
+def process_data(data: Union[int, float]) -> str:
+    return f"Processed: {data}"
+
+def sum_values(numbers: List[int]) -> int:
+    return sum(numbers)
+
+def add(a: int, b: int) -> int:
+    return a + b
+```
+
+`Callable` can be used to annotate function parameters or return types that are functions themselves.
+
+```python
+from typing import Callable
+
+def apply_func(func: Callable[[int], int], value: int) -> int:
+    return func(value)
+```
+
+In this example, `func` is expected to be a callable that takes an integer and returns an integer.
+
+#### Expression Function Annotations
+
+- Expression function annotations allow the use of arbitrary expressions as annotations rather than just simple types or classes.
+- This is particularly useful for adding more dynamic or computed annotations, which might depend on the context or other factors.
+- An expression can be anything from a constant value to a more complex expression (e.g., the result of a function or a mathematical calculation).
+
+```python
+def example(x: 2 + 3) -> int:
+    return x * 2
+```
+
+In this case, the annotation `2 + 3` is an expression, and it evaluates to `5`, meaning the parameter `x` is annotated as `5`.
+
+```python
+from datetime import datetime
+
+# Incorrect use of a expression function annotation
+def log_event(event: str, timestamp: datetime = datetime.now()) -> str:
+    return f"{event} occurred at {timestamp}"
+```
+
+Expression annotations are evaluated when the function is defined, not when it is called, similar to default arguments.

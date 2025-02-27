@@ -685,8 +685,6 @@ print({**d, 'a': 10, 'c': 3}) # {'a': 10, 'b': 2, 'c': 3} (d is unpacked and 'a'
 - Useful when working with structured data like lists of tuples or tuples of lists.
 
 ```python
-Copy
-Edit
 (a, (b, c)) = (1, (2, 3))
 print(a, b, c)  # Output: 1 2 3
 ```

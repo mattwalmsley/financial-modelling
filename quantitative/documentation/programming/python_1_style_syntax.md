@@ -71,6 +71,16 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
     - [Implicit Line Continuation](#implicit-line-continuation)
     - [Explicit Line Continuation](#explicit-line-continuation)
     - [Multi-line Strings in Python](#multi-line-strings-in-python)
+  - [Docstrings](#docstrings)
+    - [Docstring Syntax](#docstring-syntax)
+    - [Types of Docstrings](#types-of-docstrings)
+      - [Function Docstrings](#function-docstrings)
+      - [Class Docstrings](#class-docstrings)
+    - [Module Docstrings](#module-docstrings)
+    - [Accessing Docstrings](#accessing-docstrings)
+      - [Using the `__doc__` attribute:](#using-the-__doc__-attribute)
+    - [Conventions for Writing Docstrings](#conventions-for-writing-docstrings)
+    - [Docstring Style Guides](#docstring-style-guides)
   - [Conditionals](#conditionals)
     - [Ternary Conditional Operator](#ternary-conditional-operator)
   - [Functions](#functions)
@@ -995,8 +1005,6 @@ print((A or B) or C == A or (B or C))  # True
 The distributive property allows expansion of expressions using and over or (or vice versa), similar to algebraic distribution:
 
 ```python
-Copy
-Edit
 A = True
 B = False
 C = True
@@ -1372,6 +1380,115 @@ and preserves line breaks."""
 Triple quotes preserve newlines, but parentheses and backslashes allow multi-line string concatenation without newlines.
 
 Multi-line strings are **not** comments as they are **not** removed at compile time but can be used for annotating code - such as a [Docstring](https://peps.python.org/pep-0257/).
+
+## Docstrings
+
+A docstring (documentation string) is a special type of string used to document Python functions, classes, modules, and methods that provides an easy way to embed documentation directly in the code.
+
+### Docstring Syntax
+
+- Docstrings are written inside triple quotes: """ docstring """ or ''' docstring '''.
+- Triple quotes allow docstrings to span multiple lines.
+- The docstring should be placed immediately after the definition of a function, class, or module.
+
+```python
+def example_function():
+    """This function does nothing but demonstrate docstring syntax."""
+    pass
+```
+
+### Types of Docstrings
+
+#### Function Docstrings
+
+Provide a description of the function's purpose, parameters, and return values.
+
+```python
+def add(a, b):
+    """Returns the sum of two numbers a and b."""
+    return a + b
+```
+
+#### Class Docstrings
+
+Describe the class’s purpose, its attributes, and methods.
+
+```python
+class MyClass:
+    """This is a sample class for demonstration."""
+    def __init__(self, name):
+        self.name = name
+```
+
+### Module Docstrings
+
+- Describe the module's purpose and its functions, classes, and methods.
+- Typically placed at the top of the module file.
+
+```python
+"""This module handles basic arithmetic operations."""
+```
+
+### Accessing Docstrings
+
+Call the `help()` function to access the docstring of any function, class, or module.
+
+```python
+help(add)  # Displays the docstring for the add function
+```
+
+#### Using the `__doc__` attribute:
+
+Access the docstring directly using the `__doc__` attribute.
+
+```python
+print(add.__doc__)  # Output: Returns the sum of two numbers a and b.
+```
+
+### Conventions for Writing Docstrings
+
+Function/Method docstrings: Should describe the function’s purpose, parameters, return values, and possible exceptions.
+
+```python
+def multiply(a, b):
+    """
+    Multiplies two numbers and returns the result.
+
+    Parameters:
+    a (int, float): The first number.
+    b (int, float): The second number.
+
+    Returns:
+    int, float: The product of a and b.
+    """
+    return a * b
+```
+
+Class docstrings: Should describe the class’s purpose, attributes, and provide examples of usage.
+
+```python
+class Calculator:
+    """
+    A simple calculator class.
+
+    Attributes:
+    result (float): Stores the result of the last operation.
+
+    Methods:
+    add(x, y): Adds two numbers.
+    """
+    def __init__(self):
+        self.result = 0
+```
+
+### Docstring Style Guides
+
+[PEP 257](https://peps.python.org/pep-0257/): The official style guide for Python docstrings. Some key recommendations:
+
+- Docstrings should be enclosed in triple quotes.
+- For one-liners, the closing quotes should be on the same line.
+- The docstring should begin with a short description of the object’s purpose.
+- For longer docstrings, include a description of parameters, return values, and exceptions.
 
 ## Conditionals
 
