@@ -88,12 +88,18 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [`my_func` versus `my_func()`](#my_func-versus-my_func)
     - [Higher-Order Functions](#higher-order-functions)
     - [Built-in Functions](#built-in-functions)
-    - [Lambda Functions](#lambda-functions)
   - [Loops](#loops)
     - [`while` Loops](#while-loops)
     - [`for` Loops](#for-loops)
       - [Loops with `else`](#loops-with-else)
+    - [List Comprehension](#list-comprehension)
+      - [List Comprehension Comparison to Regular `for` Loop](#list-comprehension-comparison-to-regular-for-loop)
   - [Exception Handling](#exception-handling)
+  - [Scope](#scope)
+    - [Local Scope](#local-scope)
+    - [Non-Local Scope (Enclosing Scope)](#non-local-scope-enclosing-scope)
+    - [Global Scope](#global-scope)
+    - [Scope Resolution Order (LEGB Rule)](#scope-resolution-order-legb-rule)
 
 ## Objects
 
@@ -1527,7 +1533,9 @@ print(result)
 
 ## Functions
 
-Functions are reusable blocks of code that perform a specific task. They help in organizing code and avoiding repetition. In Python, functions can be defined using the `def` keyword.
+- Functions are reusable blocks of code that perform a specific task.
+- They help in organizing code and avoiding repetition. In Python, functions can be defined using the `def` keyword.
+- The [functions](./python_3_functions.md) chapter provides a detailed overview of functions in Python.
 
 ```python
 def greet(name):
@@ -1640,40 +1648,6 @@ Python has many built-in functions that are readily available for use. Some comm
     ```
 
 For a comprehensive list of built-in functions in Python, visit the official documentation: [Python Built-in Functions](https://docs.python.org/3/library/functions.html).
-
-### Lambda Functions
-
-A **lambda function** is a small anonymous function defined using the `lambda` keyword. It can take any number of arguments but has only one expression. Lambda functions are useful for short, throwaway functions.
-
-```python
-lambda arguments: expression
-```
-
-The function evaluates the expression and returns the result.
-
-```python
-# Lambda to add two numbers
-add = lambda x, y: x + y
-
-# Calling the lambda function
-print(add(3, 5))  # Output: 8
-```
-
-Lambda functions are commonly used with higher-order functions such as `map()`, `filter()`, and `sorted()`.
-
-```python
-numbers = [1, 2, 3, 4]
-squares = list(map(lambda x: x ** 2, numbers))
-
-print(squares)  # Output: [1, 4, 9, 16]
-```
-
-```python
-numbers = [1, 2, 3, 4, 5, 6]
-even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
-
-print(even_numbers)  # Output: [2, 4, 6]
-```
 
 ## Loops
 
@@ -1836,6 +1810,73 @@ else:
 # 2
 ```
 
+### List Comprehension
+
+List comprehensions are compact and efficient ways to create new lists by applying an expression to each item in an iterable, optionally filtering items based on a condition. It is typically used to replace simple for loops that build lists.
+
+- Key benefits of list comprehensions include:
+  - **Concise**: More compact and readable than traditional for loops.
+  - **Performance**: List comprehensions are often faster than using regular for loops due to optimizations.
+  - **Functional Style**: Helps write cleaner code by encapsulating the loop, expression, and filtering in a single
+- While list comprehensions are concise, they can sometimes sacrifice readability if the expression becomes too complex. In such cases, using regular for loops may be preferable.
+
+```python
+[expression for item in iterable]
+```
+
+- `expression`: The value or operation applied to each item in the iterable.
+- `item`: The current element being processed from the iterable.
+- `iterable`: The collection being iterated over (e.g., list, range, etc.).
+
+Creating a list of squares from a range of numbers:
+
+```python
+squares = [x**2 for x in range(5)]
+print(squares)  # Output: [0, 1, 4, 9, 16]
+```
+
+Creating a list of even numbers from a range:
+
+```python
+evens = [x for x in range(10) if x % 2 == 0]
+print(evens)  # Output: [0, 2, 4, 6, 8]
+```
+
+Creating a list of numbers that are divisible by both 2 and 3:
+
+```python
+div_by_2_and_3 = [x for x in range(20) if x % 2 == 0 and x % 3 == 0]
+print(div_by_2_and_3)  # Output: [0, 6, 12, 18]
+```
+
+Applying an operation on each element of an iterable (e.g., converting strings to uppercase):
+
+```python
+words = ['hello', 'world', 'python']
+upper_words = [word.upper() for word in words]
+print(upper_words)  # Output: ['HELLO', 'WORLD', 'PYTHON']
+```
+
+Creating a 2D matrix and flattening it:
+
+```python
+matrix = [[1, 2], [3, 4], [5, 6]]
+flat = [item for sublist in matrix for item in sublist]
+print(flat)  # Output: [1, 2, 3, 4, 5, 6]
+```
+
+#### List Comprehension Comparison to Regular `for` Loop
+
+```python
+# regular for loop:
+squares = []
+for x in range(5):
+  squares.append(x**2)
+
+# list comprehension:
+squares = [x**2 for x in range(5)]
+```
+
 ## Exception Handling
 
 The `try`, `except`, `else`, `finally` blocks in Python provide a powerful way to handle exceptions and ensure that certain code runs regardless of whether an error occurs. They allow for structured error handling and clean up of resources.
@@ -1879,3 +1920,92 @@ finally:
 # Cannot divide by zero.
 # This always runs.
 ```
+
+## Scope
+
+Scope determines the visibility and lifetime of variables. Python has three main scopes: local, non-local (enclosing), and global.
+
+### Local Scope
+
+A variable declared inside a function is local to that function and cannot be accessed outside it.
+
+```python
+def func():
+    x = 10  # Local variable
+    print(x)
+
+func()
+# print(x)  # Error: NameError: name 'x' is not defined
+```
+
+- Local variables are created when the function is called and destroyed when it returns.
+- Cannot be accessed outside the function.
+
+### Non-Local Scope (Enclosing Scope)
+
+Refers to variables in an enclosing function (not global). Used inside nested functions. Declared using `nonlocal`.
+
+```python
+def outer():
+    x = 10  # Enclosing variable
+
+    def inner():
+        nonlocal x  # Refers to 'x' in outer()
+        x += 5
+        print(x)
+
+    inner()
+    print(x)
+
+outer()
+```
+
+- `nonlocal` allows modifying an enclosing function’s variable.
+- Without `nonlocal`, `x` inside `inner()` would be treated as a new local variable.
+
+### Global Scope
+
+A variable declared at the module level is accessible throughout the program. Use `global` inside functions to modify them.
+
+```python
+x = 10  # Global variable
+
+def modify_global():
+    global x  # Refers to global x
+    x += 5
+    print(x)
+
+modify_global()
+print(x)  # Modified globally
+```
+
+- Without `global`, assigning to `x` inside `modify_global()` would create a new local variable.
+- Global variables persist throughout the program’s execution.
+
+### Scope Resolution Order (LEGB Rule)
+
+Python resolves variable names in the following order:
+
+1. Local – Inside the current function.
+2. Enclosing – Inside the enclosing function (for nested functions).
+3. Global – Defined at the top level of the script/module.
+4. Built-in – Python’s built-in functions (e.g., `len`, `sum`).
+
+```python
+x = "global"
+
+def outer():
+    x = "enclosing"
+
+    def inner():
+        x = "local"
+        print(x)  # Resolves to "local"
+
+    inner()
+    print(x)  # Resolves to "enclosing"
+
+outer()
+print(x)  # Resolves to "global"
+```
+
+This order ensures the most specific scope is used first.

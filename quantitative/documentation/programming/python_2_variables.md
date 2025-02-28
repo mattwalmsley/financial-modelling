@@ -2,7 +2,6 @@
 
 - [Python Variables](#python-variables)
   - [Introduction](#introduction)
-  - [Introduction](#introduction-1)
   - [Immutable Types](#immutable-types)
   - [Mutable Types](#mutable-types)
   - [Mixing Mutable and Immutable Types](#mixing-mutable-and-immutable-types)
@@ -40,13 +39,7 @@
       - [Variable Reassignment Using Unpacking](#variable-reassignment-using-unpacking)
       - [Extended Unpacking (`*`  and `**` Operators)](#extended-unpacking---and--operators)
     - [Nested Unpacking](#nested-unpacking)
-
-## Introduction
-
-- [5 6](#5-6)
-- [Output:](#output-1)
-- [a 1 2](#a-1-2)
-- [b 3 4](#b-3-4)
+  - [Callables](#callables)
 
 ## Introduction
 
@@ -717,4 +710,69 @@ for key, (x, y) in d.items():
 # Output:
 # a 1 2
 # b 3 4
+```
+
+## Callables
+
+A *callable* is any object in Python that can be called using parentheses `()`. This includes:
+
+- **Functions**: regular functions defined using `def` or `lambda`.
+
+  ```python
+  Copy
+  Edit
+  def greet(name):
+      return f"Hello, {name}!"
+
+  print(greet("Alice"))  # Hello, Alice!
+  print(callable(greet))  # True
+  ```
+
+- **Methods**: functions bound to a `class` instance.
+
+  ```python
+  Copy
+  Edit
+  class Person:
+      def greet(self, name):
+          return f"Hello, {name}!"
+
+  p = Person()
+  print(p.greet("Bob"))  # Hello, Bob!
+  print(callable(p.greet))  # True
+  ```
+
+- **Classes**: calling a class creates an instance of the class by invoking its `__new__` and `__init__` methods.
+
+  ```python
+  class MyClass:
+    def __init__(self, value):
+        self.value = value
+
+  obj = MyClass(10)  # Calls MyClass.__init__
+  print(obj.value)   # 10
+  ```
+
+- Any object, such as an instance of a class, implementing the `__call__` method is callable.
+
+  ```python
+  class Multiplier:
+      def __init__(self, factor):
+          self.factor = factor
+
+      def __call__(self, x):
+          return x * self.factor
+
+  double = Multiplier(2)
+  print(double(5))  # 10
+  ```
+
+Use `callable(obj)` to check if an object can be called.
+
+```python
+def add(a, b):
+    return a + b
+
+print(callable(add))  # True
+print(callable(10))   # False
 ```

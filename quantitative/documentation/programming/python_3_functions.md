@@ -4,12 +4,14 @@
   - [Introduction](#introduction)
   - [Argument Passing](#argument-passing)
     - [Positional and Keyword Arguments](#positional-and-keyword-arguments)
+    - [Positional-Only Arguments (`/`)](#positional-only-arguments-)
     - [`*args` and `**kwargs`](#args-and-kwargs)
       - [Unpacking with `*` and `**`](#unpacking-with--and-)
       - [Using `*args` for Positional Arguments](#using-args-for-positional-arguments)
       - [`*args` and Keyword-Only Arguments](#args-and-keyword-only-arguments)
         - [Mixing `*args` with a Regular Keyword Argument](#mixing-args-with-a-regular-keyword-argument)
         - [Enforcing Keyword-Only Arguments with `*`](#enforcing-keyword-only-arguments-with-)
+      - [Mixing Positional-Only and Keyword Arguments](#mixing-positional-only-and-keyword-arguments)
         - [Mixing `*args`, `*`, and Keyword-Only Arguments](#mixing-args--and-keyword-only-arguments)
       - [Using `**kwargs` for Keyword Arguments](#using-kwargs-for-keyword-arguments)
       - [Mixing \*args and \*\*kwargs](#mixing-args-and-kwargs)
@@ -25,6 +27,40 @@
     - [Accessing Annotations](#accessing-annotations)
     - [Typing Module and Advanced Annotations](#typing-module-and-advanced-annotations)
       - [Expression Function Annotations](#expression-function-annotations)
+  - [Lambda Functions](#lambda-functions)
+    - [Using Lambda Functions with Built-in Functions](#using-lambda-functions-with-built-in-functions)
+    - [`lambda` versus `def` Functions](#lambda-versus-def-functions)
+    - [When to Use Lambda Functions](#when-to-use-lambda-functions)
+    - [When to Avoid Lambda Functions](#when-to-avoid-lambda-functions)
+  - [Function Introspection](#function-introspection)
+    - [Basic Function Attributes](#basic-function-attributes)
+    - [Accessing Function Attributes](#accessing-function-attributes)
+    - [Creating Function Attributes](#creating-function-attributes)
+    - [Inspecting Function Signature (`inspect` module)](#inspecting-function-signature-inspect-module)
+      - [Retrieving Source Code \& Bytecode using `inspect` and `dis`](#retrieving-source-code--bytecode-using-inspect-and-dis)
+    - [Checking If an Object Is a Function](#checking-if-an-object-is-a-function)
+  - [Built-In Functions](#built-in-functions)
+    - [`map()`](#map)
+    - [`zip()`](#zip)
+      - [Using `zip()` with List Comprehensions](#using-zip-with-list-comprehensions)
+    - [`filter()`](#filter)
+      - [Using List Comprehension with `if` Instead of `filter()`](#using-list-comprehension-with-if-instead-of-filter)
+  - [Reducing Functions (`functools.reduce`)](#reducing-functions-functoolsreduce)
+    - [Built-in Reducing Functions in Python](#built-in-reducing-functions-in-python)
+      - [`sum()`: Summation of Elements](#sum-summation-of-elements)
+      - [`max()`: Maximum Value](#max-maximum-value)
+      - [`min()`: Minimum Value](#min-minimum-value)
+      - [`any()`: Checks for At Least One True Value](#any-checks-for-at-least-one-true-value)
+      - [`all()`: Checks If All Values Are True](#all-checks-if-all-values-are-true)
+      - [`str.join()`: Concatenates Strings](#strjoin-concatenates-strings)
+  - [Partial Functions (`functools.partial`)](#partial-functions-functoolspartial)
+  - [`operator` Module](#operator-module)
+    - [Using `operator.add` with `reduce()`](#using-operatoradd-with-reduce)
+    - [Example: Sorting with `itemgetter()`](#example-sorting-with-itemgetter)
+    - [Example: Accessing Attributes with `attrgetter()`](#example-accessing-attributes-with-attrgetter)
+  - [Closures](#closures)
+    - [Closures with State](#closures-with-state)
+    - [Practical Use Cases of Closures](#practical-use-cases-of-closures)
 
 ## Introduction
 
@@ -68,6 +104,21 @@ my_func(20, 10, 200) # a=20 b=10 c=200 d=4
 my_func(20, b=10, d=10) # a=20 b=10 c=100 d=10
 my_func(1, c=20, b=2, d=10) # a=1 b=2 c=20 d=10
 ```
+
+### Positional-Only Arguments (`/`)
+
+- Introduced in Python 3.8, the `/` in a function signature defines **positional-only** parameters.
+- Parameters before `/` must be passed by position and cannot be assigned using keywords.
+
+```python
+def greet(name, /):
+    print(f"Hello, {name}!")
+
+greet("Alice")    # Hello, Alice
+greet(name="Bob") # TypeError: greet() got some positional-only arguments passed as keyword arguments: 'name'
+```
+
+In the above example, name must be passed as a positional argument.
 
 ### `*args` and `**kwargs`
 
@@ -143,6 +194,19 @@ Explanation:
 
 - The `*` in the function signature means no positional arguments are allowed.
 - Only explicitly named keyword arguments can be passed to the function.
+
+#### Mixing Positional-Only and Keyword Arguments
+
+- `/` makes `x`, `y` positional-only, meaning they must be passed without using keywords.
+- `*` ensures `precision` is keyword-only, requiring explicit assignment.
+
+```python
+def divide(x, y, /, *, precision=2):
+    return round(x / y, precision)
+
+print(divide(10, 3, precision=4))  # 3.3333
+print(divide(10, y=3, precision=4))  # TypeError: divide() got some positional-only arguments passed as keyword arguments: 'y'
+```
 
 ##### Mixing `*args`, `*`, and Keyword-Only Arguments
 
@@ -264,9 +328,9 @@ example_function_two(1, 2, c=5, d=6, name="Alice", age=25)
       print("Additional filters:", args)
       print("API parameters:", kwargs)
 
-  fetch_market_data("EUR/USD", "intraday", timeframe="1h", source="Reuters", adjust_for_dividends=True)
+  fetch_market_data("EUR/USD", "intra-day", timeframe="1h", source="Reuters", adjust_for_dividends=True)
   # Fetching EUR/USD data from Reuters.
-  # Additional filters: ('intraday',)
+  # Additional filters: ('intra-day',)
   # API parameters: {'timeframe': '1h', 'adjust_for_dividends': True}
   ```
 
@@ -500,3 +564,727 @@ def log_event(event: str, timestamp: datetime = datetime.now()) -> str:
 ```
 
 Expression annotations are evaluated when the function is defined, not when it is called, similar to default arguments.
+
+## Lambda Functions
+
+- A *lambda function* is an anonymous (unnamed) function defined using the `lambda` keyword.
+- It is often used for short, simple functions where defining a full function using `def` is unnecessary.
+- Lambda functions are of type `function`.
+
+```python
+lambda parameter: expression
+```
+
+- A `lambda` function can have multiple parameters but only one expression.
+- The colon, `:`, is needed even with zero parameters.
+- The expression is evaluated and returned automatically (no need for `return`).
+- Type annotations and assignments are not allowed in lambda functions.
+
+```python
+# takes two arguments x and y, and returns their sum.
+add = lambda x, y: x + y
+print(add(3, 5))  # Output: 8
+
+# A lambda function that squares its input.
+square = lambda x: x**2
+print(square(4))  # Output: 16
+
+# A lambda function that checks if a number is even.
+is_even = lambda x: x % 2 == 0
+print(is_even(10))  # Output: True
+
+# Annotations and assignments are not allowed in lambda functions.
+lambda x: int : x*2 # SyntaxError: illegal target for annotation
+lambda x : x = x + 5 # SyntaxError: cannot assign to lambda
+```
+
+### Using Lambda Functions with Built-in Functions
+
+- `map()`: Apply a function to each element in an iterable.
+
+    ```python
+    numbers = [1, 2, 3, 4, 5]
+    squared = list(map(lambda x: x**2, numbers))
+    print(squared)  # Output: [1, 4, 9, 16, 25]
+    ```
+
+- `filter()`: Filter elements based on a condition.
+
+    ```python
+    even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+    print(even_numbers)  # Output: [2, 4]
+    ```
+
+- `sorted()`: Sort based on a key function.
+
+    ```python
+    # The lambda p: p[1] extracts the second element of each tuple for sorting.
+    points = [(2, 3), (1, 4), (5, 1)]
+    sorted_points = sorted(points, key=lambda p: p[1])  # Sort by second element
+    print(sorted_points)  # Output: [(5, 1), (2, 3), (1, 4)]
+
+    # The lambda student: student["age"] extracts the "age" key for sorting.
+    students = [
+        {"name": "Alice", "age": 25},
+        {"name": "Bob", "age": 22},
+        {"name": "Charlie", "age": 23}
+    ]
+    sorted_by_age = sorted(students, key=lambda student: student["age"])
+    print(sorted_by_age)
+    # Output:
+    # [{'name': 'Bob', 'age': 22}, {'name': 'Charlie', 'age': 23}, {'name': 'Alice', 'age': 25}]
+    ```
+
+### `lambda` versus `def` Functions
+
+| Feature                | `lambda` function                     | `def` function                  |
+|------------------------|---------------------------------------|---------------------------------|
+| Name                   | Anonymous (or assigned to a variable) | Has a name                      |
+| Number of expressions  | Only one                              | Multiple expressions/statements |
+| Readability            | Best for short operations             | Preferred for complex logic     |
+| Can contain `return`?    | No (implicit return)                  | Yes                             |
+
+### When to Use Lambda Functions
+
+- When defining quick, simple functions.
+- When using higher-order functions like `map()`, `filter()`, and `sorted()`.
+- When defining one-time use functions that don't need a formal function name.
+
+### When to Avoid Lambda Functions
+
+- When the function contains multiple expressions or complex logic.
+- When readability is compromised.
+- When debugging, as lambda functions don't have names in error messages.
+
+## Function Introspection
+
+- Function introspection refers to examining function attributes at runtime. Python provides built-in attributes and modules such as `inspect` to retrieve metadata about functions, their parameters, annotations, and more.
+- Common use cases of function introspection include:
+  - **Debugging**: Retrieve function signatures and annotations dynamically.
+  - **Meta-programming**: Modify or analyze functions at runtime.
+  - **API Development**: Validate arguments dynamically.
+  - **Documentation**: Extract function docstrings and annotations.
+
+### Basic Function Attributes
+
+Python functions are objects, and they have built-in attributes that store useful metadata.
+
+| Attribute         | Description                                              |
+|-------------------|----------------------------------------------------------|
+| `__name__`        | Name of the function                                     |
+| `__doc__`         | Docstring of the function                                |
+| `__annotations__` | Dictionary of parameter and return annotations           |
+| `__defaults__`    | Tuple of default argument values                         |
+| `__kwdefaults__`  | Dictionary of default values for keyword-only arguments  |
+| `__code__`        | `code` object containing function's bytecode and metadata  |
+| `__dict__`        | Dictionary for storing function attributes dynamically   |
+
+### Accessing Function Attributes
+
+Built-in attributes can be accessed using the dot notation.
+
+```python
+def add(a: int, b: int = 10) -> int:
+    """Returns the sum of two numbers."""
+    return a + b
+
+print(add.__name__)         # 'add'
+print(add.__doc__)          # 'Returns the sum of two numbers.'
+print(add.__annotations__)  # {'a': <class 'int'>, 'b': <class 'int'>, 'return': <class 'int'>}
+print(add.__defaults__)     # (10,)
+```
+
+`dir()` is a built-in function that will return a list of valid attributes for an object
+
+```python
+print(dir(add))
+# ['__annotations__',
+#  '__builtins__',
+#  '__call__',
+#  '__class__',
+#  '__closure__',
+#  '__code__',
+#  '__defaults__',
+#  '__delattr__',
+#  '__dict__',
+#  '__dir__', etc. etc.
+```
+
+### Creating Function Attributes
+
+Custom function attributes can be created dynamically.
+
+```python
+def my_func(a, b):
+    return a + b
+
+my_func.category = 'math'  # Add a new attribute to the function
+my_func.sub_category = 'arithmetic'
+
+print(my_func.category)  # math
+print(my_func.sub_category)  # arithmetic
+```
+
+### Inspecting Function Signature (`inspect` module)
+
+The `inspect` module provides powerful tools for *introspecting* function signatures.
+
+```python
+
+import inspect
+
+def example(x: int, y: float = 3.5, *args, z: str = "default", **kwargs) -> bool:
+    pass
+
+# Getting Function Signature
+sig = inspect.signature(example)
+print(sig)
+# (x: int, y: float = 3.5, *args, z: str = 'default', **kwargs) -> bool
+
+# Accessing Individual Parameters
+for name, param in sig.parameters.items():
+    print(f"{name}: {param.kind}, default={param.default}, annotation={param.annotation}")
+
+# x: POSITIONAL_OR_KEYWORD, default=<class 'inspect._empty'>, annotation=<class 'int'>
+# y: POSITIONAL_OR_KEYWORD, default=3.5, annotation=<class 'float'>
+# args: VAR_POSITIONAL, default=<class 'inspect._empty'>, annotation=<class 'inspect._empty'>
+# z: KEYWORD_ONLY, default=default, annotation=<class 'str'>
+# kwargs: VAR_KEYWORD, default=<class 'inspect._empty'>, annotation=<class 'inspect._empty'>
+```
+
+| Parameter Kind          | Description                                                   |
+|-------------------------|---------------------------------------------------------------|
+| POSITIONAL_OR_KEYWORD   | Can be passed as a positional or keyword argument.            |
+| VAR_POSITIONAL (*args)  | Collects extra positional arguments.                          |
+| KEYWORD_ONLY            | Must be passed as a keyword argument.                         |
+| VAR_KEYWORD (**kwargs)  | Collects extra keyword arguments.                             |
+| POSITIONAL_ONLY         | Can only be passed as a positional argument, not by keyword.  |
+
+#### Retrieving Source Code & Bytecode using `inspect` and `dis`
+
+Python allows extracting the function's source code and compiled bytecode.
+
+```python
+def add(a: int, b: int = 10) -> int:
+    """Returns the sum of two numbers."""
+    return a + b
+
+#Getting Function Source Code
+import inspect
+print(inspect.getsource(add))
+# def add(a: int, b: int = 10) -> int:
+#     """Returns the sum of two numbers."""
+#     return a + b
+
+# Getting Function Bytecode
+import dis
+dis.dis(add)
+#  2           0 LOAD_FAST                0 (a)
+#              2 LOAD_FAST                1 (b)
+#              4 BINARY_ADD
+#              6 RETURN_VALUE
+```
+
+### Checking If an Object Is a Function
+
+- `callable(obj)`: Checks if an object can be called like a function (e.g., functions, lambdas, and objects with `__call__` method).
+- `isinstance(obj, types.FunctionType)`: Specifically verifies if an object is a function (excluding classes and callable objects).
+- `inspect.isfunction(obj)`: Checks if an object is a function.
+- `inspect.ismethod(obj)`: Checks if an object is a method.
+
+```python
+import types
+import inspect
+
+def add(a: int, b: int = 10) -> int:
+    """Returns the sum of two numbers."""
+    return a + b
+
+print(callable(add))  # True
+print(isinstance(add, types.FunctionType))  # True
+
+
+print(inspect.isfunction(add))  # True
+print(inspect.ismethod(add))  # False
+```
+
+## Built-In Functions
+
+- Python provides several built-in functions to work with iterables in a functional style.
+- `map()`, `zip()`, and `filter()` allow iterables to be processed or combined in a more concise and efficient way than using traditional loops.
+
+| Function | Purpose                                                | Return Type | Example Use Case                                                                 |
+|----------|--------------------------------------------------------|-------------|----------------------------------------------------------------------------------|
+| `map()`  | Applies a function to all items in an iterable         | Iterator    | Transforming each element of an iterable (e.g., squaring numbers)                |
+| `zip()`  | Combines multiple iterables into tuples                | Iterator    | Pairing items from two or more iterables (e.g., combining names and ages)        |
+| `filter()`| Filters items from an iterable based on a condition   | Iterator    | Removing elements that do not satisfy a condition (e.g., filtering even numbers) |
+
+- Often more memory efficient than using explicit `for` loops, especially when working with large datasets, because they return iterators instead of creating a full list in memory.
+- Support a functional style of programming, where transformations or filters are applied to iterables in a declarative manner.
+- Since these functions return iterators, you often need to convert them to a `list` (or other collection types) to use their results.
+
+### `map()`
+
+`map(func, *iterables)` applies a given function (`func`) to all items in a variable number of `iterables` (such as lists or tuples), and returns a `map` object (an iterator) that yields the results.
+
+```python
+# Applying a function to square numbers
+numbers = [1, 2, 3, 4, 5]
+squares = map(lambda x: x ** 2, numbers)
+print(list(squares))  # Output: [1, 4, 9, 16, 25]
+```
+
+The returned `map` object (an iterator) must be converted to a `list` or another iterable type to access its values (using `list()` or `tuple()`).
+
+```python
+# Adding corresponding elements from two lists
+numbers1 = [1, 2, 3]
+numbers2 = [4, 5, 6]
+result = map(lambda x, y: x + y, numbers1, numbers2)
+print(list(result))  # Output: [5, 7, 9]
+```
+
+The iterator stops as soon as one of the iterables has been exhausted - i.e. the shortest iterable determines the length of the resulting map.
+
+```python
+# Adding corresponding elements from two lists
+numbers1 = [1, 2, 3, 4, 5]
+numbers2 = [9, 8, 7]
+result = map(lambda x, y: x + y, numbers1, numbers2)
+print(list(result))  # Output: [10, 10, 10]
+```
+
+### `zip()`
+
+`zip(*iterables, strict=False)` combines multiple `iterables` element-wise into tuples, creating an iterator of tuples where each tuple contains the elements at the same position from each iterable.
+
+```python
+Copy
+Edit
+names = ['Alice', 'Bob', 'Charlie']
+ages = [25, 30, 35]
+combined = zip(names, ages)
+print(list(combined))  # Output: [('Alice', 25), ('Bob', 30), ('Charlie', 35)]
+```
+
+- `zip()` stops when the shortest iterable is exhausted.
+- To zip iterables of different lengths and keep the longer ones intact, use `itertools.zip_longest()` from the `itertools` module.
+- Like `map()`, `zip()` returns an iterator, so the result will need converting to a `list` or another iterable to process the values.
+
+```python
+# Zipping three iterables
+names = ['Alice', 'Bob', 'Dave']
+scores = [90, 85]
+subjects = ['Math', 'Science']
+combined = zip(names, scores, subjects)
+print(list(combined))  # Output: [('Alice', 90, 'Math'), ('Bob', 85, 'Science')]
+```
+
+#### Using `zip()` with List Comprehensions
+
+`zip()` is especially useful in [list comprehensions](./python_1_style_syntax.md#list-comprehension) for efficiently iterating over multiple iterables at once. It helps in element-wise operations, such as combining, transforming, or filtering paired elements from different lists.
+
+```python
+# Creating a Dictionary from Two Lists
+keys = ['name', 'age', 'city']
+values = ['Alice', 25, 'New York']
+
+# Using zip() inside a dictionary comprehension
+person = {key: value for key, value in zip(keys, values)}
+print(person)  # Output: {'name': 'Alice', 'age': 25, 'city': 'New York'}
+
+
+# Pairwise Element Operations
+list1 = [1, 2, 3]
+list2 = [4, 5, 6]
+
+# Element-wise sum using list comprehension and zip()
+sums = [x + y for x, y in zip(list1, list2)]
+print(sums)  # Output: [5, 7, 9]
+```
+
+### `filter()`
+
+`filter(function or None, iterable)` filters elements from a single `iterable` based on a given `function` that takes a single argument. It returns a `filter` object, which is an iterator of the items that evaluate to `True` (truthy) when passed to the function.
+
+```python
+# Filtering even numbers from a list
+numbers = [1, 2, 3, 4, 5, 6]
+evens = filter(lambda x: x % 2 == 0, numbers)
+print(list(evens))  # Output: [2, 4, 6]
+```
+
+- If the function is `None`, `filter()` will remove all elements that are "falsy" (e.g., `None`, `False`, `0`, `""` etc.).
+- As with map() and zip(), filter() returns an iterator, so you'll need to convert it to a list or another iterable type to view the result.
+
+```python
+# Filtering out all falsy values from a list
+values = [0, '', 'Hello', None, True]
+non_falsy = filter(None, values)
+print(list(non_falsy))  # Output: ['Hello', True]
+```
+
+#### Using List Comprehension with `if` Instead of `filter()`
+
+List comprehensions can replace `filter()` by incorporating an `if` condition directly.
+
+```python
+numbers = [1, 2, 3, 4, 5, 6]
+
+# Using filter()
+even_numbers_filter = list(filter(lambda x: x % 2 == 0, numbers))
+
+# Equivalent List Comprehension
+even_numbers_lc = [x for x in numbers if x % 2 == 0] # Avoids the need for lambda functions.
+
+print(even_numbers_filter)  # Output: [2, 4, 6]
+print(even_numbers_lc)      # Output: [2, 4, 6]
+```
+
+## Reducing Functions (`functools.reduce`)
+
+Reducing functions combine an iterable recursively into a single result. The most common reducing function in Python is `functools.reduce()`.
+
+```python
+functools.reduce(function, iterable[, initial])
+```
+
+- Applies a `function` cumulatively to the items of the `iterable`.
+- The `function` must take exactly 2 positional arguments.
+- Starts by applying the `function` to the first two elements of the `iterable` to get the first *result*, then applies the `function` again to the *result* and the *next element*, and so on.
+- If `initial` is provided, it is placed before the items of the `iterable` in the calculation, and serves as a default when the    `iterable` is empty.
+
+Example: Sum of a List
+
+```python
+from functools import reduce
+
+numbers = [1, 2, 3, 4, 5]
+
+# Using reduce() to compute the sum
+result = reduce(lambda x, y: x + y, numbers)
+print(result)  # Output: 15 ((((1+2)+3)+4)+5)
+```
+
+Example: Finding the Maximum Value
+
+```python
+from functools import reduce
+
+values = [3, 7, 2, 9, 5]
+
+max_value = reduce(lambda x, y: x if x > y else y, values)
+print(max_value)  # Output: 9
+```
+
+Example: Factorial Using Reduce
+
+```python
+from functools import reduce
+
+factorial = reduce(lambda x, y: x * y, range(1, 6))
+print(factorial)  # Output: 120 (1 * 2 * 3 * 4 * 5)
+```
+
+Example: Using `initial` Argument
+
+```python
+from functools import reduce
+
+values = [1, 2, 3, 4, 5]
+value = reduce(lambda x, y: x + y, values, 10) # will start with 10
+print(value)  # Output: 25 (10 + 1 + 2 + 3 + 4 + 5)
+```
+
+### Built-in Reducing Functions in Python
+
+Python has several built-in reducing functions that perform common reduction tasks efficiently.
+
+#### `sum()`: Summation of Elements
+
+Computes the sum of all elements in an iterable.
+
+```python
+numbers = [1, 2, 3, 4, 5]
+total = sum(numbers)
+print(total)  # Output: 15
+```
+
+Equivalent to:
+
+```python
+from functools import reduce
+total = reduce(lambda x, y: x + y, numbers)
+```
+
+#### `max()`: Maximum Value
+
+Finds the largest element in an iterable.
+
+```python
+values = [10, 20, 5, 40, 15]
+largest = max(values)
+print(largest)  # Output: 40
+```
+
+Equivalent to:
+
+```python
+from functools import reduce
+largest = reduce(lambda x, y: x if x > y else y, values)
+```
+
+#### `min()`: Minimum Value
+
+Finds the smallest element in an iterable.
+
+```python
+values = [10, 20, 5, 40, 15]
+smallest = min(values)
+print(smallest)  # Output: 5
+```
+
+Equivalent to:
+
+```python
+from functools import reduce
+smallest = reduce(lambda x, y: x if x < y else y, values)
+```
+
+#### `any()`: Checks for At Least One True Value
+
+Returns `True` if any element in the iterable evaluates to `True`.
+
+```python
+booleans = [False, False, True, False]
+result = any(booleans)
+print(result)  # Output: True
+```
+
+Equivalent to:
+
+```python
+from functools import reduce
+result = reduce(lambda x, y: x or y, booleans)
+```
+
+#### `all()`: Checks If All Values Are True
+
+Returns `True` if all elements in the iterable evaluate to `True`.
+
+```python
+booleans = [True, True, False, True]
+result = all(booleans)
+print(result)  # Output: False
+```
+
+Equivalent to:
+
+```python
+from functools import reduce
+result = reduce(lambda x, y: x and y, booleans)
+```
+
+#### `str.join()`: Concatenates Strings
+
+Joins a sequence of strings into a single string.
+
+```python
+words = ["Hello", "world", "!"]
+sentence = " ".join(words)
+print(sentence)  # Output: "Hello world !"
+```
+
+Equivalent to:
+
+```python
+from functools import reduce
+sentence = reduce(lambda x, y: x + " " + y, words)
+```
+
+## Partial Functions (`functools.partial`)
+
+Partial functions allow fixing some arguments of a function, creating a new function with fewer parameters. They are useful for pre-configuring functions.
+
+```python
+functools.partial(function, *args, **kwargs)
+```
+
+- Creates a function with pre-filled arguments.
+- Returns a new `function` object.
+
+Example: Fixing Base for `int()`
+
+```python
+from functools import partial
+
+# Create a function to convert binary strings to integers
+binary_to_int = partial(int, base=2)
+
+print(binary_to_int("1010"))  # Output: 10
+print(binary_to_int("1111"))  # Output: 15
+```
+
+Example: Pre-filling Arguments for a Function
+
+```python
+from functools import partial
+
+def multiply(x, y):
+    return x * y
+
+double = partial(multiply, 2)  # Fix x = 2
+print(double(10))  # Output: 20
+print(double(7))   # Output: 14
+```
+
+Example: Using `partial` with `sorted()`
+
+```python
+from functools import partial
+
+data = [("Alice", 25), ("Bob", 30), ("Charlie", 20)]
+sort_by_age = partial(sorted, key=lambda x: x[1])
+
+print(sort_by_age(data))  
+# Output: [('Charlie', 20), ('Alice', 25), ('Bob', 30)]
+```
+
+## `operator` Module
+
+The `operator` module provides function equivalents of standard operators, making functional programming cleaner and often faster.
+
+| Operator           | Function Equivalent | Example                                  |
+|--------------------|---------------------|------------------------------------------|
+| `+`                | `operator.add`      | `add(3, 5) → 8`                          |
+| `-`                | `operator.sub`      | `sub(10, 4) → 6`                         |
+| `*`                | `operator.mul`      | `mul(3, 4) → 12`                         |
+| `/`                | `operator.truediv`  | `truediv(8, 2) → 4.0`                    |
+| `//`               | `operator.floordiv` | `floordiv(9, 2) → 4`                     |
+| `%`                | `operator.mod`      | `mod(10, 3) → 1`                         |
+| `**`               | `operator.pow`      | `pow(2, 3) → 8`                          |
+| `==`               | `operator.eq`       | `eq(5, 5) → True`                        |
+| `<`                | `operator.lt`       | `lt(3, 5) → True`                        |
+| `itemgetter(i)`    | Gets item at index `i` | `itemgetter(1)([4, 7, 9]) → 7`        |
+| `attrgetter(attr)` | Gets an attribute   | `attrgetter('age')(person) → person.age` |
+
+### Using `operator.add` with `reduce()`
+
+```python
+from functools import reduce
+import operator
+
+numbers = [1, 2, 3, 4, 5]
+
+# Equivalent to reduce(lambda x, y: x + y, numbers)
+result = reduce(operator.add, numbers)
+print(result)  # Output: 15
+```
+
+### Example: Sorting with `itemgetter()`
+
+```python
+from operator import itemgetter
+
+data = [("Alice", 25), ("Bob", 30), ("Charlie", 20)]
+
+# Sort by second item (age)
+sorted_data = sorted(data, key=itemgetter(1))
+print(sorted_data)  
+# Output: [('Charlie', 20), ('Alice', 25), ('Bob', 30)]
+Example: Accessing Attributes with attrgetter()
+```
+
+### Example: Accessing Attributes with `attrgetter()`
+
+```python
+from operator import attrgetter
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+people = [Person("Alice", 25), Person("Bob", 30), Person("Charlie", 20)]
+
+# Sort by age
+sorted_people = sorted(people, key=attrgetter("age"))
+print([(p.name, p.age) for p in sorted_people])
+# Output: [('Charlie', 20), ('Alice', 25), ('Bob', 30)]
+```
+
+## Closures
+
+- A *closure* is a function that retains access to variables from its enclosing lexical [scope](./python_1_style_syntax.md#scope), even after the enclosing function has finished executing.
+- Closures are created when a nested function captures and remembers variables from its outer function.
+- A closure consists of:
+  - An enclosing function that defines variables.
+  - A nested function that captures and uses those variables.
+  - The nested function is returned, keeping access to the enclosing variables.
+
+```python
+def outer_function(msg):
+    def inner_function():
+        print(msg)  # Captures 'msg' from outer_function
+    return inner_function  # Returns inner function as a closure
+
+closure = outer_function("Hello")
+closure()  # Output: Hello
+```
+
+Here, `inner_function` remembers the value of `msg`, even though `outer_function` has finished executing.
+
+### Closures with State
+
+Closures can maintain state across multiple calls.
+
+```python
+def counter():
+    count = 0  # Enclosing variable
+
+    def increment():
+        nonlocal count  # Modify the enclosing variable
+        count += 1
+        return count
+
+    return increment
+
+c = counter()
+print(c())  # Output: 1
+print(c())  # Output: 2
+```
+
+- `increment` remembers the value of `count` between calls.
+- `nonlocal` allows modifying the `count` variable from the enclosing scope.
+
+### Practical Use Cases of Closures
+
+**Function factory**: closures can be used to generate functions dynamically.
+
+```python
+def power(exponent):
+    def calculate(base):
+        return base ** exponent  # Captures exponent from outer function
+    return calculate
+
+square = power(2)
+cube = power(3)
+
+print(square(4))  # Output: 16
+print(cube(2))    # Output: 8
+```
+
+**Replacing simple classes**: closures can replace simple classes that maintain state.
+
+```python
+def make_multiplier(factor):
+    def multiplier(x):
+        return x * factor
+    return multiplier
+
+double = make_multiplier(2)
+triple = make_multiplier(3)
+
+print(double(5))  # Output: 10
+print(triple(5))  # Output: 15
+```
