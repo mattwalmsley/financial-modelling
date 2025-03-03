@@ -1923,7 +1923,14 @@ finally:
 
 ## Scope
 
-Scope determines the visibility and lifetime of variables. Python has three main scopes: local, non-local (enclosing), and global.
+- *Scope* defines the visibility and lifetime of names (variable bindings) within an application.
+- *Namespaces* are mappings of variable names to objects. Each scope corresponds to a namespace that determines where a name can be accessed.
+- *Variable Bindings* associate names with objects. Rebinding a variable updates the reference in the current namespace without modifying the object itself.
+- Python has three main scopes for resolving variable names:
+  - **Local Scope**: Variables defined inside a function exist only within that function’s execution context.
+  - **Enclosing (Non-Local) Scope**: Variables in outer (non-global) functions are accessible to inner functions but not modifiable without nonlocal.
+  - **Global Scope**: Variables defined at the module level exist throughout the application unless shadowed by local bindings.
+- The *LEGB Rule* (*Local* → *Enclosing* → *Global* → *Built-in*) determines the order of name resolution in Python.
 
 ### Local Scope
 
@@ -1965,7 +1972,50 @@ outer()
 
 ### Global Scope
 
-A variable declared at the module level is accessible throughout the program. Use `global` inside functions to modify them.
+- The *global scope* refers to the top-level scope of a module (i.e., a single .py file). It spans the entire module but does not extend across multiple modules in the same application.
+- Python does not have a truly global scope that spans multiple files.
+  - Each module has its own independent global scope.
+  - A global variable in one module is not automatically available in another module unless explicitly imported.
+- The only exception to Python’s module-based scoping are the *built-in objects*, which contain universally available objects such as:
+  - `True`, `False`, `None`
+  - `int`, `str`, `dict`, `list`, `set`, etc.
+  - Built-in callables like `print`, `len`, `range`, `id`, etc.
+
+Example: Global Variables Are Module-Specific
+
+```python
+# file1.py
+x = 42  # Global in file1.py
+```
+
+```python
+# file2.py
+print(x)  # NameError: name 'x' is not defined
+
+import x from file1
+print(x)  # 42 (x from the file1 module scope and print from the built-in scope)
+
+print = lambda x: f"Hello, {x}"  # Redefining print (masking - not a good practice)
+print(x) # Hello, 42 (print now refers to the lambda function in module scope)
+```
+
+- The variable `x` is global only within `file1.py` and is not available in `file2.py` unless explicitly imported.
+- Inside a function, a global variable can be accessed but not modified unless declared with `global`.
+
+```python
+x = 10  # Global variable
+
+def update_x():
+    global x  # Needed to modify x
+    x = 20
+
+update_x()
+print(x)  # 20
+```
+
+- Minimize use of global variables to avoid unintended side effects.
+- Use module-level constants (e.g., MAX_VALUE = 100) for readability.
+- If needed across modules, import explicitly (e.g., `from config import SOME_GLOBAL`).
 
 ```python
 x = 10  # Global variable

@@ -1104,14 +1104,39 @@ sentence = reduce(lambda x, y: x + " " + y, words)
 
 ## Partial Functions (`functools.partial`)
 
-Partial functions allow fixing some arguments of a function, creating a new function with fewer parameters. They are useful for pre-configuring functions.
+- Partial functions allow fixing some arguments of a function, creating a new function with fewer parameters.
+  - In other words, they provide interfaces to functions with some arguments pre-filled.
+- Custom partial functions can be defined as follows:
 
 ```python
-functools.partial(function, *args, **kwargs)
+def my_func(a, b, c):
+    return a + b + c
+
+# partial function
+def fn(b, c):
+    return my_func(10, b, c)
+
+print(fn(20, 30))  # Output: 60
+
+# lambda partial function
+f = lambda b, c: my_func(10, b, c)
+print(f(20, 30))  # Output: 60
 ```
+
+Alternatively, the `functools.partial` function can be used to create partial functions more concisely.
 
 - Creates a function with pre-filled arguments.
 - Returns a new `function` object.
+- `functools.partial(function, *args, **kwargs)`
+
+```python
+def my_func(a, b, c):
+    return a + b + c
+
+f = functools.partial(my_func, 10) # 10 passed as first positional argument (a)
+
+print(f(20, 30))  # Output: 60
+```
 
 Example: Fixing Base for `int()`
 
@@ -1123,19 +1148,6 @@ binary_to_int = partial(int, base=2)
 
 print(binary_to_int("1010"))  # Output: 10
 print(binary_to_int("1111"))  # Output: 15
-```
-
-Example: Pre-filling Arguments for a Function
-
-```python
-from functools import partial
-
-def multiply(x, y):
-    return x * y
-
-double = partial(multiply, 2)  # Fix x = 2
-print(double(10))  # Output: 20
-print(double(7))   # Output: 14
 ```
 
 Example: Using `partial` with `sorted()`
@@ -1154,19 +1166,37 @@ print(sort_by_age(data))
 
 The `operator` module provides function equivalents of standard operators, making functional programming cleaner and often faster.
 
-| Operator           | Function Equivalent | Example                                  |
-|--------------------|---------------------|------------------------------------------|
-| `+`                | `operator.add`      | `add(3, 5) → 8`                          |
-| `-`                | `operator.sub`      | `sub(10, 4) → 6`                         |
-| `*`                | `operator.mul`      | `mul(3, 4) → 12`                         |
-| `/`                | `operator.truediv`  | `truediv(8, 2) → 4.0`                    |
-| `//`               | `operator.floordiv` | `floordiv(9, 2) → 4`                     |
-| `%`                | `operator.mod`      | `mod(10, 3) → 1`                         |
-| `**`               | `operator.pow`      | `pow(2, 3) → 8`                          |
-| `==`               | `operator.eq`       | `eq(5, 5) → True`                        |
-| `<`                | `operator.lt`       | `lt(3, 5) → True`                        |
-| `itemgetter(i)`    | Gets item at index `i` | `itemgetter(1)([4, 7, 9]) → 7`        |
-| `attrgetter(attr)` | Gets an attribute   | `attrgetter('age')(person) → person.age` |
+| Operator | Function Equivalent | Example |
+|----------|---------------------|---------|
+| `+`      | `operator.add`      | `add(3, 5)` → `8` |
+| `-`      | `operator.sub`      | `sub(10, 4)` → `6` |
+| `*`      | `operator.mul`      | `mul(3, 4)` → `12` |
+| `/`      | `operator.truediv`  | `truediv(8, 2)` → `4.0` |
+| `//`     | `operator.floordiv` | `floordiv(9, 2)` → `4` |
+| `%`      | `operator.mod`      | `mod(10, 3)` → `1` |
+| `**`     | `operator.pow`      | `pow(2, 3)` → `8` |
+| `==`     | `operator.eq`       | `eq(5, 5)` → `True` |
+| `!=`     | `operator.ne`       | `ne(4, 5)` → `True` |
+| `<`      | `operator.lt`       | `lt(3, 5)` → `True` |
+| `<=`     | `operator.le`       | `le(5, 5)` → `True` |
+| `>`      | `operator.gt`       | `gt(5, 3)` → `True` |
+| `>=`     | `operator.ge`       | `ge(5, 5)` → `True` |
+| `is`     | `operator.is_`      | `is_(a, b)` → `True if a is b` |
+| `is not` | `operator.is_not`   | `is_not(a, b)` → `True if a is not b` |
+| `and`    | `operator.and_`     | `and_(True, False)` → `False` |
+| `or`     | `operator.or_`      | `or_(True, False)` → `True` |
+| `not`    | `operator.not_`     | `not_(True)` → `False` |
+
+Other Useful operator Functions:
+
+| Function                            | Description                                | Example                                      |
+|-------------------------------------|--------------------------------------------|----------------------------------------------|
+| `operator.itemgetter(i)`            | Gets item at index `i` (returns `callable`)| `itemgetter(1)([4, 7, 9])` → `7`             |
+| `operator.attrgetter(attr)`         | Gets an attribute (returns `callable`)     | `attrgetter('age')(person)` → `person.age`   |
+| `operator.methodcaller(m, *args, **kwargs)` | Calls a method on an object | `methodcaller("upper")("hello")` → `"HELLO"` |
+| `operator.getitem(obj, key)`        | Gets an item from a collection | `getitem([10, 20, 30], 1)` → `20` |
+| `operator.setitem(obj, key, value)` | Sets an item in a collection | `setitem(my_dict, "a", 42)` → `my_dict["a"] = 42` |
+| `operator.delitem(obj, key)`        | Deletes an item from a collection | `delitem(my_list, 2)` → `del my_list[2]` |
 
 ### Using `operator.add` with `reduce()`
 
