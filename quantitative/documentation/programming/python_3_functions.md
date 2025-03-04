@@ -59,6 +59,7 @@
     - [Example: Sorting with `itemgetter()`](#example-sorting-with-itemgetter)
     - [Example: Accessing Attributes with `attrgetter()`](#example-accessing-attributes-with-attrgetter)
   - [Closures](#closures)
+    - [How Python Manages Closures: Cell Objects](#how-python-manages-closures-cell-objects)
     - [Closures with State](#closures-with-state)
     - [Practical Use Cases of Closures](#practical-use-cases-of-closures)
 
@@ -1246,46 +1247,108 @@ print([(p.name, p.age) for p in sorted_people])
 ## Closures
 
 - A *closure* is a function that retains access to variables from its enclosing lexical [scope](./python_1_style_syntax.md#scope), even after the enclosing function has finished executing.
-- Closures are created when a nested function captures and remembers variables from its outer function.
+  - Closures are created when a nested function captures and remembers variables from its outer function.
+  - If a variable is used in a code block but not defined there, it is a *free variable*.
 - A closure consists of:
-  - An enclosing function that defines variables.
-  - A nested function that captures and uses those variables.
-  - The nested function is returned, keeping access to the enclosing variables.
+  1. An enclosing function that defines variables.
+  2. A nested function that captures and uses those variables.
+  3. The nested function is returned, keeping access to the enclosing variables.
 
 ```python
 def outer_function(msg):
+    greeting = f"Hello {msg}"  # Enclosing variable
     def inner_function():
-        print(msg)  # Captures 'msg' from outer_function
+        print(greeting)  # Bound to 'greeting' from outer_function (free variable)
     return inner_function  # Returns inner function as a closure
 
-closure = outer_function("Hello")
-closure()  # Output: Hello
+closure = outer_function("Python")
+closure()  # Output: Hello Python
 ```
 
-Here, `inner_function` remembers the value of `msg`, even though `outer_function` has finished executing.
+- `inner_function` retains access to `greeting` even after `outer_function` has executed.
+- The value of `greeting` is shared between two scopes:
+  - It exists in `outer_function`, but `inner_function` continues referencing it.
+
+### How Python Manages Closures: Cell Objects
+
+Python does not copy the enclosing variables into the inner function. Instead, it creates an intermediary cell object to store references to those variables.
+
+```python
+def outer():
+    x = "Hello"  # Enclosing variable
+    y = 10  # Enclosing variable
+
+    def inner():
+        print(x)  # Accesses 'x' via a cell object
+        print(y)  # Accesses 'y' via a cell object
+
+    return inner
+
+closure_func = outer()
+print(closure_func.__closure__)  
+# Output: (<cell at 0x...: str object at 0x...>, <cell at 0x...: int object at 0x...>)
+
+print(closure_func.__closure__[0].cell_contents)
+print(closure_func.__closure__[1].cell_contents)
+# Output:
+# Hello
+# 10
+```
+
+- `__closure__` holds one or more cell objects, each referencing an enclosed variable.
+- The inner function references this cell object rather than directly accessing `x`.
+- This mechanism allows closures to retain access to variables even after the enclosing function has returned.
+
+```python
+def outer():
+    a = "Hello" # not part of the closure
+    x = 10  # Enclosing variable
+
+    def inner():
+        print(x)  # Accesses 'x' via a cell object
+
+    return inner
+
+closure_func = outer()
+print(closure_func.__closure__)  
+# Output: (<cell at 0x...: int object at 0x...>,)
+
+print(closure_func.__closure__[0].cell_contents)
+# Output: 10
+```
+
+- `a` is not part of the closure because it is not used in the inner function.
+- Hence, only `x` is stored in the cell object.
 
 ### Closures with State
 
-Closures can maintain state across multiple calls.
+Closures can maintain state across multiple calls and share the extended scope.
 
 ```python
 def counter():
     count = 0  # Enclosing variable
 
     def increment():
-        nonlocal count  # Modify the enclosing variable
+        nonlocal count  # Modify the free variable with nonlocal
         count += 1
         return count
 
-    return increment
+    def decrement():
+        nonlocal count  # Modify the same free variable
+        count -= 1
+        return count
 
-c = counter()
-print(c())  # Output: 1
-print(c())  # Output: 2
+    return increment, decrement
+
+increment, decrement = counter()
+print(increment())  # Output: 1
+print(increment())  # Output: 2
+print(decrement())  # Output: 1
 ```
 
 - `increment` remembers the value of `count` between calls.
 - `nonlocal` allows modifying the `count` variable from the enclosing scope.
+- `increment` and `decrement` share the same `count` variable.
 
 ### Practical Use Cases of Closures
 

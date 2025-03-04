@@ -97,9 +97,11 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
   - [Exception Handling](#exception-handling)
   - [Scope](#scope)
     - [Local Scope](#local-scope)
+    - [Global/Module Scope](#globalmodule-scope)
+      - [The `global` Keyword](#the-global-keyword)
     - [Non-Local Scope (Enclosing Scope)](#non-local-scope-enclosing-scope)
-    - [Global Scope](#global-scope)
     - [Scope Resolution Order (LEGB Rule)](#scope-resolution-order-legb-rule)
+    - [Variables in Loops](#variables-in-loops)
 
 ## Objects
 
@@ -1934,43 +1936,29 @@ finally:
 
 ### Local Scope
 
-A variable declared inside a function is local to that function and cannot be accessed outside it.
+A variable assigned inside a function is local to that function and cannot be accessed outside it.
 
 ```python
-def func():
-    x = 10  # Local variable
+a = 10
+
+def reference_func():
+    print(a)  # Accesses the global variable 'a'
+
+
+def assignment_func():
+    x = 10  # Local variable, due to assignment inside the function
     print(x)
 
-func()
-# print(x)  # Error: NameError: name 'x' is not defined
+print(x)  # NameError: name 'x' is not defined
 ```
 
 - Local variables are created when the function is called and destroyed when it returns.
-- Cannot be accessed outside the function.
+- Every function call creates a new local scope and local variables are assigned to that scope.
+  - This is how recursion works, as each recursive call creates a new scope with its own variables.
+- All local variables defined inside the function cannot be accessed outside the function.
+- When a function finishes running, the function’s local scope is destroyed, and the reference count to variables in higher scopes are decremented.
 
-### Non-Local Scope (Enclosing Scope)
-
-Refers to variables in an enclosing function (not global). Used inside nested functions. Declared using `nonlocal`.
-
-```python
-def outer():
-    x = 10  # Enclosing variable
-
-    def inner():
-        nonlocal x  # Refers to 'x' in outer()
-        x += 5
-        print(x)
-
-    inner()
-    print(x)
-
-outer()
-```
-
-- `nonlocal` allows modifying an enclosing function’s variable.
-- Without `nonlocal`, `x` inside `inner()` would be treated as a new local variable.
-
-### Global Scope
+### Global/Module Scope
 
 - The *global scope* refers to the top-level scope of a module (i.e., a single .py file). It spans the entire module but does not extend across multiple modules in the same application.
 - Python does not have a truly global scope that spans multiple files.
@@ -1985,18 +1973,30 @@ Example: Global Variables Are Module-Specific
 
 ```python
 # file1.py
-x = 42  # Global in file1.py
+a = 42  # Global in file1.py
 ```
 
 ```python
 # file2.py
-print(x)  # NameError: name 'x' is not defined
+print(a)  # NameError: name 'a' is not defined
 
-import x from file1
-print(x)  # 42 (x from the file1 module scope and print from the built-in scope)
+import a from file1
+print(a)  # 42 (a from the file1 module scope and print from the built-in scope)
+```
 
-print = lambda x: f"Hello, {x}"  # Redefining print (masking - not a good practice)
-print(x) # Hello, 42 (print now refers to the lambda function in module scope)
+Built-in functions can be reassigned, but it is not recommended to do so.
+
+```python
+x = [1, 2, 3]
+print(len(x)) # 3
+
+def len(x):
+    return "Hello"  # Redefining len (masking - not a good practice)
+
+print(len(x)) # Hello (len now refers to the len function in module scope)
+
+del len # Deletes the local len function
+print(len(x))  # 42 (print now refers to the built-in function)
 ```
 
 - The variable `x` is global only within `file1.py` and is not available in `file2.py` unless explicitly imported.
@@ -2017,20 +2017,94 @@ print(x)  # 20
 - Use module-level constants (e.g., MAX_VALUE = 100) for readability.
 - If needed across modules, import explicitly (e.g., `from config import SOME_GLOBAL`).
 
+#### The `global` Keyword
+
+The `global` keyword allows modifying a global variable from within a function.
+
 ```python
 x = 10  # Global variable
+
+def mask_variable():
+    x = 20  # Local variable masks global x
+    print(x)
 
 def modify_global():
     global x  # Refers to global x
     x += 5
     print(x)
 
-modify_global()
-print(x)  # Modified globally
+
+mask_variable() # 20 (Local variable)
+print(x)  # 10 (Global variable)
+
+modify_global() # 15 (Modified globally)
+print(x)  # 15 (Modified globally)
 ```
 
-- Without `global`, assigning to `x` inside `modify_global()` would create a new local variable.
+- Without `global`, assigning to `x` inside `modify_global()` would create a new local variable (masking).
 - Global variables persist throughout the program’s execution.
+
+### Non-Local Scope (Enclosing Scope)
+
+- Refers to variables in an enclosing function (not global).
+- Used inside nested functions to access and modify variables from an outer function.
+- Declared using the `nonlocal` keyword.
+  - Python will look for variables defined with `nonlocal` in the enclosing local scopes chain until it first encounters the specified variable name.
+  - Only local scopes will be searched, not the global scope.
+
+```python
+x = "Hello" # Global variable
+def outer():
+    x = 10 # local variable masking global x
+    y = 20
+    z = 30
+
+    def inner():
+        nonlocal x  # Refers to 'x' in outer()
+        x += 5
+        y = 10 # Creates a new local variable 'y' in inner()
+        print(f"inner_x: {x}")
+        print(f"inner_y: {y}")
+        print(f"inner_z: {z}")  # Accesses 'z' from outer()
+
+        def inner_inner():
+            global x # Refers to 'x' in global scope
+            nonlocal y  # Refers to 'y' in inner()
+            nonlocal z  # Refers to 'z' in outer()
+            x = "Hello from inner_inner"
+            y += 1
+            z -=1
+            print(f"inner_inner_x: {x}")
+            print(f"inner_inner_y: {y}")
+            print(f"inner_inner_z: {z}")
+
+        inner_inner()
+
+    inner()
+
+    print(f"outer_x: {x}")
+    print(f"outer_y: {y}")
+    print(f"outer_z: {z}")
+
+print(f"global_x: {x}")
+outer()
+print(f"global_x: {x}")
+# global_x: Hello
+# inner_x: 15
+# inner_y: 10
+# inner_z: 30
+# inner_inner_x: Hello from inner_inner
+# inner_inner_y: 11
+# inner_inner_z: 29
+# outer_x: 15
+# outer_y: 20
+# outer_z: 29
+# global_x: Hello from inner_inner
+```
+
+- `nonlocal` allows modifying a variable from an enclosing (but not global) scope.
+- Without `nonlocal`, assigning to `x` inside `inner()` would create a new local variable, leaving `x` in `outer()` unchanged.
+- This is useful for maintaining state across function calls within a [closure](./python_3_functions.md#closures).
 
 ### Scope Resolution Order (LEGB Rule)
 
@@ -2038,7 +2112,7 @@ Python resolves variable names in the following order:
 
 1. Local – Inside the current function.
 2. Enclosing – Inside the enclosing function (for nested functions).
-3. Global – Defined at the top level of the script/module.
+3. Global/Module – Defined at the top level of the script/module.
 4. Built-in – Python’s built-in functions (e.g., `len`, `sum`).
 
 ```python
@@ -2058,4 +2132,18 @@ outer()
 print(x)  # Resolves to "global"
 ```
 
-This order ensures the most specific scope is used first.
+- This order ensures the most specific scope is used first.
+- If a variable is not found in the local scope, Python checks the enclosing scope, then the global scope, and finally the built-in scope.
+
+### Variables in Loops
+
+Variables defined in loops **are** accessible outside the loop (as long as the variable is assigned in the loop before the variable is accessed outside the loop).
+
+```python
+for i in range(10):
+    x = i + 1
+
+print(x)  # 10 (x is accessible outside the loop)
+```
+
+This convention differs to C# and Java where variables defined in loops are not accessible outside the loop.
