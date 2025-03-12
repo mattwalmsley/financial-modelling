@@ -3,6 +3,7 @@
 - [Decorators](#decorators)
   - [Introduction](#introduction)
   - [Function Decorators](#function-decorators)
+    - [Preserving Function Metadata (`__name__`, `__doc__`)](#preserving-function-metadata-__name__-__doc__)
   - [Class Decorators](#class-decorators)
   - [Method Decorators](#method-decorators)
     - [The `@property` Decorator](#the-property-decorator)
@@ -10,36 +11,136 @@
 
 ## Introduction
 
-Decorators are a powerful feature in Python that modify the behaviour of functions or methods. They are often used to add functionality to existing code in a clean and readable way.
+Decorators are a powerful feature in Python that modify the behaviour of functions, classes or methods. They are often used to add functionality to existing code in a clean and readable way.
 
 - **Function Decorators**: Used to modify or enhance functions.
 - **Class Decorators**: Used to modify or enhance classes.
 - **Method Decorators**: Used to modify or enhance methods within a class.
 
+Common notation for decorators is the `@` symbol followed by the decorator function name, placed above the function or class to be decorated.
+
+- For a decorator function `my_decorator` which decorates `my_func`, the syntax `my_func = my_decorator(my_func)` can be used to decorate the function.
+- However the `@` symbol provides a more concise and convenient way to decorate functions.
+
 ## Function Decorators
 
-A function decorator is a function that takes another function as an argument and returns a new function with added or modified behaviour.
+- A function decorator is a function that takes another function (e.g. `get_greeting`) as an argument for the parameter `func` and returns a closure (`wrapper`) that extends or modifies the behaviour of the original function (`get_greeting`).
+- The closure usually accepts any combination of parameters (`*args, **kwargs`), and will call and returns the result of `func`, the original function (`get_greeting`), using the arguments passed to the closure.
+- After decoration, calling the original function name (`get_greeting`) will now call the `wrapper` function, allowing additional logic to be executed before and/or after the original function runs.
 
 Example:
 
 ```python
 def my_decorator(func):
-    def wrapper():
+    def wrapper(*args, **kwargs):
         print("Something is happening before the function is called.")
-        func()
+        result = func(*args, **kwargs)
         print("Something is happening after the function is called.")
+        return result 
     return wrapper
 
 @my_decorator
-def say_hello():
-    print("Hello!")
+def get_greeting(name):
+    print("Function called, preparing greeting...")
+    return f"Hello {name}!"
 
-say_hello()
+print(get_greeting("World"))
 # Output:
 # Something is happening before the function is called.
-# Hello!
+# Function called, preparing greeting...
 # Something is happening after the function is called.
+# Hello World!
 ```
+
+Alternatively, the same effect can be achieved without the need for the `@` symbol by using the following syntax:
+
+```python
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        print("Something is happening before the function is called.")
+        result = func(*args, **kwargs)
+        print("Something is happening after the function is called.")
+        return result 
+    return wrapper
+
+def get_greeting(name):
+    print("Function called, preparing greeting...")
+    return f"Hello {name}!"
+
+get_greeting = my_decorator(get_greeting)
+
+print(get_greeting("World"))
+# Output:
+# Something is happening before the function is called.
+# Function called, preparing greeting...
+# Something is happening after the function is called.
+# Hello World!
+```
+
+### Preserving Function Metadata (`__name__`, `__doc__`)
+
+Without handling metadata, the decorated function will have the name and docstring of the `wrapper` instead of the original function.
+
+```python
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        """Wrapper function that modifies behaviour of the decorated function."""
+        print("Something is happening before the function is called.")
+        result = func(*args, **kwargs)
+        print("Something is happening after the function is called.")
+        return result  
+    return wrapper  # Returns the closure
+
+@my_decorator
+def get_greeting(name):
+    """Returns a greeting message."""
+    print("Function called, preparing greeting...")
+    return f"Hello {name}!"
+
+print(get_greeting("World"))
+
+# Output:
+# Something is happening before the function is called.
+# Function called, preparing greeting...
+# Something is happening after the function is called.
+# Hello World!
+print(get_greeting.__name__)  # Output: wrapper
+print(get_greeting.__doc__)   # Output: Wrapper function that modifies behaviour of the decorated function.
+```
+
+Use `functools.wraps(func)` to preserve `__name__` and `__doc__`.
+
+```python
+import functools
+
+def my_decorator(func):
+    @functools.wraps(func)  # Preserves metadata
+    def wrapper(*args, **kwargs):
+        """Wrapper function that modifies behaviour of the decorated function."""
+        print("Something is happening before the function is called.")
+        result = func(*args, **kwargs)
+        print("Something is happening after the function is called.")
+        return result  
+    return wrapper  # Returns the closure
+
+@my_decorator
+def get_greeting(name):
+    """Returns a greeting message."""
+    print("Function called, preparing greeting...")
+    return f"Hello {name}!"
+
+print(get_greeting("World"))
+
+# Output:
+# Something is happening before the function is called.
+# Function called, preparing greeting...
+# Something is happening after the function is called.
+# Hello World!
+print(get_greeting.__name__)  # Output: get_greeting
+print(get_greeting.__doc__)   # Output: Returns a greeting message.
+```
+
+The `functools.wraps` function is a decorator itself that takes the original function (`func`) as an argument and copies the metadata from the original function to the closure (`wrapper`).
 
 ## Class Decorators
 
@@ -64,7 +165,7 @@ print(obj.new_method())       # Output: New method added!
 
 ## Method Decorators
 
-Method decorators are used to modify or enhance methods within a class.
+Method decorators are used to modify or enhance methods within a class and work in the same was as [function decorators](#function-decorators).
 
 ### The `@property` Decorator
 

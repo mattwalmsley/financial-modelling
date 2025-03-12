@@ -62,6 +62,7 @@
     - [How Python Manages Closures: Cell Objects](#how-python-manages-closures-cell-objects)
     - [Closures with State](#closures-with-state)
     - [Practical Use Cases of Closures](#practical-use-cases-of-closures)
+  - [Decorators](#decorators)
 
 ## Introduction
 
@@ -1370,6 +1371,20 @@ print(cube(2))    # Output: 8
 **Replacing simple classes**: closures can replace simple classes that maintain state.
 
 ```python
+class Multiplier:
+    def __init__(self, factor):
+        self.factor = factor
+
+    def multiply(self, x):
+        return x * self.factor
+
+double = Multiplier(2)
+triple = Multiplier(3)
+
+print(double.multiply(5))  # Output: 10
+print(triple.multiply(5))  # Output: 15
+
+# Equivalent using closures
 def make_multiplier(factor):
     def multiplier(x):
         return x * factor
@@ -1381,3 +1396,11 @@ triple = make_multiplier(3)
 print(double(5))  # Output: 10
 print(triple(5))  # Output: 15
 ```
+
+## Decorators
+
+- A *decorator* is a function that takes another function, method, or class as input and extends or modifies its behaviour without altering its code.
+- Defined using `@decorator_name` syntax before a function, method, or class definition.
+- Commonly used for logging, access control, memoization, and more.
+- Since decorators return modified functions, methods, or classes, they demonstrate Python’s ability to treat these as first-class objects.
+- For a deeper dive, see the [Decorators section](./python_5_decorators.md).
