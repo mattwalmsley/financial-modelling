@@ -8,6 +8,9 @@
   - [Method Decorators](#method-decorators)
     - [The `@property` Decorator](#the-property-decorator)
     - [`@classmethod` and `@staticmethod` Decorators](#classmethod-and-staticmethod-decorators)
+  - [Stacking Multiple Decorators](#stacking-multiple-decorators)
+  - [Memoization with Decorators](#memoization-with-decorators)
+    - [Using `functools.lru_cache`for Memoization](#using-functoolslru_cachefor-memoization)
 
 ## Introduction
 
@@ -235,3 +238,139 @@ class MathOperations:
 print(MathOperations.circle_area(5))  # Output: 78.5
 print(MathOperations.add(5, 3))       # Output: 8
 ```
+
+## Stacking Multiple Decorators
+
+- Multiple decorators can be applied to a single function by stacking them in order, with the topmost decorator being applied first.
+- Each decorator wraps the function returned by the decorator below it.
+
+```python
+def dec_1(func):
+    def wrapper():
+        print("Running dec_1")
+        return func()
+    return wrapper
+
+def dec_2(func):
+    def wrapper():
+        print("Running dec_2")
+        return func()
+    return wrapper
+
+@dec_1
+@dec_2
+def my_func():
+    print("Running my_func")
+
+my_func()
+# Output:
+# Running dec_1
+# Running dec_2
+# Running my_func
+```
+
+The above example is equivalent to:
+
+```python
+my_func = dec_1(dec_2(my_func))
+```
+
+The order in which the `wrapper` calls `func` in each decorator is also important.
+
+```python
+def dec_1(func):
+    def wrapper():
+        result = func() # result = dec_2(my_func)
+        print("Running dec_1")
+        return result
+    return wrapper
+
+def dec_2(func):
+    def wrapper():
+        result = func() # result = my_func()
+        print("Running dec_2")
+        return result
+    return wrapper
+
+@dec_1
+@dec_2
+def my_func():
+    print("Running my_func")
+
+my_func()
+# Output:
+# Running my_func
+# Running dec_2
+# Running dec_1
+```
+
+## Memoization with Decorators
+
+- *Memoization* is an optimization technique that caches function results to avoid redundant computations.
+- A decorator can implement memoization by storing previous function calls and their results in a dictionary.
+- This is useful for expensive computations, such as recursive functions (e.g., Fibonacci sequences).
+
+```python
+import functools
+
+def memoize(func):
+    cache = {}  # Dictionary to store computed results
+
+    @functools.wraps(func)
+    def wrapper(n):
+        if n not in cache:
+            cache[n] = func(n)
+        return cache[n]  # Return cached result       
+
+    return wrapper
+
+@memoize
+def fibonacci(n):
+    """Returns the nth Fibonacci number."""
+
+    print("Computing:", n)
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(6))
+# Output: 
+# Computing: 6
+# Computing: 5
+# Computing: 4
+# Computing: 3
+# Computing: 2
+# Computing: 1
+# Computing: 0
+# 8
+
+print(fibonacci(7)) # only computes the new value
+# Output:
+# Computing: 7
+# 13
+```
+
+- The `fibonacci` function computes each value once and then retrieves subsequent calls from the cache.
+- This reduces time complexity from $O(2^{n})$ to $O(n)$ for recursive functions like `fibonacci`.
+
+### Using `functools.lru_cache`for Memoization
+
+Instead of manually implementing caching, Python provides `functools.lru_cache`, which automates memoization using a *least recently used* style cache.
+
+```python
+import functools
+
+@functools.lru_cache(maxsize=None)  # Unlimited cache
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print(fibonacci(10))  # Output: 55
+```
+
+Key Benefits of `functools.lru_cache`
+
+- Handles caching automatically—no need for a custom dictionary.
+- Supports optional maxsize to limit cache memory usage.
+- Thread-safe and optimally manages cache invalidation.
