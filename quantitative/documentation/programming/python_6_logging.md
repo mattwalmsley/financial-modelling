@@ -3,106 +3,233 @@
 ## Example Singleton Logger
 
 ```python
-from abc import ABCMeta, abstractmethod
-import threading
 import logging
+import logging.handlers
+import os
+import threading
+import time
+from abc import ABCMeta, abstractmethod
+from datetime import datetime, timedelta
 
-# This is a metaclass for creating singleton classes. Singleton classes allow only one instance.
+
 class SingletonMeta(type):
-    _instances = {}  # Dictionary to hold the instance reference for each class.
-    _lock = threading.Lock()  # A lock to ensure thread-safe singleton instantiation.
+    """
+    A metaclass that ensures only one instance of a class is created (singleton pattern).
+    This is thread-safe due to the use of a lock.
+    """
+
+    _instances = {}  # Dictionary to store instances of singleton classes.
+    _lock = threading.Lock()  # Lock to ensure thread-safe instantiation.
 
     def __call__(cls, *args, **kwargs):
-        # Acquire the lock to make sure that only one thread can enter this block at a time.
+        """
+        Overrides the default __call__ method to ensure only one instance of the class is created.
+        """
         with cls._lock:
-            # Check if the instance already exists for the class.
             if cls not in cls._instances:
-                # If not, create the instance and store it in the _instances dictionary.
                 cls._instances[cls] = super().__call__(*args, **kwargs)
-        # Return the instance.
         return cls._instances[cls]
 
-# This metaclass combines the features of SingletonMeta and ABCMeta.
+
 class SingletonABCMeta(ABCMeta, SingletonMeta):
-    def __new__(cls, name, bases, namespace):
-        # Create a new class using the combined metaclasses.
-        return super().__new__(cls, name, bases, namespace)
+    """
+    A metaclass that combines the features of ABCMeta (for abstract base classes)
+    and SingletonMeta (for singleton behaviour).
+    """
 
-# BaseLogger is an abstract class with the SingletonABCMeta metaclass.
+    pass
+
+
 class BaseLogger(metaclass=SingletonABCMeta):
-    # These methods are abstract, meaning subclasses must implement these methods.
+    """
+    An abstract base class for logging. Ensures that subclasses implement the required logging methods.
+    This class also enforces singleton behaviour.
+    """
+
     @abstractmethod
-    def debug(cls, message: str):
+    def debug(self, message: str):
+        """
+        Log a debug-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         pass
 
     @abstractmethod
-    def info(cls, message: str):
+    def info(self, message: str):
+        """
+        Log an info-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         pass
 
     @abstractmethod
-    def warning(cls, message: str):
+    def warning(self, message: str):
+        """
+        Log a warning-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         pass
 
     @abstractmethod
-    def error(cls, message: str):
+    def error(self, message: str):
+        """
+        Log an error-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         pass
 
     @abstractmethod
-    def critical(cls, message: str):
+    def critical(self, message: str):
+        """
+        Log a critical-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         pass
 
-# MyLogger is a concrete implementation of BaseLogger.
-class MyLogger(BaseLogger):
-    def __init__(self):
-        print('<Logger init> initializing logger...')
-        # Create a logger object with the specified name.
-        self._logger = logging.getLogger('my_logger')
-        # Set the logging level to DEBUG.
+
+class Logger(BaseLogger):
+    """
+    A concrete implementation of the BaseLogger class. This logger supports log file rolling
+    on application start and automatic cleanup of old log files based on a specified retention period.
+
+    Log files are stored in a 'logs' directory.
+    """
+
+    def __init__(self, log_file='log_file.log', cleanup_days=30):
+        """
+        Initialize the logger.
+
+        Args:
+            log_file (str): The name of the log file. Defaults to 'log_file.log'.
+            cleanup_days (int): The number of days to retain log files. Defaults to 30.
+        """
+
+        # Ensure the 'logs' directory exists
+        self._log_dir = 'logs'
+        os.makedirs(self._log_dir, exist_ok=True)
+
+        # Set the full path for the log file
+        self._log_file = os.path.join(self._log_dir, log_file)
+
+        # Initialize the logger
+        self._logger = logging.getLogger('logger')
         self._logger.setLevel(logging.DEBUG)
 
-        # Create a file handler to log messages to a file.
-        file_handler = logging.FileHandler('my_log_file.log')
-        # Set the file handler logging level to DEBUG.
-        file_handler.setLevel(logging.DEBUG)
+        # Roll over log file on application start
+        if os.path.exists(self._log_file):
+            os.rename(self._log_file, f"{self._log_file}.{datetime.now().strftime('%Y%m%d%H%M%S')}")
 
-        # Create a console handler to log messages to the console.
+        # Create a file handler with rolling based on time
+        self.file_handler = logging.handlers.TimedRotatingFileHandler(
+            self._log_file, when='midnight', interval=1, backupCount=cleanup_days
+        )
+        self.file_handler.setLevel(logging.DEBUG)
+
+        # Create a console handler
         console_handler = logging.StreamHandler()
-        # Set the console handler logging level to INFO.
         console_handler.setLevel(logging.INFO)
 
-        # Define the log message format.
+        # Define the log message format
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        # Set the formatter for both the file and console handlers.
-        file_handler.setFormatter(formatter)
+        self.file_handler.setFormatter(formatter)
         console_handler.setFormatter(formatter)
 
-        # Add the file and console handlers to the logger.
-        self._logger.addHandler(file_handler)
+        # Add the handlers to the logger
+        self._logger.addHandler(self.file_handler)
         self._logger.addHandler(console_handler)
 
-    # Implementations of the abstract methods in BaseLogger.
+        # Schedule log file cleanup
+        self._cleanup_days = cleanup_days
+        self._schedule_cleanup()
+
+    def _schedule_cleanup(self):
+        """
+        Schedule a background thread to clean up old log files based on the retention period.
+        """
+
+        def cleanup():
+            """
+            Continuously check for and delete log files older than the specified retention period.
+            """
+            while True:
+                now = datetime.now()
+                cutoff = now - timedelta(days=self._cleanup_days)
+                for handler in self._logger.handlers:
+                    if isinstance(handler, logging.handlers.TimedRotatingFileHandler):
+                        for filename in os.listdir(self._log_dir):
+                            if filename.startswith(os.path.basename(handler.baseFilename)):
+                                filepath = os.path.join(self._log_dir, filename)
+                                file_creation_time = datetime.fromtimestamp(os.path.getctime(filepath))
+                                if file_creation_time < cutoff:
+                                    os.remove(filepath)
+                time.sleep(86400)  # Sleep for 24 hours
+
+        cleanup_thread = threading.Thread(target=cleanup, daemon=True)
+        cleanup_thread.start()
+
     def debug(self, message: str):
+        """
+        Log a debug-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         self._logger.debug(message)
 
     def info(self, message: str):
+        """
+        Log an info-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         self._logger.info(message)
 
     def warning(self, message: str):
+        """
+        Log a warning-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         self._logger.warning(message)
 
     def error(self, message: str):
+        """
+        Log an error-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         self._logger.error(message)
 
     def critical(self, message: str):
+        """
+        Log a critical-level message.
+
+        Args:
+            message (str): The message to log.
+        """
         self._logger.critical(message)
 
-
-# Create an instance of MyLogger.
-logger = MyLogger()
-# Log different types of messages.
+# Example usage
+logger = Logger(cleanup_days=30)
 logger.debug('This is a debug message')
 logger.info('This is an info message')
 logger.warning('This is a warning message')
 logger.error('This is an error message')
 logger.critical('This is a critical message')
+
+uvicorn_logger = logging.getLogger("uvicorn")
+uvicorn_logger.addHandler(logger.file_handler)  # Reuse the same file handler
 ```

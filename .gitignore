@@ -184,7 +184,7 @@ TestResults/
 *.Publish.xml
 
 ## Log files and databases
-*.log
+*.log.*
 
 ## Windows generated files
 .DS_Store?
