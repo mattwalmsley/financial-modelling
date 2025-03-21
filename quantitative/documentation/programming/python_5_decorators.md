@@ -283,8 +283,6 @@ def sort_numbers(numbers):
 # Calling the decorated function
 print(sort_numbers([3, 1, 4, 1, 5, 9, 2, 6]))
 # Output (example timing will vary):
-# csharp
-# Copy code
 # Sorting Function: Execution took 0.0001 seconds
 # [1, 1, 2, 3, 4, 5, 6, 9]
 ```
@@ -563,7 +561,7 @@ def process(value):
     raise NotImplementedError("Unsupported type")
 
 @process.register(int)
-def _(value):
+def _(value): # registered function name is not relevant
     return f"Processing integer: {value * 2}"
 
 @process.register(str)

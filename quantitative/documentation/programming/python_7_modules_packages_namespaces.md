@@ -7,10 +7,9 @@
   - [Importing Modules and Packages](#importing-modules-and-packages)
   - [Relative vs Absolute Imports](#relative-vs-absolute-imports)
 
-
 ## Modules
 
-A module is a single Python file (.py) that contains functions, classes, and variables. It is used for organizing code into reusable components and can be imported using `import module_name`.
+A module is a single Python file (`.py`) that contains functions, classes, and variables. It is used for organizing code into reusable components and can be imported using `import module_name`.
 
 **Example:**
 

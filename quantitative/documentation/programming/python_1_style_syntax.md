@@ -52,18 +52,21 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Boolean Precedence](#boolean-precedence)
       - [Short-Circuiting](#short-circuiting)
       - [Using Booleans in Control Flow](#using-booleans-in-control-flow)
-    - [Strings (`str`)](#strings-str)
-    - [Lists (`list`)](#lists-list)
-    - [Dictionaries (`dict`)](#dictionaries-dict)
     - [Tuples (`tuple`)](#tuples-tuple)
       - [Creating Tuples](#creating-tuples)
-      - [Empty Tuple Exception](#empty-tuple-exception)
-      - [Tuple Properties](#tuple-properties)
       - [Accessing Tuple Elements](#accessing-tuple-elements)
       - [Tuple Packing and Unpacking](#tuple-packing-and-unpacking)
-    - [Tuples vs Lists](#tuples-vs-lists)
-    - [Common Uses of Tuples](#common-uses-of-tuples)
-    - [Tuple Methods](#tuple-methods)
+      - [Common Uses of Tuples](#common-uses-of-tuples)
+      - [Tuple Methods](#tuple-methods)
+    - [Named Tuples (`collections.namedtuple`)](#named-tuples-collectionsnamedtuple)
+      - [Modifying and Extending Named Tuples](#modifying-and-extending-named-tuples)
+      - [Docstrings in namedtuple](#docstrings-in-namedtuple)
+      - [Default Values for Named Tuples](#default-values-for-named-tuples)
+    - [Strings (`str`)](#strings-str)
+    - [Lists (`list`)](#lists-list)
+      - [Lists of Tuples](#lists-of-tuples)
+    - [Comparing Tuples, Lists, and Strings](#comparing-tuples-lists-and-strings)
+    - [Dictionaries (`dict`)](#dictionaries-dict)
     - [Sets](#sets)
   - [Naming Conventions](#naming-conventions)
   - [Python Comments](#python-comments)
@@ -256,11 +259,11 @@ Python's integer system is flexible but comes at the cost of memory and performa
 - Booleans values, `True` and `False`, are also accepted by `int()`.
 
 ```python
-int("42") # 42 (base-10 by default)
-int("1010", 2) # 10 (base-2)
-int("A12F", base=16) # 41263 (base-16)
+int('42') # 42 (base-10 by default)
+int('1010', 2) # 10 (base-2)
+int('A12F', base=16) # 41263 (base-16)
 
-int("B", 11) # ValueError
+int('B', 11) # ValueError
 
 int(3.14) # 3
 int(10.9) # 10
@@ -321,8 +324,8 @@ A Fraction object can be created from integers (`int`), strings (`str`), floats 
 from fractions import Fraction
 
 f1 = Fraction(3, 4)  # 3/4
-f2 = Fraction("1.5")  # 3/2
-f2 = Fraction("1/5")  # 1/5
+f2 = Fraction('1.5')  # 3/2
+f2 = Fraction('1/5')  # 1/5
 f3 = Fraction(0.1)  # Approximates 0.1 as a fraction
 ```
 
@@ -579,8 +582,8 @@ print(math.nan)  # Not-a-Number (NaN)
     ```python
     from decimal import Decimal
 
-    d1 = Decimal("0.1")  # Exact 0.1
-    d2 = Decimal("3.14159265358979323846")  # Arbitrary precision
+    d1 = Decimal('0.1')  # Exact 0.1
+    d2 = Decimal('3.14159265358979323846')  # Arbitrary precision
     print(d1, d2)  # 0.1  3.14159265358979323846
     ```
 
@@ -771,8 +774,8 @@ print(c) # 0.25
 `Decimal` supports addition, subtraction, multiplication, division, and exponentiation, all with exact precision.
 
 ```python
-a = Decimal("1.1")
-b = Decimal("2.2")
+a = Decimal('1.1')
+b = Decimal('2.2')
 
 print(a + b) # 3.3 (exact, unlike float)
 print(a - b) # -1.1
@@ -807,7 +810,7 @@ The `math` module can accept `Decimal` types but will convert `Decimal` types to
 #### Comparing Decimals with Floating-Points
 
 ```python
-print(Decimal("0.1") + Decimal("0.2") == Decimal("0.3"))  # True
+print(Decimal('0.1') + Decimal('0.2') == Decimal('0.3'))  # True
 print(0.1 + 0.2 == 0.3)  # False (float precision issue)
 ```
 
@@ -922,7 +925,7 @@ print(False < True) # True
   - Most values will evaluate to `True` other than those which evaluate to `False`:
     - The None object: `None`
     - Zero in any numeric type: `0`, `0.0`, `0+0j` etc.
-    - Empty sequences (lists, tuples, string etc.): `[]`, `()`, `""` etc.
+    - Empty sequences (lists, tuples, string etc.): `[]`, `()`, `''` etc.
     - Empty mapping types (dictionary, set etc.): `{}`
     - Custom classes that implements a `__bool__` or  `__len__` method that returns `False` or `0`.
 
@@ -1131,7 +1134,7 @@ b = 4
 if b:
     print(a / b)
 else:
-    print(0)  # Default behavior
+    print(0)  # Default behaviour
 
 # Shortened equivalent:
 print(b and a/b)
@@ -1166,12 +1169,260 @@ print((s3 and s3[0]) or 'n/a') # a
 - If `s3` is a non-empty string, the first character of `s3` is returned.
 - The `or` operator ensures that if `s1` and `s1[0]`, or `s2` and `s2[0]`, evaluates to `None` or an empty string, the alternative value `'n/a'` is used.
 
+### Tuples (`tuple`)
+
+- A tuple is an immutable, ordered collection of elements:
+  - *Immutable*: The data structure and contents of a tuple never change once created..
+  - *Ordered*: Tuples can represent data records, where the position of each element has meaning.
+- Tuples can store *heterogeneous* data, meaning they can contain different types.
+- If all elements within a tuple are hashable, the tuple itself is hashable and can be used as a dictionary key.
+- Tuples are defined by commas (`,`) rather than parentheses (`()`), though parentheses improve readability and are required in some cases.
+- Elements in a tuple are accessed using indexing.
+
+#### Creating Tuples
+
+Basic tuple definition:
+
+```python
+london = 'London', 'UK', 8_000_000  # A tuple with three elements
+southampton = ('Southampton', 'UK', 250_000)  # Parentheses improve readability
+
+# Accessing elements by index
+city = london[0]
+country = london[1]
+population = london[2]
+print(city, country, population)  # London UK 8000000
+```
+
+Single-element tuple: (A trailing comma is required)
+
+```python
+t = (42,)  # Correct: Tuple with one element
+t = 42,    # Also correct
+
+t = (42)   # Incorrect: This is just an integer
+```
+
+Empty tuple: (Parentheses are required)
+
+```python
+t = ()  # The only way to define an empty tuple
+```
+
+#### Accessing Tuple Elements
+
+Indexing:
+
+```python
+t = (10, 20, 30)
+print(t[1])  # 20
+```
+
+Slicing:
+
+```python
+print(t[:2])  # (10, 20)
+```
+
+Iterating:
+
+```python
+t = ('apple', 'banana', 'cherry')
+
+for item in t:
+    print(item)
+# Output:
+# apple
+# banana
+# cherry
+```
+
+Using `enumerate()` to get both index and value:
+
+```python
+Copy code
+for index, value in enumerate(t):
+    print(f"Index {index}: {value}")
+# Output:
+# Index 0: apple
+# Index 1: banana
+# Index 2: cherry
+```
+
+#### Tuple Packing and Unpacking
+
+Packing (Assigning multiple values at once):
+
+```python
+t = 'apple', 'banana', 'cherry'  # Tuple packing
+```
+
+Unpacking (Extracting values into variables):
+
+```python
+a, b, c = t  # a = 'apple', b = 'banana', c = 'cherry'
+```
+
+Using `*` for iterable unpacking:
+
+```python
+t = 1, 2, 3, 4, 5
+a, b, *c = t   # a = 1, b = 2, c = [3, 4, 5]
+a, *_, e = t   # a = 1, e = 5 (using `_` as a dummy variable)
+```
+
+#### Common Uses of Tuples
+
+- Returning multiple values from functions.
+- As dictionary keys, since they are immutable.
+- Representing fixed collections of data, where element positions hold meaning.
+
+Example: Returning multiple values from a function
+
+```python
+Copy code
+def get_coordinates():
+    return 51.5074, -0.1278  # Latitude and longitude of London
+
+lat, lon = get_coordinates()
+print(lat, lon)  # 51.5074 -0.1278
+```
+
+#### Tuple Methods
+
+Since tuples are immutable, they provide only a limited set of methods:
+
+- `.count(x)` – Returns the number of occurrences of x in the tuple.
+- `.index(x)` – Returns the index of the first occurrence of x.
+
+```python
+t = (1, 2, 3, 2, 2, 4)
+print(t.count(2))  # 3
+print(t.index(3))  # 2 (first occurrence)
+```
+
+### Named Tuples (`collections.namedtuple`)
+
+- Named tuples provide a way to define lightweight, immutable, and self-documenting data structures.
+  - Can be used instead of custom classes for storing simple data.
+- Unlike regular tuples, elements can be accessed by name as well as by index.
+- Defined using `collections.namedtuple`, which acts as a `class` factory and generates a subclass of `tuple`.
+- When called, `namedtuple` returns a `class` type and takes the following arguments:
+  - `typename`: The name of the named tuple type.
+  - `field_names`: An ordered list of field names as strings or an iterable of strings.
+    - Fields names can be any [valid variable name](#naming-conventions) but cannot start with an underscore `_`.
+  - For example:
+    - `namedtuple('A', ['x', 'y', 'z'])`
+    - `namedtuple('A', ('x', 'y', 'z')`
+    - `namedtuple('A', 'x, y, z')`
+    - `namedtuple('A', 'x y z')`
+
+```python
+from collections import namedtuple
+
+# Define a named tuple type
+City = namedtuple('City', ['name', 'country', 'population'])
+
+# Create an instance
+london = City(name='London', country='UK', population=8_000_000)
+
+# Access by index or attribute name
+print(london[0], london.name)  # London London
+print(london[1], london.country)  # UK UK
+print(london.population)  # 8000000
+print(type(london))  # <class '__main__.City'>
+print(isinstance(london, tuple))  # True
+```
+
+Named tuples are immutable given they inherit from `tuple`, so assigning new values to fields is not allowed.
+
+```python
+london.population = 9_000_000  # AttributeError: can't set attribute
+```
+
+- The `rename=True` keyword argument allows `namedtuple` to automatically rename invalid or duplicate field names.
+- Renamed fields are given sequential names: `_0`, `_1`, etc.
+- Useful when generating named tuples dynamically from sources with potentially invalid field names (e.g., user input, CSV headers).
+- Without `rename=True`, invalid field names would raise a `ValueError`.
+
+```python
+from collections import namedtuple
+
+Person = namedtuple('Person', ['name', 'age', 'name'], rename=True)
+
+print(Person._fields)  # Output: ('name', 'age', '_2')
+
+p = Person('Alice', 30, 'Duplicate')
+print(p)  # Output: Person(name='Alice', age=30, _2='Duplicate')
+```
+
+#### Modifying and Extending Named Tuples
+
+Since named tuples are immutable, elements cannot be directly changed, but a modified copy can be created with `_replace()`:
+
+```python
+PersonDefault = namedtuple('Person', ['name', 'age', 'city'])
+p = PersonDefault('Alice', 30, 'London')  
+print(p)  # Person(name='Alice', age=30, city='London')
+
+p2 = p._replace(age=31)  
+print(p2)  # Person(name='Alice', age=31, city='London')
+print(p is p2)  # False
+```
+
+A named tuple can be extended by creating a new subclass with additional fields:
+
+```python
+print(p._fields)  # ('name', 'age', 'city') 
+ExtendedPerson = namedtuple('ExtendedPerson', p._fields + ('email',))
+p_ext = ExtendedPerson('Alice', 30, 'London', 'alice@example.com')
+
+print(p_ext)  # ExtendedPerson(name='Alice', age=30, city='London', email='alice@example)
+```
+
+#### Docstrings in namedtuple
+
+A `namedtuple` automatically generates a default docstring for the class and its fields.
+
+```python
+from collections import namedtuple
+
+Person = namedtuple('Person', ['name', 'age'])
+
+print(Person.__doc__) # 'Person(name, age)'
+
+print(Person.name.__doc__) # 'Alias for field number 0'
+```
+
+Since the default docstring is simple, a custom docstring can be set manually:
+
+```python
+Person.__doc__ = 'Represents a person with a name and age.'
+Person.name.__doc__ = 'The name of the person.'
+
+print(Person.__doc__)  # 'Represents a person with a name and age.'
+print(Person.name.__doc__)  # 'The name of the person.'
+```
+
+This is useful for improving code readability and documentation.
+
+#### Default Values for Named Tuples
+
+From Python 3.7 onwards, default values can be provided for named tuple fields using the `defaults` keyword argument.
+
+```python
+Person = namedtuple("Person", ["name", "age", "city"], defaults=["Unknown", 0, "Unknown"])
+p_default = Person()  
+print(p_default)  # Person(name='Unknown', age=0, city='Unknown')
+print(p_default._field_defaults) # {'name': 'Unknown', 'age': 0, 'city': 'Unknown'}
+```
+
 ### Strings (`str`)
 
 ```python
 str
 
-"hello"
+'hello'
 "hello world"
 ```
 
@@ -1184,6 +1435,38 @@ list
 [10, "hello", 2.3] # heterogeneous type
 ```
 
+#### Lists of Tuples
+
+```python
+london = ('London', 'UK', 8_000_000) # heterogeneous tuple
+southampton = ('Southampton', 'UK', 250_000)
+paris = ('Paris', 'France', 2_000_000)
+
+cities = [london, southampton, paris] # homogenous list
+```
+
+### Comparing Tuples, Lists, and Strings
+
+- Tuples, lists, and strings are all ordered sequences, meaning element positions matter.
+  - This allows for indexing and iteration.
+- Tuples and lists can store *heterogeneous* (mixed types) or *homogeneous* (same type) elements.
+  - Lists are more commonly homogeneous, especially when elements are passed to functions via iteration.
+- Strings are always homogeneous, consisting only of characters.
+- Tuples and strings are *immutable*, while lists are *mutable*:
+  - The length and order of a tuple or string are fixed and cannot be changed.
+  - Lists can be modified by adding, removing, or changing elements.
+
+| Feature                                | Tuple | List | String |
+|----------------------------------------|:-----:|:----:|:------:|
+| Mutable (Can be modified)              | ❌    | ✅   | ❌     |
+| Ordered (Elements maintain position)   | ✅    | ✅   | ✅     |
+| Indexable (Supports [] indexing)       | ✅    | ✅   | ✅     |
+| Iterable (Can loop over elements)      | ✅    | ✅   | ✅     |
+| Heterogeneous (Mixed data types allowed)| ✅    | ✅   | ❌     |
+| Homogeneous (Same data types allowed)  | ✅    | ✅   | ✅     |
+| Length can change (Supports resizing)  | ❌    | ✅   | ❌     |
+| Order can change (Elements can be rearranged) | ❌    | ✅   | ❌     |
+
 ### Dictionaries (`dict`)
 
 ```python
@@ -1192,105 +1475,6 @@ dict
 {"key1": "value1",
 "key2": "value2"}
 ```
-
-### Tuples (`tuple`)
-
-- A tuple is an immutable ordered collection of elements.
-- Tuples are defined by commas (`,`), not parentheses as commonly assumed.
-- Parentheses are optional but improve readability and are required in some cases (e.g., empty tuples or for grouping expressions).
-
-#### Creating Tuples
-
-Basic tuple definition:
-
-```python
-t = 1, 2, 3  # A tuple with three elements
-```
-
-Using parentheses for clarity:
-
-```python
-t = (1, 2, 3)  # Same as above, parentheses improve readability
-```
-
-Single-element tuple (comma required):
-
-```python
-t = (42,)  # Correct: tuple with one element
-t = 42,    # Also correct
-```
-
-```python
-t = (42)   # Incorrect: This is just an integer
-```
-
-#### Empty Tuple Exception
-
-The only case where a tuple is not defined by a comma is an empty tuple.
-
-```python
-t = ()  # The only way to define an empty tuple
-```
-
-Without parentheses, an empty tuple cannot exist since a single comma alone does not form a valid expression.
-
-#### Tuple Properties
-
-- **Ordered**: Elements maintain their position.
-- **Immutable**: Cannot be changed after creation.
-- **Heterogeneous**: Can contain different data types.
-- **Hashable (if elements are hashable)**: Can be used as dictionary keys.
-
-#### Accessing Tuple Elements
-
-**Indexing:**
-
-```python
-t = (10, 20, 30)
-print(t[1])  # Output: 20
-```
-
-**Slicing:**
-
-```python
-print(t[:2])  # Output: (10, 20)
-```
-
-#### Tuple Packing and Unpacking
-
-**Packing**: Assigning multiple values to a tuple at once.
-
-```python
-t = "apple", "banana", "cherry"  # Tuple packing
-```
-
-**Unpacking**: Extracting values into variables.
-
-```python
-a, b, c = t  # a = "apple", b = "banana", c = "cherry"
-```
-
-### Tuples vs Lists
-
-| Feature                | Tuple | List |
-|------------------------|-------|------|
-| Mutable?               | ❌ No | ✅ Yes |
-| Ordered?               | ✅ Yes | ✅ Yes |
-| Faster?                | ✅ Yes (due to immutability) | ❌ No |
-| Uses less memory?      | ✅ Yes | ❌ No |
-
-### Common Uses of Tuples
-
-- Returning multiple values from functions.
-- As dictionary keys (since they are immutable).
-- Representing fixed collections of data.
-
-### Tuple Methods
-
-Since tuples are immutable, they have limited methods:
-
-- `.count(x)`: Returns the number of times x appears in the tuple.
-- `.index(x)`: Returns the index of the first occurrence of x.
 
 ### Sets
 
@@ -1311,7 +1495,7 @@ Identifiers in Python are names used to identify variables, functions, classes, 
 ```python
 my_variable = 10
 _variable = 5
-myVar123 = "hello"
+myVar123 = 'hello'
 ```
 
 | Identifier                  | Example            | Case Style           | Description                                                                                                   |
@@ -1561,7 +1745,6 @@ print(add(3, 4))  # Output: 7 (3 + 4)
 Functions can return values using the return statement. If no return statement is provided, the function returns `None`.
 
 ```python
-Copy code
 def square(x):
     return x ** 2
 
@@ -2053,7 +2236,7 @@ print(x)  # 15 (Modified globally)
   - Only local scopes will be searched, not the global scope.
 
 ```python
-x = "Hello" # Global variable
+x = 'Hello' # Global variable
 def outer():
     x = 10 # local variable masking global x
     y = 20
@@ -2116,20 +2299,20 @@ Python resolves variable names in the following order:
 4. Built-in – Python’s built-in functions (e.g., `len`, `sum`).
 
 ```python
-x = "global"
+x = 'global'
 
 def outer():
-    x = "enclosing"
+    x = 'enclosing'
 
     def inner():
-        x = "local"
-        print(x)  # Resolves to "local"
+        x = 'local'
+        print(x)  # Resolves to 'local'
 
     inner()
-    print(x)  # Resolves to "enclosing"
+    print(x)  # Resolves to 'enclosing'
 
 outer()
-print(x)  # Resolves to "global"
+print(x)  # Resolves to 'global'
 ```
 
 - This order ensures the most specific scope is used first.
