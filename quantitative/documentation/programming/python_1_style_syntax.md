@@ -63,6 +63,13 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Docstrings in namedtuple](#docstrings-in-namedtuple)
       - [Default Values for Named Tuples](#default-values-for-named-tuples)
     - [Strings (`str`)](#strings-str)
+      - [f-Strings (Formatted String Literals)](#f-strings-formatted-string-literals)
+        - [Evaluating Expressions](#evaluating-expressions)
+        - [Formatting Numbers](#formatting-numbers)
+        - [Formatting Strings](#formatting-strings)
+        - [Using `=` for Debugging and Logging](#using--for-debugging-and-logging)
+        - [Multiline f-Strings](#multiline-f-strings)
+        - [Nesting f-Strings](#nesting-f-strings)
     - [Lists (`list`)](#lists-list)
       - [Lists of Tuples](#lists-of-tuples)
     - [Comparing Tuples, Lists, and Strings](#comparing-tuples-lists-and-strings)
@@ -97,6 +104,14 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Loops with `else`](#loops-with-else)
     - [List Comprehension](#list-comprehension)
       - [List Comprehension Comparison to Regular `for` Loop](#list-comprehension-comparison-to-regular-for-loop)
+  - [`match` Statement](#match-statement)
+    - [Matching Literals](#matching-literals)
+    - [Matching Variable Patterns](#matching-variable-patterns)
+    - [Matching Tuples and Lists](#matching-tuples-and-lists)
+    - [Matching Dictionary Structures](#matching-dictionary-structures)
+    - [Matching Class Instances](#matching-class-instances)
+    - [Guard Conditions](#guard-conditions)
+    - [The `|` (pipe for multiple patterns) and `as` (binding matched values to a variable)](#the--pipe-for-multiple-patterns-and-as-binding-matched-values-to-a-variable)
   - [Exception Handling](#exception-handling)
   - [Scope](#scope)
     - [Local Scope](#local-scope)
@@ -1424,6 +1439,85 @@ str
 "hello world"
 ```
 
+#### f-Strings (Formatted String Literals)
+
+f-Strings, introduced in Python 3.6, provide a concise and readable way to format strings using embedded expressions. They are prefixed with `f` or `F` and allow direct interpolation of variables and expressions inside curly braces `{}`.
+
+```python
+name = "Alice"
+age = 30
+print(f"My name is {name} and I am {age} years old.")  
+# Output: My name is Alice and I am 30 years old.
+```
+
+##### Evaluating Expressions
+
+f-Strings allow expressions inside `{}`:
+
+```python
+print(f"2 + 2 = {2 + 2}")  # Output: 2 + 2 = 4
+print(f"Next year, I will be {age + 1} years old.")
+```
+
+##### Formatting Numbers
+
+f-Strings support number formatting:
+
+```python
+value = 1234.56789
+print(f"Rounded: {value:.2f}")  # Output: Rounded: 1234.57
+print(f"Currency: ${value:,.2f}")  # Output: Currency: $1,234.57
+```
+
+- `{value:.2f}`: Rounds to 2 decimal places.
+- `{value:,.2f}`: Adds thousands separator.
+
+##### Formatting Strings
+
+```python
+word = "hello"
+print(f"{word:<10}")  # Left-align (Output: 'hello     ')
+print(f"{word:>10}")  # Right-align (Output: '     hello')
+print(f"{word:^10}")  # Center-align (Output: '  hello   ')
+```
+
+##### Using `=` for Debugging and Logging
+
+Introduced in Python 3.8, the `=` inside `{}` prints both the expression and its value, useful for debugging:
+
+```python
+x = 42
+y = x * 2
+print(f"{x=}, {y=}")  # Output: x=42, y=84
+```
+
+This avoids writing redundant print statements like:
+
+```python
+print(f"x: {x}, y: {y}")  # Older style equivalent
+```
+
+##### Multiline f-Strings
+
+```python
+name = "Bob"
+height = 1.75
+info = f"""
+Name: {name}
+Height: {height:.2f}m
+"""
+print(info)
+```
+
+##### Nesting f-Strings
+
+f-Strings can be nested but require `'` (or `"` if the outer f-string uses `'`) inside the inner f-string:
+
+```python
+value = 10
+print(f"Double: {f'{value * 2}'}")  # Output: Double: 20
+```
+
 ### Lists (`list`)
 
 ```python
@@ -2059,6 +2153,143 @@ for x in range(5):
 # list comprehension:
 squares = [x**2 for x in range(5)]
 ```
+
+## `match` Statement
+
+The `match` statement, introduced in Python 3.10, provides structural pattern matching, allowing for concise and readable branching logic similar to switch statements in other languages but with more powerful pattern matching.
+
+```python
+match value:
+    case pattern1:
+        # Code block if value matches pattern1
+    case pattern2:
+        # Code block if value matches pattern2
+    case _:
+        # Default case (like `else`)
+```
+
+- The `_` (underscore) is a wildcard that matches anything, similar to `default` in a C# `switch` statement.
+- Patterns can be literals, variables, sequences, or class instances.
+
+### Matching Literals
+
+```python
+def check_status(code):
+    match code:
+        case 200:
+            return "OK"
+        case 404:
+            return "Not Found"
+        case 500:
+            return "Server Error"
+        case _:
+            return "Unknown Status"
+
+print(check_status(404))  # Not Found
+```
+
+### Matching Variable Patterns
+
+A variable pattern binds the value to the variable if there are no conflicting cases.
+
+```python
+match some_value:
+    case x:  # Matches anything and binds it to x
+        print(f"Matched: {x}")
+```
+
+If used incorrectly, variables can "capture" values instead of matching them. Use `_` to ignore values.
+
+### Matching Tuples and Lists
+
+```python
+match (x, y):
+    case (0, 0):
+        print("Origin")
+    case (0, y):
+        print(f"On Y-axis at {y}")
+    case (x, 0):
+        print(f"On X-axis at {x}")
+    case (x, y):
+        print(f"Point ({x}, {y})")
+```
+
+- Matches tuples by structure.
+- `x` and `y` capture values.
+
+### Matching Dictionary Structures
+
+```python
+def process_data(data):
+    match data:
+        case {"name": name, "age": age}:
+            print(f"User {name}, Age {age}")
+        case {"error": err}:
+            print(f"Error: {err}")
+        case _:
+            print("Unknown format")
+
+process_data({"name": "Alice", "age": 30})  # User Alice, Age 30
+```
+
+The dictionary keys must match exactly for a case to match.
+
+### Matching Class Instances
+
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(3, 4)
+
+match p:
+    case Point(x=0, y=0):
+        print("Origin")
+    case Point(x, y):
+        print(f"Point at ({x}, {y})")
+```
+
+- Uses class attributes for matching.
+- Requires `__match_args__` if explicit attributes are used.
+
+### Guard Conditions
+
+```python
+match num:
+    case x if x > 0:
+        print("Positive")
+    case x if x < 0:
+        print("Negative")
+    case _:
+        print("Zero")
+```
+
+Conditions can be added after `if`.
+
+### The `|` (pipe for multiple patterns) and `as` (binding matched values to a variable)
+
+```python
+def classify_number(value):
+    match value:
+        case 1 | 2 | 3 as num:  # Matches 1, 2, or 3 and binds to `num`
+            print(f"Small number: {num}")
+        case 10 | 20 | 30 as num:
+            print(f"Medium number: {num}")
+        case _:
+            print("Other number")
+
+classify_number(2)   # Small number: 2
+classify_number(20)  # Medium number: 20
+classify_number(99)  # Other number
+```
+
+- `1 | 2 | 3 as num`: If the value is `1`, `2`, or `3`, it binds it to `num` and prints it.
+- `10 | 20 | 30 as num`: Similar logic but for medium-sized numbers.
+- `_`: Acts as a fallback case for anything else.
+
+This combines multiple pattern matching (`|`) with variable binding (`as`), making it more powerful than traditional `if`...`elif`.
 
 ## Exception Handling
 

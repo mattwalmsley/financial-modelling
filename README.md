@@ -22,6 +22,17 @@ This repository is for educational purposes only and contains only my own work, 
 - [1] J. Hull, Options, Futures and Other Derivatives. Pearson/Prentice Hall, 2009.
 - [2] R. C. Martin and M. Martin, Agile Principles, Patterns, and Practices in C#. Pearson Education, 2006.
 
+## Useful Links
+
+- [Option Strategies Quick Guide](https://www.theocc.com/getmedia/f34f8a0d-806f-4f1a-adf7-d49d8d94b16e/option-strategies-quick-guide.pdf)
+- [Options Playbook](https://www.optionsplaybook.com/)
+- [Derivatives Academy](https://bookdown.org/maxime_debellefroid/MyBook/)
+- [Modelling and Estimating Commodity Prices: Copper Prices](https://www.math.ucdavis.edu/~rjbw/mypage/Mathematics_of_Finance_files/WtsR13.pdf)
+- [Futures Fundamentals](https://www.futuresfundamentals.org/)
+- [Derivatives](https://financetrainingcourse.com/education/derivatives/)
+- [Derivatives Crash Course](https://financetrainingcourse.com/education/the-derivatives-crash-course-for-dummies/)
+- [Financial Risk Modelling](https://financetrainingcourse.com/education/risk-model/)
+
 ## Git Commands
 
 View git remotes:

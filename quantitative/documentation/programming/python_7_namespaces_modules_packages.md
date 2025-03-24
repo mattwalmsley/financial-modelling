@@ -30,7 +30,7 @@
   - [Implicit Namespace Packages](#implicit-namespace-packages)
     - [Example: Implicit Namespace Package Structure](#example-implicit-namespace-package-structure)
     - [Namespace Packages Across Multiple Locations](#namespace-packages-across-multiple-locations)
-    - [Key Differences: Namespace Package vs. Regular Package](#key-differences-namespace-package-vs-regular-package)
+    - [Key Differences: Namespace Packages versus Regular Packages](#key-differences-namespace-packages-versus-regular-packages)
     - [When to Use Implicit Namespace Packages](#when-to-use-implicit-namespace-packages)
 
 ## Namespaces
@@ -663,7 +663,7 @@ Example:
 
 If `/path1` and `/path2` are both in `sys.path`, Python treats `namespace_pkg` as a __merged package__.
 
-### Key Differences: Namespace Package vs. Regular Package
+### Key Differences: Namespace Packages versus Regular Packages
 
 | Feature                      | Regular Package (`__init__.py` exists) | Namespace Package (`__init__.py` missing) |
 |------------------------------|:--------------------------------------:|:-----------------------------------------:|
