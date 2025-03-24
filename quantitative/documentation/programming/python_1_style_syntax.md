@@ -81,7 +81,7 @@ See [PEP 8 – Style Guide for Python Code](https://peps.python.org/pep-0008/) f
       - [Class Docstrings](#class-docstrings)
     - [Module Docstrings](#module-docstrings)
     - [Accessing Docstrings](#accessing-docstrings)
-      - [Using the `__doc__` attribute:](#using-the-__doc__-attribute)
+      - [Using the `__doc__` attribute](#using-the-__doc__-attribute)
     - [Conventions for Writing Docstrings](#conventions-for-writing-docstrings)
     - [Docstring Style Guides](#docstring-style-guides)
   - [Conditionals](#conditionals)
@@ -1043,8 +1043,6 @@ print(not (A or B) == (not A and not B))  # True
 
 Python allows chaining of comparison operators, providing a more concise and readable alternative to multiple boolean expressions.
 
-
-
 ```python
 # Instead of writing:
 if 3 < x and x < 5:
@@ -1629,7 +1627,7 @@ Call the `help()` function to access the docstring of any function, class, or mo
 help(add)  # Displays the docstring for the add function
 ```
 
-#### Using the `__doc__` attribute:
+#### Using the `__doc__` attribute
 
 Access the docstring directly using the `__doc__` attribute.
 

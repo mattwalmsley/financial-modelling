@@ -861,8 +861,6 @@ print(list(result))  # Output: [10, 10, 10]
 `zip(*iterables, strict=False)` combines multiple `iterables` element-wise into tuples, creating an iterator of tuples where each tuple contains the elements at the same position from each iterable.
 
 ```python
-Copy
-Edit
 names = ['Alice', 'Bob', 'Charlie']
 ages = [25, 30, 35]
 combined = zip(names, ages)

@@ -38,7 +38,7 @@ Common notation for decorators is the `@` symbol followed by the decorator class
 
 - For a function-based decorator `my_decorator` which decorates `my_func`, the syntax `my_func = my_decorator(my_func)` can be used to decorate the function.
 - However the `@` symbol, placed above the object to be decorated, provides a more concise and convenient way to decorate functions.
-- Similarly, as described in the [Classes as Decorators](#classes-as-decorators) section, a class `MyDecorator` can be used
+- Similarly, as described in the [classes as decorators](#class-based-decorators) section, a class `MyDecorator` can be used
   as a decorator by implementing the `__call__` method and placing `@MyDecorator()` above the object to be decorated.
 
 ## Function-Based Decorators
