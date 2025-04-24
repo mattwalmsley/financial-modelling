@@ -157,13 +157,13 @@ $$V(t) = S(t) - e^{rt}\left(e^{-rT}K_{T}\right)$$
 $$\boxed{V(t) = S(t) - e^{-r(T-t)}K_{T}}$$
 - This model can be validated by showing that at time $t = T$, the value of the portfolio is equal to $S(T) - K_{T}$:
 
-$$
+```math
 \begin{aligned}
 V(T) &= S(T) - e^{-r(T-T)}K_{T} \\
 &= S(T) - e^{0}K_{T} \\
 &= S(T) - K_{T} \\
 \end{aligned}
-$$
+```
 
 - Using the Law of One Price, the value of the forward contract $V(t)$ at any time $t < T$ must be equal to the value of the portfolio.
 - Similarly, the payoff of the **short position** can be modelled as:
@@ -358,9 +358,9 @@ $$\boxed{K_{T} = e^{(r_{d}-r_{f})T}S(0)}$$
 - This inequality can be rewritten as $Ke^{r_{f}T}\frac{1}{S(0)} > e^{r_{d}T}$.
 - Multiplying through by a notional amount of 1000 USD to give:
   
-$$
+```math
 \underbrace{K}_{\text{conversion of foreign currency back to domestic at forward rate}} \times \underbrace{e^{r_{f}T}}_{\text{investing foreign currency holding at foreign risk-free rate}} \times \underbrace{\frac{1000}{S(0)}}_{\text{conversion of 1000 USD to foreign currency at } t = 0} > \underbrace{1000e^{r_{d}T}}_{\text{value at time } T \text{ of a 1000 USD debt borrowed at time } t = 0}
-$$
+```
 
 - In other words, this inequality implies that that the seller of this FX forward contract can make a riskless profit by:
   1. borrowing 1000 USD at the domestic risk-free rate
@@ -400,14 +400,14 @@ $$
   - Using $K_{T} = e^{(r_{d}-r_{f})T}S(0)$ and substituting in the values: $K_{T} = e^{(0.04-0.06)(\frac{1}{6})}(0.75)$, the fair forward rate is $0.7475 \text{ USD}$.
 - The value of the forward contract in 1 month time ($t=\frac{1}{12}$) when the exchange rate $S(t)$ is 0.71 USD can be calculated by:
 
-$$
+```math
 \begin{aligned}
 &\boxed{{V(t) = e^{-r_{f}(T-t)}S(t) - e^{-r_{d}(T-t)}K_{T}}} \\
 &\text{Where } K_{T} = 0.7475 \\\\
 V(t) &= e^{-0.06(\frac{2}{12}-\frac{1}{12})}(0.71) - e^{-0.04(\frac{2}{12}-\frac{1}{12})}(0.7475) \\
 &= 0.03855 \text{ USD}
 \end{aligned}
-$$
+```
 
 ## Futures
 
@@ -551,7 +551,7 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
   - For a position that is long $N$ units of the underlying asset (cash position) and short $J$ futures contracts (futures position) the portfolio value is: $W(t) = NS(t) + \text{ Short Futures Position Value}$.
   - The 1-day change in the portfolio value is therefore:
 
-$$
+```math
 \begin{aligned}
 \Delta W(t) &= \Delta \text{Cash} + \Delta \text{Futures} \\
 &= N \Delta S(t) - JC \Delta K_{T}(t) \text{ where } J = \frac{N}{C} \\
@@ -560,7 +560,7 @@ $$
 &= N(S(t_{2}) - S(t_{1}))- N(S(t_{2}) - S(t_{1})) \\
 \therefore \boxed{\Delta W(t) = 0}
 \end{aligned} \\
-$$
+```
 
 - As shown, any changes in the price of a underlying asset, in this idealised scenario, has no effect on the value of a unitary hedged portfolio.
   - This is known as a **perfect hedge**.
@@ -577,14 +577,14 @@ $$
 - The portfolio value is equal to the long futures position plus the short cash position (i.e. the need for the barrels of oil).
 - For a spot price in October of 60 USD per barrel, the change in the value of the position is therefore:
 
-$$
+```math
 \begin{aligned}
 \Delta W(t) &= \Delta \text{Cash} + \Delta \text{Futures} \\
 &= -2000000\Delta S(t) + (2000)(1000) \Delta K_{T}(t) \\
 &= (-2000000)(60 - 55) + (2000)(1000)(60 -55) \\
 &= 0 \\
 \end{aligned}
-$$
+```
 
 - This is an example of a **perfect hedge** and is unrealistic in practice due to the cost of carry rarely being equal to 0.
 
@@ -608,12 +608,12 @@ $$e^{c(T-t)} = 1 + c(T-t) + \text{error (H.O.T.)}$$
 $$c = r + s - y$$
 - The basis can then be calculated by:
 
-$$
+```math
 \begin{aligned}
 b(t) &= -(r+s-y)(T-t)S(t) \\
 &= - \underbrace{r(T-t)S(t)}_{ \text{Finance}} - \underbrace{s(T-t)S(t)}_{ \text{Storage}} + \underbrace{y(T-t)S(t)}_{ \text{Convenience}}
 \end{aligned}
-$$
+```
 
 - As discussed in [futures price](#futures-prices), the arbitrage relationship $K_{T}(t) = e^{c(T-t)}S(t)$ is only an approximation as prices will fluctuate around this assumption in practice due to the forces of supply and demand.
   - For a commodity, the futures price $K_{T}(t)$ will fluctuate from the spot price $S(t)$ through the forces of supply and demand in combination with the finance, storage and convenience factors associated with the cost of carry.
@@ -627,7 +627,7 @@ $$
 
 - Taking a long position in $N$ units of an asset asset hedged with a short futures positions in $N$ units, the change in value of the combined position between $t_{1}$ and $t_{2}$ can be denoted as $\Delta W(t)$:
 
-$$
+```math
 \begin{aligned}
 \Delta W(t) &= \Delta [\text{Cash Value}] + \Delta [\text{Futures Value}] \\
 &= N \Delta S - N \Delta K_{T} \\
@@ -636,7 +636,7 @@ $$
 &= Nb(t_{2})- Nb(t_{1}) \\
 \Delta W(t) &= \underbrace{N}_{\text{Position Size}} \times \underbrace{(b(t_{2}) - b(t_{1}))}_{\text{Basis Change}}
 \end{aligned}
-$$
+```
 
 - In the case of a unitary hedge, i.e. purchasing enough futures contracts to completely offset the cash position in the underlying asset, the price risk is therefore replaced with basis risk.
 - Basis risk is a lot smaller than price risk so from a risk management perspective, this is a good trade-off.
@@ -659,13 +659,13 @@ $$
 - In November, the futures basis is $1.02 - 1.03 = -0.01 \text{ USD}$
 - The combined position has therefore profited by:
   
-$$
+```math
 \begin{aligned}
 \Delta W(t) &= N(b(t_{2})- b(t_{1})) \\
 &= (1000000)(-0.01- (-0.03)) \\
 &= 20,000 \text{ USD}
 \end{aligned}
-$$
+```
 
 #### Futures Hedging Example 2: Copper Futures
 
@@ -762,7 +762,7 @@ $$
 
 - For a 6 month LIBOR discount factor of 0.98, the continuously compounded 6 month LIBOR spot rate can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 P(t,T) &= e^{-(T-t)y(t,T)} \\
 P(0,T) &= e^{-(T)y(T)} \\
@@ -772,11 +772,11 @@ y(T) &= - \frac{\log(P(0,T))}{T} \\
 &= 0.0404 \\
 &= \boxed{4.04\%}
 \end{aligned}
-$$
+```
 
 - Similarly, the simply compounded 6 month LIBOR spot rate can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 P(t,T) &= \frac{1}{1+(T-t)L(t,T)} \\
 P(0,T) &= \frac{1}{1+(T)L(T)} \\
@@ -786,7 +786,7 @@ L(T) &= \frac{1 - P(0,T)}{TP(0,T)} \\
 &= 0.0408 \\
 &= \boxed{4.08\%}
 \end{aligned}
-$$
+```
 
 #### Applying Arbitrage Principals to Construct the LIBOR Curve
 
@@ -800,7 +800,7 @@ $$
      - This is essentially discounting the forward price at time $T_{1}$ of the zero-coupon bond, maturing at time $T_{2}$, back to time $t$ as zero-coupon bond prices are numerically the same as discount factors.
 - The price of the two portfolios must be the same due to the Law of One Price, so the following applies, still assuming a 1 USD payment at $T_{2}$:
 
-$$
+```math
 \begin{aligned}
 \overbrace
 {
@@ -810,7 +810,7 @@ $$
 }^{\text{Price at time } t \text{ of zero-coupon bond maturing at }T_{2}}
 &= \underbrace{P(t,T_{2})}_{\text{Price at time } t \text{ of zero-coupon bond maturing at }T_{2}}
 \end{aligned}
-$$
+```
 
 $$P(t,T_{1},T_{2}) = \frac{P(t,T_{2})}{P(t,T_{1})}$$
 
@@ -818,15 +818,15 @@ $$P(t,T_{1},T_{2}) = \frac{P(t,T_{2})}{P(t,T_{1})}$$
  $$P(t,T)=\frac{1}{1+(T-t)L(t,T)}$$
 - The forward interest rate is defined to have the same relationship to the forward price that the spot interest rate $L(t,T)$ has to the cash price:
 
- $$
- \begin{aligned}
- \text{Forward Price} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\
- \Longrightarrow \frac{P(t,T_{2})}{P(t,T_{1})} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\
+```math
+\begin{aligned}
+\text{Forward Price} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\
+\Longrightarrow \frac{P(t,T_{2})}{P(t,T_{1})} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\
 1 + (T_{2}-T_{1})L(t,T_{1},T_{2}) &= \frac{P(t,T_{1})}{P(t,T_{2})} \\
 L(t,T_{1},T_{2}) &= \frac{P(t,T_{1})}{(T_{2}-T_{1})P(t,T_{2})} - \frac{1}{(T_{2}-T_{1})} \\\\
 L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})}
 \end{aligned}
-$$
+```
 
 - The forward interest rate $F(t,T_{1},T_{2})$ can be determined at time $t$ in terms of the observable bond prices at time $t$.
   - The bond prices $P(t,T_{1})$ and $P(t,T_{2})$ which are listed on markets at time $t$ reflect the prevailing structure of interest rates at time $t$.
@@ -836,7 +836,7 @@ $$
 
 - Taking the current spot LIBOR rates (simple interest) for a 2 year tenor as 4% and a 4 year tenor as 7%, the forward interest rate on a loan starting in 2 years and maturing in 4 years can be calculated by first using the bond prices as follows:
 
-$$
+```math
 \begin{aligned}
 & L(0,2) = 4\% = 0.04 \\
 & L(0,4) = 7\% = 0.07 \\
@@ -844,11 +844,11 @@ $$
 \Longrightarrow P(0,2) &= \frac{1}{1+(2-0)(0.04)} = \boxed{0.9259 \text{ USD}} \\
 \Longrightarrow P(0,4) &= \frac{1}{1+(4-0)(0.07)} = \boxed{0.7813\text{ USD}} \\
 \end{aligned}
-$$
+```
 
 - Then the forward interest rate can then be calculated from these bond prices:
 
-$$
+```math
 \begin{aligned}
 L(t,T_{1},T_{2}) &= \frac{P(t,T_{1}) - P(t,T_{2})}{(T_{2}-T_{1})P(t,T_{2})} \\
 L(0,2,4) &= \frac{P(0,2) - P(0,4)}{(4-2)P(0,2)} \\
@@ -856,7 +856,7 @@ L(0,2,4) &= \frac{P(0,2) - P(0,4)}{(4-2)P(0,2)} \\
 &= 0.0925 \\
 &= \boxed{9.25\%}
 \end{aligned}
-$$
+```
 
 ### Forward Rate Agreements
 
@@ -877,13 +877,13 @@ $$(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N$$
 - In this hypothetical example, the borrower would pay/receive an amount ($L(T_{1},T_{2}) - K$ at time $T_{2}$, i.e. the principal amount $N$ does not actually need to be transferred as part of the contract.
 - In practice however, FRAs are cash settled where the counterparties exchange the discounted value of the interest rate payments at contract expiration $T_{1}$:
 
-$$
+```math
 \begin{aligned}
 P(T_{1},T_{2}) &= \frac{1}{1+(T_{2}-T_{1})L(t,T)} \\\\
 \text{Borrow pays/receives } \Longrightarrow P(T_{1},T_{2}) &= \frac{(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N}{1+(T_{2}-T_{1})L(t,T)} \\\\
 \text{Lender pays/receives } (-P(T_{1},T_{2})) \Longrightarrow P(T_{1},T_{2}) &= \frac{(T_{2}-T_{1})(K - L(T_{1},T_{2}))N}{1+(T_{2}-T_{1})L(t,T)}
 \end{aligned}
-$$
+```
 
 - To is important the note that the purpose of an FRA is **not** to borrow or lend money, but to gain or mitigate exposure to fixed/variable interest rates.
 
@@ -891,13 +891,13 @@ $$
 
 - Taking an FRA which has an expiry in 1 year on a 3 month loan for a 5 million USD principal amount with an agreed interest rate of 3%. Assuming a 3 month spotLIBOR rate of 2.1%, the amount paid/received by the borrower can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 P(T_{1},T_{2}) &= \frac{(T_{2}-T_{1})(L(T_{1},T_{2}) - K)N}{1+(T_{2}-T_{1})L(t,T)} \\\\
 &= \frac{(\frac{3}{12})(0.03 - 0.021)(5000000)}{1+(\frac{3}{12})(0.021)} \\\\
 &= \boxed{11,191 \text{ USD}}
 \end{aligned}
-$$
+```
 
 - Given this value of 11,191 USD is positive, the borrower will receive this amount at the contract expiration.
 
@@ -924,24 +924,24 @@ $$-P(t, T_{2})(T_{2} - T_{1})KN$$
 - Discounting the value of the positions in the zero-coupon bonds with face $N$ leads to $P(t,T_{1})N$ for the long position on the zero-coupon bond expiring at time $T_{1}$ and a discounted value of $-P(t,T_{2})N$ for the short position on the zero-coupon bond expiring at time $T_{2}$ (a debt).
 - By applying the Law of One Price to this 3-component portfolio, The value of the FRA at time t from the borrower's perspective, is therefore:
 
-$$
+```math
 \begin{aligned}
 \boxed{V_{\text{FRA}}(t) = P(t,T_{1})N -P(t,T_{2})N - P(t, T_{2})(T_{2} - T_{1})KN} \\
 \end{aligned}
-$$
+```
 
 - The value of the lender's position is the negative of this value.
 - THe forward rate $K$ at time $t$ time will be such that the value of the FRA at time $t$ will be 0.
 - Setting $V_{\text{FRA}}(t) = 0$ and solving for $K$:
 
-$$
+```math
 \begin{aligned}
 0 &= P(t,T_{1})N -P(t,T_{2})N - P(t, T_{2})(T_{2} - T_{1})KN \\
 P(t, T_{2})(T_{2} - T_{1})KN  &= P(t,T_{1})N -P(t,T_{2})N \\
 P(t, T_{2})(T_{2} - T_{1})K  &= P(t,T_{1}) -P(t,T_{2}) \\\\
 &\boxed{K  = \frac{P(t,T_{1}) -P(t,T_{2})}{P(t, T_{2})(T_{2} - T_{1})}}
 \end{aligned}
-$$
+```
 
 - This value of K is exactly the same as the forward LIBOR rate $L(t, T_{1}, T_{2})$ which is logical given this was derived using arbitrage principals.
 
@@ -949,18 +949,18 @@ $$
 
 Taking a 5-year LIBOR spot rate of 3.5% and a 6-year LIBOR spot rate of 4% (both simple interest), the market value today of a forward rate agreement for a 1-year term and expiring in 5 years on a principal of 2,000,000 USD with a contracted rate of 6% can be calculated from the borrowers perspective as follows:
 
-$$
+```math
 \begin{aligned}
 V_{\text{FRA}}(t) &= P(t,T_{1})N -P(t,T_{2})N - P(t, T_{2})(T_{2} - T_{1})KN \\\\
 P(t,T)=\frac{1}{1+(T-t)L(t,T)} \Longrightarrow V_{\text{FRA}}(t) &= \frac{N}{1+(T_{1}-t)L(t,T_{1})} - \frac{N}{1+(T_{2}-t)L(t,T_{2})} - \frac{(T_{2} - T_{1})KN}{1+(T_{2}-t)L(t,T_{2})} \\\\
 t=0 \Longrightarrow V_{\text{FRA}}(0) &= \frac{2000000}{1+(5)(0.035)} - \frac{2000000}{1+(6)(0.04)} - \frac{(6 - 5)(0.06)(2000000)}{1+(6)(0.04)} \\\\
 V_{\text{FRA}}(0) &= \boxed{-7550 \text{ USD}}
 \end{aligned}
-$$
+```
 
 - The fair value of the contracted rate can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 K  &= \frac{P(t,T_{1}) - P(t,T_{2})}{P(t, T_{2})(T_{2} - T_{1})} \\\\
 P(t,T)=\frac{1}{1+(T-t)L(t,T)} &\Longrightarrow P(t,T_{1}) = \frac{1}{1 + (5)(0.035)} = 0.851 \\\\
@@ -969,7 +969,7 @@ K  &= \frac{0.851 - 0.806}{0.806(6 - 5)} \\\\
 &= 0.0558 \\
 &= \boxed{5.58\%}
 \end{aligned}
-$$
+```
 
 ## Eurodollar Futures
 
@@ -988,14 +988,14 @@ $$
     - Considering the [day count convention](./2_interest-rates.md#day-count-conventions), it is not correct to assume that the underlying is a 1,000,000 USD deposit at the 3-month LIBOR rate due to 3 months not being exactly a quarter of a year.
   - From day $t$ to day $t+1$, the change in the [mark to market](#futures-marking-to-market-settlement) of a long position in the Eurodollar futures contract is the change in value:
 
-$$
+```math
 \begin{aligned}
 \text{Day t} &\Longrightarrow 1000000 + 1000000 \left(\frac{1}{4}F(t,T,T+0.25)\right) \\\\
 \text{Day t + 1} &\Longrightarrow 1000000 + 1000000\left(\frac{1}{4}F(t+1,T,T+0.25)\right) \\\\
 \Delta(t \rightarrow t+1) &= 1000000\left(\frac{1}{4}F(t+1,T,T+0.25)\right) - 1000000\left(\frac{1}{4}F(t,T,T+0.25)\right) \\\\
 &= 1000000 \frac{1}{4} (F(t+1,T,T+0.25)- F(t,T,T+0.25)) \\\\
 \end{aligned}
-$$
+```
 
 - Substituting in the 1 basis point cases, the change in the mark to market can be demonstrated to be 25 USD:
 $$\Delta(t \rightarrow t+1) = 1000000 \frac{1}{4} (0.0001) = 25 \text{ USD}$$
@@ -1006,26 +1006,26 @@ $$\Delta(t \rightarrow t+1) = 1000000 \frac{1}{4} (0.0001) = 25 \text{ USD}$$
 
 - Taking a Eurodollar futures contract which had a price yesterday of 98.1% and a price today of 97.8%, the futures rates on these days can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 P &= 100-F(t,T,T+0.25) \\
 F(t,T,T+0.25) &= 100 - P \\
 \text{Yesterday} \Longrightarrow &= 100 - 98.1 = \boxed{1.9\%} \\
 \text{Today} \Longrightarrow &= 100 - 97.8 = \boxed{2.2\%}
 \end{aligned}
-$$
+```
 
 ### Eurodollars Futures Example 2: Marking to Market
 
 - Using the contracted prices from example 1, the change in margin account of an investor who has taken a short position in the Eurodollar futures contract can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 \Delta(t \rightarrow t+1) &= 1000000\left(\frac{1}{4}F(t+1,T,T+0.25)\right) - 1000000\left(\frac{1}{4}F(t,T,T+0.25)\right) \\\\
 &= 1000000 \frac{1}{4} (0.022- 0.019) \\\\
 &= \boxed{750 \text{ USD}}
 \end{aligned}
-$$
+```
 
 - The value is positive due to rises in the contracted rate benefiting the short position in the Eurodollars future position.
 
@@ -1101,7 +1101,7 @@ $$(t_{i}-t_{i-1})L_{i-1}N$$
 - The stream of fixed payments is called the **fixed leg** of the swap and its value is denoted $V_{\text{fixed}}$.
 - The stream of floating payments is called the **floating leg** of the swap and its value is denoted $V_{\text{float}}$.
 - Using the same notation as [interest rate swaps](#interest-rate-swaps), where the following notations applying:
-  - $\{t_{j}\}_{j=0}^{J}$ represents the payment dates between the origination date $t_{j=0}$ and the final payment date $t_{j=J}$.
+  - ${t_j}^J_{j=0}$ represents the payment dates between the origination date $t_{j=0}$ and the final payment date $t_{j=J}$.
   - $S$ is the fixed rate (swap rate)
   - $L_{j}$ is the floating interest rate set at time $t_{j}$ (market observable rate)
   - $N$ is the notional amount
@@ -1113,13 +1113,12 @@ $$(t_{i}-t_{i-1})L_{i-1}N$$
   - Therefore, the discounted value of the $j$'th fixed payment is $d(t_{j})\frac{S}{m}N$.
   - The value of $V_{\text{fixed}}$ is the sum of the discounted values of all the payments:
 
-$$
+```math
 \begin{aligned}
 V_{\text{fixed}} &= \sum_{j=1}^{J}d(t_{j})\frac{S}{m}N \\\\
 &= \frac{SN}{m}\sum_{j=1}^{J}d(t_{j})
 \end{aligned}
-
-$$
+```
 
 - The value of the floating leg $V_{\text{float}}$ can now be derived as follows:
   - As shown in [interest rate swaps](#interest-rate-swaps), the $j$'th floating payment is $\frac{L_{j-1}}{m}N$.
@@ -1141,7 +1140,7 @@ $$
       - The cost to enter into the portfolio is the cost at time $t_{j=0}$ (discounted value) of the investment less the loan: $Nd(t_{j-1}) - Nd(t_{j}) \equiv N(d(t_{j-1}) - d(t_{j}))$
     - $V_{\text{float}}$ is the sum of all the floating leg payments:
 
-$$
+```math
 \begin{aligned}
 V_{\text{float}} &= \sum_{j=1}^{J}N(d(t_{j-1}) - d(t_{j})) \\\\
 &= N \sum_{j=1}^{J}(d(t_{j-1}) - d(t_{j})) \\\\
@@ -1149,39 +1148,39 @@ V_{\text{float}} &= \sum_{j=1}^{J}N(d(t_{j-1}) - d(t_{j})) \\\\
 &= N(d(t_{0}) - d(t_{J})) \\\\
 d(t_{0}) = 1 \Longrightarrow &= N(1- d(t_{J}))
 \end{aligned}
-$$
+```
 
 - For the payer (the counterparty that is paying the fixed swap rate), the value of the swap is:
 
-$$
+```math
 \begin{aligned}
 V &= V_{\text{float}} - V_{\text{fixed}} \\\\
 &= \boxed{N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j})}
 \end{aligned}
-$$
+```
 
 - For the receiver (the counterparty that is paying the floating swap rate), the value of the swap is:
 
-$$
+```math
 \begin{aligned}
 V &= V_{\text{fixed}} - V_{\text{float}} \\\\
 &= \boxed{\frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) - N(1- d(t_{J}))}
 \end{aligned}
-$$
+```
 
 #### Fair Swap Rate
 
 - The fair swap rate is the value of the fixed rate $S$ in an interest rat swap that sets the swap contract to 0 at contract origination, i.e. $V = 0$.
 - For the payer, the fair swap rate $S$ is:
 
-$$
+```math
 \begin{aligned}
 V = N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) \\\\
 0 = N(1- d(t_{J})) - \frac{SN}{m}\sum_{j=1}^{J}d(t_{j}) \\\\
 \frac{S}{m}\sum_{j=1}^{J}d(t_{j}) = (1- d(t_{J})) \\\\
 \boxed{S = \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})}} \\\\
 \end{aligned}
-$$
+```
 
 ### Swaps Example 1: Interest Rate Swap
 
@@ -1190,19 +1189,19 @@ $$
   - For a 1-year swap with $m=4$, there will be a total number of payments $J=4$.
   - The [fair swap rate](#fair-swap-rate) can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
 &= \frac{4(1- 0.952)}{0.982 + 0.975 + 0.965+ 0.952} \\\\
 &= 0.04956 \\\\
 &= \boxed{4.956 \%} \\\\
 \end{aligned}
-$$
+```
 
 - If the term structure of the discount factors was to change after 3 months to the following: $d(0.25) = 0.979$, $d(0.5) = 0.961$, $d(0.75) = 0.955$, the value of the position in 3 months from the payer's perspective can be calculated as follow:
   - Note that $d(0.75)$ is now the discount factor at $t_{J}$ given 3 months have passed
 
-$$
+```math
 \begin{aligned}
 V &= V_{\text{float}} - V_{\text{fixed}} \\\\
 
@@ -1211,7 +1210,7 @@ V &= V_{\text{float}} - V_{\text{fixed}} \\\\
 &= 225000 - 17935 \\\\
 &= \boxed{4565 \text{ USD}}
 \end{aligned}
-$$
+```
 
 ### Swaps Example 2: Hedging Interest Rate Rises
 
@@ -1223,14 +1222,14 @@ $$
   - To fully cover the variable payments with fixed payments, the corporation must enter into a 1-year swap on a notion of 5,000,000 USD that makes semi-annual floating payments based on the 6-month LIBOR.
 - The market swap rate, assuming the term term structure of discount factors: $d(0.5) = 0.996$, $d(1) = 0.989$, can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
 &= \frac{2(1- 0.989)}{0.996 + 0.989} \\\\
 &= 0.01108 \\\\
 &= \boxed{1.108 \%} \\\\
 \end{aligned}
-$$
+```
 
 - For a scenario where the 6-month LIBOR rate at swap origination is 0.8% and that 6 months later the 6-month LIBOR rate has risen to 1.7%, the effectiveness of this risk management strategy can be determined as follows:
   - Calculate the interest payments without taking a swap contract:
@@ -1266,17 +1265,17 @@ $$
 $$L\left(\frac{1}{12}\right)=0.008, \space L\left(\frac{2}{12}\right)=0.01, \space L\left(\frac{3}{12}\right)=0.013$$
 - Recalling that the relationship between the LIBOR rate and the discount factor for simple interest is $P(t,T)=\frac{1}{1+(T-t)L(t,T)}$, the discount factors (zero-coupon bond prices) can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 P\left(0,\frac{1}{12}\right) &= \frac{1}{1+\left(\frac{1}{12}-0\right)0.008} = 0.99933 \\\\
 P\left(0,\frac{2}{12}\right) &= \frac{1}{1+\left(\frac{2}{12}-0\right)0.01} = 0.99834 \\\\
 P\left(0,\frac{3}{12}\right) &= \frac{1}{1+\left(\frac{3}{12}-0\right)0.013} = 0.99676
 \end{aligned}
-$$
+```
 
 - Now recalling that [spot rates can be calculated from discount factors](./3_bonds#discount-and-spot-rate-curves) using:
 
-$$
+```math
 \begin{aligned}
 y(T) &= -\frac{\log(d(T))}{T} \\\\
 \Longrightarrow y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
@@ -1284,7 +1283,7 @@ y\left(\frac{1}{12}\right) &= -\frac{\log(0.99933)}{\left(\frac{1}{12}\right)} =
 y\left(\frac{2}{12}\right) &= -\frac{\log(0.99834)}{\left(\frac{2}{12}\right)} = 0.009968 = \boxed{0.997 \%} \\\\
 y\left(\frac{3}{12}\right) &= -\frac{\log(0.99676)}{\left(\frac{3}{12}\right)} = 0.01298 = \boxed{1.30 \%} \\\\
 \end{aligned}
-$$
+```
 
 #### Futures: 6 months out to 18 months
 
@@ -1300,16 +1299,16 @@ $$
 
 - Recalling from [applying arbitrage principals to construct the LIBOR curve](#applying-arbitrage-principals-to-construct-the-libor-curve) the formula for today's ($t=0$) price of a forward contract expiring at $T_{1} \equiv T$ for a bond maturing at time $T_{2} \equiv T+ \tau$:
 
-$$
+```math
 \begin{aligned}
 \frac{P(t,T_{2})}{P(t,T_{1})} &= \frac{1}{1+(T_{2}-T_{1})L(t,T_{1},T_{2})} \\\\
 \frac{P(0,T + \tau)}{P(0,T)} &= \frac{1}{1+(\tau)L(0,T,T + \tau)}
 \end{aligned}
-$$
+```
 
 - The LIBOR rate $L(0,T_{1},T_{1} + \tau)$ can be substituted for a forward rate $F(0,T_{1},T_{1} + \tau)$ to give the formula for discount factor extension (i.e. the discount factor for $T + \tau$ when the discount factor at $T$ is known):
 
-$$
+```math
 \begin{aligned}
 \frac{P(0,T + \tau)}{P(0,T)} &= \frac{1}{1+(\tau)F(0,T,T + \tau)} \\\\
 \Longrightarrow P(0,T + \tau) &= P(0,T) \frac{1}{1+(\tau)F(0,T,T + \tau)} \\\\
@@ -1317,11 +1316,11 @@ $$
 \text{where} \Longrightarrow P\left(0,\frac{3}{12}\right) &= 0.99676 \\\\
 P\left(0,\frac{6}{12}\right) &= 0.99676  \frac{1}{1+\left(\frac{3}{12}\right)0.016} = 0.993
 \end{aligned}
-$$
+```
 
 - A similar process can be applied for the other tenors out to 18 months:
 
-$$
+```math
 \begin{aligned}
 \Longrightarrow F\left(0,\frac{6}{12},\frac{9}{12}\right) &= 100 - 98.0 = 2.0 \% = 0.02 \\\\
 P\left(0,\frac{9}{12}\right) &= 0.988 \\\\
@@ -1332,11 +1331,11 @@ P\left(0,\frac{15}{12}\right) &= 0.975 \\\\
 \Longrightarrow F\left(0,\frac{15}{12},\frac{18}{12}\right) &= 100 - 97.0 = 3.0 \% = 0.03 \\\\
 P\left(0,\frac{18}{12}\right) &= 0.968 \\\\
 \end{aligned}
-$$
+```
 
 - The spot rates can then be calculated from the discount factors using:
 
-$$
+```math
 \begin{aligned}
 y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
 \Longrightarrow y\left(\frac{6}{12}\right) &= 0.01405 = \boxed{1.41 \%} \\\\
@@ -1345,7 +1344,7 @@ y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
 \Longrightarrow y\left(\frac{15}{12}\right) &= 0.02025 = \boxed{2.03 \%} \\\\
 \Longrightarrow y\left(\frac{18}{12}\right) &= 0.02168 = \boxed{2.17 \%} \\\\
 \end{aligned}
-$$
+```
 
 #### Swaps: 2 years out to 4 years
 
@@ -1358,16 +1357,16 @@ $$
 
 - Recalling the formula for the [fair swap rate](#fair-swap-rate) for a swap contract with semi-annual payments ($m=2$):
 
-$$
+```math
 \begin{aligned}
 S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
 &= \frac{2(1- P(0,T_{J}))}{\sum_{j=1}^{J}P(0,T_{j})}
 \end{aligned}
-$$
+```
 
 - If the 2-year swap rate $S$ is known and the discount factors from $T_{j=0}$ to $T_{j=J-1}$ are also known, then the discount factor $P(0,T_{J})$ where $T_{j=J} = 2$ can be calculated by substituting in the semi-annual ($m=2$) payments $P\left(0,\frac{6}{12}\right)$, $P\left(0,\frac{12}{12}\right)$, $P\left(0,\frac{18}{12}\right)$:
 
-$$
+```math
 \begin{aligned}
 S &= \frac{2(1- P(0,T_{J}))}{\sum_{j=1}^{J}P(0,T_{j})} \\\\
 S(2) &= \frac{2(1 - P(0,2))}{P(0,0.5) + P(0,1) + P(0,1.5) + P(0,2)} \\\\
@@ -1379,50 +1378,50 @@ P(0,2) &= \frac{2 - S(2)(P(0,0.5) + P(0,1) + P(0,1.5))}{S(2) + 2} \\\\
 y(2) &= -\frac{\log(0.955)}{2} \\\\
 &= 0.02302 = \boxed{2.30 \%}
 \end{aligned}
-$$
+```
 
 - Following a similar approach to find the discount factor for the 4 year swap rate $P(0,4)$ would require the discount factors to be known for the 2.5, 3 and 3.5 year swaps:
 $$S(4) = \frac{2(1 - P(0,4))}{P(0,0.5) + P(0,1) + P(0,1.5) + P(0,2) + P(0,2.5) + P(0,3) + P(0,3.5) + P(0,4)}$$
 - A quick approach to find the unknown discount factors between 2 and 4 years is to linearly interpolate the swap rates between $S(2)=2.3$ and $S(4)=2.7$:
 
-$$
+```math
 \begin{aligned}
 \text{{Linear Interpolation }}(x, x_0, x_1, y_0, y_1) &= y_0 + \frac{{(x - x_0) \cdot (y_1 - y_0)}}{{x_1 - x_0}} \\\\
 \Longrightarrow S(2.5) &= 2.3 + \frac{{(2.5 - 2) \cdot (2.7 - 2.3)}}{{4 - 2}} = 2.4 \\\\
 \Longrightarrow S(3) &= 2.3 + \frac{{(3 - 2) \cdot (2.7 - 2.3)}}{{4 - 2}} = 2.5 \\\\
 \Longrightarrow S(3.5) &= 2.3 + \frac{{(3.5 - 2) \cdot (2.7 - 2.3)}}{{4 - 2}} = 2.6 \\\\
 \end{aligned}
-$$
+```
 
 The discount factors can now be calculated  starting with $P(0,2.5)$:
 
-$$
+```math
 \begin{aligned}
 P(0,2.5) &= \frac{2 - S(2.5)(P(0,0.5) + P(0,1) + P(0,1.5) + P(0,2))}{S(2.5) + 2} \\\\
 &= \frac{2 - 0.024(0.993 + 0.982 + 0.968 + 0.955)}{0.024 + 2} \\\\
 &= 0.942
 \end{aligned}
-$$
+```
 
 - A similar process can be carried out to calculate the discount factors $P(0,3)$, $P(0,3.5)$ and $P(0,4)$ to give the following:
 
-$$
+```math
 \begin{aligned}
 P(0,3) &= 0.928 \\
 P(0,3.5) &= 0.913 \\
 P(0,4) &= 0.898
 \end{aligned}
-$$
+```
 
 - Finally, the spot prices can be calculated as before:
 
-$$
+```math
 \begin{aligned}
 \Longrightarrow y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
 y(4) &= -\frac{\log(0.898)}{4} \\\\
 &= 0.0269 = \boxed{2.69 \%}
 \end{aligned}
-$$
+```
 
 - The final curve can then be plotted as follows:
 
