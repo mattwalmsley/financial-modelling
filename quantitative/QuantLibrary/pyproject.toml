@@ -1,0 +1,28 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "cmake",
+    "pybind11",  # Pybind11 for the bindings
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyquantlibrary"
+version = "0.1.0"
+authors = [{ name = "Matt Walmsley" }]
+description = "Python bindings for the C++ QuantLibrary"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "BSD-3-Clause" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+    "License :: OSI Approved :: BSD License"
+]
+dependencies = [
+    "cmake",
+    "pybind11",  # Pybind11 added to dependencies
+    "setuptools",
+    "numpy",
+    "scipy"
+]

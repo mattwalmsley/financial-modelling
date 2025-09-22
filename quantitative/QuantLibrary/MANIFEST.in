@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+recursive-include include *
+recursive-include src *
+exclude .venv
+prune .venv
