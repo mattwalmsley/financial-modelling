@@ -11,29 +11,34 @@ if(NOT Python3_FOUND)
     message(FATAL_ERROR "Python3 not found")
 endif()
 
-find_package(Boost REQUIRED COMPONENTS python)
-if(NOT Boost_FOUND)
-    message(FATAL_ERROR "Boost not found")
+# Add pybind11 submodule
+add_subdirectory(extern/pybind11)
+if(NOT pybind11_FOUND)
+    message(FATAL_ERROR "pybind11 not found")
 endif()
 
-# Create the libraries
+# Define the Python wrapper sources
+set(PYTHON_WRAPPER_SOURCES
+        src/PythonWrapper/PythonWrapper.cpp  # Add your wrapper file here
+)
+
+
+# Define the source files for model, pricing_engine, and risk_engine
 set(MODEL_SOURCES
         src/Model/BlackScholesModel.cpp
         src/Model/PricingModel.cpp
+        src/Model/Exotics/ADI_Solver.cpp
+        src/Model/Exotics/Grid2D.cpp
+        src/Model/Exotics/Heston_PDE.cpp
 )
-
 set(PRICING_ENGINE_SOURCES
-        src/PricingEngine/PricingEngine.cpp
+        src/PricingEngine/PricingEngine.cpp  # Replace with your actual pricing engine source files
 )
-
 set(RISK_ENGINE_SOURCES
-        src/RiskEngine/RiskEngine.cpp
+        src/RiskEngine/RiskEngine.cpp  # Replace with your actual risk engine source files
 )
 
-set(PYTHON_WRAPPER_SOURCES
-        src/PythonWrapper/PythonWrapper.cpp
-)
-
+# Ensure model, pricing_engine, and risk_engine are built
 add_library(model ${MODEL_SOURCES})
 target_include_directories(model PUBLIC ${CMAKE_SOURCE_DIR}/include/Model)
 
@@ -43,32 +48,36 @@ target_include_directories(pricing_engine PUBLIC ${CMAKE_SOURCE_DIR}/include/Pri
 add_library(risk_engine ${RISK_ENGINE_SOURCES})
 target_include_directories(risk_engine PUBLIC ${CMAKE_SOURCE_DIR}/include/RiskEngine)
 
-# Setup pyquantlibrary
-add_library(pyquantlibrary SHARED ${PYTHON_WRAPPER_SOURCES})
+add_library(pyquantlibrary MODULE ${PYTHON_WRAPPER_SOURCES})
+
+# Set library output directory for all libraries
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set_target_properties(model pricing_engine risk_engine PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH})
+
+# Include directories for Python, Boost, pybind11, and other relevant headers
 target_include_directories(pyquantlibrary PRIVATE
         ${Python3_INCLUDE_DIRS}
-        ${Boost_INCLUDE_DIRS}
+        ${pybind11_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/include/Instrument
         ${CMAKE_SOURCE_DIR}/include/Model
         ${CMAKE_SOURCE_DIR}/include/PricingEngine
         ${CMAKE_SOURCE_DIR}/include/RiskEngine
 )
-target_link_libraries(pyquantlibrary PRIVATE ${Python3_LIBRARIES} Boost::python model pricing_engine risk_engine)
 
-# Create the main executable
-add_executable(quant_library_main src/main.cpp)
-target_link_libraries(quant_library_main PRIVATE model pricing_engine risk_engine)
+# Link libraries for Python, pybind11, and any other dependencies
+target_link_libraries(pyquantlibrary PRIVATE
+        ${Python3_LIBRARIES}
+        pybind11::module
+        model
+        pricing_engine
+        risk_engine
+)
 
-# Set versioning properties for all targets, including the wrapper
-set_target_properties(model PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(pricing_engine PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(risk_engine PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(quant_library_main PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(pyquantlibrary PROPERTIES VERSION ${PROJECT_VERSION} OUTPUT_NAME "pyquantlibrary" PREFIX "")
-
-# Configure packaging (if needed)
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-set(CPACK_GENERATOR "TGZ;ZIP")  # Example: you can add other formats like "TGZ", "ZIP", etc.
-include(CPack)
+# Set versioning properties for the target
+set_target_properties(pyquantlibrary PROPERTIES
+        VERSION ${PROJECT_VERSION}
+        OUTPUT_NAME "pyquantlibrary"
+        PREFIX ""
+        SUFFIX ".so"
+)
