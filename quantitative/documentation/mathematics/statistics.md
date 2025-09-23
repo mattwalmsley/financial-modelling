@@ -14,12 +14,16 @@
   - [Probability Theory](#probability-theory)
     - [Probability Concepts](#probability-concepts)
     - [Set Theory in Probability](#set-theory-in-probability)
-      - [Set Theory Definitions](#set-theory-definitions)
+      - [Set Theory Definitions Summary](#set-theory-definitions-summary)
         - [Set Notation](#set-notation)
       - [Set Theory Examples](#set-theory-examples)
-    - [Finite Probability](#finite-probability)
-      - [Axioms of Probability](#axioms-of-probability)
-      - [Properties of Probability](#properties-of-probability)
+    - [Finite Probability Spaces](#finite-probability-spaces)
+    - [Inclusion-Exclusion Forumula](#inclusion-exclusion-forumula)
+    - [Addition Rule of Probabilities](#addition-rule-of-probabilities)
+    - [Independent Events](#independent-events)
+    - [Example: Tossing a Coin](#example-tossing-a-coin)
+    - [Axioms of Probability](#axioms-of-probability)
+    - [Properties of Probability](#properties-of-probability)
       - [Finite Probability Examples](#finite-probability-examples)
         - [Single Die Roll](#single-die-roll)
         - [Hiring Example](#hiring-example)
@@ -31,7 +35,7 @@
 - Fundamentally, financial entities are looking to profit from changes in asset values whilst minimising the risk of loss.
 - **Time series** is the main form of financial data, with a time-dependent variable $V$ representing an asset's value at a time $t$.
 $$V(t_{1}), V(t_{2}), ...,V(t_{n-1}), V(t_{n})$$
-- The unit of time can vary from miliseconds to years, but should be consistent when working with a time series dataset.
+- The unit of time can vary from milliseconds to years, but should be consistent when working with a time series dataset.
 - For the purpose of financial analysis, **asset returns** are more useful than outright asset values/prices.
 - **Gross rate of return** $r(t)$ represents the *percentage change* between two prices at times $t$ and $t-1$, and is calculated by $r(t) = \frac{P(t) - P(t-1)}{P(t-1)}$.
   - In other words, the gross rate of return is a measure of the *relative return* as a fraction of the value at $t-1$ realized on the asset from $t-1$ to $t$.
@@ -173,7 +177,60 @@ Probability theory has evolved to model uncertainty, providing both an abstract 
 
 In probability, outcomes of a random experiment are modelled as sets, which are collections of elements. These sets help formalize and analyze the behaviour of random experiments and their possible outcomes.
 
-#### Set Theory Definitions
+- An empty set is a set that contains no elements, denoted as $\emptyset$ and defined as $\emptyset = \{\}$.
+- The **set complement** is for outcomes that are not an element of $A$ and is given by $\bar{A}$ which is defined as $\bar{A}=\Omega \setminus A = \omega \in \Omega : \omega \notin A$.
+  - The $:$ can be read as "such that".
+- Two sets are considered *equal* $A = B$ if they contain exactly the same elements. This can be expressed as:
+  - $\omega \in A \Longleftrightarrow  \omega \in B$
+  - If $\omega$ in $A$ then $\omega$ is in $B$ and vice versa.
+- If every element of set $A$ is also an element of set B, then $A$ is a **subset** of B, denoted as $A \subset B$
+  - Usually this includes the case where $A$ and $B$ are equal $A = B$.
+  - However, to emphasize that $A$ is a subset of $B$ but not equal to B, we can use the notation $A \subsetneq B$.
+  - Similarly, if $A=B$, the notation $A \subseteq B$ can be used to indicate that $A$ is a subset of B, and possibly equal to $B$.
+- The **union** of two sets $A$ and $B$ represents everything in $A$ and everything in $B$ and is given by $A \cup B$ which is defined as:
+  - $A \cup B = \{ \omega \in \Omega: \omega \in A \text{ or } \omega \in B  \text{ or both}\}$
+  - For $n$ sets $\bigcup_{i=1}^{n} A_i = A_1 \cup A_2 \cup ... \cup A_n$
+
+    ![Union Venn Diagram](../images/venn-union.png "Union Venn Diagram")
+
+- The **intersection** of two sets $A$ and $B$ is the set of all elements common to both $A$ and B$ and is given by $A \cap B$ which is defined as:
+  - $A \cap B = \{ \omega \in \Omega: \omega \in A \text{ and } \omega \in B\}$
+  - For $n$ sets $\bigcap_{i=1}^{n} A_i = A_1 \cap A_2 \cap ... \cap A_n$
+
+    ![Intersection Venn Diagram](../images/venn-intersection.png "Intersection Venn Diagram")
+
+- Two sets $A$ and $B$ are **disjoint** if they have no elements in common, which means their intersection is the empty set: $A \cap B = \emptyset$.
+
+    ![Disjoint Venn Diagram](../images/venn-disjoint.png "Disjoint Venn Diagram")
+
+- A **partition** is a way of describing what is ***knowable*** at a particular time about the actual outcome of an experiment.
+  - A partition $\mathcal{U}$ of $\Omega$ is a set of non-empty events $A_{1}, A_{2}, ..., A_{n}$ such that each outcome $\omega$ appears in exactly one event.
+    - $A_{i} \neq \emptyset$ for all $A_{i} \in \mathcal{U}$
+    - $A_i \cap A_j = \emptyset$ for all $i \neq j$
+    - $\bigcup_{i=1}^{n} A_i = \Omega$
+  - This means that the events are disjoint (or the events are incompatible).
+  - A partition $\mathcal{U}$ is described as *finer* than another partition $\mathcal{V}$ if for all $A \in \mathcal{U}$, there exists some event $B \in \mathcal{V}$ such that $A \subset B$.
+    - Equivalently, every event in $\mathcal{V}$ can be expressed as a union of events in $\mathcal{U}$.
+  - Similarly, a partition $\mathcal{U}$ is described as *coarser* than another partition $\mathcal{V}$ if for all $B \in \mathcal{V}$, there exists some event $A \in \mathcal{U}$ such that $B \subset A$.
+
+    ![Partition Venn Diagram](../images/partition.png "Partition Venn Diagram")
+
+    $$\Omega = \{a,b,c,d,e,f\} = A_1 \cup A_2 \cup A_3 = \{a,b\} \cup \{c,d\} \cup \{e,f\}$$
+    where $\mathcal{U} = \{A_1, A_2, A_3\} = \{\{a,d\},\{b,c,e\},\{f\}\}$ is a partition of $\Omega$.
+  - For a coin that is tossed three times, and only the result of the first toss is known, the partition for what is *knowable* after the first toss is given by:
+    $$\mathcal{U_1} = \{ A_h, A_t \}$$
+    where
+    $$A_h = \{\omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}\}$$
+    $$A_t = \{\omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt}\}$$
+  - Similarly, if the result of the first two tosses is known, the partition for what is *knowable* after the second toss is given by:
+    $$\mathcal{U_2} = \{ A_{hh}, A_{ht}, A_{th}, A_{tt} \}$$
+    where
+    $$A_{hh} = \{\omega_{hhh}, \omega_{hht}\}$$
+    $$A_{ht} = \{\omega_{hth}, \omega_{htt}\}$$
+    $$A_{th} = \{\omega_{thh}, \omega_{tht}\}$$
+    $$A_{tt} = \{\omega_{tth}, \omega_{ttt}\}$$
+
+#### Set Theory Definitions Summary
 
 1. **Set**:
    - A collection of elements, which could be anything from numbers to abstract objects.
@@ -220,17 +277,114 @@ Both notations are context-dependent, and familiarity with both is important.
    - Event $A$: Rolling an even number.
      - $A = \{2, 4, 6\}$.
 
-### Finite Probability
+### Finite Probability Spaces
+
+- A **sample space** is the of all outcomes within a random system where there are a finite set of outcomes. The sample space is denoted as $\Omega$.
+- A typical outcome is denoted as $\omega$ and $\omega \in \Omega$ is used to indicate that $\omega$ is an **element** of the sample space $\Omega$.
+- An **event** is a set of possible outcomes and (equivalently) an event of the sample space $\Omega$.
+
+| Probability Theory | Set Theory |
+|:------------------:|:----------:|
+| Sample Space $\Omega$ | Universal Set $U$ |
+| Outcome $\omega$ | Element $x$ |
+| Event $A$ | Subset $A$ |
+
+- A *probability measure* assigns to each outcome $\omega \in \Omega$ a number $P(\omega) \in [0,1]$ such that:
+  $$\boxed{\sum_{\omega \in \Omega} P(\omega) = 1}$$
+  where $0 \leq P(\omega) \leq 1$ for all $\omega \in \Omega$.
+- The probability of an event $A$ is defined as:
+  $$\boxed{P(A) = \sum_{\omega \in A} P(\omega)}$$
+  - In particular:
+    - $P(\emptyset) = 0$ (the empty event cannot occur).  
+    - $P(\Omega) = 1$ (the whole sample space occurs with certainty).  
+- The pair $(\Omega, P)$ is called a **finite probability space**.
+  - For finite probability spaces, any outcome $\omega$ with $P(\omega) = 0$ is called an **impossible outcome** and can never occur.
+  - Typically, assume that $P(\omega) > 0$ for all outcomes, $\omega \in \Omega$.
+
+### Inclusion-Exclusion Forumula
+
+- For two events $A$ and $B$, the inclusion-exclusion formula is given by:
+
+$$\boxed{P(A \cup B) = P(A) + P(B) - P(A \cap B)}$$
+
+- This formula accounts for the overlap between events $A$ and $B$ to avoid double counting the outcomes in the intersection $A \cap B$.
+
+![Union Venn Diagram](../images/venn-union.png "Union Venn Diagram")
+
+### Addition Rule of Probabilities
+
+- If two event $A$ and $B$ are disjoint (i.e. if $A \cap B = \emptyset$), then the addition rule of probabilities states that:
+
+$$\boxed{P(A \cup B) = P(A) + P(B)}$$
+
+![Disjoint Venn Diagram](../images/venn-disjoint.png "Disjoint Venn Diagram")
+
+- The probability of not $A$ is given by: $P(\bar{A}) = 1 - P(A)$
+
+- Let $\Omega$ be a finite sample space with probability measure $P$ and suppose $\{A_1, A_2, \dots, A_n\}$ is a **partition** of $\Omega$, i.e.
+  - $A_i \cap A_j = \emptyset$ for all $i \neq j$ (pairwise disjointness),  
+  - $\bigcup_{i=1}^n A_i = \Omega$ (covering the whole space).
+
+$$P(\Omega) = P\left(\bigcup_{i=1}^{n} A_i\right) = \sum_{i=1}^{n} P(A_i) = \sum_{i=1}^{n} \sum_{\omega=A_i}P(\omega) = \sum_{\omega \in \Omega}P(\omega) = 1$$
+
+- The partition breaks the sample space into disjoint events.
+- Because of disjointness, probabilities add without double-counting.
+- Since each event probability is itself the sum of probabilities of its outcomes, the result collapses back to the normalisation condition: the total probability of the sample space equals $1$.
+
+### Independent Events
+
+- Two events $A$ and $B$ are **statistically independent** by definition if:
+
+$$\boxed{P(A \cap B) = P(A)P(B)}$$
+
+### Example: Tossing a Coin
+
+- Tossing a coin three times can be modelled as a finite probability space.
+- The sample space is given by:
+  $$\Omega = \{ \omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}, \omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt} \}$$
+  where $h$ represents heads and $t$ represents tails.
+- An example event $A$ is the set of outcomes where the first toss is heads:
+  $$A = \{ \omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt} \}$$
+- If the coin is biased where $p_{h}$ is the probability of headers and $p_{t} = 1 - p_{h}$ is the probability of tails, then the probability measure $P$ is given by:
+  $$P(\omega_{hhh}) = p_{h}^3$$
+  $$P(\omega_{hht}) = p_{h}^2 p_{t}$$
+  $$P(\omega_{hth}) = p_{h}^2 p_{t}$$
+  $$P(\omega_{htt}) = p_{h} p_{t}^2$$
+  $$P(\omega_{thh}) = p_{h}^2 p_{t}$$
+  $$P(\omega_{tht}) = p_{h} p_{t}^2$$
+  $$P(\omega_{tth}) = p_{h} p_{t}^2$$
+  $$P(\omega_{ttt}) = p_{t}^3$$
+
+- Let $A_{h}$ be the event that the first toss is heads, then:
+
+```math
+\begin{aligned}
+P(A_{h}) &= \sum_{\omega \in A_{h}} P(\omega) \\\\
+&= P(\omega_{hhh}) + P(\omega_{hht}) + P(\omega_{hth}) + P(\omega_{htt}) \\\\
+&= p_{h}^3 + p_{h}^2 p_{t} + p_{h}^2 p_{t} + p_{h} p_{t} \\\\
+&= p^2h(p_{h} + p_{t}) + p_{h}p_{t}(p_h+p_t) \\\\
+&= p_{h}^2 + p_{h}p_{t} \\\\
+&= p_{h}(p_{h} + p_{t}) \\\\
+&= p_{h}(1) \\\\
+&= p_{h}
+\end{aligned}
+```
+
+- Similarly, let $B$ be the event that the second toss is heads, and $C$ be the event that the third toss is heads, then:
+  $$P(B) = P(\omega_{hhh}) + P(\omega_{hht}) + P(\omega_{thh}) + P(\omega_{tht}) = p_{h}^3 + p_{h}^2 p_{t} + p_{h}^2 p_{t} + p_{h} p_{t}^2 = p_{h}$$
+  $$P(C) = P(\omega_{hhh}) + P(\omega_{hth}) + P(\omega_{thh}) + P(\omega_{tth}) = p_{h}^2 p_{t} + p_{h} p_{t}^2 + p_{h} p_{t}^2 + p_{t}^3 = p_{t}$$
+  $$P(B \cap C) = P(\omega_{hht}) + P(\omega_{tht}) = p_{h}^2 p_{t} + p_{h} p_{t}^2 = p_{h}p_{t}$$
+  $$\therefore P(B \cap C) = P(B)P(C)$$
+
+### Axioms of Probability
 
 In the finite case, **probability** is modelled as a function $P(A)$ that assigns real numbers between $0$ and $1$ to subsets of a **sample space** $S$. The function $P$ is defined using the following axioms:
-
-#### Axioms of Probability
 
 1. **Non-negativity**: For any event $A \subseteq S$, $P(A) \geq 0$.
 2. **Total Probability**: $P(S) = 1$.
 3. **Additivity**: For disjoint events $A$ and $B$, $P(A \cup B) = P(A) + P(B)$.
 
-#### Properties of Probability
+### Properties of Probability
 
 These axioms lead to several useful properties:
 
