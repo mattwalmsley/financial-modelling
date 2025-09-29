@@ -21,6 +21,12 @@
   - [General Probability Spaces](#general-probability-spaces)
   - [Discrete Random Variables](#discrete-random-variables)
     - [Probability Distribution](#probability-distribution)
+      - [Probability Distribution of a Coin Toss](#probability-distribution-of-a-coin-toss)
+    - [Binomial Distribution](#binomial-distribution)
+    - [Bernoulli Distribution](#bernoulli-distribution)
+    - [Equality of Random Variables](#equality-of-random-variables)
+    - [Random Variables Defining Events](#random-variables-defining-events)
+    - [Random Variables Defining Partitions](#random-variables-defining-partitions)
 
 Probability theory has evolved to model uncertainty, providing both an abstract system of thought and practical tools for quantifying likelihoods. While it can be studied as a purely theoretical branch of mathematics, its significance is closely tied to real-world applications.
 
@@ -384,3 +390,83 @@ A **general probability space** is a triple $(\Omega, \mathcal{F}, P)$ where:
   - However, not all discrete random variables come from finite sample spaces: for example, a Poisson random variable takes values in $\{0,1,2,3,\dots\}$, which is countably infinite.
 
 ### Probability Distribution
+
+- A random variable can be characterised by its **probability distribution**, given a particular probability measure $P$ on the sample space $\Omega$.
+- The probability distribution of a discrete random variable $X$ is defined by the set of probabilities of individual values:
+
+$$\boxed{p_i = P(X = x_i) = P(\{\omega \in \Omega : X(\omega) = x_i\})}$$
+where $X=x_i$ is the event that the random variable $X$ takes the value $x_i$.
+
+- The underlying space $\Omega$ can have many random variables defined on it, each with its own probability distribution.
+- A random variable is a function $\Omega \to \mathbb{R}$, so technically speaking it does *not* include any information about the probabilities.
+- A random variable can take the same value for different outcomes $\omega$ and the probability distribution by itself does not tell us which outcomes correspond to which values.
+- Changing the probability measure $P$ on $\Omega$ will change the probability distribution of the random variable $X$.
+
+- The probability space and random variable $X$ can be represented as a table:
+
+| Outcome $\omega$ | $P(\omega)$ | $X(\omega)$ |
+|:----------------:|:-----------:|:----------:|
+| $\omega_1$       | $p_1$       | $x_1$      |
+| $\omega_2$       | $p_2$       | $x_2$      |
+| $\vdots$         | $\vdots$    | $\vdots$   |
+| $\omega_n$       | $p_n$       | $x_n$      |
+
+#### Probability Distribution of a Coin Toss
+
+- For a biased coin, the probability space and random variable $X$ (number of heads in three tosses) is given by:
+
+| Outcome $\omega$ | $P(\omega)$  | $X(\omega)$ (Number of Heads) |
+|:----------------:|:------------:|:-----------------------------:|
+| $\omega_{hhh}$   | $p_h^3$      | 3                             |
+| $\omega_{hht}$   | $p_h^2 p_t$  | 2                             |
+| $\omega_{hth}$   | $p_h^2 p_t$  | 2                             |
+| $\omega_{thh}$   | $p_h^2 p_t$  | 1                             |
+| $\omega_{htt}$   | $p_h p_t^2$  | 2                             |
+| $\omega_{tht}$   | $p_h p_t^2$  | 1                             |
+| $\omega_{tth}$   | $p_h p_t^2$  | 1                             |
+| $\omega_{ttt}$   | $p_t^3$      | 0                             |
+
+- The outcome column is referred to as the **sample space**.
+- The outcome column and the probability column together are referred to as a **finite probability space**.
+- The outcome column and the number of headers column together are referred to as a **random variable**
+
+- The resulting **probability distribution** of $X$ is calculating by summing the probabilities of outcomes that yield the same value of $X$:
+
+| $X=x_i$ (Number of Heads) | $P(X=x_i)$                     |
+|:-------------------------:|:------------------------------:|
+| 0                         | $P(X=0) = P(\omega_{ttt}) = p_t^3$ |
+| 1                         | $P(X=1) = P(\omega_{tht}) + P(\omega_{tth}) + P(\omega_{htt}) = 3 p_h p_t^2$ |
+| 2                         | $P(X=2) = P(\omega_{hht}) + P(\omega_{hth}) + P(\omega_{thh}) = 3 p_h^2 p_t$ |
+| 3                         | $P(X=3) = P(\omega_{hhh}) = p_h^3$ |
+
+### Binomial Distribution
+
+- In general, for $N$ independet tosses of a unbiased coin, the probability of getting exactly $i$ heads is given by:
+
+$$\boxed{p_i = P(X=i) = \binom{N}{i} p_h^i p_t^{N-i} \text{ for } i=0, 1, 2, \dots, N}$$
+where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, representing the number of ways to choose $i$ heads from $N$ tosses.
+
+- The binomial distribution is denoted as $\mathcal{B}(N, p_h)$, and the random variable $X$ can be written as $X \sim \mathcal{B}(N, p_h)$ to mean that $X$ follows a binomial distribution with parameters $N$ and $p_h$.
+
+### Bernoulli Distribution
+
+- A special case of the binomial distribution is when $N=1$, which is known as the **Bernoulli distribution**.
+- $P(X=0) = 1 - p$ and $P(X=1) = p$.
+
+### Equality of Random Variables
+
+- Two random variables, $X$ and $Y$ are equal if $X(\omega) = Y(\omega)$ for all $\omega \in \Omega$.
+  - Random variables that are not equal can still have the same probability distribution.
+
+### Random Variables Defining Events
+
+- A random variable can be used to define (or determine) an event.
+- The notation ${X = x_i}$ is used to denote the event $\{\omega \in \Omega: X(\omega) = x_i\}$ where the random variable $X$ takes the value $x_i$.
+- In the coin toss example where $X$ is the number of heads, the event ${X = 2}$ is given by:
+  $$\{X = 2\} = \{\omega_{hht}, \omega_{hth}, \omega_{thh}\}$$
+
+### Random Variables Defining Partitions
+
+- A random variable $X$ can take the values $x_1, x_2, \dots, x_k$.
+- $\mathcal{U}$ is the partition defined (or determined, or generated) by the random variable $X$.
+- $\mathcal{U} = \{\{X=x_i\}\}$ is a partitiion of $\Omega$, or in other words $\mathcal{U} = \{B_1, B_2, \dots, B_k\}$ where $B_i = \{\omega \in \Omega: X(\omega) = x_i\}$.
