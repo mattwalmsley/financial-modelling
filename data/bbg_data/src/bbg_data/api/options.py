@@ -72,6 +72,7 @@ class OptionChainFetcher:
         self,
         underlying: str,
         chain_filter: OptionChainFilter | None = None,
+        as_of_date: date | None = None,
     ) -> list[str]:
         """
         Get list of option tickers for an underlying security.
@@ -79,6 +80,7 @@ class OptionChainFetcher:
         Args:
             underlying: Bloomberg ticker of underlying (e.g., "NVDA US Equity")
             chain_filter: Optional filter criteria
+            as_of_date: Date to fetch option chain as-of (uses current date if None)
 
         Returns:
             List of option ticker strings
@@ -90,13 +92,20 @@ class OptionChainFetcher:
             ...     expiry_end=date(2025, 12, 31)
             ... )
             >>> tickers = fetcher.get_option_chain("NVDA US Equity", filter)
+            >>> # Fetch option chain as of specific date
+            >>> tickers = fetcher.get_option_chain("AAPL US Equity", None, date(2023, 8, 12))
         """
         logger.info(f"Fetching option chain for {underlying}")
 
         # Request OPT_CHAIN field
+        overrides = None
+        if as_of_date:
+            overrides = {"SINGLE_DATE_OVERRIDE": as_of_date.strftime("%Y%m%d")}
+
         request = self.request_builder.create_reference_request(
             securities=[underlying],
             fields=[BloombergField.OPT_CHAIN],
+            overrides=overrides,
         )
 
         self.session.send_request(request)
@@ -369,6 +378,7 @@ def fetch_option_chain(
     expiry_date: str | date,
     fields: list[BloombergField] | None = None,
     strike_range: tuple[float | None, float | None] = (None, None),
+    as_of_date: date | None = None,
 ) -> pd.DataFrame:
     """
     Convenience function to fetch option chain data for any underlying security.
@@ -378,6 +388,7 @@ def fetch_option_chain(
         expiry_date: Target expiration date (e.g., "11/21/25" or date object)
         fields: Fields to fetch (uses defaults if None)
         strike_range: (min_strike, max_strike) tuple for filtering
+        as_of_date: Date to fetch option chain as-of (uses current date if None)
 
     Returns:
         DataFrame with option market data
@@ -385,6 +396,8 @@ def fetch_option_chain(
     Example:
         >>> df = fetch_option_chain("NVDA US Equity", "11/21/25")
         >>> df = fetch_option_chain("AAPL US Equity", "12/20/24", strike_range=(150.0, 200.0))
+        >>> # Fetch option chain as of specific historical date
+        >>> df = fetch_option_chain("AAPL US Equity", "12/20/23", as_of_date=date(2023, 8, 12))
         >>> calls = df[df['option_type'] == 'CALL']
     """
     # Parse expiry date
@@ -403,7 +416,7 @@ def fetch_option_chain(
         fetcher = OptionChainFetcher(bbg_session)
 
         # Get option chain
-        tickers = fetcher.get_option_chain(underlying, chain_filter)
+        tickers = fetcher.get_option_chain(underlying, chain_filter, as_of_date)
 
         if not tickers:
             logger.warning(f"No options found for expiry {expiry_date}")

@@ -41,6 +41,7 @@ class RequestBuilder:
         self,
         securities: list[str],
         fields: list[BloombergField],
+        overrides: dict[str, str] | None = None,
     ) -> blpapi.Request:
         """
         Create a reference data request.
@@ -48,6 +49,7 @@ class RequestBuilder:
         Args:
             securities: List of Bloomberg tickers
             fields: List of fields to request
+            overrides: Optional dictionary of override fields and values
 
         Returns:
             Bloomberg request object
@@ -59,6 +61,14 @@ class RequestBuilder:
 
         for field in fields:
             request.append("fields", field.value)
+
+        # Add overrides if provided
+        if overrides:
+            overrides_element = request.getElement("overrides")
+            for field_name, value in overrides.items():
+                override = overrides_element.appendElement()
+                override.setElement("fieldId", field_name)
+                override.setElement("value", value)
 
         return request
 
