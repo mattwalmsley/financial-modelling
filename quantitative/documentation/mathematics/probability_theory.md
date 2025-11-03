@@ -470,3 +470,4 @@ where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, represen
 - A random variable $X$ can take the values $x_1, x_2, \dots, x_k$.
 - $\mathcal{U}$ is the partition defined (or determined, or generated) by the random variable $X$.
 - $\mathcal{U} = \{\{X=x_i\}\}$ is a partitiion of $\Omega$, or in other words $\mathcal{U} = \{B_1, B_2, \dots, B_k\}$ where $B_i = \{\omega \in \Omega: X(\omega) = x_i\}$.
+- For the random 
