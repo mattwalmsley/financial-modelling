@@ -62,7 +62,7 @@ $$V(t) = \sum_{i=1}^{N}\alpha_{i}S_{i}(t)$$
   - A lump sum of cash $X$ can be represented in a portfolio's value expression by $Xe^{rt}$, assuming it was brought into the portfolio at time $t=0$.
 - Similarly, any debt in the portfolio can be represented as a negative cash allocation.
   - A debt of $X$, taken on at time $t = 0$ at the risk-free interest rate $r$, would be represented by $-Xe^{rt}$.
-  - The value of a portfolio containing $n$ assets with values $S_{i}(t)$ for $i = 1 ... n$ and a debt of value of $Xe^{rt}$ would be:
+  - The value of a portfolio containing $n$ assets with values $S_{i}(t)$ for $i = 1 \dots n$ and a debt of value of $Xe^{rt}$ would be:
 $$V(t) = \sum_{i=1}^{N}S_{i}(t) - Xe^{rt}$$
 - The portfolio could have a negative value if $Xe^{rt} > \sum_{i=1}^{N}S_{i}(t)$ at some time $t$.
   - The owner of a portfolio with a negative value would need to pay any potential buyers of the portfolio.

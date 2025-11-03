@@ -49,7 +49,7 @@
 > A **stochastic process** is a family of random variables $X(t)$ indexed by a parameter $t$ that can be interpreted as time.
 
 - Stochastic processes can be categorised as being **discrete-time** stochastic processes where the process evolves at specific/discrete times ($X_{1}$ at $t_{1}$, $X_{2}$ at $t_{2}$, etc.) and as **continuous-time** stochastic processes where the process continuously evolves over time where $t \geq 0$.
-- Continuous-time stochastic processes are defined by specifying joint probability distribution for the random variables $X(t_{1})$, $X(t_{2})$,...etc. at arbitrary times $t_{1}$, $t_{2}$,...etc.
+- Continuous-time stochastic processes are defined by specifying joint probability distribution for the random variables $X(t_{1})$, $X(t_{2})$,\dotsetc. at arbitrary times $t_{1}$, $t_{2}$,\dotsetc.
   - [Brownian motion](#brownian-motion), the random motion of particles suspended in a medium, is denoted as $W(t)$ and the following assumptions are made:
     - For times $t_{1} < t_{2} < t_{3}$, the random variables $W(t_{2}) - W(t_{1})$ and $W(t_{3}) - W(t_{2})$ are independent.
     - For any times $t_{1} < t_{2}$ the random variables can be modelled by a normal distribution with mean 0 and variance $t_{2} - t_{1}$, i.e. in notation form: $W(t_{2}) - W(t_{1}) \sim \mathcal{N}(0, t_{2} - t_{1})$.
@@ -65,12 +65,12 @@ $$\text{Prob}(X_{j} = +1) = \frac{1}{2}$$
 $$\text{Prob}(X_{j} = -1) = \frac{1}{2}$$
 - The random walk of $n$ steps is therefore defined as:
 $$S_{n} = \sum_{j=1}^{n}X_{j}$$
-- In financial terms, $X(j) \equiv P(t_{j})$ could be the prices of a financial asset on a business day $t_{j}$ assuming $t_{1}$, $t_{2}$,... etc. are successive business days.
+- In financial terms, $X(j) \equiv P(t_{j})$ could be the prices of a financial asset on a business day $t_{j}$ assuming $t_{1}$, $t_{2}$,\dots etc. are successive business days.
 
 ## Time Series Statistics
 
-- For a time series: $...X(t_{0}), X(t_{0}+1), X(t_{0}+2),..., X(t_{0}+k)...$ where $X(t)$ is the price of an asset observed at time $t$ and $t_{0}$, $(t_{0}+1)$, $(t_{0}+2)$,...etc. are consecutive business days.
-- The joint distribution of $(X(k), X(k+1),..., X(k+j))$ is said to be **strictly stationary** if the distribution only changes with $j$ and not $k$ - i.e. with the number of successive observations and not the point in time that these observations are made.
+- For a time series: $\dotsX(t_{0}), X(t_{0}+1), X(t_{0}+2),\dots, X(t_{0}+k)\dots$ where $X(t)$ is the price of an asset observed at time $t$ and $t_{0}$, $(t_{0}+1)$, $(t_{0}+2)$,\dotsetc. are consecutive business days.
+- The joint distribution of $(X(k), X(k+1),\dots, X(k+j))$ is said to be **strictly stationary** if the distribution only changes with $j$ and not $k$ - i.e. with the number of successive observations and not the point in time that these observations are made.
   - In simpler terms, the joint distribution of a set of observations in the time series is the same regardless of when or where in the time series the observation is made.
 - This leads to the assumption that $X(k)$ has the same distribution as $X(1)$ and that $(X(k), X(k+1))$ has the same distribution as $(X(1), X(2))$ etc.
 - In practice strict stationarity is reduced to **stationarity** so that this principle holds up only to *second moments* - i.e. only as far as *variance* and *covariance* are concerned.
@@ -79,13 +79,13 @@ $$S_{n} = \sum_{j=1}^{n}X_{j}$$
   - **Translation invariance** defines the observation to be independent of time, such that $\gamma (k+t,\mathcal{l}+t) = \gamma (k,\mathcal{l})$.
   - $\text{cov}(X(k),X(\mathcal{l}))$ only depends on the lag $\mathcal{l}-k$.
 - *Stationarity* implies the following:
-  - The covariance of any two successive observations is the same, such that $\text{cov}(X(0),X(1)) = \text{cov}(X(1),X(2)) = \text{cov}(X(2),X(3))=...= \text{cov}(X(k),X(k+1))$
+  - The covariance of any two successive observations is the same, such that $\text{cov}(X(0),X(1)) = \text{cov}(X(1),X(2)) = \text{cov}(X(2),X(3))=\dots= \text{cov}(X(k),X(k+1))$
   - The covariance is also equal where the lag between the observations is equal, such that $\text{cov}(X(0),X(5)) = \text{cov}(X(1),X(6))$ etc.
-  - The variances are also equal for all observations, such that $\text{Var}(X(0)) = \text{Var}(X(1))=...= \text{Var}(X(k))$.
+  - The variances are also equal for all observations, such that $\text{Var}(X(0)) = \text{Var}(X(1))=\dots= \text{Var}(X(k))$.
 - The autocovariance function for the *stationary* case can therefore be denoted as $\gamma (k) \equiv \text{cov}(X(k),X(t+k))$ as this is independent of $t$.
 - Given that, for a stationary time series, the covariance between two terms in the series only depends on the lag between, the **autocorrelation** function for a stationary time series is defined as $\rho(k) = \text{corr}(X(t),X(t+k)) = \frac{\gamma(k)}{\gamma(0)}$ which is also independent of $t$.
   - $\rho(0) = 1$ for any time series.
-- The **sample autocovariance** and **sample autocorrelations** function, given a realized sample of a time series: $x(1)$, $x(2)$,..., $x(t)$,..., $x(N)$ with $N$ observations, are defined as follows:
+- The **sample autocovariance** and **sample autocorrelations** function, given a realized sample of a time series: $x(1)$, $x(2)$,\dots, $x(t)$,\dots, $x(N)$ with $N$ observations, are defined as follows:
   - The sample mean for this series will be $\bar{x} = \frac{1}{N} \sum_{i=1}^{N} x(i)$
   - The **sample autocovariance** function is $\hat{\gamma}(k) = \frac{1}{N} \sum_{i=1}^{N-k}(x(i)-\bar{x})(x(i+k)-\bar{x})$
   - The **sample autocorrelation** function is $\hat{\rho}=\frac{\hat{\gamma}(k)}{\hat{\gamma}(0)}$
@@ -159,10 +159,10 @@ $$
 r_{k}(t) &= \log(P(t)) - \log(P(t-1)) \\
 &+ \log(P(t-1)) - \log(P(t-2)) \\
 &+ \log(P(t-2)) - \log(P(t-3)) \\
-&+ ...  \\
+&+ \dots  \\
 &+ \log(P(t-k+1)) - \log(P(t-k)) \\\\
 
-r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + ... + r(t-k+1) \\\\
+r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + \dots + r(t-k+1) \\\\
 r_{k}(t) &= \sum_{i=0}^{k-1}r(t-i)
 \end{aligned}
 $$
@@ -197,7 +197,7 @@ $$
 
 $$
 \begin{aligned}
-r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + ... + r(t-k+1) \\\\
+r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + \dots + r(t-k+1) \\\\
 r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 &= 2.41 \% -3.67 \% + 2.88 \% - 0.80 \% + 0.40 \% \\
 &= \boxed{1.22 \%}
@@ -230,7 +230,7 @@ $$
 
 - Taking a random walk to be the movement of an autonomous particle which, depending on the outcome of flipping a coin, is able to move up (heads) or down (tails) 1 level.
   - The starting point is level 0.
-  - The levels are assumed to be a range of integers $...,-2,-1,0,1,2,...$
+  - The levels are assumed to be a range of integers $\dots,-2,-1,0,1,2,\dots$
 
   ![Random Walks](../images/random-walk.png "Random Walks")
 
@@ -253,7 +253,7 @@ $$
 \end{aligned}
 $$
 
-- The sequence of random moves $X_{1}, X_{2},...,X_{j},...,X_{n}$ are independent and identically distributed such that $\text{Prob}(X_{1} = y_{1}, X_{2} = y_{2},...,X_{n} = y_{n}) \equiv \text{Prob}(X_{1} = y_{1}) \text{Prob}(X_{2} = y_{2})...\text{Prob}(X_{n} = y_{n})$ where $y_{i}=+1$ or $y_{i} = -1$.
+- The sequence of random moves $X_{1}, X_{2},\dots,X_{j},\dots,X_{n}$ are independent and identically distributed such that $\text{Prob}(X_{1} = y_{1}, X_{2} = y_{2},\dots,X_{n} = y_{n}) \equiv \text{Prob}(X_{1} = y_{1}) \text{Prob}(X_{2} = y_{2})\dots\text{Prob}(X_{n} = y_{n})$ where $y_{i}=+1$ or $y_{i} = -1$.
 - For example, the probability of 2 up moves followed by a down move is:
 
 $$
@@ -268,7 +268,7 @@ $$
 
 $$
 \begin{aligned}
-S_{n} &= X_{1} + X_{2} +...+ X_{n} \\
+S_{n} &= X_{1} + X_{2} +\dots+ X_{n} \\
 &= \sum_{j=1}^{n}X_{j}
 \end{aligned}
 $$
@@ -285,7 +285,7 @@ $$
 
 ### The Binomial Distribution
 
-- Take a range of Bernoulli random variables $Y_{1}$, $Y_{2}$,..., $Y_{n}$ which are all independent and distributed as the Bernoulli distribution:
+- Take a range of Bernoulli random variables $Y_{1}$, $Y_{2}$,\dots, $Y_{n}$ which are all independent and distributed as the Bernoulli distribution:
 $$\text{Prob}(Y_{j}=1)=p \text{ and } \text{Prob}(Y_{j}=0)=q=1-p$$
 - Generally, $Y_{j}=1$ denotes success on the $j$'th trial, and similarly $Y_{j}=0$ denotes failure on the $j$'th trial with $p$ and $q$ denoting the probability of success and failure respectively.
 - The total number of successes in $n$ trials is defined as $Z_{n}$ so, given $Y_{j}=0$ for a failure, this leads to:
@@ -322,7 +322,7 @@ $$
 $$
 \begin{aligned}
 &\text{Prob}(S_{n}=2\mathcal{l}) = \frac{n!}{(m+\mathcal{l})!(m-\mathcal{l})!}p^{m+\mathcal{l}}q^{n-\mathcal{l}} \\
-\text{for } &\mathcal{l} = -m,-m+1,...,m-1,m
+\text{for } &\mathcal{l} = -m,-m+1,\dots,m-1,m
 \end{aligned}
 $$
 
@@ -448,7 +448,7 @@ $$
 \end{aligned}
 $$
 
-- Recall the properties of [Brownian motion](#brownian-motion) and the sequence of Brownian differences $W(t) - W(t-1), W(t+1) - W(t),...,W(t+k) - W(t+k-1)$ that are stationary and uncorrelated (independent).
+- Recall the properties of [Brownian motion](#brownian-motion) and the sequence of Brownian differences $W(t) - W(t-1), W(t+1) - W(t),\dots,W(t+k) - W(t+k-1)$ that are stationary and uncorrelated (independent).
   - Therefore, the $\log$ returns will also have these properties.
 - In summary, modelling $\log(S(t))$ as Brownian motion accomplishes the following:
   - Average asset price changes are proportional to the price level.

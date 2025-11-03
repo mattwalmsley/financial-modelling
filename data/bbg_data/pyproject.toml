@@ -1,0 +1,55 @@
+[project]
+name = "bbg-data"
+version = "0.1.0"
+description = "A robust, type-safe Python library for fetching Bloomberg data via blpapi"
+readme = "README.md"
+authors = [
+    { name = "Matt Walmsley", email = "matthewkjrwalmsley@hotmail.co.uk" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "blpapi>=3.24.0",
+    "pandas>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pyright>=1.1.0",
+    "ruff>=0.6.0",
+    "pandas-stubs>=2.0.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.4",
+    "pyright>=1.1.390",
+    "ruff>=0.8.4",
+    "pandas-stubs>=2.0.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = []
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+reportMissingTypeStubs = false
+include = ["src"]
+exclude = [
+    "**/__pycache__",
+    "**/node_modules",
+    ".venv",
+    "dist",
+    "build",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.11,<0.9.0"]
+build-backend = "uv_build"

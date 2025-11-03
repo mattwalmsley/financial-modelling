@@ -23,8 +23,8 @@
 
 ## Bond Pricing Model
 
-- There will be specified points of time in the future where interest will be paid. These can be denoted as $t_1$, $t_2$, ... , $t_N$.
-- The interest payments, commonly called **coupons**, made at these points in time can be denoted $c_1$, $c_2$, ... , $c_N$.
+- There will be specified points of time in the future where interest will be paid. These can be denoted as $t_1$, $t_2$, \dots , $t_N$.
+- The interest payments, commonly called **coupons**, made at these points in time can be denoted $c_1$, $c_2$, \dots , $c_N$.
   - *N.B. The **coupon rate** is the annualised interest rate that a bond pays, allowing for bonds with different periodic interest payments to be compared.*
 - The payment $c_N$ at time $t_N$ is the par value.
 - The bond holder receives this stream of payments and the bond can be valued through [discounted cash flow analysis](2_interest-rates.md#discounted-cash-flow-analysis).
@@ -70,14 +70,14 @@ $$y(T) = -\frac{\log(d(T))}{T}$$
 
 ### Building a Yield Curve
 
-- For $N$ fixed income securities with maturities at times $T_{1}, T_{2}, ..., T_{N}$, the yields are calculated from the respective market prices as: $y(T_{1}), y(T_{2}), ..., y(T_{N})$.
+- For $N$ fixed income securities with maturities at times $T_{1}, T_{2}, \dots, T_{N}$, the yields are calculated from the respective market prices as: $y(T_{1}), y(T_{2}), \dots, y(T_{N})$.
 - The times $T_{1}$ to $T_{N}$ are known as the **tenors** and are usually the maturities or expiration dates of the traded calibration instruments.
 - Interpolation is used to extend the yield curve from a finite set of tenors to the entire interval $T_{1}$ to $T_{N}$.
 
 ## Bootstrapping Spot Curves
 
 - Building a yield curve from real market data.
-- For a collection of $N$ bonds with maturities at times $T_{1} < T_{2} < ... < T_{N}$, and observable market prices $P_{1}, P_{2}, ..., P_{N}$:
+- For a collection of $N$ bonds with maturities at times $T_{1} < T_{2} < \dots < T_{N}$, and observable market prices $P_{1}, P_{2}, \dots, P_{N}$:
   - The discount curve $d(T)$ for $T \le T_{1}$ is calculated first to discount the coupons of bond 1 and find $P_{1}$.
   - The discount curve $d(T)$ for $T_{1} \le T \le T_{2}$ is calculated next using the values for $T \le T_{1}$ to discount the coupons of bond 2 and find $P_{2}$.
   - This process is repeated through all $N$ bonds to calculate $d(T)$ for $T \le T_{N}$.
@@ -117,10 +117,10 @@ $$
 - Similar to bond 2, the discounting equation for the market price of bond 3 is:
 
 $$
-P_{3} = d(1)(10000 \times 7\%) + d(2)((10000 \times 7\%) + 10000) \\ 
-d(2) = \frac{10507- (0.9637 \times 700)}{10700} \\ 
-\boxed{d(2) = 0.9189} \\ 
-y(2) = -\frac{\log(0.9189)}{2} \\ 
+P_{3} = d(1)(10000 \times 7\%) + d(2)((10000 \times 7\%) + 10000) \\
+d(2) = \frac{10507- (0.9637 \times 700)}{10700} \\
+\boxed{d(2) = 0.9189} \\
+y(2) = -\frac{\log(0.9189)}{2} \\
 \boxed{y(2) = 4.2\%}
 $$
 

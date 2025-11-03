@@ -174,11 +174,11 @@ $$P(t) = \frac{1}{d(t)}X = (1 + r)^tX$$
 
 ## Discounted Cash Flow Analysis
 
-- For an asset that pays amounts $c_1, c_2, ..., c_N$ (cash flows) at respective times $t_1, t_2, ..., t_N$, an individual payment $c_i$ will be made at time $t_i$.
+- For an asset that pays amounts $c_1, c_2, \dots, c_N$ (cash flows) at respective times $t_1, t_2, \dots, t_N$, an individual payment $c_i$ will be made at time $t_i$.
 - To value the asset, the present value of a stream of cash flows needs to be calculated.
 - The present value of an individual payment $c_i$ with discount factor $d(t_i)$ is $d(t_i)c_i$.
 - Model the present value of a stream of cash flows as the present value of an individual cash flow - i.e. the total amount that needs to be invested today to replicate the stream of cash flows.
-- Each cash flow is independent so the present value of the cash flow stream is the sum of the cash flows of the individual payment: $PV = d(t_1)c_1 + d(t_2)c_2 + ... + d(t_N)c_N$. More generally, this can be written as:
+- Each cash flow is independent so the present value of the cash flow stream is the sum of the cash flows of the individual payment: $PV = d(t_1)c_1 + d(t_2)c_2 + \dots + d(t_N)c_N$. More generally, this can be written as:
 $$PV = \sum_{i=1}^{N} d(t_i)c_i$$
 - For annual compounding where $r(t_i)$ is the annually compounded rate for term $t_i$, the present value is:
 $$PV = \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}}$$
@@ -247,7 +247,7 @@ $$PV = \sum_{i=1}^{N} e^{-\rho(t_i)t_i}c_i$$
 - The SONIA Compounded Index is defined as $I(t)$ on a business date $t$  where $S(t)$ is the SONIA rate for date $t$ and $\tau(t)$ is the number of calendar days between business dates $t$ and $t + 1$:
 $$I(t + 1) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right)$$
 - An iterative approach is taken by taking the value calculated for $I(t + 1)$ and substituting it back into the formula in place of $I(t)$. This leads to:
-$$I(t + m) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right) \times ... \times \left(1 + \frac{S(t + m - 1)\tau(t + m - 1)}{365}\right)$$
+$$I(t + m) = I(t) \times \left(1 + \frac{S(t)\tau(t)}{365}\right) \times \dots \times \left(1 + \frac{S(t + m - 1)\tau(t + m - 1)}{365}\right)$$
 - The Compounded SONIA rate $S(T,U)$ where $d$ is the **calendar days** between **business dates** $T$ and $U$ is defined as:
 $$S(T,U) = \left(\frac{I(U)}{I(T)} - 1 \right) \times \frac{365}{d}$$
 - SONIA compounded in arrears over a term (between business dates $T$ and $U$) is the effective term rate (simply compounded) that is equivalent to rolling over an overnight loan at the SONIA rate over the term.

@@ -478,7 +478,7 @@ $$\boxed{K_{T}(t) \approx e^{c(T-t)}S(T)}$$
 
 ### Futures Marking to Market (Settlement)
 
-- The days between the start and expiration of a futures contract can be denoted by $t_{1}, t_{2},...,t_{N} \equiv T$.
+- The days between the start and expiration of a futures contract can be denoted by $t_{1}, t_{2},\dots,t_{N} \equiv T$.
 - Between day 1 ($t_{1}$) and day 2 ($t_{2}$), the futures price will change from $K_{T}(t_{1})$ to $K_{T}(t_{2})$.
 - Taking the case where $K_{T}(t_{2}) < K_{T}(t_{1})$:
   - The seller of the futures contract would  be in the **superior** position and the buyer of the futures contract in the **inferior** position.
@@ -519,7 +519,7 @@ $$\text{Number of Contracts} \times \text{Contract Size} \times (K_{T}(t_{i+1})-
 - First consider the [cash settlement](./7_forwards_futures_swaps.md#settlement) process for forward contracts.
   - The long position in a forward contract is obligated to receive/pay the forward payoff at the expiration date.
   - The [forward payoff](./7_forwards_futures_swaps.md#payoffs) amount will be equal to $S(T) - K$ and can be modelled as a cash flow where, if the payoff is negative, the long position holder must pay the short position holder.
-- In the settlement process of a futures contract, the long position holder has the obligation to receive a stream of daily cash flows over the duration of the contract: $[K_{T}(t_{2}) - K_{T}(t_{1})], [K_{T}(t_{2}) - K_{T}(t_{1})], ... , [K_{T}(T) - K_{T}(t_{N-1})]$.
+- In the settlement process of a futures contract, the long position holder has the obligation to receive a stream of daily cash flows over the duration of the contract: $[K_{T}(t_{2}) - K_{T}(t_{1})], [K_{T}(t_{2}) - K_{T}(t_{1})], \dots , [K_{T}(T) - K_{T}(t_{N-1})]$.
   - Given that futures contracts can be terminated before delivery, a futures position can be viewed as an obligation to receive/pay daily amounts up until the expiration or termination of the contracts.
 - With a forward contract, no cash payments are made until the contract expiry when the transaction takes places for the contract forward price.
 - The modelling methods used to derive the forward price and contract value ([cash and carry arbitrage](./7_forwards_futures_swaps.md#cash-and-carry-arbitrage) and replication arguments) are therefore not applicable to futures contracts.
@@ -596,7 +596,7 @@ $$b(t) = S(t) - K_{T}(t)$$
 - Assuming a non-zero cost of carry, $c \not ={0}$, and using the formula from [futures prices](#futures-prices): $K_{T}(t) = e^{c(T-t)}S(t)$, the basis can be calculated by:
 $$b(t) = S(t) - e^{c(T-t)}S(t)$$
 $$b(t) =  \left(1 - e^{c(T-t)} \right)S(t)$$
-- Using a [Taylor Series](https://mathworld.wolfram.com/TaylorSeries.html) approximation and more specifically the [Maclaurin Series](https://mathworld.wolfram.com/MaclaurinSeries.html) for $e^{x} = 1 + x + \frac{1}{2}x^{2} + \frac{1}{6}x^{3} + \frac{1}{24}x^{4}...$ where $x = c(T-t)$, the basis risk can be approximated by:
+- Using a [Taylor Series](https://mathworld.wolfram.com/TaylorSeries.html) approximation and more specifically the [Maclaurin Series](https://mathworld.wolfram.com/MaclaurinSeries.html) for $e^{x} = 1 + x + \frac{1}{2}x^{2} + \frac{1}{6}x^{3} + \frac{1}{24}x^{4}\dots$ where $x = c(T-t)$, the basis risk can be approximated by:
 $$e^{c(T-t)} = 1 + c(T-t) + \text{error (H.O.T.)}$$
 - Assuming the error (higher order terms) will be small for short-dated contracts or for low cost of carry:
   $$b(t) = [1-(1+c(T-t))]S(t)$$
@@ -1144,7 +1144,7 @@ V_{\text{fixed}} &= \sum_{j=1}^{J}d(t_{j})\frac{S}{m}N \\\\
 \begin{aligned}
 V_{\text{float}} &= \sum_{j=1}^{J}N(d(t_{j-1}) - d(t_{j})) \\\\
 &= N \sum_{j=1}^{J}(d(t_{j-1}) - d(t_{j})) \\\\
-&= N [d(t_{0}) - d(t_{1}) + d(t_{1}) - d(t_{2}) + d(t_{2}) - d(t_{3}) +...+ d(t_{J-1}) - d(t_{J})] \\\\
+&= N [d(t_{0}) - d(t_{1}) + d(t_{1}) - d(t_{2}) + d(t_{2}) - d(t_{3}) +\dots+ d(t_{J-1}) - d(t_{J})] \\\\
 &= N(d(t_{0}) - d(t_{J})) \\\\
 d(t_{0}) = 1 \Longrightarrow &= N(1- d(t_{J}))
 \end{aligned}

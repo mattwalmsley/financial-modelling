@@ -784,7 +784,7 @@ $$
 - Scaled random walks converge to brownian motion as discussed in the [Brownian motion](./8_stochastic-processes.md#brownian-motion) section in in [stochastic processes](./8_stochastic-processes.md).
 $$S_{t}^{(m)} = \sum_{j=1}^{\lfloor mt \rfloor} \frac{X_{j}}{\sqrt{m}}$$
 - A modified random walk can be shown to converge to Brownian motion with drift, as follows.
-- Let $X_{j}$ for $j=1... \infty$ be a sequence of independent, identically distributed random variables, such that:
+- Let $X_{j}$ for $j=1\dots \infty$ be a sequence of independent, identically distributed random variables, such that:
   - $\text{Prob}(X_{j} = +1) = \frac{1}{2}$
   - $\text{Prob}(X_{j} = -1) = \frac{1}{2}$
 - A modified random variable $Y_{j}^{(n)}$ is also defined as $Y_{j}^{(n)} = \frac{\mu}{n} + \frac{\sigma}{\sqrt{n}}X_{j}$ for as follows for $n>0$.
