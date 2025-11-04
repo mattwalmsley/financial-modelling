@@ -10,11 +10,14 @@ This sub-package contains the fundamental building blocks:
 
 from bbg_data.core.enums import BloombergField, OptionType, Periodicity, RequestType, ServiceType
 from bbg_data.core.models import (
+    ATMOptionDataPoint,
+    ErrorDetail,
     HistoricalDataPoint,
     OptionChainFilter,
     OptionContract,
     OptionMarketData,
     ReferenceDataPoint,
+    Response,
 )
 from bbg_data.core.session import BloombergSession, BloombergSessionError, session
 from bbg_data.core.utils import format_ticker, parse_bloomberg_date, split_dataframe_by_type
@@ -32,6 +35,9 @@ __all__ = [
     "OptionChainFilter",
     "ReferenceDataPoint",
     "HistoricalDataPoint",
+    "ATMOptionDataPoint",
+    "ErrorDetail",
+    "Response",
     # Session
     "session",
     "BloombergSession",

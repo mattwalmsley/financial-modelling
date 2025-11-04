@@ -2,7 +2,8 @@
 Bloomberg API request builders and response parsers.
 
 This module provides high-level abstractions for constructing Bloomberg API
-requests and parsing responses into typed data structures.
+requests and parsing responses into typed data structures with comprehensive
+error handling.
 """
 
 import logging
@@ -13,7 +14,7 @@ import blpapi
 import pandas as pd
 
 from bbg_data.core.enums import BloombergField, Periodicity, RequestType, ServiceType
-from bbg_data.core.models import HistoricalDataPoint, ReferenceDataPoint
+from bbg_data.core.models import HistoricalDataPoint, ReferenceDataPoint, Response
 from bbg_data.core.session import BloombergSession
 
 logger = logging.getLogger(__name__)
@@ -118,97 +119,187 @@ class ResponseParser:
     """
     Parser for Bloomberg API responses.
 
-    Converts raw Bloomberg response messages into typed Python objects.
+    Converts raw Bloomberg response messages into typed Python objects with
+    comprehensive error handling to preserve partial results.
     """
 
     @staticmethod
-    def parse_reference_data(event: blpapi.Event) -> list[ReferenceDataPoint]:
+    def parse_reference_data(event: blpapi.Event) -> Response[list[ReferenceDataPoint]]:
         """
-        Parse reference data response.
+        Parse reference data response with error handling.
 
         Args:
             event: Bloomberg event containing response
 
         Returns:
-            List of reference data points
+            Response containing list of reference data points and any errors
         """
-        results: list[ReferenceDataPoint] = []
+        response = Response(data=[])
 
-        for msg in event:
-            if not msg.hasElement("securityData"):
-                continue
+        try:
+            for msg in event:
+                try:
+                    if not msg.hasElement("securityData"):
+                        continue
 
-            sec_data_array = msg.getElement("securityData")
+                    sec_data_array = msg.getElement("securityData")
 
-            for i in range(sec_data_array.numValues()):
-                sec_data = sec_data_array.getValueAsElement(i)
-                security = sec_data.getElementAsString("security")
+                    for i in range(sec_data_array.numValues()):
+                        try:
+                            sec_data = sec_data_array.getValueAsElement(i)
+                            security = sec_data.getElementAsString("security")
 
-                data_point = ReferenceDataPoint(security=security)
+                            data_point = ReferenceDataPoint(security=security)
 
-                # Parse field data
-                if sec_data.hasElement("fieldData"):
-                    field_data = sec_data.getElement("fieldData")
-                    data_point.fields = ResponseParser._parse_field_data(field_data)
+                            # Parse field data
+                            if sec_data.hasElement("fieldData"):
+                                try:
+                                    field_data = sec_data.getElement("fieldData")
+                                    data_point.fields = ResponseParser._parse_field_data(field_data)
+                                except Exception as e:
+                                    logger.error(f"Error parsing field data for {security}: {e}")
+                                    response.add_error(
+                                        error_type="FieldParsingError",
+                                        message=f"Failed to parse field data: {str(e)}",
+                                        context={"security": security},
+                                        exception=e,
+                                    )
 
-                # Parse errors
-                if sec_data.hasElement("securityError"):
-                    error_info = sec_data.getElement("securityError")
-                    error_msg = error_info.getElementAsString("message")
-                    data_point.errors.append(error_msg)
+                            # Parse errors
+                            if sec_data.hasElement("securityError"):
+                                try:
+                                    error_info = sec_data.getElement("securityError")
+                                    error_msg = error_info.getElementAsString("message")
+                                    data_point.errors.append(error_msg)
+                                    response.add_error(
+                                        error_type="SecurityError",
+                                        message=error_msg,
+                                        context={"security": security},
+                                    )
+                                except Exception as e:
+                                    logger.error(
+                                        f"Error parsing security error for {security}: {e}"
+                                    )
 
-                if sec_data.hasElement("fieldExceptions"):
-                    exceptions = sec_data.getElement("fieldExceptions")
-                    for j in range(exceptions.numValues()):
-                        exc = exceptions.getValueAsElement(j)
-                        field_id = exc.getElementAsString("fieldId")
-                        error_info = exc.getElement("errorInfo")
-                        error_msg = error_info.getElementAsString("message")
-                        data_point.errors.append(f"{field_id}: {error_msg}")
+                            if sec_data.hasElement("fieldExceptions"):
+                                try:
+                                    exceptions = sec_data.getElement("fieldExceptions")
+                                    for j in range(exceptions.numValues()):
+                                        exc = exceptions.getValueAsElement(j)
+                                        field_id = exc.getElementAsString("fieldId")
+                                        error_info = exc.getElement("errorInfo")
+                                        error_msg = error_info.getElementAsString("message")
+                                        data_point.errors.append(f"{field_id}: {error_msg}")
+                                        response.add_error(
+                                            error_type="FieldException",
+                                            message=error_msg,
+                                            context={"security": security, "field": field_id},
+                                        )
+                                except Exception as e:
+                                    logger.error(
+                                        f"Error parsing field exceptions for {security}: {e}"
+                                    )
 
-                results.append(data_point)
+                            response.data.append(data_point)
 
-        return results
+                        except Exception as e:
+                            logger.error(f"Error parsing security data at index {i}: {e}")
+                            response.add_error(
+                                error_type="SecurityParsingError",
+                                message=f"Failed to parse security at index {i}: {str(e)}",
+                                context={"index": i},
+                                exception=e,
+                            )
+
+                except Exception as e:
+                    logger.error(f"Error processing message: {e}")
+                    response.add_error(
+                        error_type="MessageProcessingError",
+                        message=f"Failed to process message: {str(e)}",
+                        exception=e,
+                    )
+
+        except Exception as e:
+            logger.error(f"Critical error in parse_reference_data: {e}")
+            response.add_error(
+                error_type="CriticalParsingError",
+                message=f"Critical parsing failure: {str(e)}",
+                exception=e,
+            )
+
+        return response
 
     @staticmethod
-    def parse_historical_data(event: blpapi.Event) -> list[HistoricalDataPoint]:
+    def parse_historical_data(event: blpapi.Event) -> Response[list[HistoricalDataPoint]]:
         """
-        Parse historical data response.
+        Parse historical data response with error handling.
 
         Args:
             event: Bloomberg event containing response
 
         Returns:
-            List of historical data points
+            Response containing list of historical data points and any errors
         """
-        results: list[HistoricalDataPoint] = []
+        response = Response(data=[])
 
-        for msg in event:
-            if not msg.hasElement("securityData"):
-                continue
+        try:
+            for msg in event:
+                try:
+                    if not msg.hasElement("securityData"):
+                        continue
 
-            sec_data = msg.getElement("securityData")
-            security = sec_data.getElementAsString("security")
+                    sec_data = msg.getElement("securityData")
+                    security = sec_data.getElementAsString("security")
 
-            if not sec_data.hasElement("fieldData"):
-                continue
+                    if not sec_data.hasElement("fieldData"):
+                        continue
 
-            field_data_array = sec_data.getElement("fieldData")
+                    field_data_array = sec_data.getElement("fieldData")
 
-            for i in range(field_data_array.numValues()):
-                field_data = field_data_array.getValueAsElement(i)
+                    for i in range(field_data_array.numValues()):
+                        try:
+                            field_data = field_data_array.getValueAsElement(i)
 
-                # Extract date
-                dt = field_data.getElementAsDatetime("date")
-                data_date = dt.date() if isinstance(dt, datetime) else dt
+                            # Extract date
+                            dt = field_data.getElementAsDatetime("date")
+                            data_date = dt.date() if isinstance(dt, datetime) else dt
 
-                # Extract field values
-                fields = ResponseParser._parse_field_data(field_data, exclude=["date"])
+                            # Extract field values
+                            fields = ResponseParser._parse_field_data(field_data, exclude=["date"])
 
-                data_point = HistoricalDataPoint(security=security, date=data_date, fields=fields)
-                results.append(data_point)
+                            data_point = HistoricalDataPoint(
+                                security=security, date=data_date, fields=fields
+                            )
+                            response.data.append(data_point)
 
-        return results
+                        except Exception as e:
+                            logger.error(
+                                f"Error parsing historical data point {i} for {security}: {e}"
+                            )
+                            response.add_error(
+                                error_type="HistoricalDataPointError",
+                                message=f"Failed to parse data point: {str(e)}",
+                                context={"security": security, "index": i},
+                                exception=e,
+                            )
+
+                except Exception as e:
+                    logger.error(f"Error processing historical message: {e}")
+                    response.add_error(
+                        error_type="MessageProcessingError",
+                        message=f"Failed to process historical message: {str(e)}",
+                        exception=e,
+                    )
+
+        except Exception as e:
+            logger.error(f"Critical error in parse_historical_data: {e}")
+            response.add_error(
+                error_type="CriticalParsingError",
+                message=f"Critical parsing failure: {str(e)}",
+                exception=e,
+            )
+
+        return response
 
     @staticmethod
     def _parse_field_data(

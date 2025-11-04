@@ -2,11 +2,12 @@
 Option chain data fetching functionality.
 
 This module provides high-level functions for fetching option chain data from Bloomberg,
-with support for filtering, batching, and extensible field selection.
+with support for filtering, batching, extensible field selection, and comprehensive
+error handling.
 """
 
 import logging
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any
 
 import blpapi
@@ -15,11 +16,14 @@ import pandas as pd
 from bbg_data.api.requests import RequestBuilder, ResponseParser, to_dataframe
 from bbg_data.core.enums import BloombergField, OptionType, ServiceType
 from bbg_data.core.models import (
+    ATMOptionDataPoint,
+    ErrorDetail,
     HistoricalDataPoint,
     OptionChainFilter,
     OptionContract,
     OptionMarketData,
     ReferenceDataPoint,
+    Response,
 )
 from bbg_data.core.session import BloombergSession, session
 
@@ -154,9 +158,9 @@ class OptionChainFetcher:
         tickers: list[str],
         fields: list[BloombergField] | None = None,
         as_of_date: date | None = None,
-    ) -> list[OptionMarketData]:
+    ) -> Response[list[OptionMarketData]]:
         """
-        Fetch market data for option contracts.
+        Fetch market data for option contracts with error handling.
 
         Args:
             tickers: List of option Bloomberg tickers
@@ -164,11 +168,14 @@ class OptionChainFetcher:
             as_of_date: Data as-of date (uses current if None)
 
         Returns:
-            List of option market data objects
+            Response containing list of option market data objects and any errors
 
         Example:
             >>> tickers = ["NVDA US 11/21/25 C177.5 Equity"]
-            >>> data = fetcher.get_option_market_data(tickers)
+            >>> response = fetcher.get_option_market_data(tickers)
+            >>> data = response.data
+            >>> if response.has_errors:
+            ...     response.print_errors()
         """
         if fields is None:
             fields = DEFAULT_OPTION_FIELDS
@@ -179,30 +186,50 @@ class OptionChainFetcher:
         logger.info(f"Fetching market data for {len(tickers)} options")
 
         all_data: list[ReferenceDataPoint] = []
+        all_errors: list[ErrorDetail] = []
 
         # Batch requests to avoid Bloomberg limits
         for i in range(0, len(tickers), self.batch_size):
             batch = tickers[i : i + self.batch_size]
             logger.debug(f"Processing batch {i // self.batch_size + 1} ({len(batch)} securities)")
 
-            request = self.request_builder.create_reference_request(
-                securities=batch,
-                fields=fields,
-            )
+            try:
+                request = self.request_builder.create_reference_request(
+                    securities=batch,
+                    fields=fields,
+                )
 
-            self.session.send_request(request)
+                self.session.send_request(request)
 
-            # Collect responses
-            while True:
-                event = self.session.next_event()
-                batch_data = ResponseParser.parse_reference_data(event)
-                all_data.extend(batch_data)
+                # Collect responses
+                while True:
+                    event = self.session.next_event()
+                    response = ResponseParser.parse_reference_data(event)
+                    all_data.extend(response.data)
+                    all_errors.extend(response.errors)
 
-                if event.eventType() == blpapi.Event.RESPONSE:
-                    break
+                    if event.eventType() == blpapi.Event.RESPONSE:
+                        break
+
+            except Exception as e:
+                logger.error(f"Error fetching batch {i // self.batch_size + 1}: {e}")
+                # Add error but continue with next batch
+                err = ErrorDetail(
+                    timestamp=datetime.now(),
+                    error_type="BatchRequestError",
+                    message=f"Failed to fetch batch {i // self.batch_size + 1}: {str(e)}",
+                    context={"batch_index": i // self.batch_size, "batch_size": len(batch)},
+                    exception=e,
+                )
+                all_errors.append(err)
+
+        # Log summary of errors if any occurred
+        if all_errors:
+            logger.warning(f"Encountered {len(all_errors)} errors during data fetch")
 
         # Convert to OptionMarketData objects
-        return self._to_option_market_data(all_data, as_of_date)
+        market_data = self._to_option_market_data(all_data, as_of_date)
+        return Response(data=market_data, errors=all_errors)
 
     def get_historical_option_data(
         self,
@@ -240,28 +267,51 @@ class OptionChainFetcher:
         )
 
         all_data: list[HistoricalDataPoint] = []
+        all_errors: list[ErrorDetail] = []
 
         # Batch requests
         for i in range(0, len(tickers), self.batch_size):
             batch = tickers[i : i + self.batch_size]
 
-            request = self.request_builder.create_historical_request(
-                securities=batch,
-                fields=fields,
-                start_date=start_date,
-                end_date=end_date,
-            )
+            try:
+                request = self.request_builder.create_historical_request(
+                    securities=batch,
+                    fields=fields,
+                    start_date=start_date,
+                    end_date=end_date,
+                )
 
-            self.session.send_request(request)
+                self.session.send_request(request)
 
-            # Collect responses
-            while True:
-                event = self.session.next_event()
-                batch_data = ResponseParser.parse_historical_data(event)
-                all_data.extend(batch_data)
+                # Collect responses
+                while True:
+                    event = self.session.next_event()
+                    response = ResponseParser.parse_historical_data(event)
+                    all_data.extend(response.data)
+                    all_errors.extend(response.errors)
 
-                if event.eventType() == blpapi.Event.RESPONSE:
-                    break
+                    if event.eventType() == blpapi.Event.RESPONSE:
+                        break
+
+            except Exception as e:
+                logger.error(f"Error fetching historical batch {i // self.batch_size + 1}: {e}")
+                # Add error but continue with next batch
+                err = ErrorDetail(
+                    timestamp=datetime.now(),
+                    error_type="HistoricalBatchError",
+                    message=f"Failed to fetch historical batch: {str(e)}",
+                    context={
+                        "batch_index": i // self.batch_size,
+                        "start_date": str(start_date),
+                        "end_date": str(end_date),
+                    },
+                    exception=e,
+                )
+                all_errors.append(err)
+
+        # Log summary of errors if any occurred
+        if all_errors:
+            logger.warning(f"Encountered {len(all_errors)} errors during historical data fetch")
 
         # Convert to DataFrame
         return to_dataframe(all_data)
@@ -372,6 +422,479 @@ class OptionChainFetcher:
 
         return results
 
+    def find_atm_strike(
+        self,
+        underlying_price: float,
+        available_strikes: list[float],
+    ) -> float | None:
+        """
+        Find the strike price closest to the underlying price (ATM).
+
+        Args:
+            underlying_price: Current underlying price
+            available_strikes: List of available strike prices
+
+        Returns:
+            Strike price closest to underlying price, or None if no strikes available
+
+        Example:
+            >>> strikes = [100.0, 105.0, 110.0, 115.0, 120.0]
+            >>> fetcher.find_atm_strike(108.0, strikes)
+            110.0
+        """
+        if not available_strikes:
+            return None
+
+        return min(available_strikes, key=lambda x: abs(x - underlying_price))
+
+    def find_nearby_expiry(
+        self,
+        underlying: str,
+        target_date: date,
+        min_days_to_expiry: int = 7,
+        max_days_to_expiry: int = 60,
+    ) -> date | None:
+        """
+        Find the nearby (front-month) option expiry date for a given date.
+
+        Searches for the nearest expiry that is at least min_days_to_expiry away
+        but no more than max_days_to_expiry away from the target date.
+
+        Args:
+            underlying: Bloomberg ticker of underlying (e.g., "NVDA US Equity")
+            target_date: Reference date to find expiry relative to
+            min_days_to_expiry: Minimum days until expiry (to avoid expiration week)
+            max_days_to_expiry: Maximum days until expiry (to stay in front month)
+
+        Returns:
+            Expiry date, or None if no suitable expiry found
+
+        Example:
+            >>> from datetime import date
+            >>> expiry = fetcher.find_nearby_expiry(
+            ...     "NVDA US Equity",
+            ...     target_date=date(2024, 10, 15),
+            ...     min_days_to_expiry=7
+            ... )
+        """
+        logger.info(
+            f"Finding nearby expiry for {underlying} as-of {target_date} "
+            f"({min_days_to_expiry}-{max_days_to_expiry} days out)"
+        )
+
+        # Get full option chain as-of target date (no expiry filter)
+        chain_filter = OptionChainFilter()
+        tickers = self.get_option_chain(underlying, chain_filter, target_date)
+
+        if not tickers:
+            logger.warning(f"No options found for {underlying} on {target_date}")
+            return None
+
+        # Parse tickers to extract unique expiry dates
+        contracts = [self._parse_ticker(t, underlying) for t in tickers]
+        valid_contracts = [c for c in contracts if c is not None]
+
+        if not valid_contracts:
+            logger.warning("No valid option contracts parsed")
+            return None
+
+        # Get unique expiry dates
+        expiry_dates = sorted(set(c.expiry for c in valid_contracts))
+
+        # Filter expiries within the desired range
+        valid_expiries = []
+        for expiry in expiry_dates:
+            days_to_expiry = (expiry - target_date).days
+            if min_days_to_expiry <= days_to_expiry <= max_days_to_expiry:
+                valid_expiries.append(expiry)
+
+        if not valid_expiries:
+            logger.warning(
+                f"No expiries found between {min_days_to_expiry} and {max_days_to_expiry} "
+                f"days from {target_date}. Available expiries: {expiry_dates[:5]}"
+            )
+            return None
+
+        # Return the nearest expiry within the valid range
+        nearby_expiry = valid_expiries[0]
+        logger.debug(
+            f"Found nearby expiry: {nearby_expiry} "
+            f"({(nearby_expiry - target_date).days} days from {target_date})"
+        )
+
+        return nearby_expiry
+
+    def get_atm_option_data(
+        self,
+        underlying: str,
+        target_date: date,
+        expiry_date: date | None = None,
+        strike_range_pct: float = 0.1,
+        min_days_to_expiry: int = 7,
+        max_days_to_expiry: int = 60,
+    ) -> ATMOptionDataPoint:
+        """
+        Fetch underlying price and ATM option data for a specific date.
+
+        This method:
+        1. Fetches underlying settlement/last/bid/ask prices for the target date
+        2. Finds nearby expiry if not provided (based on min/max days to expiry)
+        3. Gets option chain as-of the target date
+        4. Filters to options near the underlying price (within strike_range_pct)
+        5. Identifies the ATM strike (closest to underlying price)
+        6. Fetches market data for ATM call and put options
+
+        Args:
+            underlying: Bloomberg ticker of underlying (e.g., "NVDA US Equity")
+            target_date: Date to fetch data for
+            expiry_date: Option expiration date to use (if None, finds nearby expiry)
+            strike_range_pct: Percentage range around underlying price to search for options
+                            (e.g., 0.1 = ±10%)
+            min_days_to_expiry: Minimum days until expiry when finding nearby (default: 7)
+            max_days_to_expiry: Maximum days until expiry when finding nearby (default: 60)
+
+        Returns:
+            ATMOptionDataPoint with underlying and option data
+
+        Example:
+            >>> from datetime import date
+            >>> # With explicit expiry
+            >>> data = fetcher.get_atm_option_data(
+            ...     "NVDA US Equity",
+            ...     target_date=date(2024, 10, 15),
+            ...     expiry_date=date(2024, 11, 21)
+            ... )
+            >>> # Auto-find nearby expiry
+            >>> data = fetcher.get_atm_option_data(
+            ...     "NVDA US Equity",
+            ...     target_date=date(2024, 10, 15)
+            ... )
+            >>> print(f"Using expiry: {data.call_option.contract.expiry}")
+        """
+        # Find nearby expiry if not provided
+        if expiry_date is None:
+            expiry_date = self.find_nearby_expiry(
+                underlying=underlying,
+                target_date=target_date,
+                min_days_to_expiry=min_days_to_expiry,
+                max_days_to_expiry=max_days_to_expiry,
+            )
+            if expiry_date is None:
+                logger.warning(f"Could not find nearby expiry for {underlying} on {target_date}")
+                return ATMOptionDataPoint(
+                    date=target_date,
+                    underlying_ticker=underlying,
+                )
+            logger.info(f"Using nearby expiry: {expiry_date}")
+
+        logger.info(
+            f"Fetching ATM option data for {underlying} on {target_date} with expiry {expiry_date}"
+        )
+
+        # Step 1: Fetch underlying prices as-of target_date
+        underlying_fields = [
+            BloombergField.PX_SETTLE,
+            BloombergField.PX_LAST,
+            BloombergField.PX_BID,
+            BloombergField.PX_ASK,
+        ]
+
+        overrides = {"SINGLE_DATE_OVERRIDE": target_date.strftime("%Y%m%d")}
+        request = self.request_builder.create_reference_request(
+            securities=[underlying],
+            fields=underlying_fields,
+            overrides=overrides,
+        )
+
+        self.session.send_request(request)
+
+        # Collect underlying data
+        underlying_data = None
+        while True:
+            event = self.session.next_event()
+            data_points = ResponseParser.parse_reference_data(event)
+            if data_points:
+                underlying_data = data_points[0]
+
+            if event.eventType() == blpapi.Event.RESPONSE:
+                break
+
+        if not underlying_data:
+            logger.warning(f"No underlying data found for {underlying} on {target_date}")
+            return ATMOptionDataPoint(
+                date=target_date,
+                underlying_ticker=underlying,
+                option_expiry=expiry_date,
+            )
+
+        # Extract underlying prices
+        underlying_settlement = underlying_data.get_field(BloombergField.PX_SETTLE)
+        underlying_last = underlying_data.get_field(BloombergField.PX_LAST)
+        underlying_bid = underlying_data.get_field(BloombergField.PX_BID)
+        underlying_ask = underlying_data.get_field(BloombergField.PX_ASK)
+
+        # Determine reference price for ATM calculation (prefer settlement, then last)
+        ref_price = underlying_settlement or underlying_last
+        if ref_price is None:
+            logger.warning(f"No reference price found for {underlying} on {target_date}")
+            return ATMOptionDataPoint(
+                date=target_date,
+                underlying_ticker=underlying,
+                option_expiry=expiry_date,
+                underlying_settlement=underlying_settlement,
+                underlying_last=underlying_last,
+                underlying_bid=underlying_bid,
+                underlying_ask=underlying_ask,
+            )
+
+        # Step 2: Get option chain as-of target_date with strike filter
+        strike_min = ref_price * (1 - strike_range_pct)
+        strike_max = ref_price * (1 + strike_range_pct)
+
+        chain_filter = OptionChainFilter(
+            expiry_start=expiry_date,
+            expiry_end=expiry_date,
+            strike_min=strike_min,
+            strike_max=strike_max,
+        )
+
+        tickers = self.get_option_chain(underlying, chain_filter, target_date)
+
+        if not tickers:
+            logger.warning(
+                f"No options found for {underlying} on {target_date} "
+                f"with expiry {expiry_date} in strike range [{strike_min:.2f}, {strike_max:.2f}]"
+            )
+            return ATMOptionDataPoint(
+                date=target_date,
+                underlying_ticker=underlying,
+                option_expiry=expiry_date,
+                underlying_settlement=underlying_settlement,
+                underlying_last=underlying_last,
+                underlying_bid=underlying_bid,
+                underlying_ask=underlying_ask,
+            )
+
+        # Step 3: Parse tickers to find available strikes
+        contracts = [self._parse_ticker(t, underlying) for t in tickers]
+        valid_contracts = [c for c in contracts if c is not None]
+
+        if not valid_contracts:
+            logger.warning("No valid option contracts parsed from tickers")
+            return ATMOptionDataPoint(
+                date=target_date,
+                underlying_ticker=underlying,
+                option_expiry=expiry_date,
+                underlying_settlement=underlying_settlement,
+                underlying_last=underlying_last,
+                underlying_bid=underlying_bid,
+                underlying_ask=underlying_ask,
+            )
+
+        # Get unique strikes
+        strikes = sorted(set(c.strike for c in valid_contracts))
+
+        # Step 4: Find ATM strike
+        atm_strike = self.find_atm_strike(ref_price, strikes)
+
+        if atm_strike is None:
+            logger.warning("Could not determine ATM strike")
+            return ATMOptionDataPoint(
+                date=target_date,
+                underlying_ticker=underlying,
+                underlying_settlement=underlying_settlement,
+                underlying_last=underlying_last,
+                underlying_bid=underlying_bid,
+                underlying_ask=underlying_ask,
+            )
+
+        logger.debug(
+            f"Underlying price: {ref_price:.2f}, ATM strike: {atm_strike:.2f}, "
+            f"Available strikes: {strikes}"
+        )
+
+        # Step 5: Get ATM call and put tickers
+        atm_call_ticker = None
+        atm_put_ticker = None
+
+        for contract in valid_contracts:
+            if contract.strike == atm_strike:
+                if contract.option_type == OptionType.CALL:
+                    atm_call_ticker = contract.ticker
+                elif contract.option_type == OptionType.PUT:
+                    atm_put_ticker = contract.ticker
+
+        # Step 6: Fetch market data for ATM options
+        atm_tickers = [t for t in [atm_call_ticker, atm_put_ticker] if t is not None]
+
+        if not atm_tickers:
+            logger.warning(f"No ATM option tickers found for strike {atm_strike}")
+            return ATMOptionDataPoint(
+                date=target_date,
+                underlying_ticker=underlying,
+                option_expiry=expiry_date,
+                underlying_settlement=underlying_settlement,
+                underlying_last=underlying_last,
+                underlying_bid=underlying_bid,
+                underlying_ask=underlying_ask,
+            )
+
+        # Use reference request with date override instead of current market data
+        option_market_data_response = self.get_option_market_data(
+            atm_tickers,
+            fields=DEFAULT_OPTION_FIELDS,
+            as_of_date=target_date,
+        )
+
+        # Separate call and put data
+        call_option = None
+        put_option = None
+
+        for opt_data in option_market_data_response.data:
+            if opt_data.contract.option_type == OptionType.CALL:
+                call_option = opt_data
+            elif opt_data.contract.option_type == OptionType.PUT:
+                put_option = opt_data
+
+        return ATMOptionDataPoint(
+            date=target_date,
+            underlying_ticker=underlying,
+            option_expiry=expiry_date,
+            underlying_settlement=underlying_settlement,
+            underlying_last=underlying_last,
+            underlying_bid=underlying_bid,
+            underlying_ask=underlying_ask,
+            call_option=call_option,
+            put_option=put_option,
+        )
+
+    def get_atm_timeseries(
+        self,
+        underlying: str,
+        start_date: date,
+        end_date: date,
+        expiry_date: date | None = None,
+        strike_range_pct: float = 0.1,
+        min_days_to_expiry: int = 7,
+        max_days_to_expiry: int = 60,
+        roll_days_before_expiry: int = 5,
+    ) -> Response[list[ATMOptionDataPoint]]:
+        """
+        Fetch time series of underlying price and ATM option data with error handling.
+
+        Iterates through each business day in the date range and fetches
+        underlying prices and ATM option data. If expiry_date is not provided,
+        automatically finds the nearby expiry for each date and rolls to the next
+        expiry when the current one gets too close to expiration.
+
+        Errors for individual dates are logged and collected, but processing continues
+        to preserve already-fetched data.
+
+        Args:
+            underlying: Bloomberg ticker of underlying (e.g., "NVDA US Equity")
+            start_date: Start date (inclusive)
+            end_date: End date (inclusive)
+            expiry_date: Option expiration date to track (if None, auto-finds nearby expiry)
+            strike_range_pct: Percentage range around underlying price to search for options
+            min_days_to_expiry: Minimum days until expiry when finding nearby (default: 7)
+            max_days_to_expiry: Maximum days until expiry when finding nearby (default: 60)
+            roll_days_before_expiry: Days before expiry to roll to next contract (default: 5)
+
+        Returns:
+            Response containing list of ATMOptionDataPoint objects and any errors
+
+        Example:
+            >>> from datetime import date
+            >>> # Auto-roll expiries
+            >>> response = fetcher.get_atm_timeseries(
+            ...     "NVDA US Equity",
+            ...     start_date=date(2024, 10, 1),
+            ...     end_date=date(2024, 12, 31),
+            ... )
+            >>> data = response.data
+            >>> if response.has_errors:
+            ...     response.print_errors()
+        """
+        logger.info(f"Fetching ATM time series for {underlying} from {start_date} to {end_date}")
+
+        if expiry_date:
+            logger.info(f"Using fixed expiry: {expiry_date}")
+        else:
+            logger.info(
+                f"Auto-rolling expiry (targeting {min_days_to_expiry}-{max_days_to_expiry} "
+                f"days out, rolling {roll_days_before_expiry} days before expiry)"
+            )
+
+        response = Response(data=[])
+        current_expiry = expiry_date  # Will be None if auto-rolling
+
+        # Iterate through each day in the range
+        current_date = start_date
+        while current_date <= end_date:
+            try:
+                # Check if we need to roll to a new expiry (only if auto-rolling)
+                if expiry_date is None:
+                    if current_expiry is None:
+                        # First iteration - find initial expiry
+                        need_new_expiry = True
+                    else:
+                        # Check if we're too close to current expiry
+                        days_to_expiry = (current_expiry - current_date).days
+                        need_new_expiry = days_to_expiry < roll_days_before_expiry
+
+                    if need_new_expiry:
+                        logger.info(
+                            f"Finding new expiry for {current_date} "
+                            f"(current expiry: {current_expiry}, days to expiry: "
+                            f"{(current_expiry - current_date).days if current_expiry else 'N/A'})"
+                        )
+                        current_expiry = self.find_nearby_expiry(
+                            underlying=underlying,
+                            target_date=current_date,
+                            min_days_to_expiry=min_days_to_expiry,
+                            max_days_to_expiry=max_days_to_expiry,
+                        )
+                        if current_expiry:
+                            logger.info(f"Rolled to new expiry: {current_expiry}")
+
+                data_point = self.get_atm_option_data(
+                    underlying=underlying,
+                    target_date=current_date,
+                    expiry_date=current_expiry,
+                    strike_range_pct=strike_range_pct,
+                    min_days_to_expiry=min_days_to_expiry,
+                    max_days_to_expiry=max_days_to_expiry,
+                )
+                response.data.append(data_point)
+
+            except Exception as e:
+                logger.error(f"Error fetching data for {current_date}: {e}")
+                # Add error and create empty data point to maintain date continuity
+                response.add_error(
+                    error_type="DateFetchError",
+                    message=f"Failed to fetch data for {current_date}: {str(e)}",
+                    context={
+                        "date": str(current_date),
+                        "underlying": underlying,
+                        "expiry": str(current_expiry) if current_expiry else None,
+                    },
+                    exception=e,
+                )
+                # Still add a placeholder data point to maintain timeline
+                response.data.append(
+                    ATMOptionDataPoint(
+                        date=current_date,
+                        underlying_ticker=underlying,
+                        option_expiry=current_expiry,
+                    )
+                )
+
+            # Move to next day
+            current_date += timedelta(days=1)
+
+        logger.info(f"Fetched {len(response.data)} data points with {response.error_count} errors")
+        return response
+
 
 def fetch_option_chain(
     underlying: str,
@@ -379,9 +902,9 @@ def fetch_option_chain(
     fields: list[BloombergField] | None = None,
     strike_range: tuple[float | None, float | None] = (None, None),
     as_of_date: date | None = None,
-) -> pd.DataFrame:
+) -> Response[pd.DataFrame]:
     """
-    Convenience function to fetch option chain data for any underlying security.
+    Convenience function to fetch option chain data with error handling.
 
     Args:
         underlying: Bloomberg ticker of underlying security (e.g., "NVDA US Equity")
@@ -391,67 +914,378 @@ def fetch_option_chain(
         as_of_date: Date to fetch option chain as-of (uses current date if None)
 
     Returns:
-        DataFrame with option market data
+        Response containing DataFrame with option market data and any errors
 
     Example:
-        >>> df = fetch_option_chain("NVDA US Equity", "11/21/25")
-        >>> df = fetch_option_chain("AAPL US Equity", "12/20/24", strike_range=(150.0, 200.0))
-        >>> # Fetch option chain as of specific historical date
-        >>> df = fetch_option_chain("AAPL US Equity", "12/20/23", as_of_date=date(2023, 8, 12))
+        >>> response = fetch_option_chain("NVDA US Equity", "11/21/25")
+        >>> df = response.data
+        >>> if response.has_errors:
+        ...     response.print_errors()
         >>> calls = df[df['option_type'] == 'CALL']
     """
-    # Parse expiry date
-    if isinstance(expiry_date, str):
-        expiry_date = datetime.strptime(expiry_date, "%m/%d/%y").date()
+    response = Response(data=pd.DataFrame())
 
-    # Create filter
-    chain_filter = OptionChainFilter(
-        expiry_start=expiry_date,
-        expiry_end=expiry_date,
-        strike_min=strike_range[0],
-        strike_max=strike_range[1],
-    )
+    try:
+        # Parse expiry date
+        if isinstance(expiry_date, str):
+            expiry_date = datetime.strptime(expiry_date, "%m/%d/%y").date()
 
-    with session() as bbg_session:
-        fetcher = OptionChainFetcher(bbg_session)
+        # Create filter
+        chain_filter = OptionChainFilter(
+            expiry_start=expiry_date,
+            expiry_end=expiry_date,
+            strike_min=strike_range[0],
+            strike_max=strike_range[1],
+        )
 
-        # Get option chain
-        tickers = fetcher.get_option_chain(underlying, chain_filter, as_of_date)
+        with session() as bbg_session:
+            fetcher = OptionChainFetcher(bbg_session)
 
-        if not tickers:
-            logger.warning(f"No options found for expiry {expiry_date}")
-            return pd.DataFrame()
+            # Get option chain
+            tickers = fetcher.get_option_chain(underlying, chain_filter, as_of_date)
 
-        # Get market data
-        market_data = fetcher.get_option_market_data(tickers, fields)
+            if not tickers:
+                logger.warning(f"No options found for expiry {expiry_date}")
+                response.add_error(
+                    error_type="NoOptionsFound",
+                    message=f"No options found for expiry {expiry_date}",
+                    context={
+                        "underlying": underlying,
+                        "expiry_date": str(expiry_date),
+                        "strike_range": strike_range,
+                    },
+                )
+                return response
 
-        # Convert to DataFrame
-        records: list[dict[str, Any]] = []
-        for data in market_data:
-            record = {
-                "security": data.contract.ticker,
-                "strike": data.contract.strike,
-                "expiry": data.contract.expiry,
-                "option_type": data.contract.option_type.value,
-                "settlement_price": data.settlement_price,
-                "last_price": data.last_price,
-                "bid": data.bid,
-                "ask": data.ask,
-                "mid_price": data.mid_price,
-                "volume": data.volume,
-                "open_interest": data.open_interest,
-                "implied_vol": data.implied_vol,
-                "delta": data.delta,
-                "gamma": data.gamma,
-                "theta": data.theta,
-                "vega": data.vega,
-            }
-            records.append(record)
+            # Get market data (returns Response object)
+            market_data_response = fetcher.get_option_market_data(tickers, fields)
 
-        df = pd.DataFrame(records)
+            # Extend errors from market data fetch
+            response.errors.extend(market_data_response.errors)
 
-        # Sort by option type and strike
-        if not df.empty:
-            df = df.sort_values(["option_type", "strike"])
+            # Convert to DataFrame
+            records: list[dict[str, Any]] = []
+            for data in market_data_response.data:
+                record = {
+                    "security": data.contract.ticker,
+                    "strike": data.contract.strike,
+                    "expiry": data.contract.expiry,
+                    "option_type": data.contract.option_type.value,
+                    "settlement_price": data.settlement_price,
+                    "last_price": data.last_price,
+                    "bid": data.bid,
+                    "ask": data.ask,
+                    "mid_price": data.mid_price,
+                    "volume": data.volume,
+                    "open_interest": data.open_interest,
+                    "implied_vol": data.implied_vol,
+                    "delta": data.delta,
+                    "gamma": data.gamma,
+                    "theta": data.theta,
+                    "vega": data.vega,
+                }
+                records.append(record)
 
-        return df
+            df = pd.DataFrame(records)
+
+            # Sort by option type and strike
+            if not df.empty:
+                df = df.sort_values(["option_type", "strike"])
+
+            response.data = df
+
+    except Exception as e:
+        logger.error(f"Error fetching option chain: {e}")
+        response.add_error(
+            error_type="OptionChainFetchError",
+            message=f"Failed to fetch option chain: {str(e)}",
+            context={
+                "underlying": underlying,
+                "expiry_date": str(expiry_date),
+                "strike_range": strike_range,
+            },
+            exception=e,
+        )
+
+    return response
+
+
+def fetch_atm_option_timeseries(
+    underlying: str,
+    start_date: date | str,
+    end_date: date | str,
+    expiry_date: date | str | None = None,
+    strike_range_pct: float = 0.1,
+    min_days_to_expiry: int = 7,
+    max_days_to_expiry: int = 60,
+    roll_days_before_expiry: int = 5,
+) -> Response[pd.DataFrame]:
+    """
+    Fetch time series of underlying price and ATM option data with error handling.
+
+    This function fetches daily data for:
+    - Underlying stock prices (settlement, last, bid, ask)
+    - ATM call option metrics (settle, last, bid, ask, implied vol, Greeks, OI, volume)
+    - ATM put option metrics (settle, last, bid, ask, implied vol, Greeks, OI, volume)
+
+    The function can either:
+    1. Track a fixed expiry date (if expiry_date provided)
+    2. Auto-roll to nearby expiries as they approach expiration (if expiry_date is None)
+
+    When auto-rolling, the function:
+    1. Iterates through each date in the range
+    2. Finds the nearby expiry (min_days_to_expiry to max_days_to_expiry away)
+    3. Rolls to the next expiry when current expiry is within roll_days_before_expiry
+    4. Fetches underlying prices as-of each date
+    5. Gets option chain as-of each date for the current expiry
+    6. Identifies the strike closest to the underlying price (ATM)
+    7. Fetches market data for ATM call and put options
+    8. Returns combined data in a DataFrame with daily rows
+
+    Errors for individual dates are logged and collected in the Response, but processing
+    continues to preserve already-fetched data.
+
+    Args:
+        underlying: Bloomberg ticker of underlying (e.g., "NVDA US Equity")
+        start_date: Start date (inclusive), as date object or "YYYY-MM-DD" string
+        end_date: End date (inclusive), as date object or "YYYY-MM-DD" string
+        expiry_date: Option expiration date, as date object or "mm/dd/yy" string.
+                    If None, automatically finds and rolls to nearby expiries.
+        strike_range_pct: Percentage range around underlying price to search for options
+                         (e.g., 0.1 = ±10%, default)
+        min_days_to_expiry: When auto-rolling, minimum days until expiry (default: 7)
+        max_days_to_expiry: When auto-rolling, maximum days until expiry (default: 60)
+        roll_days_before_expiry: When auto-rolling, roll to next expiry this many days
+                                before current expiry (default: 5)
+
+    Returns:
+        Response containing DataFrame with columns and any errors:
+            - date: Observation date
+            - underlying_ticker: Underlying security ticker
+            - expiry_date: Option expiration date for this observation
+            - days_to_expiry: Days from observation date to expiry
+            - underlying_settlement: Underlying settlement price
+            - underlying_last: Underlying last price
+            - underlying_bid: Underlying bid price
+            - underlying_ask: Underlying ask price
+            - underlying_mid: Underlying mid price (calculated)
+            - atm_strike: ATM strike price
+            - call_ticker: Call option ticker
+            - call_settlement: Call option settlement price
+            - call_last: Call option last price
+            - call_bid: Call option bid price
+            - call_ask: Call option ask price
+            - call_mid: Call option mid price
+            - call_volume: Call option volume
+            - call_open_interest: Call option open interest
+            - call_implied_vol: Call option implied volatility
+            - call_delta: Call option delta
+            - call_gamma: Call option gamma
+            - call_theta: Call option theta
+            - call_vega: Call option vega
+            - put_ticker: Put option ticker
+            - put_settlement: Put option settlement price
+            - put_last: Put option last price
+            - put_bid: Put option bid price
+            - put_ask: Put option ask price
+            - put_mid: Put option mid price
+            - put_volume: Put option volume
+            - put_open_interest: Put option open interest
+            - put_implied_vol: Put option implied volatility
+            - put_delta: Put option delta
+            - put_gamma: Put option gamma
+            - put_theta: Put option theta
+            - put_vega: Put option vega
+
+    Example:
+        >>> from datetime import date
+        >>> # Auto-roll to nearby expiries over 3 months
+        >>> response = fetch_atm_option_timeseries(
+        ...     "NVDA US Equity",
+        ...     start_date=date(2024, 10, 1),
+        ...     end_date=date(2024, 12, 31),
+        ... )
+        >>> df = response.data
+        >>> if response.has_errors:
+        ...     response.print_errors()
+        >>> # Check when expiries changed
+        >>> print(df.groupby('expiry_date').size())
+        >>>
+        >>> # Track a specific expiry
+        >>> response = fetch_atm_option_timeseries(
+        ...     "NVDA US Equity",
+        ...     start_date=date(2024, 10, 1),
+        ...     end_date=date(2024, 10, 31),
+        ...     expiry_date="11/21/24"
+        ... )
+        >>>
+        >>> # Or using string dates
+        >>> response = fetch_atm_option_timeseries(
+        ...     "AAPL US Equity",
+        ...     start_date="2024-10-01",
+        ...     end_date="2024-10-31",
+        ...     expiry_date="11/15/24",
+        ...     strike_range_pct=0.05  # Tighter ±5% range
+        ... )
+        >>> df = response.data
+        >>> # Analyze implied volatility over time
+        >>> df.plot(x='date', y=['call_implied_vol', 'put_implied_vol'])
+    """
+    response = Response(data=pd.DataFrame())
+
+    try:
+        # Parse dates
+        if isinstance(start_date, str):
+            start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+        if isinstance(end_date, str):
+            end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
+        if isinstance(expiry_date, str):
+            expiry_date = datetime.strptime(expiry_date, "%m/%d/%y").date()
+
+        if expiry_date:
+            logger.info(
+                f"Fetching ATM option time series for {underlying} from {start_date} to {end_date} "
+                f"with fixed expiry {expiry_date}"
+            )
+        else:
+            logger.info(
+                f"Fetching ATM option time series for {underlying} from {start_date} to {end_date} "
+                f"with auto-rolling expiries"
+            )
+
+        with session() as bbg_session:
+            fetcher = OptionChainFetcher(bbg_session)
+
+            # Get time series data (returns Response object)
+            timeseries_response = fetcher.get_atm_timeseries(
+                underlying=underlying,
+                start_date=start_date,
+                end_date=end_date,
+                expiry_date=expiry_date,
+                strike_range_pct=strike_range_pct,
+                min_days_to_expiry=min_days_to_expiry,
+                max_days_to_expiry=max_days_to_expiry,
+                roll_days_before_expiry=roll_days_before_expiry,
+            )
+
+            # Extend errors from timeseries fetch
+            response.errors.extend(timeseries_response.errors)
+
+            # Convert to DataFrame
+            records: list[dict[str, Any]] = []
+            for point in timeseries_response.data:
+                record = {
+                    "date": point.date,
+                    "underlying_ticker": point.underlying_ticker,
+                    "expiry_date": point.option_expiry,
+                    "days_to_expiry": point.days_to_expiry,
+                    "underlying_settlement": point.underlying_settlement,
+                    "underlying_last": point.underlying_last,
+                    "underlying_bid": point.underlying_bid,
+                    "underlying_ask": point.underlying_ask,
+                    "underlying_mid": point.underlying_mid,
+                    "atm_strike": point.atm_strike,
+                }
+
+                # Add call option data
+                if point.call_option:
+                    record.update(
+                        {
+                            "call_ticker": point.call_option.contract.ticker,
+                            "call_settlement": point.call_option.settlement_price,
+                            "call_last": point.call_option.last_price,
+                            "call_bid": point.call_option.bid,
+                            "call_ask": point.call_option.ask,
+                            "call_mid": point.call_option.mid_price,
+                            "call_volume": point.call_option.volume,
+                            "call_open_interest": point.call_option.open_interest,
+                            "call_implied_vol": point.call_option.implied_vol,
+                            "call_delta": point.call_option.delta,
+                            "call_gamma": point.call_option.gamma,
+                            "call_theta": point.call_option.theta,
+                            "call_vega": point.call_option.vega,
+                        }
+                    )
+                else:
+                    record.update(
+                        {
+                            "call_ticker": None,
+                            "call_settlement": None,
+                            "call_last": None,
+                            "call_bid": None,
+                            "call_ask": None,
+                            "call_mid": None,
+                            "call_volume": None,
+                            "call_open_interest": None,
+                            "call_implied_vol": None,
+                            "call_delta": None,
+                            "call_gamma": None,
+                            "call_theta": None,
+                            "call_vega": None,
+                        }
+                    )
+
+                # Add put option data
+                if point.put_option:
+                    record.update(
+                        {
+                            "put_ticker": point.put_option.contract.ticker,
+                            "put_settlement": point.put_option.settlement_price,
+                            "put_last": point.put_option.last_price,
+                            "put_bid": point.put_option.bid,
+                            "put_ask": point.put_option.ask,
+                            "put_mid": point.put_option.mid_price,
+                            "put_volume": point.put_option.volume,
+                            "put_open_interest": point.put_option.open_interest,
+                            "put_implied_vol": point.put_option.implied_vol,
+                            "put_delta": point.put_option.delta,
+                            "put_gamma": point.put_option.gamma,
+                            "put_theta": point.put_option.theta,
+                            "put_vega": point.put_option.vega,
+                        }
+                    )
+                else:
+                    record.update(
+                        {
+                            "put_ticker": None,
+                            "put_settlement": None,
+                            "put_last": None,
+                            "put_bid": None,
+                            "put_ask": None,
+                            "put_mid": None,
+                            "put_volume": None,
+                            "put_open_interest": None,
+                            "put_implied_vol": None,
+                            "put_delta": None,
+                            "put_gamma": None,
+                            "put_theta": None,
+                            "put_vega": None,
+                        }
+                    )
+
+                records.append(record)
+
+            df = pd.DataFrame(records)
+
+            # Sort by date
+            if not df.empty:
+                df = df.sort_values("date")
+
+            response.data = df
+            logger.info(f"Returned DataFrame with {len(df)} rows and {response.error_count} errors")
+
+    except Exception as e:
+        logger.error(f"Error fetching ATM option timeseries: {e}")
+        response.add_error(
+            error_type="ATMTimeseriesFetchError",
+            message=f"Failed to fetch ATM option timeseries: {str(e)}",
+            context={
+                "underlying": underlying,
+                "start_date": str(start_date),
+                "end_date": str(end_date),
+                "expiry_date": str(expiry_date) if expiry_date else None,
+            },
+            exception=e,
+        )
+
+    return response

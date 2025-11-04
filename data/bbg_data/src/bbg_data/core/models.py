@@ -6,10 +6,113 @@ ensuring type safety and reducing errors from string-based data handling.
 """
 
 from dataclasses import dataclass, field
-from datetime import date
-from typing import Any
+from datetime import date, datetime
+from typing import Any, Generic, TypeVar
 
 from bbg_data.core.enums import BloombergField, OptionType
+
+
+@dataclass
+class ErrorDetail:
+    """
+    Represents an error that occurred during data fetching.
+
+    Attributes:
+        timestamp: When the error occurred
+        error_type: Type of error (e.g., "BloombergAPIError", "ParsingError")
+        message: Human-readable error message
+        context: Additional context (e.g., security ticker, date, field name)
+        exception: Original exception if available
+    """
+
+    timestamp: datetime
+    error_type: str
+    message: str
+    context: dict[str, Any] = field(default_factory=dict)
+    exception: Exception | None = None
+
+    def __str__(self) -> str:
+        """Return human-readable representation."""
+        ctx_str = ", ".join(f"{k}={v}" for k, v in self.context.items()) if self.context else ""
+        timestamp_str = self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        base_msg = f"[{timestamp_str}] {self.error_type}: {self.message}"
+        return base_msg + (f" ({ctx_str})" if ctx_str else "")
+
+
+T = TypeVar("T")
+
+
+@dataclass
+class Response(Generic[T]):
+    """
+    Generic response wrapper that includes both data and error information.
+
+    This allows functions to return partial results even when some errors occur,
+    preventing loss of already-fetched data.
+
+    Attributes:
+        data: The actual data returned (can be partial if errors occurred)
+        errors: List of errors encountered (empty if no errors)
+        success: True if no errors occurred
+    """
+
+    data: T
+    errors: list[ErrorDetail] = field(default_factory=list)
+
+    @property
+    def success(self) -> bool:
+        """Check if operation completed without errors."""
+        return len(self.errors) == 0
+
+    @property
+    def has_errors(self) -> bool:
+        """Check if any errors occurred."""
+        return len(self.errors) > 0
+
+    @property
+    def error_count(self) -> int:
+        """Get count of errors."""
+        return len(self.errors)
+
+    def add_error(
+        self,
+        error_type: str,
+        message: str,
+        context: dict[str, Any] | None = None,
+        exception: Exception | None = None,
+    ) -> None:
+        """
+        Add an error to the response.
+
+        Args:
+            error_type: Type of error
+            message: Error message
+            context: Additional context information
+            exception: Original exception if available
+        """
+        self.errors.append(
+            ErrorDetail(
+                timestamp=datetime.now(),
+                error_type=error_type,
+                message=message,
+                context=context or {},
+                exception=exception,
+            )
+        )
+
+    def get_errors_by_type(self, error_type: str) -> list[ErrorDetail]:
+        """Get all errors of a specific type."""
+        return [e for e in self.errors if e.error_type == error_type]
+
+    def print_errors(self) -> None:
+        """Print all errors to console."""
+        if not self.errors:
+            print("No errors")
+            return
+
+        print(f"\n{len(self.errors)} error(s) occurred:")
+        for i, error in enumerate(self.errors, 1):
+            print(f"  {i}. {error}")
 
 
 @dataclass(frozen=True)
@@ -189,3 +292,57 @@ class OptionChainFilter:
         if self.option_types and contract.option_type not in self.option_types:
             return False
         return True
+
+
+@dataclass
+class ATMOptionDataPoint:
+    """
+    Combined underlying and ATM option data for a single date.
+
+    Represents a point-in-time snapshot of the underlying security and its
+    at-the-money option contract.
+
+    Attributes:
+        date: Observation date
+        underlying_ticker: Bloomberg ticker of underlying security
+        option_expiry: Option expiration date used for this observation
+        underlying_settlement: Underlying settlement price
+        underlying_last: Underlying last price
+        underlying_bid: Underlying bid price
+        underlying_ask: Underlying ask price
+        call_option: ATM call option market data (None if not found)
+        put_option: ATM put option market data (None if not found)
+    """
+
+    date: date
+    underlying_ticker: str
+    option_expiry: date | None = None
+    underlying_settlement: float | None = None
+    underlying_last: float | None = None
+    underlying_bid: float | None = None
+    underlying_ask: float | None = None
+    call_option: OptionMarketData | None = None
+    put_option: OptionMarketData | None = None
+
+    @property
+    def underlying_mid(self) -> float | None:
+        """Calculate underlying mid price from bid/ask if available."""
+        if self.underlying_bid is not None and self.underlying_ask is not None:
+            return (self.underlying_bid + self.underlying_ask) / 2.0
+        return None
+
+    @property
+    def atm_strike(self) -> float | None:
+        """Get the ATM strike price (assumes call and put have same strike)."""
+        if self.call_option:
+            return self.call_option.contract.strike
+        if self.put_option:
+            return self.put_option.contract.strike
+        return None
+
+    @property
+    def days_to_expiry(self) -> int | None:
+        """Calculate days to expiry from observation date."""
+        if self.option_expiry:
+            return (self.option_expiry - self.date).days
+        return None
