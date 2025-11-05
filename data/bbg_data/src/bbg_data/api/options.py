@@ -149,7 +149,7 @@ class OptionChainFetcher:
 
         # Apply filter if provided
         if chain_filter:
-            all_tickers = self._filter_tickers(all_tickers, chain_filter, underlying)
+            all_tickers = self._filter_tickers(all_tickers, chain_filter, underlying, as_of_date)
 
         return all_tickers
 
@@ -321,11 +321,35 @@ class OptionChainFetcher:
         tickers: list[str],
         chain_filter: OptionChainFilter,
         underlying: str,
+        as_of_date: date | None = None,
     ) -> list[str]:
-        """Filter option tickers based on criteria."""
-        # Parse tickers to contracts for filtering
-        contracts = [self._parse_ticker(t, underlying) for t in tickers]
-        filtered_tickers = [t for t, c in zip(tickers, contracts) if c and chain_filter.matches(c)]
+        """
+        Filter option tickers based on criteria.
+        
+        Uses reference data lookup to handle both human-readable and FIGI format tickers.
+        
+        Args:
+            tickers: List of option tickers to filter
+            chain_filter: Filter criteria to apply
+            underlying: Underlying security ticker
+            as_of_date: Date to fetch reference data as-of (uses current date if None)
+            
+        Returns:
+            List of tickers that match the filter criteria
+        """
+        # Fetch contract details from reference data (works with FIGI tickers)
+        contracts = self._get_option_contracts_from_reference_data(
+            tickers, underlying, as_of_date
+        )
+        
+        # Create a mapping of ticker to contract
+        ticker_to_contract = {c.ticker: c for c in contracts}
+        
+        # Filter tickers where we have a valid contract that matches the criteria
+        filtered_tickers = [
+            t for t in tickers
+            if t in ticker_to_contract and chain_filter.matches(ticker_to_contract[t])
+        ]
 
         logger.info(f"Filtered to {len(filtered_tickers)} options matching criteria")
         return filtered_tickers
@@ -339,6 +363,10 @@ class OptionChainFetcher:
         Parse Bloomberg option ticker into OptionContract.
 
         Format: "NVDA US 11/21/25 C177.5 Equity"
+        
+        Note: This method uses string parsing and may fail for historical tickers
+        in FIGI format (e.g., 'BBG01QQKDSZ4 Equity'). For robust parsing,
+        use _get_option_contracts_from_reference_data instead.
         """
         try:
             parts = ticker.split()
@@ -383,6 +411,109 @@ class OptionChainFetcher:
         except Exception as e:
             logger.debug(f"Failed to parse ticker {ticker}: {e}")
             return None
+
+    def _get_option_contracts_from_reference_data(
+        self,
+        tickers: list[str],
+        underlying: str,
+        as_of_date: date | None = None,
+    ) -> list[OptionContract]:
+        """
+        Fetch option contract details from Bloomberg reference data.
+        
+        This method is more robust than string parsing as it works with both
+        human-readable tickers and FIGI format tickers. When using historical
+        dates with SINGLE_DATE_OVERRIDE, Bloomberg may return FIGI tickers
+        (e.g., 'BBG01QQKDSZ4 Equity') which cannot be parsed via string manipulation.
+        
+        Args:
+            tickers: List of option Bloomberg tickers (any format)
+            underlying: Bloomberg ticker of underlying security
+            as_of_date: Date to fetch reference data as-of (uses current date if None)
+            
+        Returns:
+            List of OptionContract objects with data from reference fields
+        """
+        if not tickers:
+            return []
+            
+        logger.debug(f"Fetching reference data for {len(tickers)} tickers")
+        
+        # Fetch reference data for option-specific fields
+        fields = [
+            BloombergField.OPT_EXPIRE_DT,
+            BloombergField.OPT_STRIKE_PX,
+            BloombergField.OPT_PUT_CALL,
+        ]
+        
+        overrides = None
+        if as_of_date:
+            overrides = {"SINGLE_DATE_OVERRIDE": as_of_date.strftime("%Y%m%d")}
+        
+        all_data: list[ReferenceDataPoint] = []
+        
+        # Batch requests to avoid Bloomberg limits
+        for i in range(0, len(tickers), self.batch_size):
+            batch = tickers[i : i + self.batch_size]
+            
+            try:
+                request = self.request_builder.create_reference_request(
+                    securities=batch,
+                    fields=fields,
+                    overrides=overrides,
+                )
+                
+                self.session.send_request(request)
+                
+                # Collect responses
+                while True:
+                    event = self.session.next_event()
+                    response = ResponseParser.parse_reference_data(event)
+                    all_data.extend(response.data)
+                    
+                    if event.eventType() == blpapi.Event.RESPONSE:
+                        break
+                        
+            except Exception as e:
+                logger.error(f"Error fetching reference data batch {i // self.batch_size + 1}: {e}")
+        
+        # Convert reference data to OptionContract objects
+        contracts: list[OptionContract] = []
+        
+        for point in all_data:
+            try:
+                expiry = point.get_field(BloombergField.OPT_EXPIRE_DT)
+                strike = point.get_field(BloombergField.OPT_STRIKE_PX)
+                put_call = point.get_field(BloombergField.OPT_PUT_CALL)
+                
+                if expiry is None or strike is None or put_call is None:
+                    logger.debug(f"Missing required fields for {point.security}")
+                    continue
+                
+                # Convert expiry to date if it's a datetime
+                if isinstance(expiry, datetime):
+                    expiry = expiry.date()
+                
+                # Parse option type from Bloomberg value (e.g., 'C', 'CALL', 'P', 'PUT')
+                option_type = OptionType.from_bloomberg(put_call)
+                if option_type is None:
+                    logger.debug(f"Could not parse option type '{put_call}' for {point.security}")
+                    continue
+                
+                contract = OptionContract(
+                    ticker=point.security,
+                    strike=float(strike),
+                    expiry=expiry,
+                    option_type=option_type,
+                    underlying=underlying,
+                )
+                contracts.append(contract)
+                
+            except Exception as e:
+                logger.debug(f"Failed to create contract from reference data for {point.security}: {e}")
+        
+        logger.debug(f"Created {len(contracts)} option contracts from reference data")
+        return contracts
 
     def _to_option_market_data(
         self,
@@ -459,6 +590,9 @@ class OptionChainFetcher:
 
         Searches for the nearest expiry that is at least min_days_to_expiry away
         but no more than max_days_to_expiry away from the target date.
+        
+        Uses reference data lookup to fetch option contract details, which is
+        more robust than string parsing and works with historical FIGI tickers.
 
         Args:
             underlying: Bloomberg ticker of underlying (e.g., "NVDA US Equity")
@@ -482,24 +616,25 @@ class OptionChainFetcher:
             f"({min_days_to_expiry}-{max_days_to_expiry} days out)"
         )
 
-        # Get full option chain as-of target date (no expiry filter)
-        chain_filter = OptionChainFilter()
-        tickers = self.get_option_chain(underlying, chain_filter, target_date)
+        # Get full option chain as-of target date (no expiry filter)  
+        tickers = self.get_option_chain(underlying, as_of_date=target_date)
 
         if not tickers:
             logger.warning(f"No options found for {underlying} on {target_date}")
             return None
 
-        # Parse tickers to extract unique expiry dates
-        contracts = [self._parse_ticker(t, underlying) for t in tickers]
-        valid_contracts = [c for c in contracts if c is not None]
+        # Fetch option contract details from reference data
+        # This is more robust than string parsing and works with FIGI tickers
+        contracts = self._get_option_contracts_from_reference_data(
+            tickers, underlying, target_date
+        )
 
-        if not valid_contracts:
-            logger.warning("No valid option contracts parsed")
+        if not contracts:
+            logger.warning("No valid option contracts found from reference data")
             return None
 
         # Get unique expiry dates
-        expiry_dates = sorted(set(c.expiry for c in valid_contracts))
+        expiry_dates = sorted({c.expiry for c in contracts})
 
         # Filter expiries within the desired range
         valid_expiries = []
