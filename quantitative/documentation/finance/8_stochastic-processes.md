@@ -69,13 +69,13 @@ $$S_{n} = \sum_{j=1}^{n}X_{j}$$
 
 ## Time Series Statistics
 
-- For a time series: $\dotsX(t_{0}), X(t_{0}+1), X(t_{0}+2),\dots, X(t_{0}+k)\dots$ where $X(t)$ is the price of an asset observed at time $t$ and $t_{0}$, $(t_{0}+1)$, $(t_{0}+2)$,\dotsetc. are consecutive business days.
+- For a time series: $\dots X(t_{0}), X(t_{0}+1), X(t_{0}+2),\dots, X(t_{0}+k)\dots$ where $X(t)$ is the price of an asset observed at time $t$ and $t_{0}$, $(t_{0}+1)$, $(t_{0}+2)$,\dotsetc. are consecutive business days.
 - The joint distribution of $(X(k), X(k+1),\dots, X(k+j))$ is said to be **strictly stationary** if the distribution only changes with $j$ and not $k$ - i.e. with the number of successive observations and not the point in time that these observations are made.
   - In simpler terms, the joint distribution of a set of observations in the time series is the same regardless of when or where in the time series the observation is made.
 - This leads to the assumption that $X(k)$ has the same distribution as $X(1)$ and that $(X(k), X(k+1))$ has the same distribution as $(X(1), X(2))$ etc.
 - In practice strict stationarity is reduced to **stationarity** so that this principle holds up only to *second moments* - i.e. only as far as *variance* and *covariance* are concerned.
-- The **autocovariance** function of a time series $X(t)$ is defined to be: $\gamma (k,\mathcal{l}) \equiv \text{cov}(X(k),X(\mathcal{l})) \equiv E[(X(k) - E(X(k)))(X(\mathcal{l}) - E(X(\mathcal{l})))]$ for observations made at time $k$ and $\mathcal{l}$.
-- The time series is *stationary* if its autocovariance function is **translation invariant** along with the expectation $E[X(k)]= \mu$ - i.e. $\mu$ is independent of $k$.
+- The **autocovariance** function of a time series $X(t)$ is defined to be: $\gamma (k,\mathcal{l}) \equiv \text{cov}(X(k),X(\mathcal{l})) \equiv \mathbb{E}[(X(k) - E(X(k)))(X(\mathcal{l}) - E(X(\mathcal{l})))]$ for observations made at time $k$ and $\mathcal{l}$.
+- The time series is *stationary* if its autocovariance function is **translation invariant** along with the expectation $\mathbb{E}[X(k)]= \mu$ - i.e. $\mu$ is independent of $k$.
   - **Translation invariance** defines the observation to be independent of time, such that $\gamma (k+t,\mathcal{l}+t) = \gamma (k,\mathcal{l})$.
   - $\text{cov}(X(k),X(\mathcal{l}))$ only depends on the lag $\mathcal{l}-k$.
 - *Stationarity* implies the following:
@@ -513,11 +513,11 @@ $$
 
 $$
 \begin{aligned}
-E[Z] &= 0 \\
+\mathbb{E}[Z] &= 0 \\
 \text{Var}(Z) &= 1 \\\\
-E \left[e^{\mu + \sigma Z} \right] &= e^{\mu + \sigma E[Z] + \frac{ \sigma^{2}}{2}} = e^{\mu + \frac{\sigma^{2}}{2}} \\\\
+\mathbb{E} \left[e^{\mu + \sigma Z} \right] &= e^{\mu + \sigma \mathbb{E}[Z] + \frac{ \sigma^{2}}{2}} = e^{\mu + \frac{\sigma^{2}}{2}} \\\\
 \text{Var}(e^{\mu + \sigma Z}) &= e^{2 \mu + 2 \sigma^{2}} \\\\
-\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)} &= \sqrt{\text{Var}(e^{\mu + \sigma Z}) - (E[e^{\mu + \sigma Z}])^{2}} \\\\
+\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)} &= \sqrt{\text{Var}(e^{\mu + \sigma Z}) - (\mathbb{E}[e^{\mu + \sigma Z}])^{2}} \\\\
 &=\sqrt{e^{2 \mu + 2 \sigma^{2}} - (e^{\mu + \frac{\sigma^{2}}{2}})^{2}} \\\\
 &= \sqrt{e^{2 \mu + 2 \sigma^{2}} - e^{2 \mu + \sigma^{2}}} \\\\
 &= \sqrt{e^{2 \mu + \sigma^{2}} \cdot e^{\sigma^{2}} - 1} \\\\

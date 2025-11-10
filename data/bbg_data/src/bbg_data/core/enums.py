@@ -33,27 +33,33 @@ class BloombergField(str, Enum):
     OPT_VEGA = "OPT_VEGA"
     OPT_RHO = "OPT_RHO"
     OPT_CHAIN = "OPT_CHAIN"
-    
+
     # Implied volatility
     IVOL_MID = "IVOL_MID"
     IVOL_BID = "IVOL_BID"
     IVOL_ASK = "IVOL_ASK"
-    
+
+    # Volatility surface fields (50 delta)
+    HIST_50D_IMP_VOL_1M = "HIST_50D_IMP_VOL_1M"  # 50 delta 1-month implied vol
+    HIST_50D_IMP_VOL_2M = "HIST_50D_IMP_VOL_2M"  # 50 delta 2-month implied vol
+    HIST_50D_IMP_VOL_3M = "HIST_50D_IMP_VOL_3M"  # 50 delta 3-month implied vol
+    HIST_50D_IMP_VOL_6M = "HIST_50D_IMP_VOL_6M"  # 50 delta 6-month implied vol
+
     # Volume and open interest
     VOLUME = "VOLUME"
     OPEN_INT = "OPEN_INT"
-    
+
     # Chain-related fields
     CHAIN_TICKERS = "CHAIN_TICKERS"
-    
+
     # Option descriptive fields
     STRIKE = "STRIKE"
     CP_FLAG = "CP_FLAG"
     OPTION_TYPE = "OPTION_TYPE"
-    
+
     # Dividend and corporate actions
     EQY_DVD_YLD = "EQY_DVD_YLD"
-    
+
     # Risk-free rate proxies
     USGG3M = "USGG3M Index"
     USGG1Y = "USGG1Y Index"
@@ -63,24 +69,24 @@ class BloombergField(str, Enum):
 
 class OptionType(str, Enum):
     """Option type: Call or Put."""
-    
+
     CALL = "CALL"
     PUT = "PUT"
-    
+
     @classmethod
     def from_bloomberg(cls, value: str | None) -> "OptionType | None":
         """
         Parse Bloomberg option type value.
-        
+
         Args:
             value: Bloomberg field value (e.g., 'C', 'CALL', 'P', 'PUT')
-            
+
         Returns:
             OptionType enum or None if unable to parse
         """
         if not value:
             return None
-            
+
         value_upper = str(value).upper()
         if "C" in value_upper and "P" not in value_upper:
             return cls.CALL
@@ -91,7 +97,7 @@ class OptionType(str, Enum):
 
 class ServiceType(str, Enum):
     """Bloomberg API service types."""
-    
+
     REFDATA = "//blp/refdata"
     MKTDATA = "//blp/mktdata"
     INSTRUMENTS = "//blp/instruments"
@@ -99,7 +105,7 @@ class ServiceType(str, Enum):
 
 class RequestType(str, Enum):
     """Bloomberg request types."""
-    
+
     REFERENCE_DATA = "ReferenceDataRequest"
     HISTORICAL_DATA = "HistoricalDataRequest"
     INTRADAY_TICK = "IntradayTickRequest"
@@ -108,7 +114,7 @@ class RequestType(str, Enum):
 
 class Periodicity(str, Enum):
     """Periodicity options for historical data requests."""
-    
+
     DAILY = "DAILY"
     WEEKLY = "WEEKLY"
     MONTHLY = "MONTHLY"

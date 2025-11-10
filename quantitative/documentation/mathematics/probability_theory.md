@@ -27,6 +27,7 @@
     - [Equality of Random Variables](#equality-of-random-variables)
     - [Random Variables Defining Events](#random-variables-defining-events)
     - [Random Variables Defining Partitions](#random-variables-defining-partitions)
+    - [Expectaion](#expectaion)
 
 Probability theory has evolved to model uncertainty, providing both an abstract system of thought and practical tools for quantifying likelihoods. While it can be studied as a purely theoretical branch of mathematics, its significance is closely tied to real-world applications.
 
@@ -470,4 +471,21 @@ where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, represen
 - A random variable $X$ can take the values $x_1, x_2, \dots, x_k$.
 - $\mathcal{U}$ is the partition defined (or determined, or generated) by the random variable $X$.
 - $\mathcal{U} = \{\{X=x_i\}\}$ is a partitiion of $\Omega$, or in other words $\mathcal{U} = \{B_1, B_2, \dots, B_k\}$ where $B_i = \{\omega \in \Omega: X(\omega) = x_i\}$.
-- For the random 
+- For the random variable $X$ (number of heads), the following paritition is defined:
+
+$$\{\{\omega_{ttt}\}, \{\omega_{tht}, \omega_{tth}, \omega_{htt}\}, \{\omega_{hht}, \omega_{hth}, \omega_{thh}\}, \{\omega_{hhh}\}\}$$
+```math
+\begin{aligned}
+X=0 &\Longrightarrow \{\omega_{ttt}\} \\\\
+X=1 &\Longrightarrow \{\omega_{tht}, \omega_{tth}, \omega_{htt}\} \\\\
+X=2 &\Longrightarrow \{\omega_{hht}, \omega_{hth}, \omega_{thh}\} \\\\
+X=3 &\Longrightarrow \{\omega_{hhh}\}
+\end{aligned}
+```
+
+### Expectaion
+
+The expectation (expected value) of a discrete random variable $X$, with respect to probability measure $P$, is defined as follows:
+
+$$\boxed{\mathbb{E}[X] = \sum_{i} x_i P(X = x_i) = \sum_{\omega \in \Omega} X(\omega) P(\omega)}$$
+where the first sum is over all possible values $x_i$ that $X$ can take, and the second sum is over all outcomes $\omega$ in the sample space $\Omega$.

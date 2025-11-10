@@ -1,33 +1,37 @@
-# ATM Option Time Series Fetching
+# 50-Delta Volatility Time Series Fetching
 
 ## Overview
 
-The `fetch_atm_option_timeseries()` function fetches daily time series data for:
+The `fetch_50delta_vol_timeseries()` function fetches daily time series data for:
 
-- **Underlying stock prices** (settlement, last, bid, ask)
-- **ATM call option** metrics (settlement, last, bid, ask, implied volatility, Greeks, open interest, volume)
-- **ATM put option** metrics (settlement, last, bid, ask, implied volatility, Greeks, open interest, volume)
+- **Underlying stock prices** (settlement)
+- **50-delta implied volatility** for standard tenors (1M, 2M, 3M, 6M)
+
+This approach uses Bloomberg's pre-calculated volatility surface fields, which is **much simpler and more efficient** than constructing ATM options manually (no need to find strikes, expiries, or filter option chains).
 
 ## How It Works
 
-The function implements a multi-step process for each date in the range:
+The function uses a single Bloomberg historical data request to fetch:
 
-1. **Fetch Underlying Prices** - Queries Bloomberg for the underlying security's prices as-of each date
-2. **Get Option Chain** - Retrieves available option tickers for the specified expiry date, as-of each date
-3. **Filter by Strike** - Limits options to those with strikes within a percentage range of the underlying price
-4. **Find ATM Strike** - Identifies the strike closest to the underlying price (at-the-money)
-5. **Fetch Option Data** - Queries market data for the ATM call and put options
+1. **Underlying settlement prices** for each date
+2. **50-delta implied volatility** from Bloomberg's volatility surface
+
+Bloomberg pre-calculates these values, eliminating the need for:
+
+- Finding option chains
+- Identifying ATM strikes
+- Filtering by expiry dates
+- Fetching individual option contracts
 
 ## Function Signature
 
 ```python
-def fetch_atm_option_timeseries(
+def fetch_50delta_vol_timeseries(
     underlying: str,
     start_date: date | str,
     end_date: date | str,
-    expiry_date: date | str,
-    strike_range_pct: float = 0.1,
-) -> pd.DataFrame
+    tenor: str = "1M",
+) -> Response[pd.DataFrame]
 ```
 
 ### Parameters
@@ -35,58 +39,18 @@ def fetch_atm_option_timeseries(
 - **`underlying`** (`str`): Bloomberg ticker of the underlying security (e.g., `"NVDA US Equity"`)
 - **`start_date`** (`date | str`): Start date, as `date` object or `"YYYY-MM-DD"` string
 - **`end_date`** (`date | str`): End date, as `date` object or `"YYYY-MM-DD"` string
-- **`expiry_date`** (`date | str`): Option expiration date, as `date` object or `"mm/dd/yy"` string
-- **`strike_range_pct`** (`float`, optional): Percentage range around underlying price to search for options (default: 0.1 = ±10%)
+- **`tenor`** (`str`, optional): Volatility tenor - `"1M"`, `"2M"`, `"3M"`, or `"6M"` (default: `"1M"`)
 
 ### Returns
 
-`pd.DataFrame` with the following columns:
+`Response[pd.DataFrame]` containing:
 
-#### Underlying Data
-
-- `date`: Observation date
-- `underlying_ticker`: Underlying security ticker
-- `underlying_settlement`: Underlying settlement price
-- `underlying_last`: Underlying last price
-- `underlying_bid`: Underlying bid price
-- `underlying_ask`: Underlying ask price
-- `underlying_mid`: Underlying mid price (calculated from bid/ask)
-
-#### General
-
-- `atm_strike`: ATM strike price (same for call and put)
-
-#### Call Option Data
-
-- `call_ticker`: Bloomberg ticker of the call option
-- `call_settlement`: Call settlement price
-- `call_last`: Call last price
-- `call_bid`: Call bid price
-- `call_ask`: Call ask price
-- `call_mid`: Call mid price (calculated from bid/ask)
-- `call_volume`: Call trading volume
-- `call_open_interest`: Call open interest
-- `call_implied_vol`: Call implied volatility
-- `call_delta`: Call delta
-- `call_gamma`: Call gamma
-- `call_theta`: Call theta
-- `call_vega`: Call vega
-
-#### Put Option Data
-
-- `put_ticker`: Bloomberg ticker of the put option
-- `put_settlement`: Put settlement price
-- `put_last`: Put last price
-- `put_bid`: Put bid price
-- `put_ask`: Put ask price
-- `put_mid`: Put mid price (calculated from bid/ask)
-- `put_volume`: Put trading volume
-- `put_open_interest`: Put open interest
-- `put_implied_vol`: Put implied volatility
-- `put_delta`: Put delta
-- `put_gamma`: Put gamma
-- `put_theta`: Put theta
-- `put_vega`: Put vega
+- **`data`**: DataFrame with the following columns:
+  - `date`: Observation date
+  - `security`: Underlying ticker
+  - `settlement_price`: Underlying settlement price
+  - `vol_50d_1m` (or `vol_50d_2m`, etc.): 50-delta implied volatility
+- **`errors`**: List of any errors encountered (processing continues on errors)
 
 ## Usage Examples
 
@@ -94,15 +58,21 @@ def fetch_atm_option_timeseries(
 
 ```python
 from datetime import date
-from bbg_data.api import fetch_atm_option_timeseries
+from bbg_data.api import fetch_50delta_vol_timeseries
 
-# Fetch October 2024 data for NVDA with November expiry
-df = fetch_atm_option_timeseries(
+# Fetch 1-month 50-delta vol for Q4 2024
+response = fetch_50delta_vol_timeseries(
     underlying="NVDA US Equity",
     start_date=date(2024, 10, 1),
-    end_date=date(2024, 10, 31),
-    expiry_date="11/21/24"
+    end_date=date(2024, 12, 31),
+    tenor="1M"
 )
+
+df = response.data
+
+if response.has_errors:
+    print(f"Warning: {response.error_count} errors occurred")
+    response.print_errors()
 
 print(df.head())
 ```
@@ -111,27 +81,72 @@ print(df.head())
 
 ```python
 # Alternative using string dates
-df = fetch_atm_option_timeseries(
+response = fetch_50delta_vol_timeseries(
     underlying="AAPL US Equity",
     start_date="2024-10-01",
     end_date="2024-10-31",
-    expiry_date="11/15/24",
-    strike_range_pct=0.05  # Tighter ±5% range
+    tenor="3M"
 )
+
+df = response.data
+print(df.describe())
 ```
 
-### Analyzing Implied Volatility
+### Compare Multiple Tenors
 
 ```python
-# Filter to rows with complete option data
-valid_data = df.dropna(subset=["call_implied_vol", "put_implied_vol"])
+# Fetch different tenors for term structure analysis
+response_1m = fetch_50delta_vol_timeseries(
+    "NVDA US Equity",
+    start_date=date(2024, 10, 1),
+    end_date=date(2024, 10, 31),
+    tenor="1M"
+)
 
-# Calculate put-call IV skew
-valid_data['iv_skew'] = valid_data['put_implied_vol'] - valid_data['call_implied_vol']
+response_3m = fetch_50delta_vol_timeseries(
+    "NVDA US Equity",
+    start_date=date(2024, 10, 1),
+    end_date=date(2024, 10, 31),
+    tenor="3M"
+)
 
-print(f"Mean Call IV: {valid_data['call_implied_vol'].mean():.2%}")
-print(f"Mean Put IV: {valid_data['put_implied_vol'].mean():.2%}")
-print(f"Mean IV Skew: {valid_data['iv_skew'].mean():.2%}")
+response_6m = fetch_50delta_vol_timeseries(
+    "NVDA US Equity",
+    start_date=date(2024, 10, 1),
+    end_date=date(2024, 10, 31),
+    tenor="6M"
+)
+
+# Combine the data
+df_combined = response_1m.data[["date", "settlement_price", "vol_50d_1m"]].copy()
+df_combined = df_combined.merge(
+    response_3m.data[["date", "vol_50d_3m"]], on="date", how="left"
+)
+df_combined = df_combined.merge(
+    response_6m.data[["date", "vol_50d_6m"]], on="date", how="left"
+)
+
+print(df_combined.head())
+```
+
+### Analyzing Volatility
+
+```python
+df = response.data
+
+# Basic statistics
+print(f"Average volatility: {df['vol_50d_1m'].mean():.2%}")
+print(f"Volatility std dev: {df['vol_50d_1m'].std():.2%}")
+print(f"Max volatility: {df['vol_50d_1m'].max():.2%}")
+print(f"Min volatility: {df['vol_50d_1m'].min():.2%}")
+
+# Calculate daily changes
+df['price_change'] = df['settlement_price'].pct_change()
+df['vol_change'] = df['vol_50d_1m'].diff()
+
+# Correlation between price and vol
+correlation = df[['settlement_price', 'vol_50d_1m']].corr()
+print(correlation)
 ```
 
 ### Plotting Time Series
@@ -139,24 +154,23 @@ print(f"Mean IV Skew: {valid_data['iv_skew'].mean():.2%}")
 ```python
 import matplotlib.pyplot as plt
 
-# Plot implied volatility over time
-plt.figure(figsize=(12, 6))
-plt.plot(df['date'], df['call_implied_vol'], label='Call IV', marker='o')
-plt.plot(df['date'], df['put_implied_vol'], label='Put IV', marker='s')
-plt.xlabel('Date')
-plt.ylabel('Implied Volatility')
-plt.title('ATM Option Implied Volatility')
-plt.legend()
-plt.grid(True)
-plt.show()
+df = response.data
 
-# Plot Greeks
-fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-df.plot(x='date', y='call_delta', ax=axes[0,0], title='Call Delta')
-df.plot(x='date', y='call_gamma', ax=axes[0,1], title='Call Gamma')
-df.plot(x='date', y='call_theta', ax=axes[1,0], title='Call Theta')
-df.plot(x='date', y='call_vega', ax=axes[1,1], title='Call Vega')
-plt.tight_layout()
+# Plot volatility and price
+fig, ax1 = plt.subplots(figsize=(12, 6))
+
+ax1.plot(df['date'], df['settlement_price'], 'b-', label='Price')
+ax1.set_xlabel('Date')
+ax1.set_ylabel('Price', color='b')
+ax1.tick_params(axis='y', labelcolor='b')
+
+ax2 = ax1.twinx()
+ax2.plot(df['date'], df['vol_50d_1m'], 'r-', label='50Δ 1M Vol')
+ax2.set_ylabel('Implied Volatility', color='r')
+ax2.tick_params(axis='y', labelcolor='r')
+
+plt.title('NVDA: Price vs 50-Delta 1M Volatility')
+plt.grid(True)
 plt.show()
 ```
 
@@ -164,7 +178,8 @@ plt.show()
 
 ```python
 # Save the data
-df.to_csv('atm_options_data.csv', index=False)
+df = response.data
+df.to_csv('nvda_50delta_vol.csv', index=False)
 ```
 
 ## Advanced Usage with OptionChainFetcher
@@ -179,41 +194,60 @@ from datetime import date
 with session() as bbg_session:
     fetcher = OptionChainFetcher(bbg_session)
     
-    # Fetch data for a single date
-    data_point = fetcher.get_atm_option_data(
+    # Fetch 50-delta vol timeseries
+    response = fetcher.get_50delta_vol_timeseries(
         underlying="NVDA US Equity",
-        target_date=date(2024, 10, 15),
-        expiry_date=date(2024, 11, 21),
-        strike_range_pct=0.10
+        start_date=date(2024, 10, 1),
+        end_date=date(2024, 10, 31),
+        tenor="1M"
     )
     
-    print(f"Date: {data_point.date}")
-    print(f"Underlying: {data_point.underlying_settlement}")
-    print(f"ATM Strike: {data_point.atm_strike}")
-    if data_point.call_option:
-        print(f"Call IV: {data_point.call_option.implied_vol:.2%}")
-    if data_point.put_option:
-        print(f"Put IV: {data_point.put_option.implied_vol:.2%}")
+    df = response.data
+    print(df.head())
 ```
 
 ## Performance Considerations
 
-- Each date requires multiple Bloomberg API calls (underlying prices + option chain + option data)
-- For a 20-day period, expect ~60-100 API calls total
-- Consider using business days only to reduce API calls
-- The `strike_range_pct` parameter helps limit the number of options queried
+- **Single API call**: Unlike the old ATM approach, this makes only **one** Bloomberg historical data request
+- **Much faster**: No need to iterate through dates or fetch option chains
+- **More reliable**: Uses Bloomberg's pre-calculated values
+- **For a 3-month period**: Old approach ~200-300 API calls, new approach ~1 API call
+
+## Bloomberg Fields Used
+
+The function uses these Bloomberg volatility surface fields:
+
+- `HIST_50D_IMP_VOL_1M` - 50-delta 1-month implied volatility
+- `HIST_50D_IMP_VOL_2M` - 50-delta 2-month implied volatility
+- `HIST_50D_IMP_VOL_3M` - 50-delta 3-month implied volatility
+- `HIST_50D_IMP_VOL_6M` - 50-delta 6-month implied volatility
+
+These fields represent the implied volatility at 50-delta (approximately ATM) for standard expiry tenors.
+
+## Why 50-Delta Instead of ATM?
+
+- **More stable**: 50-delta volatility is smoother than exact ATM volatility
+- **Standard measure**: Used by traders and risk managers
+- **Always available**: Bloomberg calculates these even when exact ATM strikes don't exist
+- **Better interpolation**: Bloomberg's surface interpolation is more robust than manual strike selection
 
 ## Error Handling
 
-The function is designed to be robust:
+The function returns a `Response` object that includes both data and errors:
 
-- If underlying data is missing for a date, that row will have `None` values
-- If no options are found for a date, call/put columns will be `None`
-- If only one of call/put is found, the other will be `None`
-- The function continues processing even if individual dates fail
+```python
+response = fetch_50delta_vol_timeseries(...)
+
+if response.has_errors:
+    print(f"{response.error_count} errors occurred")
+    response.print_errors()  # Print detailed error information
+    
+# Data is still available even with errors
+df = response.data
+```
 
 ## See Also
 
-- `fetch_option_chain()` - Fetch full option chains for a specific expiry
+- `fetch_option_chain()` - Fetch full option chains for building vol surfaces
 - `OptionChainFetcher` class - Lower-level API for more control
 - `examples/atm_option_timeseries.py` - Complete working example
