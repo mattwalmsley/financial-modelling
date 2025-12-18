@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.7">
+  <diagram name="Page-1" id="5MIjGKylOODfiqh9XJRI">
+    <mxGraphModel dx="2066" dy="1137" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="120" width="160" x="120" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-12" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="a" vertex="1">
+          <mxGeometry height="30" width="30" x="130" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-13" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="b" vertex="1">
+          <mxGeometry height="30" width="30" x="185" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-14" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="c" vertex="1">
+          <mxGeometry height="30" width="30" x="240" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-15" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="d" vertex="1">
+          <mxGeometry height="30" width="30" x="130" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-16" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="e" vertex="1">
+          <mxGeometry height="30" width="30" x="185" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-17" parent="1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" value="f" vertex="1">
+          <mxGeometry height="30" width="30" x="240" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-25" parent="1" style="shape=corner;whiteSpace=wrap;html=1;fillColor=none;dx=75;dy=80;strokeColor=#FF0000;dashed=1;" value="" vertex="1">
+          <mxGeometry height="80" width="80" x="185" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#00CC00;dashed=1;" value="" vertex="1">
+          <mxGeometry height="80" width="30" x="130" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-36" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" value="$$\Omega$$" vertex="1">
+          <mxGeometry height="30" width="90" x="155" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-37" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#00CC00;" value="$$A$$" vertex="1">
+          <mxGeometry height="30" width="60" x="140" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="LMgEg_oxYY90Uw3xWCpH-38" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#ff0000;" value="$$\bar{A}$$" vertex="1">
+          <mxGeometry height="30" width="90" x="130" y="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

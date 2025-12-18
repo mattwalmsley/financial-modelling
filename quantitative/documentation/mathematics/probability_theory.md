@@ -5,7 +5,6 @@
   - [Set Theory in Probability](#set-theory-in-probability)
     - [Set Theory Definitions Summary](#set-theory-definitions-summary)
       - [Set Notation](#set-notation)
-    - [Set Theory Examples](#set-theory-examples)
   - [Finite Probability Spaces](#finite-probability-spaces)
     - [Inclusion-Exclusion Formula](#inclusion-exclusion-formula)
     - [Addition Rule of Probabilities](#addition-rule-of-probabilities)
@@ -27,7 +26,7 @@
     - [Equality of Random Variables](#equality-of-random-variables)
     - [Random Variables Defining Events](#random-variables-defining-events)
     - [Random Variables Defining Partitions](#random-variables-defining-partitions)
-    - [Expectaion](#expectaion)
+    - [Expectation](#expectation)
 
 Probability theory has evolved to model uncertainty, providing both an abstract system of thought and practical tools for quantifying likelihoods. While it can be studied as a purely theoretical branch of mathematics, its significance is closely tied to real-world applications.
 
@@ -62,7 +61,10 @@ In probability, outcomes of a random experiment are modelled as sets, which are 
 
 - An empty set is a set that contains no elements, denoted as $\emptyset$ and defined as $\emptyset = \{\}$.
 - The **set complement** is for outcomes that are not an element of $A$ and is given by $\bar{A}$ which is defined as $\bar{A}=\Omega \setminus A = \omega \in \Omega : \omega \notin A$.
-  - The $:$ can be read as "such that".
+  - The $:$ can be read as *such that*, the $\setminus$ as *minus*, the $\in$ as *is an element of*, and the $\notin$ as *is not an element of*.
+
+    ![Complement Set](../images/complement-set.png "Complement Set")
+
 - Two sets are considered *equal* $A = B$ if they contain exactly the same elements. This can be expressed as:
   - $\omega \in A \Longleftrightarrow  \omega \in B$
   - If $\omega$ in $A$ then $\omega$ is in $B$ and vice versa.
@@ -100,18 +102,6 @@ In probability, outcomes of a random experiment are modelled as sets, which are 
 
     $$\Omega = \{a,b,c,d,e,f\} = A_1 \cup A_2 \cup A_3 = \{a,b\} \cup \{c,d\} \cup \{e,f\}$$
     where $\mathcal{U} = \{A_1, A_2, A_3\} = \{\{a,d\},\{b,c,e\},\{f\}\}$ is a partition of $\Omega$.
-  - For a coin that is tossed three times, and only the result of the first toss is known, the partition for what is *knowable* after the first toss is given by:
-    $$\mathcal{U_1} = \{ A_h, A_t \}$$
-    where
-    $$A_h = \{\omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}\}$$
-    $$A_t = \{\omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt}\}$$
-  - Similarly, if the result of the first two tosses is known, the partition for what is *knowable* after the second toss is given by:
-    $$\mathcal{U_2} = \{ A_{hh}, A_{ht}, A_{th}, A_{tt} \}$$
-    where
-    $$A_{hh} = \{\omega_{hhh}, \omega_{hht}\}$$
-    $$A_{ht} = \{\omega_{hth}, \omega_{htt}\}$$
-    $$A_{th} = \{\omega_{thh}, \omega_{tht}\}$$
-    $$A_{tt} = \{\omega_{tth}, \omega_{ttt}\}$$
 
 ### Set Theory Definitions Summary
 
@@ -147,24 +137,12 @@ The common practice is to denote intersections in probabilities using commas. Fo
 $$P(S_1 \cap S_2) = P(S_1, S_2)$$
 Both notations are context-dependent, and familiarity with both is important.
 
-### Set Theory Examples
-
-1. **Coin Toss**:
-   - Sample space for a single toss: $S = \{H, T\}$.
-   - For three tosses: $S = \{(H, H, H), (H, H, T), (H, T, H), \dots, (T, T, T)\}$.
-   - Event $B$: At least two heads in three tosses.
-     - $B = \{(H, H, T), (H, T, H), (T, H, H), (H, H, H)\}$.
-
-2. **Die Roll**:
-   - Sample space: $S = \{1, 2, 3, 4, 5, 6\}$.
-   - Event $A$: Rolling an even number.
-     - $A = \{2, 4, 6\}$.
-
 ## Finite Probability Spaces
 
-- A **sample space** is the of all outcomes within a random system where there are a finite set of outcomes. The sample space is denoted as $\Omega$.
+- A **sample space** is the set of all outcomes within a random system where there are a finite set of outcomes. The sample space is denoted as $\Omega$.
 - A typical outcome is denoted as $\omega$ and $\omega \in \Omega$ is used to indicate that $\omega$ is an **element** of the sample space $\Omega$.
 - An **event** is a set of possible outcomes and (equivalently) an event of the sample space $\Omega$.
+  - An event $A$, has occurred if the actual outcome $\omega$ is an element of the event $A$, i.e. $\omega \in A$.
 
 | Probability Theory | Set Theory |
 |:------------------:|:----------:|
@@ -247,6 +225,19 @@ $$\boxed{P(A) = P(\bigcup_{i=1}^{m} (A \cap B_i)) = \sum_{i=1}^{m} (A \cap B_i)=
   where $h$ represents heads and $t$ represents tails.
 - An example event $A$ is the set of outcomes where the first toss is heads:
   $$A = \{ \omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt} \}$$
+- For a coin that is tossed three times, and only the result of the first toss is known, the partition for what is *knowable* after the first toss is given by:
+    $$\mathcal{U_1} = \{ A_h, A_t \}$$
+    where
+    $$A_h = \{\omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}\}$$
+    $$A_t = \{\omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt}\}$$
+  - Similarly, if the result of the first two tosses is known, the partition for what is *knowable* after the second toss is given by:
+    $$\mathcal{U_2} = \{ A_{hh}, A_{ht}, A_{th}, A_{tt} \}$$
+    where
+    $$A_{hh} = \{\omega_{hhh}, \omega_{hht}\}$$
+    $$A_{ht} = \{\omega_{hth}, \omega_{htt}\}$$
+    $$A_{th} = \{\omega_{thh}, \omega_{tht}\}$$
+    $$A_{tt} = \{\omega_{tth}, \omega_{ttt}\}$$
+
 - If the coin is biased where $p_{h}$ is the probability of headers and $p_{t} = 1 - p_{h}$ is the probability of tails, then the probability measure $P$ is given by:
   $$P(\omega_{hhh}) = p_{h}^3$$
   $$P(\omega_{hht}) = p_{h}^2 p_{t}$$
@@ -474,6 +465,7 @@ where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, represen
 - For the random variable $X$ (number of heads), the following paritition is defined:
 
 $$\{\{\omega_{ttt}\}, \{\omega_{tht}, \omega_{tth}, \omega_{htt}\}, \{\omega_{hht}, \omega_{hth}, \omega_{thh}\}, \{\omega_{hhh}\}\}$$
+
 ```math
 \begin{aligned}
 X=0 &\Longrightarrow \{\omega_{ttt}\} \\\\
@@ -483,7 +475,7 @@ X=3 &\Longrightarrow \{\omega_{hhh}\}
 \end{aligned}
 ```
 
-### Expectaion
+### Expectation
 
 The expectation (expected value) of a discrete random variable $X$, with respect to probability measure $P$, is defined as follows:
 
