@@ -200,13 +200,15 @@ $$\boxed{P(A \cap B) = P(A)P(B)}$$
 
 ### Conditional Probability
 
-For two events $A$ and $B$ with $P(B) > 0$, the **conditional probability** of $A$ given $B$ is defined as:
+- For two events $A$ and $B$ with $P(B) > 0$, the **conditional probability** of $A$ given $B$ is defined as:
 
 $$\boxed{P(A|B) = \frac{P(A \cap B)}{P(B)}}$$
 
-In other words, $P(A|B)$ represents the probability of event $A$ occurring given that event $B$ has already occurred.
+- In other words, $P(A|B)$ represents the probability of event $A$ occurring given that event $B$ has already occurred.
 
 $$\boxed{P(A)= P(A|B) \Longleftrightarrow  A \text{ and } B \text{ are independent}}$$
+
+- The set $B$ becomes the new universe and therefore dividing by $P(B)$ rescales the conditional probabilities such that $P(B|B) = 1$.
 
 ### Law of Total Probability
 
@@ -227,6 +229,7 @@ $$\boxed{P(A) = P(\bigcup_{i=1}^{m} (A \cap B_i)) = \sum_{i=1}^{m} (A \cap B_i)=
   $$A = \{ \omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt} \}$$
 - For a coin that is tossed three times, and only the result of the first toss is known, the partition for what is *knowable* after the first toss is given by:
     $$\mathcal{U_1} = \{ A_h, A_t \}$$
+
     where
     $$A_h = \{\omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}\}$$
     $$A_t = \{\omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt}\}$$
@@ -268,24 +271,25 @@ P(A_{h}) &= \sum_{\omega \in A_{h}} P(\omega) \\\\
   $$P(C) = P(\omega_{hhh}) + P(\omega_{hth}) + P(\omega_{thh}) + P(\omega_{tth}) = p_{h}^2 p_{t} + p_{h} p_{t}^2 + p_{h} p_{t}^2 + p_{t}^3 = p_{t}$$
   $$P(B \cap C) = P(\omega_{hht}) + P(\omega_{tht}) = p_{h}^2 p_{t} + p_{h} p_{t}^2 = p_{h}p_{t}$$
   $$\therefore P(B \cap C) = P(B)P(C)$$
-
-- The probability of getting precisely one tail (event $E_t$), given that the first toss is heads (event $A_h$), is given by:
+  - Hence, the events $B$ and $C$ are independent.
+- The probability of getting precisely one tail (event $D_t$), given that the first toss is heads (event $A_h$), is given by:
 
 ```math
 \begin{aligned}
-P(E_t|A_h) &= \frac{P(\omega_{hht})+P(\omega_{hth})}{P(A_h)} \\\\
+P(D_t|A_h) &= \frac{P(D_t \cap A_h)}{P(A_h)} \\\\
+&= \frac{P(\omega_{hht})+P(\omega_{hth})}{P(A_h)} \\\\
 &= \frac{p_{h}^2 p_{t} + p_{h}^2 p_{t}}{p_{h}} \\\\
 &= 2 p_{h} p_{t}
 \end{aligned}
 ```
 
 - The probability of getting precisely one tail ($3p_h^2p_t$) is different from the conditional probability of getting precisely one tail given that the first toss is heads ($2p_hp_t$).
-  - Hence, the events $E_t$ and $A_h$ are not independent.
-- The probability of getting precisely one tail (event $E_t$), given that the first toss is tails (event $A_t$), is given by:
+  - Hence, the events $D_t$ and $A_h$ are not independent.
+- The probability of getting precisely one tail (event $D_t$), given that the first toss is tails (event $A_t$), is given by:
 
 ```math
 \begin{aligned}
-P(E_t) &= \frac{P(\omega_{thh})}{P(A_t)} \\\\
+P(D_t) &= \frac{P(\omega_{thh})}{P(A_t)} \\\\
 &= \frac{ p_{t}p_{h}^2}{p_{t}} \\\\
 &= p_{h}^2
 \end{aligned}
@@ -293,7 +297,7 @@ P(E_t) &= \frac{P(\omega_{thh})}{P(A_t)} \\\\
 
 - By the law of total probability, the probability of getting precisely one tail is given by:
 
-$$P(E_t|A_h)P(A_h) + P(E_t|A_t)P(A_t) = 2p_hp_t \cdot p_h + p_h^2 \cdot p_t = 3p_h^2p_t$$
+$$P(D_t|A_h)P(A_h) + P(D_t|A_t)P(A_t) = 2p_hp_t \cdot p_h + p_h^2 \cdot p_t = 3p_h^2p_t$$
 
 - Which is the same as getting precisely one tail without any conditions.
 
