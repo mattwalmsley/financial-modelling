@@ -101,7 +101,7 @@ PV &= \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}} \\
 &= 595.53 + 582.40 + 9988.62 \\
 &= \boxed{11,166.55 \text{ USD}}
 \end{aligned} \\
-$$
+```
 
 - Given the bond's current market price (10,000 USD) is lower than the present fair value (11,166.55 USD), there is a potential arbitrage opportunity present that can be constructed as follows:
   - At year 0, borrow 595.53 USD with a 1 year term, 582.40 USD with a 2 year term and 9,988.62 USD with a 3 year term, the debt owed on each of these amounts will be exactly matched by the coupon payments from the bond respectively.
