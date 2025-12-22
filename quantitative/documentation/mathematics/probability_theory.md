@@ -27,6 +27,37 @@
     - [Random Variables Defining Events](#random-variables-defining-events)
     - [Random Variables Defining Partitions](#random-variables-defining-partitions)
     - [Expectation](#expectation)
+      - [Expectation of a Coin Toss](#expectation-of-a-coin-toss)
+    - [Functions of Random Variables](#functions-of-random-variables)
+      - [Function of a Coin Toss Random Variable](#function-of-a-coin-toss-random-variable)
+      - [Linearity Property of Expectations](#linearity-property-of-expectations)
+    - [Variance](#variance)
+      - [Property of Variance](#property-of-variance)
+    - [Standard Deviation](#standard-deviation)
+    - [Radon-Nikodym Derivative](#radon-nikodym-derivative)
+      - [Properties of the Radon-Nikodym Derivative](#properties-of-the-radon-nikodym-derivative)
+    - [Conditional Expectations](#conditional-expectations)
+      - [Conditioning on an Event](#conditioning-on-an-event)
+      - [Conditional Expectation Given $Y=y\_j$](#conditional-expectation-given-yy_j)
+    - [Conditional Expectations II — Conditioning on a Partition](#conditional-expectations-ii--conditioning-on-a-partition)
+      - [Linearity of Conditional Expectation](#linearity-of-conditional-expectation)
+      - [Tower Property (Expectation of Conditional Expectation)](#tower-property-expectation-of-conditional-expectation)
+      - [Law of Iterated Conditional Expectations](#law-of-iterated-conditional-expectations)
+    - [Conditioning on a Discrete Random Variable](#conditioning-on-a-discrete-random-variable)
+  - [Continuous Random Variables](#continuous-random-variables)
+    - [Probability Density Function (PDF)](#probability-density-function-pdf)
+    - [Cumulative Distribution Function (CDF)](#cumulative-distribution-function-cdf)
+    - [Expectation (Continuous Case)](#expectation-continuous-case)
+    - [Variance and Moments](#variance-and-moments)
+    - [Normal Distribution](#normal-distribution)
+    - [Transformation of Random Variables](#transformation-of-random-variables)
+    - [Log-Normal Distribution](#log-normal-distribution)
+  - [Multivariate Distributions](#multivariate-distributions)
+    - [Independence](#independence)
+    - [Covariance and Correlation](#covariance-and-correlation)
+  - [Limit Theorems](#limit-theorems)
+    - [Law of Large Numbers](#law-of-large-numbers)
+    - [Central Limit Theorem](#central-limit-theorem)
 
 Probability theory has evolved to model uncertainty, providing both an abstract system of thought and practical tools for quantifying likelihoods. While it can be studied as a purely theoretical branch of mathematics, its significance is closely tied to real-world applications.
 
@@ -202,20 +233,20 @@ $$\boxed{P(A \cap B) = P(A)P(B)}$$
 
 - For two events $A$ and $B$ with $P(B) > 0$, the **conditional probability** of $A$ given $B$ is defined as:
 
-$$\boxed{P(A|B) = \frac{P(A \cap B)}{P(B)}}$$
+$$\boxed{P(A \mid B) = \frac{P(A \cap B)}{P(B)}}$$
 
-- In other words, $P(A|B)$ represents the probability of event $A$ occurring given that event $B$ has already occurred.
+- In other words, $P(A \mid B)$ represents the probability of event $A$ occurring given that event $B$ has already occurred.
 
-$$\boxed{P(A)= P(A|B) \Longleftrightarrow  A \text{ and } B \text{ are independent}}$$
+$$\boxed{P(A)= P(A \mid B) \Longleftrightarrow  A \text{ and } B \text{ are independent}}$$
 
-- The set $B$ becomes the new universe and therefore dividing by $P(B)$ rescales the conditional probabilities such that $P(B|B) = 1$.
+- The set $B$ becomes the new universe and therefore dividing by $P(B)$ rescales the conditional probabilities such that $P(B \mid B) = 1$.
 
 ### Law of Total Probability
 
 - Let $\mathcal{U}$ be a partition of $\Omega$ with events $B_1, B_2, \dots, B_m$ and $P(B_i) > 0$ for all $i$.
 - Then for any event $A$, the law of total probability states that:
 
-$$\boxed{P(A) = P(\bigcup_{i=1}^{m} (A \cap B_i)) = \sum_{i=1}^{m} (A \cap B_i)=\sum_{i=1}^{m} P(A|B_i)P(B_i)}$$
+$$\boxed{P(A) = P(\bigcup_{i=1}^{m} (A \cap B_i)) = \sum_{i=1}^{m} (A \cap B_i)=\sum_{i=1}^{m} P(A \mid B_i)P(B_i)}$$
 
 ![Total Probability Venn Diagram](../images/total-probability.png "Total Probability Venn Diagram")
 
@@ -276,7 +307,7 @@ P(A_{h}) &= \sum_{\omega \in A_{h}} P(\omega) \\\\
 
 ```math
 \begin{aligned}
-P(D_t|A_h) &= \frac{P(D_t \cap A_h)}{P(A_h)} \\\\
+P(D_t\mid A_h) &= \frac{P(D_t \cap A_h)}{P(A_h)} \\
 &= \frac{P(\omega_{hht})+P(\omega_{hth})}{P(A_h)} \\\\
 &= \frac{p_{h}^2 p_{t} + p_{h}^2 p_{t}}{p_{h}} \\\\
 &= 2 p_{h} p_{t}
@@ -297,7 +328,7 @@ P(D_t) &= \frac{P(\omega_{thh})}{P(A_t)} \\\\
 
 - By the law of total probability, the probability of getting precisely one tail is given by:
 
-$$P(D_t|A_h)P(A_h) + P(D_t|A_t)P(A_t) = 2p_hp_t \cdot p_h + p_h^2 \cdot p_t = 3p_h^2p_t$$
+$$P(D_t\mid A_h)P(A_h) + P(D_t\mid A_t)P(A_t) = 2p_hp_t \cdot p_h + p_h^2 \cdot p_t = 3p_h^2p_t$$
 
 - Which is the same as getting precisely one tail without any conditions.
 
@@ -422,18 +453,18 @@ where $X=x_i$ is the event that the random variable $X$ takes the value $x_i$.
 | $\omega_{tth}$   | $p_h p_t^2$  | 1                             |
 | $\omega_{ttt}$   | $p_t^3$      | 0                             |
 
-- The outcome column is referred to as the **sample space**.
-- The outcome column and the probability column together are referred to as a **finite probability space**.
-- The outcome column and the number of headers column together are referred to as a **random variable**
+- The *outcome* column is referred to as the **sample space**.
+- The *outcome* column and the *probability* column together are referred to as a **finite probability space**.
+- The *outcome* column and the *number of headers* column together are referred to as a **random variable**
 
-- The resulting **probability distribution** of $X$ is calculating by summing the probabilities of outcomes that yield the same value of $X$:
+- The resulting **probability distribution** of $X$ is calculated by summing the probabilities of outcomes that yield the same value of $X$:
 
-| $X=x_i$ (Number of Heads) | $P(X=x_i)$                     |
-|:-------------------------:|:------------------------------:|
-| 0                         | $P(X=0) = P(\omega_{ttt}) = p_t^3$ |
+| $X=x_i$ (Number of Heads) | $P(X=x_i)$                                                                   |
+|:-------------------------:|:----------------------------------------------------------------------------:|
+| 0                         | $P(X=0) = P(\omega_{ttt}) = p_t^3$                                           |
 | 1                         | $P(X=1) = P(\omega_{tht}) + P(\omega_{tth}) + P(\omega_{htt}) = 3 p_h p_t^2$ |
 | 2                         | $P(X=2) = P(\omega_{hht}) + P(\omega_{hth}) + P(\omega_{thh}) = 3 p_h^2 p_t$ |
-| 3                         | $P(X=3) = P(\omega_{hhh}) = p_h^3$ |
+| 3                         | $P(X=3) = P(\omega_{hhh}) = p_h^3$                                           |
 
 ### Binomial Distribution
 
@@ -453,6 +484,7 @@ where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, represen
 
 - Two random variables, $X$ and $Y$ are equal if $X(\omega) = Y(\omega)$ for all $\omega \in \Omega$.
   - Random variables that are not equal can still have the same probability distribution.
+    - E.g. suppose that $p_h = p_t = 0.5$, then the random variable number of heads $X \sim \mathcal{B}(N,\frac{1}{2})$ and the random variable for the number of tails $Y \sim \mathcal{B}(N,\frac{1}{2})$ are the same but the two random variables are not equal.
 
 ### Random Variables Defining Events
 
@@ -465,7 +497,7 @@ where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, represen
 
 - A random variable $X$ can take the values $x_1, x_2, \dots, x_k$.
 - $\mathcal{U}$ is the partition defined (or determined, or generated) by the random variable $X$.
-- $\mathcal{U} = \{\{X=x_i\}\}$ is a partitiion of $\Omega$, or in other words $\mathcal{U} = \{B_1, B_2, \dots, B_k\}$ where $B_i = \{\omega \in \Omega: X(\omega) = x_i\}$.
+- $\mathcal{U} = \{\{X=x_i\}\}$ is a partitiion of $\Omega$, or in other words $\mathcal{U} = \{B_1, B_2, \dots, B_k\}$ where $B_i = \{\omega \in \Omega: X(\omega) = x_i\}$ is the set of all outcomes where $X=x_i$..
 - For the random variable $X$ (number of heads), the following paritition is defined:
 
 $$\{\{\omega_{ttt}\}, \{\omega_{tht}, \omega_{tth}, \omega_{htt}\}, \{\omega_{hht}, \omega_{hth}, \omega_{thh}\}, \{\omega_{hhh}\}\}$$
@@ -483,5 +515,363 @@ X=3 &\Longrightarrow \{\omega_{hhh}\}
 
 The expectation (expected value) of a discrete random variable $X$, with respect to probability measure $P$, is defined as follows:
 
-$$\boxed{\mathbb{E}[X] = \sum_{i} x_i P(X = x_i) = \sum_{\omega \in \Omega} X(\omega) P(\omega)}$$
+$$\boxed{\mathbb{E}[X] = \sum_{i=1}^{k}{x_i P(X = x_i)} = \sum_{\omega \in \Omega}{X(\omega) P(\omega)}}$$
 where the first sum is over all possible values $x_i$ that $X$ can take, and the second sum is over all outcomes $\omega$ in the sample space $\Omega$.
+
+- For a constant $k$, $\mathbb{E}[k] = \sum_{\omega \in \Omega}{k(\omega)P(\omega)}=k\sum_{\omega \in \Omega}{P(\omega)}=k$.
+- Also, for any random variable $X$, $\mathbb{E}[\mathbb{E}[X]] = \mathbb{E}[X]$. since $\mathbb{E}[X]$ is a number.
+
+#### Expectation of a Coin Toss
+
+The expectation for the value of $X$, where $X$ is the number of heads in three tosses of a coin, is given by:
+
+```math
+\begin{aligned}
+\mathbb{E}[X] &= 0 \cdot P(X=0) + 1 \cdot P(X=1) + 2 \cdot P(X=2) + 3 \cdot P(X=3) \\\\
+&= 0 \cdot p_t^3 + 1 \cdot 3 p_h p_t^2 + 2 \cdot 3 p_h^2 p_t + 3 \cdot p_h^3 \\\\
+&= 3 p_h p_t^2 + 6 p_h^2 p_t + 3 p_h^3 \\\\
+&= 3 p_h (p_t^2 + 2 p_h p_t + p_h^2) \\\\
+&= 3 p_h (p_t + p_h)^2 \\\\
+&= 3 p_h (1)^2 \\\\
+&= 3 p_h
+\end{aligned}```
+
+As a sense check, $X$ can take values from $0$ to $3$, so the expectation $\mathbb{E}[X]$ lies between $0$ and $3$, given that $0 \leq p_h \leq 1$.
+
+More generally, for $N$ tosses of a biased coin where $X \sim \mathcal{B}(N, p_h)$, the expectation is given by:
+$$\boxed{\mathbb{E}[X] = N p_h}$$
+
+### Functions of Random Variables
+
+- For a function $f: \mathbb{R} \to \mathbb{R}$ and a random variable $X$, the composition $f(X)$ is also a random variable defined by:
+$$\boxed{f(X)(\omega) = f(X(\omega)) \text{ for all } \omega \in \Omega}$$
+
+|$\Omega$     | $X$        | $f(X)$   |
+|:-----------:|:----------:|:--------:|
+| $\omega_1$  |  $x_1$     | $f(x_1)$ |
+| $\omega_2$  |  $x_2$     | $f(x_2)$ |
+| $\vdots$    |  $\vdots$  | $\vdots$ |
+| $\omega_n$  |  $x_n$     | $f(x_n)$ |
+
+Therefore, it follows that the expectation of $f(X)$ is given by:
+$$\boxed{\mathbb{E}[f(X)] = \sum_{i=1}^{k}{f(x_i) P(X = x_i)} = \sum_{\omega \in \Omega}{f(X(\omega)) P(\omega)}}$$
+where $X$ can take the values $x_1, x_2, \dots, x_k$ with probabilities $p_1, p_2, \dots, p_k$ respectively.
+
+#### Function of a Coin Toss Random Variable
+
+- Continuing with the coin toss example where $X$ is the number of heads in three tosses, consider the function $f(x) = x^2$.
+- The random variable $f(X)$ is given by:
+
+| $X$ (Number of Heads) | $f(X) = X^2$ |
+|:---------------------:|:------------:|
+| 0                     | 0            |
+| 1                     | 1            |
+| 2                     | 4            |
+| 3                     | 9            |
+
+- The expectation of $f(X)$ is calculated as follows:
+
+```math
+\begin{aligned}
+\mathbb{E}[f(X)] &= 0^2 \cdot P(X=0) + 1^2 \cdot P(X=1) + 2^2 \cdot P(X=2) + 3^2 \cdot P(X=3) \\\\
+&= 0 \cdot p_t^3 + 1 \cdot 3 p_h p_t^2 + 4 \cdot 3 p_h ^2 p_t + 9 \cdot p_h^3 \\\\
+&= 3 p_h p_t^2 + 12 p_h^2 p_t + 9 p_h^3 \\\\
+&= 3 p_h (p_t^2 + 4 p_h p_t + 3 p_h^2) \\\\
+&= 3 p_h (p_t + p_h)(p_t + 3 p_h) \\\\
+&= 3 p_h (1)(1 + 2 p_h) \\\\
+&= 3 p_h (1 + 2 p_h) \\\\
+&= 3 p_h + 6 p_h^2 \\\\
+&= 3 p_h (1 + 2 p_h)
+\end{aligned}```
+
+#### Linearity Property of Expectations
+
+- For $n$ random rvariables $X_1, X_2, \dots, X_n$ and constants $a_1, a_2, \dots, a_n$, the expectation operator is linear:
+$$\boxed{\mathbb{E}\left[\sum_{i=1}^{n} a_i X_i\right] = \sum_{i=1}^{n} a_i \mathbb{E}[X_i]}$$
+
+Which can be proven as follows:
+
+```math
+\begin{aligned}
+\mathbb{E}\left[\sum_{i=1}^{n} a_i X_i\right] &= \sum_{\omega \in \Omega} \left(\sum_{i=1}^{n} a_i X_i(\omega)\right) P(\omega) \\\\
+&= \sum_{i=1}^{n} a_i \left(\sum_{\omega \in \Omega} X_i(\omega) P(\omega)\right) \\\\
+&= \sum_{i=1}^{n} a_i \mathbb{E}[X_i]
+\end{aligned}```
+
+- A special case of the linearity property is when $n=2$:
+$$\boxed{\mathbb{E}[aX + bY] = a\mathbb{E}[X] + b\mathbb{E}[Y]}$$
+where $X$ and $Y$ are random variables and $a$ and $b$ are constants.
+
+- Similarly, for a single random variable $X$ and constants $a$ and $b$:
+$$\boxed{\mathbb{E}[aX + b] = a\mathbb{E}[X] + b}$$
+
+### Variance
+
+- The **variance** of a discrete random variable $X$ is a measure of how much the values of $X$ deviate from its expectation $\mathbb{E}[X]$.
+
+$$\boxed{\text{Var}(X) = \mathbb{E}[(X - \mathbb{E}[X])^2] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2}$$
+
+- This formula can be derived as follows:
+
+```math
+\begin{aligned}
+\text{Var}(X) &= \mathbb{E}[(X - \mathbb{E}[X])^2] \\\\
+&= \mathbb{E}[X^2 - 2X\mathbb{E}[X] + (\mathbb{E}[X])^2] \\\\
+&= \mathbb{E}[X^2] - 2\mathbb{E}[X]\mathbb{E}[X]  + (\mathbb{E}[X])^2 \\\\
+&= \mathbb{E}[X^2] - (\mathbb{E}[X])^2
+\end{aligned}```
+
+#### Property of Variance
+- For a random variable $X$ and constants $a$ and $b$, the variance satisfies the following property:
+$$\boxed{\text{Var}(aX + b) = a^2 \text{Var}(X)}$$
+- This property can be proven as follows:
+
+```math
+\begin{aligned}
+\text{Var}(aX + b) &= \mathbb{E}[(aX + b - \mathbb{E}[aX + b])^2] \\\\
+&= \mathbb{E}[(aX + b - (a\mathbb{E}[X] + b))^2] \\\\
+&= \mathbb{E}[(aX - a\mathbb{E}[X])^2] \\\\
+&= \mathbb{E}[a^2(X - \mathbb{E}[X])^2] \\\\
+&= a^2 \mathbb{E}[(X - \mathbb{E}[X])^2] \\\\
+&= a^2 \text{Var}(X)
+\end{aligned}```
+
+- **N.B. Variance is not linear, unlike expectation.**
+
+### Standard Deviation
+
+- The **standard deviation** of a discrete random variable $X$ is defined as the square root of its variance:
+$$\boxed{\sigma_X = \sigma(X) = \sqrt{\text{Var}(X)}}$$
+
+### Radon-Nikodym Derivative
+
+- The expectation and variance of a random variable $X$ depend on the probability measure $P$ assigned to the underlying space $\Omega$.
+- When defining the expectation and variance of a random variable $X$, it is important to specify the probability measure $P$ being used by including it as a superscript:
+  - $\mathbb{E}^P[X]$ denotes the expectation of $X$ with respect to the probability measure $P$.
+  - $\text{Var}^P(X)$ denotes the variance of $X$ with respect to the probability measure $P$.
+- In certain applications, multiple probability measures may be considered on the same sample space $\Omega$, and the expectation and variance of a random variable $X$ may differ depending on the chosen measure (e.g. $P$ or $Q$).
+  - $\mathbb{E}^P[X]$ or $\mathbb{E}^Q[X]$ may yield different results.
+
+|$\Omega$     | $P(\omega)$  | $Q(\omega)$  | $X(\omega)$ |
+|:-----------:|:------------:|:------------:|:-----------:|
+| $\omega_1$  |  $p_1$       |  $q_1$       | $x_1$       |
+| $\omega_2$  |  $p_2$       |  $q_2$       | $x_2$       |
+| $\vdots$    |  $\vdots$    |  $\vdots$    | $\vdots$    |
+| $\omega_n$  |  $p_n$       |  $q_n$       | $x_n$       |
+
+The **Radon-Nikodym derivative** allows us to relate two probability measures defined on the same measurable space, by defining the Radon-Nikodym derivates to be the random variable:
+$$\boxed{Z(\omega) = \frac{Q(\omega)}{P(\omega)} \text{ for all } \omega \in \Omega \text{ where } P(\omega) > 0}$$
+
+#### Properties of the Radon-Nikodym Derivative
+
+**1. Positivity: $Z(\omega) > 0$ for all $\omega \in \Omega$, and so $P(Z > 0) = 1$.**
+
+- Since $Q$ is a probability measure on $\Omega$, we have $Q(\omega) \geq 0$ for all $\omega \in \Omega$. Additionally, since $P$ is a probability measure, $P(\omega) > 0$ for all $\omega \in \Omega$ (by assumption). Therefore:
+$$Z(\omega) = \frac{Q(\omega)}{P(\omega)} \geq 0 \text{ for all } \omega \in \Omega$$
+
+- For strict positivity, note that if $Q(\omega) = 0$, then $Z(\omega) = 0$, and if $Q(\omega) > 0$, then $Z(\omega) > 0$ since $P(\omega) > 0$. Thus:
+$$P(Z > 0) = P\left(\left\{\omega \in \Omega : Z(\omega) > 0\right\}\right) = \sum_{\omega: Q(\omega) > 0} P(\omega)$$
+
+- The key property is that if $Q$ is absolutely continuous with respect to $P$ (written $Q \ll P$), then $\{Q(\omega) = 0\} \subseteq \{P(\omega) = 0\}$. Since $P(\omega) > 0$ for all $\omega$, any outcome where $Q(\omega) = 0$ would contradict the assumption. Therefore, in applications where $Q \ll P$, we have $P(Z > 0) = 1$.
+
+**2. Expectation: $\mathbb{E}^P[Z] = 1$.**
+
+- By definition of the Radon-Nikodym derivative, the expectation of $Z$ can be computed under the measure $P$:
+
+```math
+\begin{aligned}
+\mathbb{E}^P[Z] &= \sum_{\omega \in \Omega} Z(\omega) P(\omega) \\\\
+&= \sum_{\omega \in \Omega} \frac{Q(\omega)}{P(\omega)} P(\omega) \\\\
+&= \sum_{\omega \in \Omega} Q(\omega) \\\\
+&= 1
+\end{aligned}```
+
+- The last equality follows from the fact that $Q$ is a probability measure, so its probabilities sum to 1 over $\Omega$.
+
+**3. Change of Measure: $\mathbb{E}^Q[Y] = \mathbb{E}^P[ZY]$ for any random variable $Y$.**
+
+- The Radon-Nikodym derivative provides a formula to compute expectations under the measure $Q$ using the measure $P$. For any random variable $Y$ defined on $\Omega$:
+
+```math
+\begin{aligned}
+\mathbb{E}^Q[Y] &= \sum_{\omega \in \Omega} Y(\omega) Q(\omega) \\\\
+&= \sum_{\omega \in \Omega} Y(\omega) \cdot Z(\omega) P(\omega) \\\\
+&= \sum_{\omega \in \Omega} [Y(\omega) Z(\omega)] P(\omega) \\\\
+&= \mathbb{E}^P[ZY]
+\end{aligned}```
+
+- This result is fundamental in probability theory and quantitative finance, as it allows probability measures to be changed. The random variable $Z$ acts as a "weight" that transforms expectations from one measure to another. This is particularly useful when comparing probabilities and expectations under different market measures (e.g., the real-world measure and the risk-neutral measure in derivatives pricing).
+
+### Conditional Expectations
+
+This section focusses on the conditional expectation of a random variables, following on from the concept of conditional probability of events.
+
+#### Conditioning on an Event
+
+Let $A$ be some event (with non-zero probability) such that $A \subset \Omega$ with $P(A) > 0$ and let $X$ be a (discrete) random variable defined on $(\Omega, P)$.
+
+- The **conditional expectation of random variable $X$ given the event $A$** has occurred is defined as:
+
+$$\boxed{\mathbb{E}[X \mid A] = \frac{\sum_{\omega \in A}{X(\omega)P(\omega)}}{\sum_{\omega \in A}{P(\omega)}} =  \frac{\sum_{\omega \in A}{X(\omega)P(\omega)}}{{P(A)}}}$$
+
+- If $X \in \{x_1,\dots,x_k\}$ is discrete with finitely many values, the same quantity can be written as:
+
+$$\mathbb{E}[X \mid A] = \sum_{i=1}^{k} x_i \frac{P(\{X=x_i\} \cap A)}{P(A)} = \sum_{i=1}^{k} x_i P(X=x_i \mid A)$$
+
+- $\mathbb{E}[X \mid A]$ is a **number** (not a random variable).
+
+#### Conditional Expectation Given $Y=y_j$
+
+Let $Y$ be discrete and define the event $A_j = \{Y=y_j\}$ with $P(Y=y_j)>0$. Then:
+
+$$\boxed{\mathbb{E}[X \mid Y=y_j] = \sum_i x_i\,\frac{P(X=x_i,\,Y=y_j)}{P(Y=y_j)}}$$
+
+### Conditional Expectations II — Conditioning on a Partition
+
+Let $\mathcal{U} = \{B_1,\dots,B_m\}$ be a **partition** of $\Omega$ (pairwise disjoint, exhaustive) with $P(B_j)>0$ for all $j$.
+
+- The conditional expectation of $X$ given the partition $\mathcal{U}$ is a **random variable**:
+
+$$\boxed{\mathbb{E}[X\mid \mathcal{U}](\omega) := \mathbb{E}[X \mid B(\omega)]}$$
+
+where $B(\omega)$ denotes the unique partition element in $\mathcal{U}$ that contains $\omega$.
+
+- $\mathbb{E}[X\mid \mathcal{U}]$ is **constant on each partition element** $B_j$.
+
+#### Linearity of Conditional Expectation
+
+For random variables $X_1,\dots,X_n$ and constants $a_1,\dots,a_n$:
+
+$$\boxed{\mathbb{E}\!\left[\sum_{j=1}^{n} a_j X_j\,\middle|\,\mathcal{U}\right] = \sum_{j=1}^{n} a_j\,\mathbb{E}[X_j\mid \mathcal{U}]}$$
+
+#### Tower Property (Expectation of Conditional Expectation)
+
+$$\boxed{\mathbb{E}[\,\mathbb{E}[X\mid \mathcal{U}]\,] = \mathbb{E}[X]}$$
+
+This is also called the **law of iterated expectations**.
+
+#### Law of Iterated Conditional Expectations
+
+If partition $\mathcal{U}$ is **finer** than partition $\mathcal{V}$, then:
+
+$$\boxed{\mathbb{E}[\,\mathbb{E}[X\mid \mathcal{U}]\mid \mathcal{V}] = \mathbb{E}[X\mid \mathcal{V}]}$$
+
+### Conditioning on a Discrete Random Variable
+
+Let $Y$ be discrete. The random variable $Y$ induces a partition
+
+$$\mathcal{U}_Y := \{\{Y=y\} : y \in \text{supp}(Y)\}.$$
+
+Define conditional expectation given $Y$ by conditioning on this partition:
+
+$$\boxed{\mathbb{E}[X\mid Y] := \mathbb{E}[X\mid \mathcal{U}_Y]}$$
+
+and the tower property becomes:
+
+$$\boxed{\mathbb{E}[\,\mathbb{E}[X\mid Y] \,] = \mathbb{E}[X]}$$
+
+## Continuous Random Variables
+
+- A continuous random variable has an **uncountable** support.
+- In typical continuous models, single points have probability zero:
+
+$$P(X=x)=0\quad \text{for all } x.$$
+
+### Probability Density Function (PDF)
+
+If $X$ has a density $f_X$, then for $a \le b$:
+
+$$\boxed{P(a \le X \le b) = \int_a^b f_X(x)\,dx}$$
+
+and the density normalises to 1:
+
+$$\boxed{\int_{-\infty}^{\infty} f_X(x)\,dx = 1}$$
+
+### Cumulative Distribution Function (CDF)
+
+The CDF is
+
+$$\boxed{F_X(x) := P(X \le x)}$$
+
+If $X$ has density $f_X$, then
+
+$$\boxed{F_X(x) = \int_{-\infty}^{x} f_X(t)\,dt}$$
+
+and (where differentiable)
+
+$$\boxed{f_X(x) = \frac{d}{dx}F_X(x)}$$
+
+### Expectation (Continuous Case)
+
+If $X$ has density $f_X$ and $\mathbb{E}[\lvert X\rvert] < \infty$, then
+
+$$\boxed{\mathbb{E}[X] = \int_{-\infty}^{\infty} x\, f_X(x)\,dx}$$
+
+### Variance and Moments
+
+$$\boxed{\mathrm{Var}(X) = \mathbb{E}\!\left[(X-\mathbb{E}[X])^2\right] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2}$$
+
+The $m$-th moment (when finite) is
+
+$$\boxed{\mathbb{E}[X^m] = \int_{-\infty}^{\infty} x^m\, f_X(x)\,dx}$$
+
+### Normal Distribution
+
+A normal random variable $X \sim \mathcal{N}(\mu,\sigma^2)$ has density
+
+$$\boxed{f_X(x) = \frac{1}{\sqrt{2\pi}\,\sigma}\,\exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)}$$
+
+The **standard normal** is $Z \sim \mathcal{N}(0,1)$ with
+
+$$\boxed{\varphi(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2}},\qquad \boxed{\Phi(x) = \int_{-\infty}^{x} \varphi(t)\,dt}.$$
+
+### Transformation of Random Variables
+
+Let $Y=g(X)$ where $g$ is monotone and differentiable, and $X$ has density $f_X$. Then $Y$ has density
+
+$$\boxed{f_Y(y) = f_X(g^{-1}(y))\,\left|\frac{d}{dy}g^{-1}(y)\right|}$$
+
+### Log-Normal Distribution
+
+If $\log Y \sim \mathcal{N}(\mu,\sigma^2)$, then $Y$ is **log-normal**.
+
+$$\boxed{\mathbb{E}[Y] = e^{\mu + \sigma^2/2}}$$
+
+$$\boxed{\mathrm{Var}(Y) = (e^{\sigma^2}-1)\,e^{2\mu+\sigma^2}}$$
+
+## Multivariate Distributions
+
+Let $(X,Y)$ have joint density $f_{X,Y}(x,y)$. Then
+
+$$\boxed{P(a \le X \le b,\; c \le Y \le d) = \int_a^b\!\int_c^d f_{X,Y}(x,y)\,dy\,dx}$$
+
+### Independence
+
+If $X$ and $Y$ are independent and admit densities, then
+
+$$\boxed{f_{X,Y}(x,y) = f_X(x)\,f_Y(y)}$$
+
+### Covariance and Correlation
+
+$$\boxed{\mathrm{Cov}(X,Y) = \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y]}$$
+
+The correlation coefficient is
+
+$$\boxed{\rho_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma_X\,\sigma_Y}}$$
+
+- Independence $\Rightarrow$ zero correlation (when second moments exist).
+- The converse is false in general.
+
+## Limit Theorems
+
+### Law of Large Numbers
+
+For i.i.d. random variables $X_1, X_2, \dots$ with $\mathbb{E}[X_i]=\mu$ (and suitable integrability conditions),
+
+$$\boxed{\frac{1}{N}\sum_{i=1}^{N} X_i \xrightarrow[]{\text{a.s.}} \mu}$$
+
+### Central Limit Theorem
+
+For i.i.d. random variables with mean $\mu$ and variance $\sigma^2 \in (0,\infty)$, letting $S_N = \sum_{i=1}^{N} X_i$,
+
+$$\boxed{\frac{S_N - N\mu}{\sigma\sqrt{N}} \xrightarrow[]{d} \mathcal{N}(0,1)}$$

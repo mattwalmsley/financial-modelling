@@ -1,6 +1,15 @@
 # Introduction
 
 - [Introduction](#introduction)
+  - [Financial Markets](#financial-markets)
+    - [Money Markets](#money-markets)
+    - [Capital Markets](#capital-markets)
+    - [Foreign Exchange Markets (Forex/FX)](#foreign-exchange-markets-forexfx)
+    - [Derivatives Markets](#derivatives-markets)
+    - [Movement of Funds](#movement-of-funds)
+    - [Primary and Secondary Markets](#primary-and-secondary-markets)
+    - [Exchange Traded versus Over-the-Counter (OTC)](#exchange-traded-versus-over-the-counter-otc)
+  - [Financial Institutions](#financial-institutions)
   - [Cash Products](#cash-products)
   - [Derivatives](#derivatives)
   - [Value](#value)
@@ -8,6 +17,124 @@
   - [Modelling Portfolios](#modelling-portfolios)
   - [Foreign Currencies (FX)](#foreign-currencies-fx)
   - [Long versus Short Positions](#long-versus-short-positions)
+
+## Financial Markets
+
+- A financial market is a means or mechanisms where buyers and sellers can trade financial assets/securities.
+  - Most financial markets are now electronically based, with only a few physical exchanges still in operation.
+- Financial securities are legal contracts which give the right to receive (or obligation to pay) a future benefit under a stated set of conditions.
+- The role of financial markets is to **efficiently** connect lenders/savers with borrowers/spenders.
+  - These markets can facilitate the raising of capital (by companies), the transfer of risk (by investors) and international trade (by governments and corporations).
+- There is no single classification system for financial markets, but for ease of understanding they will be divided into four main types:
+  - Money markets
+  - Capital markets
+  - Foreign exchange markets
+  - Derivatives markets
+
+### Money Markets
+
+- The **money market** is for the trading of short-term debt instruments, generally with maturities of less than one year.
+- Market participants include banks, financial institutions, corporations and governments.
+- Examples of traded instruments include:
+  - Treasury bills
+  - Federal funds
+  - Repurchase agreements (repos)
+  - Negotiable certificates of deposit (CDs)
+  - Commercial paper and assets backed commercial paper (ABCP)
+  - Eurodollars
+  - Bankers' acceptances
+
+### Capital Markets
+
+- The **capital market** is for the trading of longer-term debt instruments (generally with maturities of greater than one year) as well as equity instruments (stocks/shares) which have no maturity date.
+- Debt instruments are referred to as *fixed income* securities. Buyers will receive contractual cash flows at periodic intervals - *fixed interest* or *coupon payments* - and, where applicable, repayment of principal at maturity. Examples include:
+  - Government/Corporate/Municipal Bonds
+  - Government Notes
+  - Debentures
+  - Mortgages, including mortgage-backed securities (MBS)
+  - Asset-backed securities (ABS)
+  - Zero-coupon bonds (sold at a discount to face value and do not pay periodic interest)
+- Equity instruments represent ownership in a company and will be initially sold in the **primary market** (e.g. via an initial public offering - IPO) before being traded on the **secondary market**. Examples include:
+  - Common stock
+  - Preferred stock
+- The secondary stock market is one of the most closely followed financial markets and is often seen to be an indicator of the overall economic performance of a country.
+
+### Foreign Exchange Markets (Forex/FX)
+
+- The **foreign exchange market** (also known as the *forex* or FX market) is for the trading of currencies.
+- Market participants include banks, financial institutions, corporations, governments and retail investors.
+- Spot rates are the current exchange rates for immediate delivery of currencies.
+- Forward rates are over-the-counter contracts for delivery of currencies at a future date for a pre-agreed exchange rate.
+- Futures contracts for currencies are also traded on exchanges, e.g. the CME (Chicago Mercantile Exchange): [Euro FX](https://www.cmegroup.com/markets/fx/g10/euro-fx.html).
+
+### Derivatives Markets
+
+- The **derivatives market** is for the trading of financial instruments whose value is derived from the value of an underlying asset.
+- Derivatives can be traded over-the-counter (OTC) or on exchanges.
+- Examples of traded derivatives include:
+  - Forwards
+  - Futures
+  - Options
+  - Swaps
+- The underlying asset can be:
+  - Cash products (stocks, bonds, some commodities, currencies)
+  - Physical products (e.g. agricultural products, metals, energy products)
+  - Other derivatives (e.g. options on futures)
+- Uses of derivative include:
+  - Risk management - reducing exposure (hedging) to adverse price movements in an underlying asset through tailored derivative contracts.
+  - Speculation - increasing exposure and taking on risk in the hope of making a profit from favourable price movements in an underlying asset.
+    - Derivatives can provide leverage, meaning that a small initial outlay can provide exposure to a much larger position in the underlying asset.
+
+### Movement of Funds
+
+- **Direct finance** occurs when borrowers borrow funds directly from lenders in financial markets by selling them securities. Examples include:
+  - A company issuing shares (equity) to investors in exchange for capital.
+  - A government issuing bonds (debt) to investors in exchange for capital.
+- **Indirect finance** occurs when financial intermediaries (e.g. banks, mutual funds, pension funds) stand between lenders and borrowers by accepting funds from lenders and then lending them to borrowers. Examples include:
+  - A bank accepting deposits from savers and then using these deposits to make loans to borrowers.
+  - A mutual fund pooling money from investors to purchase a diversified portfolio of stocks and bonds.
+
+### Primary and Secondary Markets
+
+- The **primary market** is where new securities are issued and sold for the first time. Examples include:
+  - Initial public offerings (IPOs) of stocks
+  - New bond issues by governments or corporations
+- The **secondary market** is where existing securities are traded among investors after they have been issued in the primary market. Examples include:
+  - Stock exchanges (e.g. NYSE, NASDAQ)
+  - Bond markets (e.g. over-the-counter bond trading)
+
+### Exchange Traded versus Over-the-Counter (OTC)
+
+- **Exchange traded** markets are centralized platforms where standardized securities and derivatives are bought and sold. Examples include:
+  - Stock exchanges (e.g. NYSE, NASDAQ)
+  - Futures exchanges (e.g. CME, ICE)
+- **Over-the-counter (OTC)** markets are decentralized networks where customized securities and derivatives are traded directly between parties. Examples include:
+  - OTC derivatives markets (e.g. for forwards, swaps)
+  - Bond markets (e.g. corporate bonds traded OTC)
+
+## Financial Institutions
+
+- Financial institutions act as intermediaries in financial markets.
+- Their roles include:
+  - Reducing transaction costs through economies of scale
+  - Decreasing the asymmetry of information between borrowers and lenders
+  - Diversifying risk by pooling funds from many investors
+- **Investment intermediaries** include:
+  - Commercial banks
+  - Investment banks
+  - Insurance companies
+  - Pension funds
+  - Mutual funds
+  - Hedge funds
+  - Brokerage firms
+- **Depository institutions** include:
+  - Savings and loan associations
+  - Credit unions
+  - Mutual savings banks
+  - Commercial banks
+- **Contractual savings institutions** include:
+  - Insurance companies
+  - Pension funds
 
 ## Cash Products
 
