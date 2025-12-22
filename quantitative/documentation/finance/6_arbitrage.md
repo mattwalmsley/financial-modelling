@@ -177,7 +177,7 @@ $$\therefore V(0) > B(0)$$
 - Take a prevailing interest rate of 6% on a 3 year term and a contract paying 10,000 in 3 years time (i.e a zero-coupon bond with a 10,000 USD face value).
 - Discount a 10,000 USD payment in 3 years time using the prevailing interest rate:
 
-$$
+```math
 \begin{aligned}
 PV &= e^{-rt}X \\
 &= e^{-0.06 \times 3} \times 10000 \\

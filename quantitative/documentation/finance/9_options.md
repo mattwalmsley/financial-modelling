@@ -854,9 +854,9 @@ $$C_{0} = E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S^{(n)}(T) - K, 
 $$S^{(n)}(T) \to S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)}$$
 - This convergence is strong enough to imply the following, where $\text{L.N.}$ is the log-normal distribution:
 
-$$
-\lim_{n \to \infty} \space E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{(n)}(T) - K, 0 \} \right] \equiv E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)} - K, 0  \right \} \right]
-$$
+```math
+\lim_{n \to \infty} \space E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{(n)}(T) - K, 0 \} \right] \equiv E^{\text{L.N.}} \left[ \text{max} \left \{ S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)} - K, 0  \right \} \right]
+```
 
 - $W(t)$ is Brownian motion and $W(T)$ has a normal distribution with mean $0$ and variance $T$ which leads to $Z = \frac{W(T)}{\sqrt{T}} \sim \mathcal{N}  (0,1)$.
 
