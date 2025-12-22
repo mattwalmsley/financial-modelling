@@ -137,10 +137,10 @@ $$
 
 - The price of a 2 year bond with a 100,000 USD face value and a 7% coupon paid semi-annually can be calculated as follows:
 
-```math
+$$
 \begin{aligned}
 P_{1.5} &= d(0.5)\left(\frac{100000 \times 7\%}{2}\right) + d(1)\left(\frac{100000 \times 7\%}{2}\right) + d(1.5)\left(\frac{100000 \times 7\%}{2}\right)+ d(2)\left(\frac{100000 \times 7\%}{2} + 100000\right) \\
 &= (0.985 \times 3500) + (0.9637 \times 3500) + (0.942 \times 3500) + (0.9189 \times 103500) \\
 &= \boxed{105,224 \text{ USD}}
 \end{aligned}
-```
+$$
