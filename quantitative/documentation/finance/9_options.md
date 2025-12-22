@@ -126,16 +126,16 @@
 - If $S(T) \leq K$ then the option will not be exercised and the payoff will be 0.
 - The long call payoff can be written as follows:
 
-$$
+```math
 \begin{aligned}
 C(S(T), T) &=
 \begin{cases}
 S(T) - K &S(T) > K \\
 0 &S(T) \leq K
-\end{cases} \\
+\end{cases} \\\\
 &=\text{max}\{0,S(T)-K\}
 \end{aligned}
-$$
+```
 
   ![Long Call Profit](../images/long-call.png "Long Call Profit")
 
@@ -153,16 +153,16 @@ $$-C(S(T),T) = - \text{max}\{0,S(T)-K\}$$
 - If $S(T) \geq K$ then the option will not be exercised and the payoff will be 0.
 - The long put payoff can be written as follows:
 
-$$
+```math
 \begin{aligned}
 P(S(T), T) &=
 \begin{cases}
 K - S(T) &S(T) < K \\
 0 &S(T) \geq K
-\end{cases} \\
+\end{cases} \\\\
 &=\text{max}\{0,K-S(T)\}
 \end{aligned}
-$$
+```
 
   ![Long Put Profit](../images/long-put.png "Long Put Profit")
 
@@ -210,13 +210,13 @@ $$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
   - Given the inequality, there will be a remaining cash sum equal to $S(t) - C(t)$ which can be invested at the risk-free rate $r$.
 - Now rewrite the inequality as follows:
 
-$$
+```math
 \begin{aligned}
 C(t) + e^{-r(T-t)}K &< S(t) \\
 e^{r(T-t)}C(t) + K &< e^{r(T-t)}S(t) \\
 K &< e^{r(T-t)}(S(t) - C(t)) \\
 \end{aligned}
-$$
+```
 
 - The inequality now shows that the value of the remaining cash sum $S(t) - C(t)$ at time $T$, having been invested at the risk-free rate $r$, is greater than the strike price $K$.
 - At the expiration of the call option $T$, the arbitrage portfolio contains the following:
@@ -279,15 +279,15 @@ $$C(S(t), t) =\text{max}\{0,S(t)-K\}$$
 - Denote $C_{A}(S(t), t)$ as the price of an American call, continue to denote a European call as $C(S(t), t)$ at time $t$.
 - The lower bound for an American call is therefore:
 
-$$
+```math
 \begin{aligned}
 C_{A}(S(t),t) &\geq C(S(t),t) \\
-&\geq \text{max}\{0,S(t) - e^{-r(T-t)}K\} \\
-\text{With } r > 0 \Longrightarrow \text{max}\{0,S(t) - e^{-r(T-t)}K\} &> \text{max}\{0,S(t)-K\} \\
+&\geq \text{max}\{0,S(t) - e^{-r(T-t)}K\} \\\\\\
+\text{With } r > 0 \Longrightarrow \text{max}\{0,S(t) - e^{-r(T-t)}K\} &> \text{max}\{0,S(t)-K\} \\\\\\
 \therefore C_{A}(S(t),t) &> \text{max}\{0,S(t)-K\} \\
 &\equiv \text{call's intrinsic value}
 \end{aligned}
-$$
+```
 
 - The market value of an American style call is always more than the intrinsic value.
   - This is because the intrinsic value is the amount that will be the realized from exercising the option early.
@@ -439,51 +439,51 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
 - Choose a value for $\Delta$ that creates a riskless portfolio - where the value of the portfolio at time $t=1$ in both the $+$ and $-$ cases is the same.
 - Denote the value function of the arbitrage portfolio as $V_{t} = \Delta S_{t} - D_{t}$ and then solve the following equation to find $\Delta$:
 
-$$
+```math
 \begin{aligned}
-\Delta uS_{0} - D_{1}(+) &= \Delta dS_{0} - D_{1}(-) \\
+\Delta uS_{0} - D_{1}(+) &= \Delta dS_{0} - D_{1}(-) \\\\
 \therefore \Delta &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}
 \end{aligned}
-$$
+```
 
-$$
+```math
 \begin{aligned}
-\Longrightarrow V_{1} &= \Delta S_{1} - D_{1} \\
+\Longrightarrow V_{1} &= \Delta S_{1} - D_{1} \\\\
 &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}S_{1} - D_{1}
 \end{aligned}
-$$
+```
 
 - This holds true in both the $+$ and $-$ states due to the derivation for $\Delta$ and can therefore be calculated using either state. Hence, for the $+$ state:
 
-$$
+```math
 \begin{aligned}
 \Longrightarrow &S_{1} = uS_{0} \\
-\Longrightarrow &D_{1} = D_{1}(+) \\
-V_{1} &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}uS_{0} - D_{1}(+) \\
-&= \frac{D_{1}(+) - D_{1}(-)}{(u-d)}u - D_{1}(+) \\
-&= \frac{(D_{1}(+) - D_{1}(-))u - (u-d)D_{1}(+)}{u-d} \\
-&= \frac{uD_{1}(+) - uD_{1}(-) - uD_{1}(+) + dD_{1}(+)}{u-d} \\
+\Longrightarrow &D_{1} = D_{1}(+) \\\\
+V_{1} &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}uS_{0} - D_{1}(+) \\\\
+&= \frac{D_{1}(+) - D_{1}(-)}{(u-d)}u - D_{1}(+) \\\\
+&= \frac{(D_{1}(+) - D_{1}(-))u - (u-d)D_{1}(+)}{u-d} \\\\
+&= \frac{uD_{1}(+) - uD_{1}(-) - uD_{1}(+) + dD_{1}(+)}{u-d} \\\\
 V_{1} &= \boxed{\frac{dD_{1}(+) - uD_{1}(-)}{u-d}}
 \end{aligned}
-$$
+```
 
 - The value of $V_{1}$ is a constant value with probability 1 by arbitrage principles and at time $t=0$, discounting can be applied to find the initial value of the portfolio $V_{0}$:
 
-$$
+```math
 \begin{aligned}
-V_{0} &= \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\
-V_{0} &= \Delta S_{0} - D_{0} \\
-\Longrightarrow \Delta S_{0} - D_{0} &= \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\
-D_{0} &= \Delta S_{0} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\
-\Longrightarrow \Delta &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}} \\
-\therefore D_{0} &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}S_{0} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\
-&= \frac{(1+r)(D_{1}(+) - D_{1}(-))}{(1+r)(u-d)} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\
-&= \frac{(1+r)(D_{1}(+) - D_{1}(-)) - dD_{1}(+) + uD_{1}(-)}{(1+r)(u-d)} \\
-&= \frac{(1+r-d)D_{1}(+) + (u-1-r)D_{1}(-)}{(1+r)(u-d)} \\
-&= \frac{(1+r-d)D_{1}(+)}{(1+r)(u-d)} + \frac{(u-1-r)D_{1}(-)}{(1+r)(u-d)} \\
-&= \frac{(1+r-d)}{(u-d)} \underbrace{\frac{D_{1}(+)}{(1+r)}}_{\text{Discounted value of } D_{1}(+)} + \frac{(u-1-r)}{(u-d)} \underbrace{\frac{D_{1}(-)}{(1+r)}}_{\text{Discounted value of } D_{1}(-)} \\
+V_{0} &= \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+V_{0} &= \Delta S_{0} - D_{0} \\\\
+\Longrightarrow \Delta S_{0} - D_{0} &= \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+D_{0} &= \Delta S_{0} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+\Longrightarrow \Delta &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}} \\\\
+\therefore D_{0} &= \frac{D_{1}(+) - D_{1}(-)}{(u-d)S_{0}}S_{0} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r)(D_{1}(+) - D_{1}(-))}{(1+r)(u-d)} - \frac{dD_{1}(+) - uD_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r)(D_{1}(+) - D_{1}(-)) - dD_{1}(+) + uD_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r-d)D_{1}(+) + (u-1-r)D_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r-d)D_{1}(+)}{(1+r)(u-d)} + \frac{(u-1-r)D_{1}(-)}{(1+r)(u-d)} \\\\
+&= \frac{(1+r-d)}{(u-d)} \underbrace{\frac{D_{1}(+)}{(1+r)}}_{\text{Discounted value of } D_{1}(+)} + \frac{(u-1-r)}{(u-d)} \underbrace{\frac{D_{1}(-)}{(1+r)}}_{\text{Discounted value of } D_{1}(-)} \\\\
 \end{aligned}
-$$
+```
 
 - The above formula displays the fair price of the derivative at time $t=0$ as a linear combination of the discounted values it takes at expiry.
 
@@ -496,14 +496,14 @@ $$\tilde{p} = \frac{(1+r-d)}{(u-d)}$$
 $$\tilde{q} = \frac{(u-1-r)}{(u-d)}$$
 - By definition, $\tilde{p} + \tilde{q} = 1$, as shown below:
 
-$$
+```math
 \begin{aligned}
-\tilde{p} + \tilde{q} &\equiv \frac{(1+r-d)}{(u-d)} + \frac{(u-1-r)}{(u-d)} \\
-&\equiv \frac{(1+r-d) + (u-1-r)}{(u-d)} \\
-&\equiv \frac{-d + u}{(u-d)} \\
+\tilde{p} + \tilde{q} &\equiv \frac{(1+r-d)}{(u-d)} + \frac{(u-1-r)}{(u-d)} \\\\
+&\equiv \frac{(1+r-d) + (u-1-r)}{(u-d)} \\\\
+&\equiv \frac{-d + u}{(u-d)} \\\\
 &\equiv 1
 \end{aligned}
-$$
+```
 
 - $D_{0}$, the fair price of the derivative at time $t=0$, is a weighted average of the possible values discounted from expiry when $t=1$ to the initial time $t=0$.
 $$D_{0} = \tilde{p} \frac{D_{1}(+)}{(1+r)} + \tilde{q} \frac{D_{1}(-)}{(1+r)}$$
@@ -516,21 +516,21 @@ $$D_{0} = E^{\tilde{P}} \left[\frac{D_{1}}{1+r} \right]$$
 - For any derivative with value $W(t)$ the price at $t=0$ can be calculated by $W_{0} = E^{\tilde{P}} \left[\frac{W_{1}}{1+r} \right]$.
   - Given that $W(0)$ and $1+r$ are deterministic, both terms can be moved in/out of the expectation which leads to:
 
-$$
+```math
 \begin{aligned}
-1+r &= E^{\tilde{P}} \left[\frac{W(1)}{W(0)} \right] \\
+1+r &= E^{\tilde{P}} \left[\frac{W(1)}{W(0)} \right] \\\\
 &= E^{\tilde{P}}[\text{Gross Return of } W]
 \end{aligned}
-$$
+```
 
 - This concept is also true for the underlying asset, the stock in this case:
 
-$$
+```math
 \begin{aligned}
-1+r &= E^{\tilde{P}} \left[\frac{S(1)}{S(0)} \right] \\
+1+r &= E^{\tilde{P}} \left[\frac{S(1)}{S(0)} \right] \\\\
 &= E^{\tilde{P}}[\text{Gross Return of } S]
 \end{aligned}
-$$
+```
 
 - The risk neutral distribution is such that the expected return for any asset is the same as the expected return for a riskless asset, regardless of the risk level of the asset.
   - The risk neutral distribution is the distribution for asset prices if all investors in the economy were indifferent to risk levels.
@@ -550,20 +550,20 @@ $$
   - The risk-free interest rate $r$ is 8%.
 - $D_0$ can be determined using the risk neutral distribution as follows:
 
-$$
+```math
 \begin{aligned}
-\tilde{p} &= \frac{(1+r-d)}{(u-d)} \\
-\tilde{q} &= \frac{(u-1-r)}{(u-d)} \\
-&\Longrightarrow u = \frac{S_{1}(+)}{S_{0}} = \frac{65}{50} = 1.3 \\
-&\Longrightarrow d = \frac{S_{1}(-)}{S_{0}} = \frac{40}{50} = 0.8 \\
-\therefore \tilde{p} &=\frac{1+0.08-0.8}{1.3-0.8} = 0.56 \\
-\therefore \tilde{q} &= \frac{1.3-1-0.08}{1.3-0.08} = 0.44 \\
-D_{0} &= \left[\frac{D_{1}}{1+r} \right] \\
-&= \tilde{p} \frac{D_{1}(+)}{(1+r)} + \tilde{q} \frac{D_{1}(-)}{(1+r)} \\
-&= 0.56 \frac{10}{1+0.08} + 0.44 \frac{0}{1+0.08} \\
+\tilde{p} &= \frac{(1+r-d)}{(u-d)} \\\\
+\tilde{q} &= \frac{(u-1-r)}{(u-d)} \\\\
+&\Longrightarrow u = \frac{S_{1}(+)}{S_{0}} = \frac{65}{50} = 1.3 \\\\
+&\Longrightarrow d = \frac{S_{1}(-)}{S_{0}} = \frac{40}{50} = 0.8 \\\\
+\therefore \tilde{p} &=\frac{1+0.08-0.8}{1.3-0.8} = 0.56 \\\\
+\therefore \tilde{q} &= \frac{1.3-1-0.08}{1.3-0.08} = 0.44 \\\\\\
+D_{0} &= \left[\frac{D_{1}}{1+r} \right] \\\\
+&= \tilde{p} \frac{D_{1}(+)}{(1+r)} + \tilde{q} \frac{D_{1}(-)}{(1+r)} \\\\
+&= 0.56 \frac{10}{1+0.08} + 0.44 \frac{0}{1+0.08} \\\\
 &= 5.19
 \end{aligned}
-$$
+```
 
 ### Two-Step Binomial Model
 
@@ -602,14 +602,14 @@ $$D_{1}(+) = \tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r}$$
 $$D_{1}(-) = \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r}$$
 - The risk neutral expectation for $D_{0}$ is then expressed in terms of the potential values of $D_{2}$ as follows:
 
-$$
+```math
 \begin{aligned}
-D_{0} &= \tilde{p} \frac{D_{1}(+)}{1+r} + \tilde{q} \frac{D_{1}(-)}{1+r} \\
-&= \frac{\tilde{p}}{1+r} \left(\tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r} \right) + \frac{\tilde{q}}{1+r} \left( \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r} \right) \\
-&= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + \tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}} \\
+D_{0} &= \tilde{p} \frac{D_{1}(+)}{1+r} + \tilde{q} \frac{D_{1}(-)}{1+r} \\\\
+&= \frac{\tilde{p}}{1+r} \left(\tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r} \right) + \frac{\tilde{q}}{1+r} \left( \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r} \right) \\\\
+&= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + \tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}} \\\\
 &= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + 2\tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}}
 \end{aligned}
-$$
+```
 
 - This represents the [binomial distribution from the random walk](./8_stochastic-processes.md#the-binomial-distribution) with binomial probabilities $\text{bin}(k;2,\tilde{p})$ which can be substituted in as follows:
 $$D_{0} = \text{bin}(2;2,\tilde{p}) \frac{D_{2}(++)}{(1+r)^{2}} + \text{bin}(1;2,\tilde{p}) \frac{D_{2}(+-)}{(1+r)^{2}} + \text{bin}(0;2,\tilde{p}) \frac{D_{2}(--)}{(1+r)^{2}}$$
@@ -627,51 +627,51 @@ $$D_{0} = E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right]$$
 - A two-step binomial model with $u=1.2$ and $d=0.9$ can be used to calculate $D_{0}$, the fair price of the derivative asset at time $t=0$, by applying arbitrage principles to find the risk neutral expectations.
 - The risk neutral probabilities are given by:
 
-$$
+```math
 \begin{aligned}
-\tilde{p} &= \frac{(1+r-d)}{(u-d)} \\
-&= \frac{1+0.06-0.9}{1.2-0.9} \\
-&= 0.5333 \\
-\tilde{q} &= \frac{(u-1-r)}{(u-d)} \\
-&= \frac{1.2-1-0.06}{1.2-0.9} \\
+\tilde{p} &= \frac{(1+r-d)}{(u-d)} \\\\
+&= \frac{1+0.06-0.9}{1.2-0.9} \\\\
+&= 0.5333 \\\\\\
+\tilde{q} &= \frac{(u-1-r)}{(u-d)} \\\\
+&= \frac{1.2-1-0.06}{1.2-0.9} \\\\
 &= 0.4667
 \end{aligned}
-$$
+```
 
 - The risk neutral expectations and arbitrage prices for the derivate asset at time $t=1$ can now be calculated as follows:
 
-$$
+```math
 \begin{aligned}
-D_{1}(+) &= \tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r} \\
-&= 0.5333 \left( \frac{-15}{1+0.06} \right) + 0.4667 \left( \frac{10}{1+0.06} \right) \\
-&= -3.145 \\
-D_{1}(-) &= \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r} \\
-&= 0.5333 \left( \frac{10}{1+0.06} \right) + 0.4667 \left( \frac{25}{1+0.06} \right) \\
+D_{1}(+) &= \tilde{p} \frac{D_{2}(++)}{1+r} + \tilde{q} \frac{D_{2}(+-)}{1+r} \\\\
+&= 0.5333 \left( \frac{-15}{1+0.06} \right) + 0.4667 \left( \frac{10}{1+0.06} \right) \\\\
+&= -3.145 \\\\\\
+D_{1}(-) &= \tilde{p} \frac{D_{2}(+-)}{1+r} + \tilde{q} \frac{D_{2}(--)}{1+r} \\\\
+&= 0.5333 \left( \frac{10}{1+0.06} \right) + 0.4667 \left( \frac{25}{1+0.06} \right) \\\\
 &= 16.038
 \end{aligned}
-$$
+```
 
 - Finally, the risk neutral expectation and arbitrage price for the derivative asset at time $t=0$ can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
-D_{0} &= \tilde{p} \frac{D_{1}(+)}{1+r} + \tilde{q} \frac{D_{1}(-)}{1+r} \\
-&= 0.5333 \left( \frac{-3.145}{1+0.06} \right) + 0.4667 \left( \frac{16.038}{1+0.06} \right) \\
+D_{0} &= \tilde{p} \frac{D_{1}(+)}{1+r} + \tilde{q} \frac{D_{1}(-)}{1+r} \\\\
+&= 0.5333 \left( \frac{-3.145}{1+0.06} \right) + 0.4667 \left( \frac{16.038}{1+0.06} \right) \\\\
 &= 5.478
 \end{aligned}
-$$
+```
 
 - The fair price of the derivative asset at time $t=0$ is 5.478.
 - Alternatively, the risk neutral expectation formula can be used:
 
-$$
+```math
 \begin{aligned}
-D_{0} &= E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right] \\
-&= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + 2\tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}} \\
-&= (0.5333)^{2} \frac{-15}{1.06^{2}} + 2(0.5333)(0.4667) \frac{10}{1.06^{2}} + (0.4667)^{2} \frac{25}{1.06^{2}} \\
+D_{0} &= E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right] \\\\
+&= \tilde{p}^{2} \frac{D_{2}(++)}{(1+r)^{2}} + 2\tilde{p}\tilde{q} \frac{D_{2}(+-)}{(1+r)^{2}} + \tilde{q}^{2} \frac{D_{2}(--)}{(1+r)^{2}} \\\\
+&= (0.5333)^{2} \frac{-15}{1.06^{2}} + 2(0.5333)(0.4667) \frac{10}{1.06^{2}} + (0.4667)^{2} \frac{25}{1.06^{2}} \\\\
 &= 5.478
 \end{aligned}
-$$
+```
 
 ### The Full Binomial Model
 
@@ -692,13 +692,13 @@ $$
 
 - A similar procedure to the two-step case is used to determine $D_{0}$, the fair value of the derivative at time $t=0$, resulting in the following formula:
 
-$$
+```math
 \begin{aligned}
-D_{0} &= E^{\text{bin}(;3,\tilde{p})} \left[ \frac{D_{3}}{(1+r)^{3}} \right] \\
-&= \text{bin}(3;3,\tilde{p}) \frac{D_{3}(+++)}{(1+r)^{3}} + \text{bin}(2;3,\tilde{p}) \tilde{q} \frac{D_{3}(++-)}{(1+r)^{3}} + \text{bin}(1;3,\tilde{p}) \frac{D_{3}(+--)}{(1+r)^{3}} + \text{bin}(0;3,\tilde{p}) \frac{D_{3}(---)}{(1+r)^{3}} \\
-&= \tilde{p}^{3} \frac{D_{3}(+++)}{(1+r)^{3}} + 3\tilde{p}^{2} \tilde{q} \frac{D_{3}(++-)}{(1+r)^{3}} + 3\tilde{p}\tilde{q}^{2} \frac{D_{3}(+--)}{(1+r)^{3}} + \tilde{q}^{3} \frac{D_{3}(---)}{(1+r)^{3}} \\
+D_{0} &= E^{\text{bin}(;3,\tilde{p})} \left[ \frac{D_{3}}{(1+r)^{3}} \right] \\\\
+&= \text{bin}(3;3,\tilde{p}) \frac{D_{3}(+++)}{(1+r)^{3}} + \text{bin}(2;3,\tilde{p}) \tilde{q} \frac{D_{3}(++-)}{(1+r)^{3}} + \text{bin}(1;3,\tilde{p}) \frac{D_{3}(+--)}{(1+r)^{3}} + \text{bin}(0;3,\tilde{p}) \frac{D_{3}(---)}{(1+r)^{3}} \\\\
+&= \tilde{p}^{3} \frac{D_{3}(+++)}{(1+r)^{3}} + 3\tilde{p}^{2} \tilde{q} \frac{D_{3}(++-)}{(1+r)^{3}} + 3\tilde{p}\tilde{q}^{2} \frac{D_{3}(+--)}{(1+r)^{3}} + \tilde{q}^{3} \frac{D_{3}(---)}{(1+r)^{3}} \\\\
 \end{aligned}
-$$
+```
 
 - The notation used becomes unsuitable for a large number of steps so is modified as follows:
   - The underlying asset price at time $t=k$ is denoted $S_{k}$.
@@ -711,12 +711,12 @@ $$
 - The derivative payoff (contract expiration) is at time $t=n$ such that $D_{n} = D_{n}(j)$ is the when $S_{n} = S_{n}(j)$.
 - This leads to the following general case for the binomial model:
 
-$$
+```math
 \begin{aligned}
-D_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{D_{n}}{(1+r)^{n}} \right] \\
+D_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{D_{n}}{(1+r)^{n}} \right] \\\\
 &= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{D_{n}(j)}{(1+r)^{n}}
 \end{aligned}
-$$
+```
 
 ### Call Pricing using the Binomial Model
 
@@ -729,48 +729,48 @@ $$C_{0} = E^{\text{bin}(;n,\tilde{p})} \left[ \frac{C_{n}}{(1+r)^{n}} \right]$$
 - $C_{n}$ is the call payoff where $C_{n} = \text{max}\{S_{n} - K, 0 \}$
 - Substituting in the call payoff and stating explicitly:
 
-$$
+```math
 \begin{aligned}
-C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \right] \\
-&= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \\
-&= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{u^{j}d^{n-j}S_{0} - K, 0 \}}{(1+r)^{n}} \\
+C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \right] \\\\
+&= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \\\\
+&= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{u^{j}d^{n-j}S_{0} - K, 0 \}}{(1+r)^{n}} \\\\
 \end{aligned}
-$$
+```
 
 - For a non-zero result, $u^{j}d^{n-j}S_{0} - K > 0$ due to the $\text{max}$ function which can be solved for $J$:
 
-$$
+```math
 \begin{aligned}
 u^{j}d^{n-j}S_{0} - K &> 0 \\
-u^{j}d^{n-j} &> \frac{K}{S_{0}} \\
-\log(u^{j}d^{n-j}) &> \log \left(\frac{K}{S_{0}} \right) \\
-\log(u^{j}d^{n}d^{-j}) &> \log \left(\frac{K}{S_{0}} \right) \\
-j \log(u) + n \log(d) - j \log(d) &> \log \left(\frac{K}{S_{0}} \right) \\
-j (\log(u)  - \log(d)) &> \log \left(\frac{K}{S_{0}} \right) - n \log(d) \\
-j  &> \frac{\log \left(\frac{K}{S_{0}} \right) - n \log(d)}{\log(\frac{u}{d})} \\
- &> M(K,S_{0}) \equiv M\\
+u^{j}d^{n-j} &> \frac{K}{S_{0}} \\\\
+\log(u^{j}d^{n-j}) &> \log \left(\frac{K}{S_{0}} \right) \\\\
+\log(u^{j}d^{n}d^{-j}) &> \log \left(\frac{K}{S_{0}} \right) \\\\
+j \log(u) + n \log(d) - j \log(d) &> \log \left(\frac{K}{S_{0}} \right) \\\\
+j (\log(u)  - \log(d)) &> \log \left(\frac{K}{S_{0}} \right) - n \log(d) \\\\
+j  &> \frac{\log \left(\frac{K}{S_{0}} \right) - n \log(d)}{\log(\frac{u}{d})} \\\\
+ &> M(K,S_{0}) \equiv M\\\\
 \end{aligned}
-$$
+```
 
 - This new condition for $j$ can be applied as follows:
 
-$$
+```math
 \begin{aligned}
-C_{0} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{u^{j}d^{n-j}S_{0} - K}{(1+r)^{n}} \\
-&= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{u^{j}d^{n-j}S_{0}}{(1+r)^{n}} - \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{K}{(1+r)^{n}} \\
-&= \frac{S_{0}}{(1+r)^{n}} \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} u^{j}d^{n-j} - \frac{K}{(1+r)^{n}} \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \\
+C_{0} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{u^{j}d^{n-j}S_{0} - K}{(1+r)^{n}} \\\\
+&= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{u^{j}d^{n-j}S_{0}}{(1+r)^{n}} - \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{K}{(1+r)^{n}} \\\\
+&= \frac{S_{0}}{(1+r)^{n}} \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} u^{j}d^{n-j} - \frac{K}{(1+r)^{n}} \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \\\\
 &= \frac{S_{0}}{(1+r)^{n}} \phi_{1} - \frac{K}{(1+r)^{n}} \phi_{2}
 \end{aligned}
-$$
+```
 
 - The values for $\phi_{1}$ and $\phi_{2}$ are related to the cumulative probability distribution function of the binomial distribution and are as follows:
 
-$$
+```math
 \begin{aligned}
-\phi_{1} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} u^{j}d^{n-j} \\
+\phi_{1} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} u^{j}d^{n-j} \\\\
 \phi_{2} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j}
 \end{aligned}
-$$
+```
 
 - $\phi_{2}$ is the probability of being larger than $M$ in the binomial distribution.
 - These formulae can be continued to derived the Black-Scholes formula.
@@ -799,16 +799,16 @@ $$S^{(n)}(t) = e^{U^{(n)}(t)}$$
 $$S^{(n)}(t) \to e^{\mu t + \sigma W(t)} = S(t)$$
 - $S^{(n)}(t)$ is a discrete process that approximates the log-normal asset price process and is in fact a binomial process, as demonstrated by evaluating the logarithm of $S^{(n)}(t)$ at discrete times $t=\frac{k}{n}$.
 
-$$
+```math
 \begin{aligned}
-\log \left( S^{(n)} \left( \frac{k}{n} \right) \right) &= U^{(n)} \left( \frac{k}{n} \right) \\
-&= \sum_{j=1}^{k}Y_{j}^{(n)} \\
-&= Y_{k}^{(n)} + \sum_{j=1}^{k-1}Y_{j}^{(n)} \\
-&= Y_{k}^{(n)} + U^{(n)} \left( \frac{k-1}{n} \right) \\
-&= Y_{k}^{(n)} + \log \left( S^{(n)} \left( \frac{k-1}{n} \right) \right) \\
+\log \left( S^{(n)} \left( \frac{k}{n} \right) \right) &= U^{(n)} \left( \frac{k}{n} \right) \\\\
+&= \sum_{j=1}^{k}Y_{j}^{(n)} \\\\
+&= Y_{k}^{(n)} + \sum_{j=1}^{k-1}Y_{j}^{(n)} \\\\
+&= Y_{k}^{(n)} + U^{(n)} \left( \frac{k-1}{n} \right) \\\\
+&= Y_{k}^{(n)} + \log \left( S^{(n)} \left( \frac{k-1}{n} \right) \right) \\\\
 \Longrightarrow S^{(n)} \left( \frac{k}{n} \right) &= e^{Y_{k}^{(n)}}S^{(n)} \left( \frac{k-1}{n} \right)
 \end{aligned}
-$$
+```
 
 - Recalling that $Y_{k}^{(n)} = \frac{\mu}{n} + \frac{\sigma}{\sqrt{n}}X_{j}$ takes two values each with probability $\frac{1}{2}$, depending on whether $X_{j}$ takes $+1$ or $-1$, leads to the following:
   - $Y_{k}^{(n)} = \frac{\mu}{n} + \frac{\sigma}{\sqrt{n}}$ or
@@ -838,9 +838,9 @@ $$\lim_{n \to \infty} S^{(n)}(t) = S_{0}e^{t \left(r-\frac{\sigma^{2}}{2} \right
 
   $$
   \begin{aligned}
-  C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \right] \\
-  &= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \\
-  &= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{u^{j}d^{n-j}S_{0} - K, 0 \}}{(1+r)^{n}} \\
+  C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \right] \\\\
+  &= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{S_{n} - K, 0 \}}{(1+r)^{n}} \\\\
+  &= \sum_{j=0}^{n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \frac{\text{max}\{u^{j}d^{n-j}S_{0} - K, 0 \}}{(1+r)^{n}} \\\\
   \end{aligned}
   $$
 
@@ -854,51 +854,51 @@ $$C_{0} = E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S^{(n)}(T) - K, 
 $$S^{(n)}(T) \to S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)}$$
 - This convergence is strong enough to imply the following, where $\text{L.N.}$ is the log-normal distribution:
 
-$$
+```math
 \lim_{n \to \infty} \space E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{(n)}(T) - K, 0 \} \right] \equiv E^{\text{L.N.}} \left[ \text{max} \left \{ S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)} - K, 0  \right \} \right]
-$$
+```
 
 - $W(t)$ is Brownian motion and $W(T)$ has a normal distribution with mean $0$ and variance $T$ which leads to $Z = \frac{W(T)}{\sqrt{T}} \sim \mathcal{N}  (0,1)$.
 
-$$
+```math
 \begin{aligned}
-&E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}\frac{W(T)}{\sqrt{T}}} - K, 0  \right \} \right] \\
+&E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}\frac{W(T)}{\sqrt{T}}} - K, 0  \right \} \right] \\\\
 &E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \right]
 \end{aligned}
-$$
+```
 
 - The limit of the discounting factor $(1+\frac{r}{n})^{\lfloor nT \rfloor}$ can be taken as follows:
 
-$$
+```math
 \begin{aligned}
-\lim_{n \to \infty} \frac{\lfloor nT \rfloor}{n} &= T \\
-\text{From calculus: } \lim_{n \to \infty} (1+\frac{r}{n})^{n} &= e^{r} \\
-\therefore \lim_{n \to \infty} (1+\frac{r}{n})^{\lfloor nT \rfloor} &= \lim_{n \to \infty} (1+\frac{r}{n})^{n \frac{\lfloor nT \rfloor}{n}} \\
-&= \lim_{n \to \infty} \left[ \left( 1+\frac{r}{n} \right)^{n} \right ] ^{\frac{\lfloor nT \rfloor}{n}} \\
-&= \left [e^{r} \right]^{T} \\
+\lim_{n \to \infty} \frac{\lfloor nT \rfloor}{n} &= T \\\\
+\text{From calculus: } \lim_{n \to \infty} (1+\frac{r}{n})^{n} &= e^{r} \\\\
+\therefore \lim_{n \to \infty} (1+\frac{r}{n})^{\lfloor nT \rfloor} &= \lim_{n \to \infty} (1+\frac{r}{n})^{n \frac{\lfloor nT \rfloor}{n}} \\\\
+&= \lim_{n \to \infty} \left[ \left( 1+\frac{r}{n} \right)^{n} \right ] ^{\frac{\lfloor nT \rfloor}{n}} \\\\
+&= \left [e^{r} \right]^{T} \\\\
 &= e^{rT}
 \end{aligned}
-$$
+```
 
 - The limit of the call price as the number of time steps in the binomial model goes to infinity is derived as follows:
 
-$$
+```math
 \begin{aligned}
-\lim_{n \to \infty} C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S^{(n)}(T) - K, 0 \}}{ \left(1+\frac{r}{n}\right)^{\lfloor nT \rfloor} } \right] \\
-&= \lim_{n \to \infty} \frac{1}{ \left(1+\frac{r}{n}\right)^{\lfloor nT \rfloor} } E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{(n)}(T) - K, 0 \} \right] \\
-\therefore \lim_{n \to \infty} C_{0} &= \frac{1}{e^{rT}} E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)} - K, 0  \right \} \right] \\
+\lim_{n \to \infty} C_{0} &= E^{\text{bin}(;n,\tilde{p})} \left[ \frac{\text{max}\{S^{(n)}(T) - K, 0 \}}{ \left(1+\frac{r}{n}\right)^{\lfloor nT \rfloor} } \right] \\\\
+&= \lim_{n \to \infty} \frac{1}{ \left(1+\frac{r}{n}\right)^{\lfloor nT \rfloor} } E^{\text{bin}(;n,\tilde{p})} \left[ \text{max}\{S^{(n)}(T) - K, 0 \} \right] \\\\
+\therefore \lim_{n \to \infty} C_{0} &= \frac{1}{e^{rT}} E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma W(T)} - K, 0  \right \} \right] \\\\
 &= e^{-rT} E^{\text{L.N.}} \left[ \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \right]
 \end{aligned}
-$$
+```
 
 - Given the probability density function of $Z$ is a standard normal random variable, the expectation can be written as an explicit integral:
 
-$$
+```math
 \begin{aligned}
-\lim_{n \to \infty} C_{0} &= e^{-rT} \int _{-\infty}^{\infty} \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \frac{e^{- \frac{z^{2}}{2}}}{\sqrt{2 \pi}} dz \\
+\lim_{n \to \infty} C_{0} &= e^{-rT} \int _{-\infty}^{\infty} \text{max} \left \{S_{0}e^{T \left(r-\frac{\sigma^{2}}{2} \right) + \sigma \sqrt{T}Z} - K, 0  \right \} \frac{e^{- \frac{z^{2}}{2}}}{\sqrt{2 \pi}} dz \\\\
 &= \boxed{S_{0}N(d_{1}) - Ke^{-rT}N(d_{2})}
 \end{aligned}
-$$
+```
 
 - The variables $d_{1}=d_{+}$ and $d_{2}=d_{-}$ are given by:
 $$d_{\pm} = \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S_{0}}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)T \right]$$
@@ -911,15 +911,15 @@ $$N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz$$
 
 >For an underlying asset price that evolves under a log-normal distribution with drift $\mu$ and volatility $\sigma$, the fair price of a **call** option at time $t$ on this underlying asset is given by the Black-Scholes formula below.
 
-$$
+```math
 \begin{aligned}
-C(S,t;K,T,\sigma,r) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
+C(S,t;K,T,\sigma,r) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \text{Where} \\
-&d_{1}=d_{+} \text{ and } d_{2}=d_{-} \\
-&d_{\pm} = \frac{1}{\sigma \sqrt{T-t}} \left[ \log \left(\frac{S}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)(T-t) \right] \\
+&d_{1}=d_{+} \text{ and } d_{2}=d_{-} \\\\
+&d_{\pm} = \frac{1}{\sigma \sqrt{T-t}} \left[ \log \left(\frac{S}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)(T-t) \right] \\\\
 &N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz
 \end{aligned}
-$$
+```
 
 > - $t$ is the time of valuation - any point during the life of the option (between contract origination > $t=0$ and expiration $t=T$).
 > - $S$ is the price of the underlying asset at time $t$.
@@ -934,15 +934,15 @@ $$
 
 >Using [put-call parity](#put-call-parity), the fair price of a **put** option is derived using the Black-Scholes formula below.
 
-$$
+```math
 \begin{aligned}
-P(S,t) &= C(S,t) - S - e^{-r(T-t)}K \\
-&= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) - S - e^{-r(T-t)}K \\
-&= S(N(d_{1}) - 1) - Ke^{-r(T-t)}(N(d_{2}) - 1) \\
-&= S(-N(-d_{1})) - Ke^{-r(T-t)}(-N(-d_{2})) \\
+P(S,t) &= C(S,t) - S - e^{-r(T-t)}K \\\\
+&= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) - S - e^{-r(T-t)}K \\\\
+&= S(N(d_{1}) - 1) - Ke^{-r(T-t)}(N(d_{2}) - 1) \\\\
+&= S(-N(-d_{1})) - Ke^{-r(T-t)}(-N(-d_{2})) \\\\
 &= Ke^{-r(T-t)}N(-d_{2}) - S(-N(-d_{1}))
 \end{aligned}
-$$
+```
 
 > Noting the use of the following property of the cumulative distribution function:
 
@@ -1018,30 +1018,30 @@ $$N(-x) = 1 - N(x) \Longrightarrow N(x) - 1 = -N(-x)$$
 
 ### Delta
 
-$$
+```math
 \begin{aligned}
-C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \Delta = \frac{\partial C}{\partial S} = N(d_{1})
 \end{aligned}
-$$
+```
 
 ### Gamma
 
-$$
+```math
 \begin{aligned}
-C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \Gamma = \frac{\partial^{2} C}{\partial S^{2}} = \frac{N'(d_{1})}{S(t) \sigma \sqrt{T-t}}
 \end{aligned}
-$$
+```
 
 ### Vega
 
-$$
+```math
 \begin{aligned}
-C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \nu = \frac{\partial C}{\partial \sigma}= S(t) \sqrt{T-t} N'(d_{1})
 \end{aligned}
-$$
+```
 
 ### Theta
 
@@ -1053,21 +1053,21 @@ $$
   - The theta of a call is therefore always less than 0 as the fair value of a call decreases as the option expiration approaches, assuming all market factors remain constant.
   - Consequently, holding a call option in the absence of any favourable market moves is a losing strategy.
 
-$$
+```math
 \begin{aligned}
-C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \Theta = \frac{\partial C}{\partial t} = -\frac{SN'(d_{1})\sigma}{2 \sqrt{T-t}} - rKe^{-r(T-t)}N(d_{2}) < 0
 \end{aligned}
-$$
+```
 
 - The theta for a put option is also usually negative, except for very in-the-money put options, and is calculated as follows.
 
-$$
+```math
 \begin{aligned}
-P = Ke^{-r(T-t)}N(-d_{2}) - S(-N(-d_{1})) \\
+P = Ke^{-r(T-t)}N(-d_{2}) - S(-N(-d_{1})) \\\\
 \Theta = \frac{\partial P}{\partial t} = -\frac{SN'(d_{1})\sigma}{2 \sqrt{T-t}} + rKe^{-r(T-t)}N(-d_{2})
 \end{aligned}
-$$
+```
 
 #### Example: Theta and Time Decay
 
@@ -1086,59 +1086,59 @@ $$
   - Risk-free rate $r = 0.04$
 - Using the method of calculating theta and scaling to one month $\frac{1}{12}$:
 
-$$
+```math
 \begin{aligned}
-d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.35 \sqrt{\frac{2}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 + \frac{0.35^{2}}{2}\right)\frac{2}{12} \right] \\
-&= 1.3941 \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{2}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 + \frac{0.35^{2}}{2}\right)\frac{2}{12} \right] \\\\
+&= 1.3941 \\\\\\
 
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.35 \sqrt{\frac{2}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 - \frac{0.35^{2}}{2}\right)\frac{2}{12} \right] \\
-&= 1.2512 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{2}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 - \frac{0.35^{2}}{2}\right)\frac{2}{12} \right] \\\\
+&= 1.2512 \\\\\\
 
-\Theta &= -\frac{SN'(d_{1})\sigma}{2 \sqrt{T}} - rKe^{-r(T)}N(d_{2}) \\
-&= -\frac{30N'(1.3941)(0.35)}{2 \sqrt{\frac{2}{12}}} - (0.04)(25)e^{-0.04\frac{2}{12}}N(1.2512) \\
-&= -2.83 \\
+\Theta &= -\frac{SN'(d_{1})\sigma}{2 \sqrt{T}} - rKe^{-r(T)}N(d_{2}) \\\\
+&= -\frac{30N'(1.3941)(0.35)}{2 \sqrt{\frac{2}{12}}} - (0.04)(25)e^{-0.04\frac{2}{12}}N(1.2512) \\\\
+&= -2.83 \\\\\\
 
-\Theta &= \frac{\partial C(S,t;K,T,\sigma,r)}{\partial t}\Longrightarrow C(S,t+\Delta T) - C(S,t) \approx \Theta \Delta t  \\
-\therefore C(S,t+\Delta T) - C(S,t) &= -2.83 \frac{1}{12} \\
-&= -0.2358 \\
+\Theta &= \frac{\partial C(S,t;K,T,\sigma,r)}{\partial t}\Longrightarrow C(S,t+\Delta T) - C(S,t) \approx \Theta \Delta t  \\\\
+\therefore C(S,t+\Delta T) - C(S,t) &= -2.83 \frac{1}{12} \\\\
+&= -0.2358 \\\\\\
 \end{aligned}
-$$
+```
 
 - The approximate loss on the fifty option contracts after one month using the theta method would be $50 \times 0.2358 = 11.79$.
 - Using the method of repricing the option contract one month closer to expiration, assuming all market factor remain constant:
 
-$$
+```math
 \begin{aligned}
-C(t=0) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
-&= 30N(1.3941) - 25e^{-0.04\frac{2}{12}}N(1.2512) \\
-&= 5.33 \\
+C(t=0) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+&= 30N(1.3941) - 25e^{-0.04\frac{2}{12}}N(1.2512) \\\\
+&= 5.33 \\\\\\
 
-C \left(t=\frac{1}{12} \right) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
-\Longrightarrow d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.35 \sqrt{\frac{1}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 + \frac{0.35^{2}}{2}\right)\frac{1}{12} \right] \\
-&= 1.8880 \\
+C \left(t=\frac{1}{12} \right) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
+\Longrightarrow d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{1}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 + \frac{0.35^{2}}{2}\right)\frac{1}{12} \right] \\\\
+&= 1.8880 \\\\\\
 
- d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.35 \sqrt{\frac{1}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 - \frac{0.35^{2}}{2}\right)\frac{1}{12} \right] \\
-&= 1.7870\\
-C \left(t=\frac{1}{12} \right) &= 30N(1.8880) - 25e^{-0.04\frac{1}{12}}N(1.7870) \\
+ d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.35 \sqrt{\frac{1}{12}}} \left[ \log \left(\frac{30}{25} \right) + \left( 0.04 - \frac{0.35^{2}}{2}\right)\frac{1}{12} \right] \\\\
+&= 1.7870\\\\\\
+C \left(t=\frac{1}{12} \right) &= 30N(1.8880) - 25e^{-0.04\frac{1}{12}}N(1.7870) \\\\
 &= 5.12
 \end{aligned}
-$$
+```
 
 - The approximate loss on the fifty option contracts after one month using the price recalculation method would be $50 \times (5.33 - 5.12) = 10.50$.
 - The theta approximation has therefore overestimated the loss - this is usually the case.
 
 ### Rho
 
-$$
+```math
 \begin{aligned}
-C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\
+C = SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \rho = \frac{\partial C}{\partial r} = (T-t)Ke^{-r(T-t)}N(d_{2})
 \end{aligned}
-$$
+```
 
 ## Delta Hedging
 
@@ -1155,12 +1155,12 @@ $$\Delta = \frac{\partial C}{\partial S} = N(d_{1})$$
 $$V(t) = C(S(t),t) - \delta S(t)$$
 - The portfolio is said to be *delta neutral* if $\frac{\partial V}{\partial S} = 0$ which leads to the following condition:
 
-$$
+```math
 \begin{aligned}
-\frac{\partial V}{\partial S} = \frac{\partial C}{\partial S} - \delta &= 0 \\
+\frac{\partial V}{\partial S} = \frac{\partial C}{\partial S} - \delta &= 0 \\\\
 \Longrightarrow \delta &= \frac{\partial C}{\partial S} = \Delta
 \end{aligned}
-$$
+```
 
 - Therefore, to maintain a delta neutral portfolio, a short position (due to the minus sign) in the underlying stock equal to the delta of the option is required.
   - In other words, delta ($\Delta$) short positions in the underlying asset should be entered into for every long position in the call option.
@@ -1179,15 +1179,15 @@ $$0 \leq \Delta \leq 1$$
   - Volatility $\sigma = 0.2$
   - Risk-free rate $r=0.05$
 
-$$
+```math
 \begin{aligned}
-\Delta &= N(d_{1}) \\
-\Longrightarrow d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.2 \sqrt{0.5}} \left[ \log \left(\frac{60}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)(0.5) \right] \\
-&= 1.536695 \\
+\Delta &= N(d_{1}) \\\\
+\Longrightarrow d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{0.5}} \left[ \log \left(\frac{60}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)(0.5) \right] \\\\
+&= 1.536695 \\\\
 \therefore \Delta &= N(1.536695) = 0.9378 = \boxed{93.78\%}
 \end{aligned}
-$$
+```
 
 - If a portfolio contains 200 call options, the short position allocation required in the underlying stock to achieve a delta neutral position can be calculated by multiplying delta ($\Delta$) by the number of option contracts: $0.9378 \times 200 = 188$.
 
@@ -1195,50 +1195,50 @@ $$
   - The stock has gained 10 USD per share so the short position has lost 10 USD per share, resulting in the total short position losing 1880 USD.
   - The option's value can be calculated before ($T=0.5$) and after one month ($T=0.5 - \frac{1}{12} = \frac{5}{12}$).
 
-$$
+```math
 \begin{aligned}
 \Longrightarrow T=0.5 \\
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.2 \sqrt{0.5}} \left[ \log \left(\frac{60}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)0.5 \right] \\
-&= 1.395274 \\
-\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\
-&= 60N(1.536695) - 50e^{-(0.05)(0.5)}N(1.395274) \\
-&= \boxed{11.48} \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{0.5}} \left[ \log \left(\frac{60}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)0.5 \right] \\\\
+&= 1.395274 \\\\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 60N(1.536695) - 50e^{-(0.05)(0.5)}N(1.395274) \\\\
+&= \boxed{11.48} \\\\\\
 
 \Longrightarrow T=\frac{5}{12} \\
-d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{70}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\
-&= 2.832227 \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{70}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 2.832227 \\\\\\
 
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{70}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\
-&= 2.703127 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{70}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 2.703127 \\\\
 
-\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\
-&= 70N(2.832227) - 50e^{-(0.05)(\frac{5}{12})}N(2.703127) \\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 70N(2.832227) - 50e^{-(0.05)(\frac{5}{12})}N(2.703127) \\\\
 &= \boxed{21.04}
 \end{aligned}
-$$
+```
 
 - The PnL can be calculated by: $200(21.04 - 11.48) - 1880 = 32$.
 - If after one month, the underlying stock is trading at 50 USD instead, the PnL can be calculated as follows.
   - The short position in the stock will have gained 1880 USD.
 
-$$
+```math
 \begin{aligned}
-d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{50}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\
-&= 0.225924 \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{50}{50} \right) + \left( 0.05 + \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 0.225924 \\\\\\
 
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{50}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\
-&= 0.09682458 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.2 \sqrt{\frac{5}{12}}} \left[ \log \left(\frac{50}{50} \right) + \left( 0.05 - \frac{0.2^{2}}{2}\right)\frac{5}{12} \right] \\\\
+&= 0.09682458 \\\\
 
-\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\
-&= 50N(0.225924) - 50e^{-(0.05)(\frac{5}{12})}N(0.09682458) \\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 50N(0.225924) - 50e^{-(0.05)(\frac{5}{12})}N(0.09682458) \\\\
 &= \boxed{3.09}
 \end{aligned}
-$$
+```
 
 - The PnL can be calculated by: $200(3.09 - 11.48) + 1880 = 202$.
 - In both cases, delta hedging has protected the portfolio from losing money, regardless of the direction of the stock price.
@@ -1265,23 +1265,23 @@ $$
     - Current volatility $\sigma = 0.1$
     - Risk-free interest rate $r=0.05$
 
-$$
+```math
 \begin{aligned}
-d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.1 \sqrt{{1}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 + \frac{0.1^{2}}{2}\right)(1) \right] \\
-&= 0.55 \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.1 \sqrt{{1}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 + \frac{0.1^{2}}{2}\right)(1) \right] \\\\
+&= 0.55 \\\\\\
 
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.1 \sqrt{{1}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 - \frac{0.1^{2}}{2}\right)(1) \right] \\
-&= 0.45 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.1 \sqrt{{1}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 - \frac{0.1^{2}}{2}\right)(1) \right] \\\\
+&= 0.45 \\\\
 
-\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\
-&= 100N(0.55) - 100e^{-(0.05)(1)}N(0.45) \\
-&= \boxed{6.80} \\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 100N(0.55) - 100e^{-(0.05)(1)}N(0.45) \\\\
+&= \boxed{6.80} \\\\\\
 
 \Longrightarrow \Delta &= N(d_{1}) = N(0.55) = \boxed{0.7088}
 \end{aligned}
-$$
+```
 
 - A delta neutral position will consist of 1000 call options and a short on 709 shares in the underlying stock.
   - This position is then held for 6 months with no further trading.
@@ -1293,21 +1293,21 @@ $$
 - The short position in the 709 shares will have gained 10 USD per share so a profit of 7090 USD in total on the underlying stock.
 - The option value can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
-d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{90}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\
-&= -0.142696 \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{90}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= -0.142696 \\\\\\
 
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{90}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\
-&= -0.4255387 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{90}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= -0.4255387 \\\\
 
-\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\
-&= 90N(-0.142696) - 100e^{-(0.05)(0.5)}N(-0.4255387) \\
-&= \boxed{7.20} \\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 90N(-0.142696) - 100e^{-(0.05)(0.5)}N(-0.4255387) \\\\
+&= \boxed{7.20} \\\\\\
 \end{aligned}
-$$
+```
 
 - The final PnL on the position after 6 months is therefore:
 $$1000 \times (7.20 - 6.80) + 7090 = \boxed{7490 \text{ USD}}$$
@@ -1317,21 +1317,21 @@ $$1000 \times (7.20 - 6.80) + 7090 = \boxed{7490 \text{ USD}}$$
 - The short position in the 709 shares will have remained unchanged so there is no profit or loss.
 - The option value can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
-d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\
-&= 0.2298097 \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= 0.2298097 \\\\\\
 
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\
-&= -0.05303301 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{100}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= -0.05303301 \\\\
 
-\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\
-&= 100N(0.2298097) - 100e^{-(0.05)(0.5)}N(-0.05303301) \\
-&= \boxed{12.39} \\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 100N(0.2298097) - 100e^{-(0.05)(0.5)}N(-0.05303301) \\\\
+&= \boxed{12.39} \\\\\\
 \end{aligned}
-$$
+```
 
 - The final PnL on the position after 6 months is therefore:
 $$1000 \times (12.39 - 6.80) = \boxed{5590 \text{ USD}}$$
@@ -1341,21 +1341,21 @@ $$1000 \times (12.39 - 6.80) = \boxed{5590 \text{ USD}}$$
 - The short position in the 709 shares will have lost 10 USD per share so a loss of 7090 USD in total on the underlying stock.
 - The option value can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
-d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{110}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\
-&= 0.5667821 \\
+d_{1} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r + \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{110}{100} \right) + \left( 0.05 + \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= 0.5667821 \\\\\\
 
-d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\
-&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{110}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\
-&= 0.2839394 \\
+d_{2} &= \frac{1}{\sigma \sqrt{T}} \left[ \log \left(\frac{S}{K} \right) + \left( r - \frac{\sigma^{2}}{2}\right)(T) \right] \\\\
+&= \frac{1}{0.4 \sqrt{{0.5}}} \left[ \log \left(\frac{110}{100} \right) + \left( 0.05 - \frac{0.4^{2}}{2}\right)(0.5) \right] \\\\
+&= 0.2839394 \\\\
 
-\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\
-&= 110N(0.5667821) - 100e^{-(0.05)(0.5)}N(0.2839394) \\
-&= \boxed{18.94} \\
+\therefore C &= SN(d_{1}) - Ke^{-r(T)}N(d_{2}) \\\\
+&= 110N(0.5667821) - 100e^{-(0.05)(0.5)}N(0.2839394) \\\\
+&= \boxed{18.94} \\\\\\
 \end{aligned}
-$$
+```
 
 - The final PnL on the position after 6 months is therefore:
 $$1000 \times (18.94 - 6.80) - 7090 = \boxed{5050 \text{ USD}}$$
