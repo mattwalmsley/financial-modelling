@@ -203,7 +203,7 @@ $$-P(S(T),T) = - \text{max}\{0,K-S(T)\}$$
 
 ### Arbitrage Inequality Example 2: Call Price Greater Than Long Forward Position
 
-- Similar to example 1, assume that $C(t) \geq S(t) e-^{-r(T-t)}K$ is not true and that if $C(t) < S(t) -e^{-r(T-t)}K$ is true at time $t$, there will be to an arbitrage opportunity present.
+- Similar to example 1, assume that $C(t) \geq S(t) - e^{-r(T-t)}K$ is not true and that if $C(t) < S(t) -e^{-r(T-t)}K$ is true at time $t$, there will be to an arbitrage opportunity present.
 - Rewrite this inequality as $C(t) + e^{-r(T-t)}K < S(t)$ for ease and construct the following arbitrage portfolio:
   - A short position on the underlying stock, receiving $S(t)$ in cash.
   - A long position on the call, paying $C(t)$.
@@ -916,7 +916,7 @@ $$
 C(S,t;K,T,\sigma,r) &= SN(d_{1}) - Ke^{-r(T-t)}N(d_{2}) \\\\
 \text{Where} \\
 &d_{1}=d_{+} \text{ and } d_{2}=d_{-} \\\\
-&d{\pm} = \frac{1}{\sigma \sqrt{T-t}} \left[ \log \left(\frac{S}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)(T-t) \right] \\\\
+&d_{\pm} = \frac{1}{\sigma \sqrt{T-t}} \left[ \log \left(\frac{S}{K} \right) + \left( r \pm \frac{\sigma^{2}}{2}\right)(T-t) \right] \\\\
 &N(x) = \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{- \frac{z^{2}}{2}} dz
 \end{aligned}
 $$
