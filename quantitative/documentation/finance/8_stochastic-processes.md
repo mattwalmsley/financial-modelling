@@ -134,27 +134,27 @@ $$\text{Kurt}(X) = E \left[ \left( \frac{X - \mu}{\sigma} \right)^4 \right]$$
 
 - The 1-period **continuously compounded return** or **log return** of an asset with price $P(t)$ at time $t$ is defined as:
 
-$$
+```math
 \begin{aligned}
 r(t) &= \log \left( \frac{P(t)}{P(t-1)} \right) \\\\
 &= \log(P(t)) - \log(P(t-1))
 \end{aligned}
-$$
+```
 
 - The $k$-period continuously compounded return between a time $t$ and a time $k$-periods before $t$ can therefore be defined as:
 
-$$
+```math
 \begin{aligned}
 r_k(t) &= \log \left( \frac{P(t)}{P(t-k)} \right) \\
 &= \log(P(t)) - \log(P(t-k)) \\\\
 \end{aligned}
-$$
+```
 
 - The period $k$ should be in the same unit of time as the value for $t$ - this is normally years of days when working with financial models.
 - The continuously compounded return is the $\log$ of the corresponding [gross return](./2_interest-rates.md#gross-return).
 - The continuously compounded returns across a period from $t$ to $t-k$ can be written as the sum of all the intervals within the period as follows:
 
-$$
+```math
 \begin{aligned}
 r_{k}(t) &= \log(P(t)) - \log(P(t-1)) \\
 &+ \log(P(t-1)) - \log(P(t-2)) \\
@@ -165,7 +165,7 @@ r_{k}(t) &= \log(P(t)) - \log(P(t-1)) \\
 r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + \dots + r(t-k+1) \\\\
 r_{k}(t) &= \sum_{i=0}^{k-1}r(t-i)
 \end{aligned}
-$$
+```
 
 ### Asset Return Measures Example
 
@@ -182,7 +182,7 @@ $$
 
 - The daily $\log$ returns can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 r(t) &= \log \left( \frac{P(t)}{P(t-1)} \right) \\\\
 r(2) &= \log \left( \frac{P(2)}{P(1)} \right) = \log \left( \frac{111}{105} \right) = \boxed{2.41 \%} \\\\
@@ -191,18 +191,18 @@ r(4) &= \log \left( \frac{P(4)}{P(3)} \right) = \log \left( \frac{109}{102} \rig
 r(5) &= \log \left( \frac{P(5)}{P(4)} \right) = \log \left( \frac{107}{109} \right) = \boxed{-0.80 \%} \\\\
 r(6) &= \log \left( \frac{P(6)}{P(5)} \right) = \log \left( \frac{108}{107} \right) = \boxed{0.40 \%} \\\\
 \end{aligned}
-$$
+```
 
 - The weekly $\log$ return can be calculated as follows:
 
-$$
+```math
 \begin{aligned}
 r_{k}(t) &\equiv r(t) + r(t-1) + r(t-2) + \dots + r(t-k+1) \\\\
 r_{f}(6) &= r(2) + r(3) + r(4) + r(5) + r(6) \\
 &= 2.41 \% -3.67 \% + 2.88 \% - 0.80 \% + 0.40 \% \\
 &= \boxed{1.22 \%}
 \end{aligned}
-$$
+```
 
 ## Stylized Facts of Asset Prices and Returns
 
@@ -236,42 +236,42 @@ $$
 
 - Let the probability of a move up (heads) be $p$ and the probability of a move down (tails) is $q=1-p$:
 
-$$
+```math
 \begin{aligned}
 \text{Prob(move up)} &= p \\
 \text{Prob(move down)} &= p = 1 - q
 \end{aligned}
-$$
+```
 
 - Assume that each coin flip is independent of all the other flips such that previous flip has no influence on the next.
 - Each $j$'th move is represented by a random variable $X_{j}$ such that:
 
-$$
+```math
 \begin{aligned}
 \text{Prob}(X_{j} = +1) &= p \\
 \text{Prob}(X_{j} = -1) &= q
 \end{aligned}
-$$
+```
 
 - The sequence of random moves $X_{1}, X_{2},\dots,X_{j},\dots,X_{n}$ are independent and identically distributed such that $\text{Prob}(X_{1} = y_{1}, X_{2} = y_{2},\dots,X_{n} = y_{n}) \equiv \text{Prob}(X_{1} = y_{1}) \text{Prob}(X_{2} = y_{2})\dots\text{Prob}(X_{n} = y_{n})$ where $y_{i}=+1$ or $y_{i} = -1$.
 - For example, the probability of 2 up moves followed by a down move is:
 
-$$
+```math
 \begin{aligned}
 \text{Prob}(X_{1} = +1, X_{2} = +1, X_{3} = -1) &= \text{Prob}(X_{1} = +1)\text{Prob}(X_{2} = +1)\text{Prob}(X_{3} = -1) \\
 &= p \times p \times q \\
 &= p^{2}q
 \end{aligned}
-$$
+```
 
 - The position after $n$ moves is the sum of all the moves from $1$ to $n$, such that the discrete time stochastic process $S_{n}$ is the **random walk**:
 
-$$
+```math
 \begin{aligned}
 S_{n} &= X_{1} + X_{2} +\dots+ X_{n} \\
 &= \sum_{j=1}^{n}X_{j}
 \end{aligned}
-$$
+```
 
 - The moves $X_{j}$ can follow any distribution for a random walk as long as they are independent and identically distributed.
 - The distribution of $S_{n}$ at a time $n$ is evaluated as follow:
@@ -295,36 +295,36 @@ $$\text{Prob}(Z_{n}=k) = \frac{n!}{k!(n-k)!}p^{k}q^{n-k}$$
 - The binomial distribution is denoted $\text{bin}(k;n,p)$.
 - Applying the binomial distribution to the [random walks](#random-walks) example where $n=2$ leads to the same probabilities:
 
-$$
+```math
 \begin{aligned}
 \text{Prob}(S_{2}=2) &\equiv \text{Prob}(Z_{2}=2) = \text{bin}(2;2,p) = p^{2} \\
 \text{Prob}(S_{2}=0) &\equiv \text{Prob}(Z_{2}=1) = \text{bin}(1;2,p) = 2pq \\
 \text{Prob}(S_{2}=-2) &\equiv \text{Prob}(Z_{2}=0) = \text{bin}(0;2,p) = q^{2}
 \end{aligned}
-$$
+```
 
 - The proof that the Binomial Distribution can be extended to find the distribution of random walk position $S_{n}$ is as follows.
 - The Bernoulli random variable $Y_{j}$ can be related to the moves $X_{j}$ by $X_{j}=2Y_{j}-1$, so that $X_{j}=1$ when $Y_{j}=1$ and $X_{j}=-1$ when $Y_{j}=0$.
 - The probabilities $p$ and $q$ remain the same between the random walks and binomial distribution, as well as the assumptions that the successive trials/moves are independent.
 
-$$
+```math
 \begin{aligned}
 S_{n} &=  \sum_{j=1}^{n}X_{j} \\
 S_{n} &=  \sum_{j=1}^{n}(2Y_{j}-1) \\
 S_{n} &=  2\sum_{j=1}^{n}Y_{j}-\sum_{j=1}^{n}1 \\
 S_{n} &=  2Z_{n}-n\\
 \end{aligned}
-$$
+```
 
 - The random walks distribution $S_{n}$ will inherit a *shifted* binomial distribution from $Z_{n}$.
 - For simplicity, let $n=2m$ so that the values of $S_{n}$ will only be even integers ranging from $-2m$ to $2m$.
 
-$$
+```math
 \begin{aligned}
 &\text{Prob}(S_{n}=2\mathcal{l}) = \frac{n!}{(m+\mathcal{l})!(m-\mathcal{l})!}p^{m+\mathcal{l}}q^{n-\mathcal{l}} \\
 \text{for } &\mathcal{l} = -m,-m+1,\dots,m-1,m
 \end{aligned}
-$$
+```
 
 ### Modelling Asset Prices using Random Walks
 
@@ -348,7 +348,7 @@ $$
   - This can be achieved by reducing the time step between moves (increasing the frequency of the moves) to a very small value.
   - The unit-size of the moves must also decrease with the time step in order to avoid causing the variance to go to infinity as follows:
 
-$$
+```math
 \begin{aligned}
 \text{Let } \sigma^{2} = \text{Var}(X_{j}) \\
 \lim_{m \to \infty} \text{Var}(S_{m}) &= \lim_{m \to \infty} \text{Var} \left(\sum_{j=1}^{m}X_{j} \right) \\
@@ -356,12 +356,12 @@ $$
 &= \lim_{m \to \infty} m \sigma^{2} \\\\
 &= \infty
 \end{aligned}
-$$
+```
 
 - The moves $X_{j}$ of size 1 must be scaled down for the limit to be sensible. This can be done by dividing $X_{j}$ by a factor $\alpha$.
   - The [central limit theorem](https://www.investopedia.com/terms/c/central_limit_theorem.asp) suggests that $\alpha = \sqrt{m}$, such that:
 
-$$
+```math
 \begin{aligned}
 
 \lim_{m \to \infty} \text{Var} \left(\sum_{j=1}^{m} \frac{X_{j}}{\sqrt{m}} \right) &= \lim_{m \to \infty} \sum_{j=1}^{m} \text{Var} \left( \frac{X_{j}}{\sqrt{m}} \right) \text{ by independence} \\\\
@@ -370,7 +370,7 @@ $$
 &= \lim_{m \to \infty} \frac{1}{m}  m \sigma^{2} \\\\
 &= \sigma^{2} \text{ (a finite variance)}
 \end{aligned}
-$$
+```
 
 - As shown, $\alpha = \sqrt{m}$ is the right scaling for the moves, and so, as the number of time-steps $m$ per unit time increases, a limit should be considered.
   - For any real time $t \geq 0$, the number of moves will be some integer close to $mt$.
@@ -394,12 +394,12 @@ $$S_{t}^{(m)} = \sum_{j=1}^{\lfloor mt \rfloor} \frac{X_{j}}{\sqrt{m}}$$
 $$W(t; \mu , \sigma) = \mu t + \sigma W(t)$$
 - The addition of the drift term does not provide any advantages over the random walk model as a drift term $\mu n$ could also be added to a random walks.
 
-$$
+```math
 \begin{aligned}
 T_{n} &= \mu n + S_{n} \\\\
 &= \mu n  + \sum_{j=1}^{n} X_{j}
 \end{aligned}
-$$
+```
 
 ### Modelling Asset Prices using Brownian Motion
 
@@ -420,14 +420,14 @@ $$
 - The asset price is denoted $S(t)$ and changes in the logarithm of the asset price $\log (S(t))$ are denoted as $\psi (t)$.
   - It follows that $S(t) = e^{\psi (t)}$ and $\psi (t+1) = \psi (t) + \delta$ where $\delta$ is the increase in the logarithm of the asset price from $t$ to $t+1$.
 
-$$
+```math
 \begin{aligned}
 S(t+1) &= e^{\psi (t+1)} \\
 &= e^{\psi (t) + \delta} \\
 &= e^{\psi (t)}e^{\delta} \\
 &= S(t)e^{\delta}
 \end{aligned}
-$$
+```
 
 - The asset price at $t+1$ is calculated by multiplying the asset price at $t$ by the factor $e^{\delta}$.
 - The price jump is therefore: $S(t+1) -S(t) = e^{\delta}S(t) - S(t)$ and this holds regardless of the price level.
@@ -440,13 +440,13 @@ $$
   - It is therefore reasonable to consider modelling $\log(S(t))$ as Brownian motion rather than $S(t)$ itself, such that $\log(S(t)) = W(t)$.
 - The asset returns can be modelled as follows:
 
-$$
+```math
 \begin{aligned}
 \log \left(\frac{S(t)}{S(t-1)} \right) &= \log(S(t)) - \log(S(t-1)) \\\\
 \log(S(t)) = W(t) \Longrightarrow \\
 &= W(t) - W(t-1)
 \end{aligned}
-$$
+```
 
 - Recall the properties of [Brownian motion](#brownian-motion) and the sequence of Brownian differences $W(t) - W(t-1), W(t+1) - W(t),\dots,W(t+k) - W(t+k-1)$ that are stationary and uncorrelated (independent).
   - Therefore, the $\log$ returns will also have these properties.
@@ -455,12 +455,12 @@ $$
   - Asset returns are stationary and uncorrelated.
 - It is standard practice to add a drift term as discussed in [Brownian Motion with Drift](#brownian-motion-with-drift), a volatility factor $\sigma$, and an initial asset price $S(0)$, such that the log-normal model for an asset price $S(t)$ (also known as geometric Brownian motion) becomes:
 
-$$
+```math
 \begin{aligned}
 \log(S(t)) = \log(S(0)) + \mu t + \sigma W(t) \\\\
 S(t) = \boxed{S(0) + e^{\mu t + \sigma W(t)}}
 \end{aligned}
-$$
+```
 
 ### Modelling Asset Prices with the Log-Normal Model
 
@@ -472,7 +472,7 @@ $$
 
 - The standard deviation of the log-normal model, $\sqrt{\text{Var}(S(t+1) - S(t))}$, can be calculated as follows.
 
-$$
+```math
 \begin{aligned}
 S(t) &= S(0) + e^{\mu t + \sigma W(t)} \\\\
 S(t + 1) &= S(0) + e^{\mu (t+1) + \sigma W(t + 1)} \\\\
@@ -486,32 +486,32 @@ S(t + 1) &= S(0) + e^{\mu (t+1) + \sigma W(t + 1)} \\\\
 \Longrightarrow S(t+1) &= S(t)e^{\mu + \sigma (W(t + 1) - W(t))} \\\\
 \Longrightarrow S(t+1) - S(t) &= S(t)(e^{\mu + \sigma (W(t + 1) - W(t))} - 1) \\\\
 \end{aligned}
-$$
+```
 
 - Assuming $S(t)$ is known at time $t$ (deterministic) and that the only source of randomness is $W(t + 1) - W(t)$ which is a normally distributed random variable with mean 0 and variance 1 as per the properties of Brownian motion properties.
 - Denoting $Z$ as the random variable $W(t + 1) - W(t)$, the variance of the change in price, $\text{Var}(S(t+1) - S(t))$ is therefore calculated as follows:
 
-$$
+```math
 \begin{aligned}
 \text{Var}(S(t+1) - S(t)) &= \text{Var}[S(t)(e^{\mu + \sigma (W(t + 1) - W(t))} - 1)] \\
 &= \text{Var}[S(t)(e^{\mu + \sigma (Z)} - 1)] \\
 &= \text{Var}(e^{\mu + \sigma (Z)} - 1)S(t)^{2} \text{ assuming } S(t) \text{ is a known constant at } t
 \end{aligned}
-$$
+```
 
 - The standard deviation is therefore calculated by square rooting the variance:
 
-$$
+```math
 \begin{aligned}
 \sqrt{\text{Var}(S(t+1) - S(t))} &= \sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)S(t)^{2}} \\\\
 &= \sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)}S(t)\\\\
 B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)} \Longrightarrow &= BS(t)
 \end{aligned}
-$$
+```
 
 - Where $B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)}$ is a constant greater than 0 for a  normal distribution $Z \sim \mathcal{N}(0,1)$:
 
-$$
+```math
 \begin{aligned}
 \mathbb{E}[Z] &= 0 \\
 \text{Var}(Z) &= 1 \\\\
@@ -524,7 +524,7 @@ $$
 &= e^{\mu + \frac{\sigma^{2}}{2}} \sqrt{e^{\sigma^{2}} -1} \\\\
 \Longrightarrow B &= \boxed{e^{\mu + \frac{\sigma^{2}}{2}} \sqrt{e^{\sigma^{2}} -1}}
 \end{aligned}
-$$
+```
 
 - The important part is that $B$ is a constant which only depends on $\mu$ and $\sigma$, known model parameters, and is independent of the asset price $S(t)$.
 - To summarise, the standard deviation of the changes in price is $BS(t)$ - i.e. the price change $\propto$ the price level.

@@ -94,7 +94,7 @@
   - $r(3) = 2\%$
 - Given the bond pays a 600 USD coupon in years 1 and 2, and 10,600 USD (par value + coupon) in year 3, the bond pricing formula can be applied for annually compounded interest rates to find the present fair value of the bond as follows:
 
-$$
+```math
 \begin{aligned}
 PV &= \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}} \\
 &= \frac{600}{1 + 0.0075} + \frac{600}{(1 + 0.015)^{2}} + \frac{10600}{(1 + 0.02)^{3}} \\
@@ -183,7 +183,7 @@ PV &= e^{-rt}X \\
 &= e^{-0.06 \times 3} \times 10000 \\
 &= \boxed{8,353 \text{ USD}}
 \end{aligned}
-$$
+```
 
 - If the contract is currently trading at 9,000 USD the contract is **overpriced** and a short position should be assumed to take advantage of the arbitrage.
   - The contract can be sold for 9,000 USD and the cash received then invested at the risk-free rate (6\%):
