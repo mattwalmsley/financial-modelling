@@ -534,7 +534,8 @@ The expectation for the value of $X$, where $X$ is the number of heads in three 
 &= 3 p_h (p_t + p_h)^2 \\\\
 &= 3 p_h (1)^2 \\\\
 &= 3 p_h
-\end{aligned}```
+\end{aligned}
+```
 
 As a sense check, $X$ can take values from $0$ to $3$, so the expectation $\mathbb{E}[X]$ lies between $0$ and $3$, given that $0 \leq p_h \leq 1$.
 
@@ -582,7 +583,8 @@ where $X$ can take the values $x_1, x_2, \dots, x_k$ with probabilities $p_1, p_
 &= 3 p_h (1 + 2 p_h) \\\\
 &= 3 p_h + 6 p_h^2 \\\\
 &= 3 p_h (1 + 2 p_h)
-\end{aligned}```
+\end{aligned}
+```
 
 #### Linearity Property of Expectations
 
@@ -596,7 +598,8 @@ Which can be proven as follows:
 \mathbb{E}\left[\sum_{i=1}^{n} a_i X_i\right] &= \sum_{\omega \in \Omega} \left(\sum_{i=1}^{n} a_i X_i(\omega)\right) P(\omega) \\\\
 &= \sum_{i=1}^{n} a_i \left(\sum_{\omega \in \Omega} X_i(\omega) P(\omega)\right) \\\\
 &= \sum_{i=1}^{n} a_i \mathbb{E}[X_i]
-\end{aligned}```
+\end{aligned}
+```
 
 - A special case of the linearity property is when $n=2$:
 $$\boxed{\mathbb{E}[aX + bY] = a\mathbb{E}[X] + b\mathbb{E}[Y]}$$
@@ -619,7 +622,8 @@ $$\boxed{\text{Var}(X) = \mathbb{E}[(X - \mathbb{E}[X])^2] = \mathbb{E}[X^2] - (
 &= \mathbb{E}[X^2 - 2X\mathbb{E}[X] + (\mathbb{E}[X])^2] \\\\
 &= \mathbb{E}[X^2] - 2\mathbb{E}[X]\mathbb{E}[X]  + (\mathbb{E}[X])^2 \\\\
 &= \mathbb{E}[X^2] - (\mathbb{E}[X])^2
-\end{aligned}```
+\end{aligned}
+```
 
 #### Property of Variance
 - For a random variable $X$ and constants $a$ and $b$, the variance satisfies the following property:
@@ -634,7 +638,8 @@ $$\boxed{\text{Var}(aX + b) = a^2 \text{Var}(X)}$$
 &= \mathbb{E}[a^2(X - \mathbb{E}[X])^2] \\\\
 &= a^2 \mathbb{E}[(X - \mathbb{E}[X])^2] \\\\
 &= a^2 \text{Var}(X)
-\end{aligned}```
+\end{aligned}
+```
 
 - **N.B. Variance is not linear, unlike expectation.**
 
@@ -684,7 +689,8 @@ $$P(Z > 0) = P\left(\left\{\omega \in \Omega : Z(\omega) > 0\right\}\right) = \s
 &= \sum_{\omega \in \Omega} \frac{Q(\omega)}{P(\omega)} P(\omega) \\\\
 &= \sum_{\omega \in \Omega} Q(\omega) \\\\
 &= 1
-\end{aligned}```
+\end{aligned}
+```
 
 - The last equality follows from the fact that $Q$ is a probability measure, so its probabilities sum to 1 over $\Omega$.
 
@@ -698,7 +704,8 @@ $$P(Z > 0) = P\left(\left\{\omega \in \Omega : Z(\omega) > 0\right\}\right) = \s
 &= \sum_{\omega \in \Omega} Y(\omega) \cdot Z(\omega) P(\omega) \\\\
 &= \sum_{\omega \in \Omega} [Y(\omega) Z(\omega)] P(\omega) \\\\
 &= \mathbb{E}^P[ZY]
-\end{aligned}```
+\end{aligned}
+```
 
 - This result is fundamental in probability theory and quantitative finance, as it allows probability measures to be changed. The random variable $Z$ acts as a "weight" that transforms expectations from one measure to another. This is particularly useful when comparing probabilities and expectations under different market measures (e.g., the real-world measure and the risk-neutral measure in derivatives pricing).
 
