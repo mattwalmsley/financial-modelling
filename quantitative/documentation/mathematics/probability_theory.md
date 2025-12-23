@@ -38,11 +38,14 @@
       - [Properties of the Radon-Nikodym Derivative](#properties-of-the-radon-nikodym-derivative)
     - [Conditional Expectations](#conditional-expectations)
       - [Conditioning on an Event](#conditioning-on-an-event)
-      - [Conditional Expectation Given $Y=y\_j$](#conditional-expectation-given-yy_j)
-    - [Conditional Expectations II — Conditioning on a Partition](#conditional-expectations-ii--conditioning-on-a-partition)
+        - [Conditional Expectation Given an Event Example 1](#conditional-expectation-given-an-event-example-1)
+        - [Conditional Expectation Given an Event Example 2](#conditional-expectation-given-an-event-example-2)
+    - [Conditioning on a Partition](#conditioning-on-a-partition)
+        - [Conditional Expectation Given a Partition Example](#conditional-expectation-given-a-partition-example)
       - [Linearity of Conditional Expectation](#linearity-of-conditional-expectation)
-      - [Tower Property (Expectation of Conditional Expectation)](#tower-property-expectation-of-conditional-expectation)
-      - [Law of Iterated Conditional Expectations](#law-of-iterated-conditional-expectations)
+      - [Expectation of Conditional Expectation](#expectation-of-conditional-expectation)
+        - [Example of Expectation of Conditional Expectation](#example-of-expectation-of-conditional-expectation)
+      - [Law of Iterated Conditional Expectations (Tower Property)](#law-of-iterated-conditional-expectations-tower-property)
     - [Conditioning on a Discrete Random Variable](#conditioning-on-a-discrete-random-variable)
   - [Continuous Random Variables](#continuous-random-variables)
     - [Probability Density Function (PDF)](#probability-density-function-pdf)
@@ -165,7 +168,10 @@ In probability, outcomes of a random experiment are modelled as sets, which are 
 #### Set Notation
 
 The common practice is to denote intersections in probabilities using commas. For example:
+> Probability of $S_1$ *and* $S_2$ occurring.
+
 $$P(S_1 \cap S_2) = P(S_1, S_2)$$
+
 Both notations are context-dependent, and familiarity with both is important.
 
 ## Finite Probability Spaces
@@ -727,23 +733,95 @@ $$\mathbb{E}[X \mid A] = \sum_{i=1}^{k} x_i \frac{P(\{X=x_i\} \cap A)}{P(A)} = \
 
 - $\mathbb{E}[X \mid A]$ is a **number** (not a random variable).
 
-#### Conditional Expectation Given $Y=y_j$
+##### Conditional Expectation Given an Event Example 1
 
-Let $Y$ be discrete and define the event $A_j = \{Y=y_j\}$ with $P(Y=y_j)>0$. Then:
+- For three tosses of a coin, let $X$ be the number of heads and let $A_h$ be the event that the first toss is a head.
+- The conditional expectation of $X$ given $A_h$ is calculated as follows:
 
-$$\boxed{\mathbb{E}[X \mid Y=y_j] = \sum_i x_i\,\frac{P(X=x_i,\,Y=y_j)}{P(Y=y_j)}}$$
+```math
+\begin{aligned}
+\mathbb{E}[X \mid A_h] &= \frac{\sum_{\omega \in A_h}{X(\omega) P(\omega)}}{P(A_h)} \\\\
+&= \sum_{x=0}^{3}x\frac{{P(X=x, A_h)}}{P(A_h)} \\\\
+&= \frac{3 \cdot P(\omega_{hhh}) + 2 \cdot P(\omega_{hht}) + 2 \cdot P(\omega_{hth}) + 1 \cdot P(\omega_{htt})}{P(A_h)} \\\\
+&= \frac{3 \cdot p_h^3 + 2 \cdot p_h^2 p_t + 2 \cdot p_h^2 p_t + 1 \cdot p_h p_t^2}{P(A_h)} \\\\
+&= \frac{3 p_h^3 + 4 p_h^2 p_t + p_h p_t^2}{P(A_h)} \\\\
+&= \frac{p_h(3 p_h^2 + 4 p_h p_t + p_t^2)}{P(A_h)} \\\\
+&= \frac{p_h(3 p_h^2 + 4 p_h p_t + p_t^2)}{p_h} \\\\
+&= 3 p_h^2 + 4 p_h p_t + p_t^2 \\\\
+&= (3 p_h + p_t)(p_h+p_t) \text{ where } p_h + p_t = 1 \\\\
+&= (3p_h + (1 - p_h)) \\\\
+&= 1 + 2 p_h
+\end{aligned}
+```
 
-### Conditional Expectations II — Conditioning on a Partition
+##### Conditional Expectation Given an Event Example 2
 
-Let $\mathcal{U} = \{B_1,\dots,B_m\}$ be a **partition** of $\Omega$ (pairwise disjoint, exhaustive) with $P(B_j)>0$ for all $j$.
+- It has been shown that random variables can [define events](#random-variables-defining-events).
+- Let $Y$ be another discrete random variable defined on the same probability space as $X$ where $Y$ can take values $y_1, y_2, \dots, y_k$.
+- Event $A_j$ is defined for $j=1, \dots, k$ as $A_j = \{Y = y_j\} = \{\omega \in \Omega : Y(\omega) = y_j\}$, assuming $P(A_j) > 0$ (non-zero probability).
+- Let $X$ be some other discrete random variable defined on the same probability space which can take values $x_i \dots, x_n$. Then the conditional expectation of $X$ given that $Y = y_j$ is:
 
-- The conditional expectation of $X$ given the partition $\mathcal{U}$ is a **random variable**:
+```math
+\begin{aligned}
+\mathbb{E}[X \mid Y=y_j] &= \sum_{i=1}^{n}{x_i\,\frac{P(X=x_i,\,Y=y_j)}{P(Y=y_j)}} \\\\
+&= \sum_{i=1}^{n}{x_i\,P(X=x_i \mid Y=y_j)}
+\end{aligned}
+```
 
-$$\boxed{\mathbb{E}[X\mid \mathcal{U}](\omega) := \mathbb{E}[X \mid B(\omega)]}$$
+- Here, the expectation of $X$ has been found by summing over only those outcomes $\omega$ where $Y(\omega) = y_j$.
+
+### Conditioning on a Partition
+
+Following on from conditioning on an event, now consider conditioning on a partition of the sample space.
+
+- Let $\mathcal{U} = \{B_1,B_2,\dots,B_m\}$ be a **partition** of $\Omega$ and let $A$ be some event.
+- The conditional probability of $A$ with respect to the partition $\mathcal{U}$ is defined as the random variable:
+
+$$\boxed{P(A \mid \mathcal{U})(\omega) = P(A \mid B(\omega))}$$
+
+where $B(\omega)$ denotes the unique event in $\mathcal{U}$ that contains $\omega$.
+
+Now let $X$ be some random variable.
+
+- The conditional expectation of $X$ with respect to the partition $\mathcal{U}$ is also a **random variable**:
+
+$$\boxed{\mathbb{E}[X\mid \mathcal{U}](\omega) = \mathbb{E}[X \mid B(\omega)]}$$
 
 where $B(\omega)$ denotes the unique partition element in $\mathcal{U}$ that contains $\omega$.
 
-- $\mathbb{E}[X\mid \mathcal{U}]$ is **constant on each partition element** $B_j$.
+- So $\mathbb{E}[X \mid \mathcal{U}]$ takes the value $\mathbb{E}[X \mid B_i]$ when $\omega \in B_i$ with probability $P(B_i)$.
+- It is necessary to assume that $P(B_j) > 0$ for all $j=1, \dots, m$ in order for the conditional expectation to be well-defined.
+
+##### Conditional Expectation Given a Partition Example
+
+Continuing with the coin toss example where $X$ is the number of heads in three tosses and $p_h$ is the probability of  head and $p_t$ the probability o a tail, consider the partition $\mathcal{U_1} = \{B_h, B_t\}$ where:
+
+- $B_h$ is the event that the first toss is a head: $B_h = \{\omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}\}$
+- $B_t$ is the event that the first toss is a tail: $B_t = \{\omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt}\}$
+
+Let $X$ be the number of heads in three tosses. The conditional expectation of $X$ given the partition $\mathcal{U}_1$ is the random variable:
+
+```math
+\begin{aligned}
+\mathbb{E}[X \mid \mathcal{U}_1](\omega) &=
+\begin{cases}
+\mathbb{E}[X \mid B_h] & \text{if } \omega \in B_h \\\\
+\mathbb{E}[X \mid B_t] & \text{if } \omega \in B_t
+\end{cases}
+\\\\
+&=
+\begin{cases}
+3p_h^2 +2p_hp_t + 2p_tp_h +p_t^2 & \text{if } \omega \in B_h \\\\
+2p_h^2 + 1p_hp_t + 1p_tp_h + 0p_t^2 & \text{if } \omega \in B_t
+\end{cases}
+\\\\
+&=
+\begin{cases}
+1 + 2 p_h & \text{if } \omega \in B_h \\\\
+2 p_h & \text{if } \omega \in B_t
+\end{cases}
+\end{aligned}
+```
 
 #### Linearity of Conditional Expectation
 
@@ -751,62 +829,102 @@ For random variables $X_1,\dots,X_n$ and constants $a_1,\dots,a_n$:
 
 $$\boxed{\mathbb{E}\!\left[\sum_{j=1}^{n} a_j X_j\,\middle|\,\mathcal{U}\right] = \sum_{j=1}^{n} a_j\,\mathbb{E}[X_j\mid \mathcal{U}]}$$
 
-#### Tower Property (Expectation of Conditional Expectation)
+#### Expectation of Conditional Expectation
+
+Suppose $X$ is a random variable and $\mathcal{U}=\{B_1, \dots, B_m\}$ is a partition of $\Omega$. Then:
 
 $$\boxed{\mathbb{E}[\,\mathbb{E}[X\mid \mathcal{U}]\,] = \mathbb{E}[X]}$$
 
-This is also called the **law of iterated expectations**.
+This can be proven as follows:
 
-#### Law of Iterated Conditional Expectations
+```math
+\begin{aligned}
+\mathbb{E}[\,\mathbb{E}[X\mid \mathcal{U}]\,]
+&= \sum_{j=1}^{m} \mathbb{E}[X \mid B_j] P(B_j) \\\\
+&= \sum_{j=1}^{m} \left(\sum_{\omega \in B_j} X(\omega) \frac{P(\omega)}{P(B_j)}\right) P(B_j) \\\\
+&= \sum_{j=1}^{m} \sum_{\omega \in B_j} X(\omega) P(\omega) \\\\
+&= \sum_{\omega \in \Omega} X(\omega) P(\omega) \\\\
+&= \mathbb{E}[X]
+\end{aligned}
+```
 
-If partition $\mathcal{U}$ is **finer** than partition $\mathcal{V}$, then:
+##### Example of Expectation of Conditional Expectation
 
-$$\boxed{\mathbb{E}[\,\mathbb{E}[X\mid \mathcal{U}]\mid \mathcal{V}] = \mathbb{E}[X\mid \mathcal{V}]}$$
+Continuing with the coin toss example where $X$ is the number of heads in three tosses and $p_h$ is the probability of head and $p_t$ the probability of a tail, consider the partition $\mathcal{U_1} = \{B_h, B_t\}$ where:- $B_h$ is the event that the first toss is a head: $B_h = \{\omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}\}$
+- $B_t$ is the event that the first toss is a tail: $B_t = \{\omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt}\}$
+- Let $X$ be the number of heads in three tosses. The expectation of the conditional expectation of $X$ given the partition $\mathcal{U}_1$ is calculated as follows:
+
+```math
+\begin{aligned}
+\mathbb{E}[\,\mathbb{E}[X \mid \mathcal{U}_1]\,]
+&= \mathbb{E}[X \mid B_h] P(B_h) + \mathbb{E}[X \mid B_t] P(B_t) \\\\
+&= (1 + 2 p_h) \cdot P(B_h) + (2 p_h) \cdot P(B_t) \\\\
+&= (1 + 2 p_h) \cdot p_h + (2 p_h) \cdot p_t \\\\
+&= p_h + 2 p_h^2 + 2 p_h p_t \\\\
+&= 3 p_h (p_h + p_t) \\\\
+&= 3 p_h (1) \\\\
+&= 3 p_h \\\\
+&= \mathbb{E}[X]
+\end{aligned}
+```
+
+#### Law of Iterated Conditional Expectations (Tower Property)
+
+Let $X$ be a random variable and let $\mathcal{U}$ and $\mathcal{V}$ be two partitions of $\Omega$ where $\mathcal{U}$ is **finer** than partition $\mathcal{V}$. Then:
+
+$$\boxed{\mathbb{E}[\,\mathbb{E}[X\mid \mathcal{U}]\,\mid \mathcal{V}] = \mathbb{E}[X\mid \mathcal{V}]}$$
 
 ### Conditioning on a Discrete Random Variable
 
-Let $Y$ be discrete. The random variable $Y$ induces a partition
+Let $X$ and $Y$ be discrete random variables and then define the random variable $\mathbb{E}[X\mid Y]$ by conditioning on the partition induced by $Y$:
 
-$$\mathcal{U}_Y := \{\{Y=y\} : y \in \text{supp}(Y)\}.$$
+$$\boxed{\mathbb{E}[X \mid Y] = \mathbb{E}[X \mid \mathcal{U}_Y]}$$
 
-Define conditional expectation given $Y$ by conditioning on this partition:
+where the partition $\mathcal{U}_Y$ is the partition of $\Omega$ defined by $Y$.
 
-$$\boxed{\mathbb{E}[X\mid Y] := \mathbb{E}[X\mid \mathcal{U}_Y]}$$
+Using the expression for the conditional expectation given a partition, it follows that:
 
-and the tower property becomes:
-
-$$\boxed{\mathbb{E}[\,\mathbb{E}[X\mid Y] \,] = \mathbb{E}[X]}$$
+$$\mathbb{E}[\,\mathbb{E}[X\mid Y]] = \mathbb{E}[X]$$
 
 ## Continuous Random Variables
 
-- A continuous random variable has an **uncountable** support.
-- In typical continuous models, single points have probability zero:
+- A continuous random variable has an **uncountable** number of possible values, taking all the values in one (or more intervals) of the real number $\mathbb{R}$.
+- In typical continuous models, the probability of taking any individual is zero:
 
 $$P(X=x)=0\quad \text{for all } x.$$
 
+Continuous random variables can therefore only be defined on a [general probability space](#general-probability-spaces) $(\Omega, \Sigma, P)$ where $\Sigma$ (sometimes defined as $\mathcal{F}$) is a sigma-algebra on $\Omega$.
+
 ### Probability Density Function (PDF)
 
-If $X$ has a density $f_X$, then for $a \le b$:
+If $X$ has a probability density function $f_X(x)$, which is a positive function $fX(x) \geq 0$, then for $a \le b$:
 
-$$\boxed{P(a \le X \le b) = \int_a^b f_X(x)\,dx}$$
+$$\boxed{P(a \le X \le b) = \int_a^b f_X(x) dx}$$
 
-and the density normalises to 1:
+Informally, $f_X(x)dx = P(x \le X \le x + dx)$, or in other words $f_X(x)\,dx$ represents the probability that $X$ takes a value in the infinitesimal interval $[x, x+dx]$.
 
-$$\boxed{\int_{-\infty}^{\infty} f_X(x)\,dx = 1}$$
+The density also normalises to 1 since the total probability is 1:
+
+$$\int_{-\infty}^{\infty} f_X(x) dx = 1$$
+
+![Probability Density Function](../images/pdf.png)
 
 ### Cumulative Distribution Function (CDF)
 
-The CDF is
+The cumulative distribution function is defined as (noting the upper case $F$):
 
-$$\boxed{F_X(x) := P(X \le x)}$$
-
-If $X$ has density $f_X$, then
-
-$$\boxed{F_X(x) = \int_{-\infty}^{x} f_X(t)\,dt}$$
+$$\boxed{F_X(x) = P(X \le x) = \int_{-\infty}^{x} f_X(x')dx'}$$
 
 and (where differentiable)
 
-$$\boxed{f_X(x) = \frac{d}{dx}F_X(x)}$$
+$$f_X(x) = \frac{dF_X}{dx}(x)$$
+
+$$\int_a^b f_X(x) dx = F_X(b) - F_X(a) = P(a \le X \le b)$$
+
+$$F_X(x) \rightarrow 0 \text{ as } x \rightarrow-\infty$$
+$$F_X(x) \rightarrow 1 \text{ as } x \rightarrow\infty$$
+
+![Probability Density Function](../images/cdf.png)
 
 ### Expectation (Continuous Case)
 
