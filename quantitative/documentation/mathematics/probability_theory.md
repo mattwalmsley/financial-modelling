@@ -30,7 +30,7 @@
       - [Expectation of a Coin Toss](#expectation-of-a-coin-toss)
     - [Functions of Random Variables](#functions-of-random-variables)
       - [Function of a Coin Toss Random Variable](#function-of-a-coin-toss-random-variable)
-      - [Linearity Property of Expectations](#linearity-property-of-expectations)
+    - [Linearity Property of Expectations](#linearity-property-of-expectations)
     - [Variance](#variance)
       - [Property of Variance](#property-of-variance)
     - [Standard Deviation](#standard-deviation)
@@ -53,8 +53,12 @@
     - [Expectation of Continuous Random Variables](#expectation-of-continuous-random-variables)
     - [Uniform Distribution](#uniform-distribution)
     - [Cauchy Distribution](#cauchy-distribution)
-    - [Variance and Moments](#variance-and-moments)
+    - [Linearity Property of Expectations (Continuous Case)](#linearity-property-of-expectations-continuous-case)
+    - [Expectation of Functions of Continuous Random Variables](#expectation-of-functions-of-continuous-random-variables)
+    - [Variance of Continuous Random Variables](#variance-of-continuous-random-variables)
+    - [Moments of Continuous Random Variables](#moments-of-continuous-random-variables)
     - [Normal Distribution](#normal-distribution)
+      - [Standard Normal Distribution](#standard-normal-distribution)
     - [Transformation of Random Variables](#transformation-of-random-variables)
     - [Log-Normal Distribution](#log-normal-distribution)
   - [Multivariate Distributions](#multivariate-distributions)
@@ -594,9 +598,9 @@ where $X$ can take the values $x_1, x_2, \dots, x_k$ with probabilities $p_1, p_
 \end{aligned}
 ```
 
-#### Linearity Property of Expectations
+### Linearity Property of Expectations
 
-- For $n$ random rvariables $X_1, X_2, \dots, X_n$ and constants $a_1, a_2, \dots, a_n$, the expectation operator is linear:
+- For $n$ random variables $X_1, X_2, \dots, X_n$ and constants $a_1, a_2, \dots, a_n$, the expectation operator is linear:
 $$\boxed{\mathbb{E}\left[\sum_{i=1}^{n} a_i X_i\right] = \sum_{i=1}^{n} a_i \mathbb{E}[X_i]}$$
 
 Which can be proven as follows:
@@ -973,23 +977,88 @@ for some scale parameter $A > 0$.
 \end{aligned}
 ```
 
-### Variance and Moments
+### Linearity Property of Expectations (Continuous Case)
+
+For continuous random variables $X_1, X_2, \dots, X_n$ and constants $a_1, a_2, \dots, a_n$, the expectation operator is linear:
+
+$$\boxed{\mathbb{E}\!\left[\sum_{j=1}^{n} a_j X_j\right] = \sum_{j=1}^{n} a_j \mathbb{E}[X_j]}$$
+
+### Expectation of Functions of Continuous Random Variables
+
+For a continuous random variable $X$ with density $f_X$, and a function $g:\mathbb{R} \to \mathbb{R}$, the expectation of $g(X)$ is given by:
+
+$$\mathbb{E}[g(X)] = \int_{-\infty}^{\infty} g(x)\, f_X(x)\,dx$$
+
+So, for example:
+
+$$\mathbb{E}[X^2] = \int_{-\infty}^{\infty} x^2\, f_X(x)\,dx$$
+
+### Variance of Continuous Random Variables
+
+The variance of $X$ is given by:
 
 $$\boxed{\mathrm{Var}(X) = \mathbb{E}\!\left[(X-\mathbb{E}[X])^2\right] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2}$$
 
-The $m$-th moment (when finite) is
+provided that $\mathbb{E}[X^2]$ exists.
 
-$$\boxed{\mathbb{E}[X^m] = \int_{-\infty}^{\infty} x^m\, f_X(x)\,dx}$$
+For the discrete case, variance is not linear, and the same applies for continuous random variables:
+
+$$\mathrm{Var}(aX + b) = a^2\,\mathrm{Var}(X)$$
+
+for constants $a$ and $b$.
+
+### Moments of Continuous Random Variables
+
+The $m$-th moment is defined as the expectation of $X^m$, assuming it exists:
+
+$$\boxed{\mathbb{E}[X^m] = \int_{-\infty}^{\infty} x^m f_X(x)dx}$$
+
+So the first moment is the expectation $\mathbb{E}[X]$ and the variance is related to the second moment $\mathbb{E}[X^2]$.
+
+For example, the moments of a uniform random variable $X \sim \mathcal{U}[0,1]$ where $m \geq 0$ are given by:
+
+```math
+\begin{aligned}
+\mathbb{E}[X^m] &= \int_{-\infty}^{\infty} x^m f_X(x)dx \\\\
+&= \int_{0}^{1} x^m \cdot 1 \, dx \\\\
+&= \left[\frac{x^{m+1}}{m+1}\right]_0^1 \\\\
+&= \frac{1}{m+1}
+\end{aligned}
+```
 
 ### Normal Distribution
 
-A normal random variable $X \sim \mathcal{N}(\mu,\sigma^2)$ has density
+- The normal distribution is a fundamental continuous distribution in probability theory and statistics.
+- A normal distribution is fully characterised by its expectation (mean) $\mu$ and variance $\sigma^2$ (or standard deviation $\sigma$).
 
-$$\boxed{f_X(x) = \frac{1}{\sqrt{2\pi}\,\sigma}\,\exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)}$$
+A normal random variable $X \sim \mathcal{N}(\mu,\sigma^2)$ has probability density function:
 
-The **standard normal** is $Z \sim \mathcal{N}(0,1)$ with
+$$\boxed{f_X(x) = \frac{1}{\sqrt{2\pi} \sigma} \exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]}$$
 
-$$\boxed{\varphi(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2}},\qquad \boxed{\Phi(x) = \int_{-\infty}^{x} \varphi(t)\,dt}.$$
+where $\frac{1}{\sqrt{2\pi} \sigma}$ is a normalising constant to ensure the total probability is 1:
+
+```math
+\begin{aligned}
+\int_{-\infty}^{\infty} f_X(x) dx &= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi} \sigma} \exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right] dx \\\\
+&= 1
+\end{aligned}
+```
+
+#### Standard Normal Distribution
+
+The **standard normal** distribution is a special cse of the normal distribution, where the mean is 0 and the variance is 1. A standard normal random variable is denoted as $Z \sim \mathcal{N}(0,1)$ with:
+
+$$\text{p.d.f: } \boxed{\phi(x) = \frac{1}{\sqrt{2\pi}}e^{-x^2/2}}$$
+$$\text{c.d.f: } \boxed{\Phi(x) = \int_{-\infty}^{x} \varphi(t)\,dt}$$
+
+In some contexts, the standard normal p.d.f. is denoted by $\varphi(x)$ or $n(x)$ instead of $\phi(x)$ and the c.d.f. by $N(x)$ instead of $\Phi(x)$.
+
+![Normal Distribution](../images/normal_pdf_cdf.png)
+
+Properties of the standard normal distribution include:
+
+$$\Phi (x) = 1 - \Phi(-x)$$
+$$P(a \le X \le b) = \Phi(b) - \Phi(a)$$
 
 ### Transformation of Random Variables
 
@@ -1004,6 +1073,8 @@ If $\log Y \sim \mathcal{N}(\mu,\sigma^2)$, then $Y$ is **log-normal**.
 $$\boxed{\mathbb{E}[Y] = e^{\mu + \sigma^2/2}}$$
 
 $$\boxed{\mathrm{Var}(Y) = (e^{\sigma^2}-1)\,e^{2\mu+\sigma^2}}$$
+
+![Log Normal Distribution](../images/log_normal_pdf_cdf.png)
 
 ## Multivariate Distributions
 
