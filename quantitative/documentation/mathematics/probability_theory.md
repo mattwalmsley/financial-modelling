@@ -50,7 +50,9 @@
   - [Continuous Random Variables](#continuous-random-variables)
     - [Probability Density Function (PDF)](#probability-density-function-pdf)
     - [Cumulative Distribution Function (CDF)](#cumulative-distribution-function-cdf)
-    - [Expectation (Continuous Case)](#expectation-continuous-case)
+    - [Expectation of Continuous Random Variables](#expectation-of-continuous-random-variables)
+    - [Uniform Distribution](#uniform-distribution)
+    - [Cauchy Distribution](#cauchy-distribution)
     - [Variance and Moments](#variance-and-moments)
     - [Normal Distribution](#normal-distribution)
     - [Transformation of Random Variables](#transformation-of-random-variables)
@@ -907,7 +909,7 @@ The density also normalises to 1 since the total probability is 1:
 
 $$\int_{-\infty}^{\infty} f_X(x) dx = 1$$
 
-![Probability Density Function](../images/pdf.png)
+![Normal PDF](../images/normal_pdf_shaded.png)
 
 ### Cumulative Distribution Function (CDF)
 
@@ -924,13 +926,52 @@ $$\int_a^b f_X(x) dx = F_X(b) - F_X(a) = P(a \le X \le b)$$
 $$F_X(x) \rightarrow 0 \text{ as } x \rightarrow-\infty$$
 $$F_X(x) \rightarrow 1 \text{ as } x \rightarrow\infty$$
 
-![Probability Density Function](../images/cdf.png)
+![Normal CDF](../images/pdf_cdf_relationship.png)
 
-### Expectation (Continuous Case)
+### Expectation of Continuous Random Variables
 
-If $X$ has density $f_X$ and $\mathbb{E}[\lvert X\rvert] < \infty$, then
+The expectation for a continuous random variable can be expressed directly in terms of its probability density function - i.e. without reference to the underlying probability space.
 
-$$\boxed{\mathbb{E}[X] = \int_{-\infty}^{\infty} x\, f_X(x)\,dx}$$
+Assuming that $\int_{-\infty}^{\infty} |x| f_X(x) dx < \infty$, the expectation of $X$ is defined as:
+
+$$\boxed{\mathbb{E}[X] = \int_{-\infty}^{\infty} x f_X(x) dx}$$
+
+where $f_X(x) dx$ is the probability that $x \leq X \leq x + dx$.
+
+### Uniform Distribution
+
+A uniform random variable $X$ on the interval $[0,1]$ has probability density function defined as follows:
+
+$$\boxed{f_X(x) = \begin{cases} 1 & 0 \le x \le 1 \\\\ 0 & \text{otherwise} \end{cases}}$$
+
+![Uniform Distribution](../images/uniform_distribution.png)
+
+$X$ on a uniform distribution on the the inveral $[0,1]$ can be defined as $X \sim \mathcal{U}[0,1]$.
+
+The expectation of $X$ is then given by:
+$$\mathbb{E}[X] = \int_{-\infty}^{\infty}x f_X(x) dx = \int_0^1 x \cdot 1 \, dx = \frac{1}{2}$$
+
+### Cauchy Distribution
+
+A random variable $X$ has a Cauchy distribution if:
+
+$$f_X(x) = \frac{A}{\pi (A^2+x^2)}$$
+
+for some scale parameter $A > 0$.
+
+![Cauchy Distribution](../images/cauchy_distribution.png)
+
+- The Cauchy distribution has a symmetric, bell-shaped density similar to the normal distribution, but with much heavier tails.
+  - This makes it useful for modelling data with outliers/extreme events.
+- The Cauchy distribution does not have a finite expectation or variance as $\int_{- \infty}^{\infty} |x| f_X(x)dx = \infty$ so the expectation is undefined:
+
+```math
+\begin{aligned}
+\mathbb{E}[X] &= \int_{-\infty}^{\infty} x f_X(x) dx \\\\
+&= \int_{-\infty}^{\infty} \frac{A x}{\pi (A^2 + x^2)} dx \\\\
+& \therefore \text{(not well defined)}
+\end{aligned}
+```
 
 ### Variance and Moments
 
