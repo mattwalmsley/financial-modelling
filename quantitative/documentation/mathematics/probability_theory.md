@@ -59,9 +59,14 @@
     - [Moments of Continuous Random Variables](#moments-of-continuous-random-variables)
     - [Normal Distribution](#normal-distribution)
       - [Standard Normal Distribution](#standard-normal-distribution)
-    - [Transformation of Random Variables](#transformation-of-random-variables)
+    - [Transformation Formula for Densities](#transformation-formula-for-densities)
+      - [Example of Transformation Formula for Densities](#example-of-transformation-formula-for-densities)
     - [Log-Normal Distribution](#log-normal-distribution)
   - [Multivariate Distributions](#multivariate-distributions)
+    - [Joint Probability Distributions](#joint-probability-distributions)
+      - [Example of Joint Probability Distribution](#example-of-joint-probability-distribution)
+      - [Example of Bivariate Standard Normal Distribution](#example-of-bivariate-standard-normal-distribution)
+    - [Expectation of Functions of Multiple Random Variables](#expectation-of-functions-of-multiple-random-variables)
     - [Independence](#independence)
     - [Covariance and Correlation](#covariance-and-correlation)
   - [Limit Theorems](#limit-theorems)
@@ -638,6 +643,7 @@ $$\boxed{\text{Var}(X) = \mathbb{E}[(X - \mathbb{E}[X])^2] = \mathbb{E}[X^2] - (
 ```
 
 #### Property of Variance
+
 - For a random variable $X$ and constants $a$ and $b$, the variance satisfies the following property:
 $$\boxed{\text{Var}(aX + b) = a^2 \text{Var}(X)}$$
 - This property can be proven as follows:
@@ -857,6 +863,7 @@ This can be proven as follows:
 ##### Example of Expectation of Conditional Expectation
 
 Continuing with the coin toss example where $X$ is the number of heads in three tosses and $p_h$ is the probability of head and $p_t$ the probability of a tail, consider the partition $\mathcal{U_1} = \{B_h, B_t\}$ where:- $B_h$ is the event that the first toss is a head: $B_h = \{\omega_{hhh}, \omega_{hht}, \omega_{hth}, \omega_{htt}\}$
+
 - $B_t$ is the event that the first toss is a tail: $B_t = \{\omega_{thh}, \omega_{tht}, \omega_{tth}, \omega_{ttt}\}$
 - Let $X$ be the number of heads in three tosses. The expectation of the conditional expectation of $X$ given the partition $\mathcal{U}_1$ is calculated as follows:
 
@@ -905,13 +912,13 @@ Continuous random variables can therefore only be defined on a [general probabil
 
 If $X$ has a probability density function $f_X(x)$, which is a positive function $fX(x) \geq 0$, then for $a \le b$:
 
-$$\boxed{P(a \le X \le b) = \int_a^b f_X(x) dx}$$
+$$\boxed{P(a \le X \le b) = \int_a^b f_X(x)\, dx}$$
 
-Informally, $f_X(x)dx = P(x \le X \le x + dx)$, or in other words $f_X(x)\,dx$ represents the probability that $X$ takes a value in the infinitesimal interval $[x, x+dx]$.
+Informally, $f_X(x)\,dx = P(x \le X \le x + dx)$, or in other words $f_X(x)\,dx$ represents the probability that $X$ takes a value in the infinitesimal interval $[x, x+dx]$.
 
 The density also normalises to 1 since the total probability is 1:
 
-$$\int_{-\infty}^{\infty} f_X(x) dx = 1$$
+$$\int_{-\infty}^{\infty} f_X(x)\, dx = 1$$
 
 ![Normal PDF](../images/normal_pdf_shaded.png)
 
@@ -919,13 +926,13 @@ $$\int_{-\infty}^{\infty} f_X(x) dx = 1$$
 
 The cumulative distribution function is defined as (noting the upper case $F$):
 
-$$\boxed{F_X(x) = P(X \le x) = \int_{-\infty}^{x} f_X(x')dx'}$$
+$$\boxed{F_X(x) = P(X \le x) = \int_{-\infty}^{x} f_X(x')\,dx'}$$
 
 and (where differentiable)
 
 $$f_X(x) = \frac{dF_X}{dx}(x)$$
 
-$$\int_a^b f_X(x) dx = F_X(b) - F_X(a) = P(a \le X \le b)$$
+$$\int_a^b f_X(x)\, dx = F_X(b) - F_X(a) = P(a \le X \le b)$$
 
 $$F_X(x) \rightarrow 0 \text{ as } x \rightarrow-\infty$$
 $$F_X(x) \rightarrow 1 \text{ as } x \rightarrow\infty$$
@@ -938,9 +945,9 @@ The expectation for a continuous random variable can be expressed directly in te
 
 Assuming that $\int_{-\infty}^{\infty} |x| f_X(x) dx < \infty$, the expectation of $X$ is defined as:
 
-$$\boxed{\mathbb{E}[X] = \int_{-\infty}^{\infty} x f_X(x) dx}$$
+$$\boxed{\mathbb{E}[X] = \int_{-\infty}^{\infty} x f_X(x)\, dx}$$
 
-where $f_X(x) dx$ is the probability that $x \leq X \leq x + dx$.
+where $f_X(x)\, dx$ is the probability that $x \leq X \leq x + dx$.
 
 ### Uniform Distribution
 
@@ -953,7 +960,7 @@ $$\boxed{f_X(x) = \begin{cases} 1 & 0 \le x \le 1 \\\\ 0 & \text{otherwise} \end
 $X$ on a uniform distribution on the the inveral $[0,1]$ can be defined as $X \sim \mathcal{U}[0,1]$.
 
 The expectation of $X$ is then given by:
-$$\mathbb{E}[X] = \int_{-\infty}^{\infty}x f_X(x) dx = \int_0^1 x \cdot 1 \, dx = \frac{1}{2}$$
+$$\mathbb{E}[X] = \int_{-\infty}^{\infty}x f_X(x)\, dx = \int_0^1 x \cdot 1 \, dx = \frac{1}{2}$$
 
 ### Cauchy Distribution
 
@@ -971,8 +978,8 @@ for some scale parameter $A > 0$.
 
 ```math
 \begin{aligned}
-\mathbb{E}[X] &= \int_{-\infty}^{\infty} x f_X(x) dx \\\\
-&= \int_{-\infty}^{\infty} \frac{A x}{\pi (A^2 + x^2)} dx \\\\
+\mathbb{E}[X] &= \int_{-\infty}^{\infty} x f_X(x)\, dx \\\\
+&= \int_{-\infty}^{\infty} \frac{A x}{\pi (A^2 + x^2)}\, dx \\\\
 & \therefore \text{(not well defined)}
 \end{aligned}
 ```
@@ -1011,7 +1018,7 @@ for constants $a$ and $b$.
 
 The $m$-th moment is defined as the expectation of $X^m$, assuming it exists:
 
-$$\boxed{\mathbb{E}[X^m] = \int_{-\infty}^{\infty} x^m f_X(x)dx}$$
+$$\boxed{\mathbb{E}[X^m] = \int_{-\infty}^{\infty} x^m f_X(x)\,dx}$$
 
 So the first moment is the expectation $\mathbb{E}[X]$ and the variance is related to the second moment $\mathbb{E}[X^2]$.
 
@@ -1019,7 +1026,7 @@ For example, the moments of a uniform random variable $X \sim \mathcal{U}[0,1]$ 
 
 ```math
 \begin{aligned}
-\mathbb{E}[X^m] &= \int_{-\infty}^{\infty} x^m f_X(x)dx \\\\
+\mathbb{E}[X^m] &= \int_{-\infty}^{\infty} x^m f_X(x)\,dx \\\\
 &= \int_{0}^{1} x^m \cdot 1 \, dx \\\\
 &= \left[\frac{x^{m+1}}{m+1}\right]_0^1 \\\\
 &= \frac{1}{m+1}
@@ -1060,15 +1067,52 @@ Properties of the standard normal distribution include:
 $$\Phi (x) = 1 - \Phi(-x)$$
 $$P(a \le X \le b) = \Phi(b) - \Phi(a)$$
 
-### Transformation of Random Variables
+### Transformation Formula for Densities
 
-Let $Y=g(X)$ where $g$ is monotone and differentiable, and $X$ has density $f_X$. Then $Y$ has density
+For a continuous random variable $X$ with density $f_X(x)$, the density of a transformed random variable $Y = g(X)$ can be found using the transformation formula.
 
-$$\boxed{f_Y(y) = f_X(g^{-1}(y))\,\left|\frac{d}{dy}g^{-1}(y)\right|}$$
+Let $g'(x) \equiv \frac{dg}{dx}$ denote the derivative of $g(x)$ with respect to $x$.
+
+Suppose that $g(x)$ is differentiable everywhere and is either strictly monotonically increasing $g'(x) > 0$  or strictly monotonically decreasing $g'(x) < 0$ for all $x \in \mathbb{R}$.
+
+Then the density of $Y$ is given by:
+
+$$\boxed{f_Y(y) = \begin{cases} f_X(g^{-1}(y))\,\left|\frac{d}{dy}g^{-1}(y)\right| & \text{ for all } y \text{ for which } g^{-1}(y) \text{ exists,} \\\\ 0 & \text{otherwise} \end{cases}}$$
+
+where $g^{-1}(y)$ is the inverse function of $g(x)$ such that $g^{-1}(g(x)) = x$.
+
+#### Example of Transformation Formula for Densities
+
+- Suppose that $X \sim \mathcal{N}(\mu, \sigma^2)$ and let $Y = \frac{X-\mu}{\sigma}$.
+- $Y \sim \mathcal{N}(0,1)$ can be proven using the transformation formula for densities as follows:
+
+$$g(x) = \frac{x - \mu}{\sigma} $$
+where $g$ is strictly monotonically increasing since $\sigma > 0$.
+
+$$\therefore g^{-1}(y) = \sigma y + \mu$$
+
+$$\therefore \frac{d}{dy} g^{-1}(y) = \sigma$$
+
+and $\frac{d}{dy} g^{-1}(y)$ exists for all $y \in \mathbb{R}$.
+
+```math
+\begin{aligned}
+f_X(x) &= \frac{1}{\sqrt{2\pi} \sigma} \exp\!\left[-\frac{(x - \mu)^2}{2\sigma^2}\right] \\\\
+\therefore f_Y(y) &= \frac{1}{\sqrt{2\pi} \sigma} \exp\!\left[-\frac{(\sigma y + \mu - \mu)^2}{2\sigma^2}\right] \cdot \sigma  \\\\
+&= \frac{1}{\sqrt{2\pi}} \exp\!\left[-\frac{y^2}{2}\right] \\\\
+&= \phi(y) \text{ for all } y \in \mathbb{R} \\\\
+&\therefore Y \sim \mathcal{N}(0,1)
+\end{aligned}
+```
 
 ### Log-Normal Distribution
 
-If $\log Y \sim \mathcal{N}(\mu,\sigma^2)$, then $Y$ is **log-normal**.
+- If $\log Y \sim \mathcal{N}(\mu,\sigma^2)$, then $Y$ has a log-normal distribution with parameters $\mu$ and $\sigma^2$.
+  - $log$ here denotes the natural logarithm (base $e$), i.e. $\ln$.
+- $Y$ can be described as being **log-normal** nd denoted $Y \sim \mathcal{L}(\mu, \sigma^2)$.
+- The log-normal distribution is useful for modelling share prices and other financial quantities that are strictly positive.
+
+The properties of a log-normal random variable $Y$ include:
 
 $$\boxed{\mathbb{E}[Y] = e^{\mu + \sigma^2/2}}$$
 
@@ -1076,11 +1120,95 @@ $$\boxed{\mathrm{Var}(Y) = (e^{\sigma^2}-1)\,e^{2\mu+\sigma^2}}$$
 
 ![Log Normal Distribution](../images/log_normal_pdf_cdf.png)
 
+The probability density function of a log-normal random variable $Y$ is given by:
+
+$$\boxed{f_Y(y) = \begin{cases} \frac{1}{\sqrt{2\pi} \sigma y} \exp\!\left[-\frac{(\ln y - \mu)^2}{2\sigma^2}\right] & y > 0 \\\\ 0 & \text{otherwise} \end{cases}}$$
+
+This can be proven using the transformation formula for densities with $g(x) = e^x$ as follows.
+
+By definition, $log Y = X \sim \mathcal{N}(\mu, \sigma^2)$ and $X$ has density:
+
+$$f_X(x) = \frac{1}{\sqrt{2\pi} \sigma} \exp\!\left[-\frac{(x - \mu)^2}{2\sigma^2}\right]$$
+
+$y = g(x) = e^x$ is strictly monotonically increasing since $g'(x) = e^x > 0$ for all $x \in \mathbb{R}$.
+
+```math
+\begin{aligned}
+g(x) &= e^x \\\\
+\therefore g^{-1}(y) &= \ln y \text{ for } y > 0 \\\\
+\therefore \frac{d}{dy} g^{-1}(y) &= \frac{1}{y} \text{ for } y > 0 \\\\
+\therefore f_Y(y) &= f_X(g^{-1}(y)) \left|\frac{d}{dy} g^{-1}(y)\right| \text{ for } y > 0 \\\\
+&= \frac{1}{\sqrt{2\pi} \sigma} \exp\!\left[-\frac{(\ln y - \mu)^2}{2\sigma^2}\right] \cdot \frac{1}{y} \text{ for } y > 0 \\\\
+&= \frac{1}{\sqrt{2\pi} \sigma y} \exp\!\left[-\frac{(\ln y - \mu)^2}{2\sigma^2}\right] \text{ for } y > 0 \\\\
+&\therefore f_Y(y) = 0 \text{ otherwise}
+\end{aligned}
+```
+
 ## Multivariate Distributions
 
-Let $(X,Y)$ have joint density $f_{X,Y}(x,y)$. Then
+### Joint Probability Distributions
+
+For two discrete random variables $X$ and $Y$ on the same probability space, taking values in $\{x_i\} = \{x_1, x_2, \dots, x_k\}$ and $\{y_i\} = \{y_1, y_2, \dots, y_l\}$ respectively, the joint probability distribution is defined as:
+
+$$\boxed{P(X=x_i, Y=y_j) = P(\{\omega \in \Omega : X(\omega) = x_i \text{ and } Y(\omega) = y_j\})}$$
+
+where $1 \leq i \leq k$ and $1 \leq j \leq l$.
+
+Similarly, for two continuous random variables $X$ and $Y$ with joint density $f_{X,Y}(x,y)$, the probability that $X$ and $Y$ lie in the intervals $[a,b]$ and $[c,d]$ respectively is given by:
 
 $$\boxed{P(a \le X \le b,\; c \le Y \le d) = \int_a^b\!\int_c^d f_{X,Y}(x,y)\,dy\,dx}$$
+
+where $a \leq b$ and $c \leq d$.
+
+#### Example of Joint Probability Distribution
+
+- Using the coin toss example where $X$ is the number of heads in three tosses, $p_h$ is the probability of head and $p_t$ the probability of a tail, let $Y$ be the number of tails in the second and third tosses **only**.
+
+| Outcome $\omega$ | $P(\omega)$ | $X(\omega)$ | $Y(\omega)$ |
+|------------------|-------------|-------------|-------------|
+| $\omega_{hhh}$   | $p_h^3$     | 3           | 0           |
+| $\omega_{hht}$   | $p_h^2 p_t$ | 2           | 1           |
+| $\omega_{hth}$   | $p_h^2 p_t$ | 2           | 1           |
+| $\omega_{htt}$   | $p_h p_t^2$ | 1           | 2           |
+| $\omega_{thh}$   | $p_h^2 p_t$ | 2           | 0           |
+| $\omega_{tht}$   | $p_h p_t^2$ | 1           | 1           |
+| $\omega_{tth}$   | $p_h p_t^2$ | 1           | 1           |
+| $\omega_{ttt}$   | $p_t^3$     | 0           | 2           |
+
+The joint probability distribution of $X$ and $Y$ is therefore given by:
+
+| $X \backslash Y$ | $y_j = 0$              | $1$                     | $2$                    |
+|------------------|------------------------|-------------------------|------------------------|
+| $x_i = 0$        | $P(X=0,Y=0)=0$         | $P(X=0,Y=1)=0$          | $P(X=0,Y=2)=p_t^3$     |
+| $1$              | $P(X=1,Y=0)=0$         | $P(X=1,Y=1)=2p_h p_t^2$ | $P(X=1,Y=2)=p_h p_t^2$ |
+| $2$              | $P(X=2,Y=0)=p_h^2 p_t$ | $P(X=2,Y=1)=2p_h^2 p_t$ | $P(X=2,Y=2)=0$         |
+| $3$              | $P(X=3,Y=0)=p_h^3$     | $P(X=3,Y=1)=0$          | $P(X=3,Y=2)=0$         |
+
+#### Example of Bivariate Standard Normal Distribution
+
+The bivariate standard normal distribution is a two-dimensional extension of the standard normal distribution. It is characterised by the joint probability density function:
+
+$$\boxed{f_{X,Y}(x,y) = \frac{1}{2\pi\sqrt{1-\rho^2}} \exp\!\left[-\frac{1}{2(1-\rho^2)}\left(x^2 - 2\rho xy + y^2\right)\right]}$$
+
+where $\rho$ is the correlation coefficient between $X$ and $Y$.
+
+![Bivariate Standard Normal Distribution](../images/bivariate_normal_pdf_3d.png)
+
+Varying the correlation coefficient $\rho$ affects the shape of the bivariate normal distribution as shown below:
+
+![Bivariate Standard Normal Distribution](../images/bivariate_normal_pdf_correlations.png)
+
+### Expectation of Functions of Multiple Random Variables
+
+For two discrete random variables $X$ and $Y$, and a function $g(x, y)$, the expectation of $g(X,Y)$ is given by:
+
+$$\boxed{\mathbb{E}[g(X,Y)] = \sum_{i=1}\sum_{j=1} g(x_i,y_j)\,P(X=x_i, Y=y_j)}$$
+
+where the sums are taken over the $k$ possible values of $X$ and the $l$ possible values of $Y$.
+
+For two continuous random variables $X$ and $Y$ with joint density $f_{X,Y}(x,y)$, the expectation of $g(X,Y)$ is given by:
+
+$$\boxed{\mathbb{E}[g(X,Y)] = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} g(x,y) f_{X,Y}(x,y)\, dx\, dy}$$
 
 ### Independence
 
