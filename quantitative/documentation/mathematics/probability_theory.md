@@ -67,11 +67,18 @@
       - [Example of Joint Probability Distribution](#example-of-joint-probability-distribution)
       - [Example of Bivariate Standard Normal Distribution](#example-of-bivariate-standard-normal-distribution)
     - [Expectation of Functions of Multiple Random Variables](#expectation-of-functions-of-multiple-random-variables)
-    - [Independence](#independence)
-    - [Covariance and Correlation](#covariance-and-correlation)
-  - [Limit Theorems](#limit-theorems)
-    - [Law of Large Numbers](#law-of-large-numbers)
-    - [Central Limit Theorem](#central-limit-theorem)
+    - [Independent Random Variables](#independent-random-variables)
+      - [Conditional Expectation of One Random Variable Given Another](#conditional-expectation-of-one-random-variable-given-another)
+      - [Addition Rules for Independent Random Variables (Convolution)](#addition-rules-for-independent-random-variables-convolution)
+        - [Example of Addition Rule for Independent Discrete Random Variables](#example-of-addition-rule-for-independent-discrete-random-variables)
+    - [Covariance](#covariance)
+    - [Correlation](#correlation)
+    - [Relationship Between Independence and Correlation](#relationship-between-independence-and-correlation)
+    - [Important Results for Covariances](#important-results-for-covariances)
+  - [Law of Large Numbers](#law-of-large-numbers)
+  - [Central Limit Theorem](#central-limit-theorem)
+    - [Example: Gaussian Distribution](#example-gaussian-distribution)
+    - [Example: Binomial Distribution](#example-binomial-distribution)
 
 Probability theory has evolved to model uncertainty, providing both an abstract system of thought and practical tools for quantifying likelihoods. While it can be studied as a purely theoretical branch of mathematics, its significance is closely tied to real-world applications.
 
@@ -1210,33 +1217,203 @@ For two continuous random variables $X$ and $Y$ with joint density $f_{X,Y}(x,y)
 
 $$\boxed{\mathbb{E}[g(X,Y)] = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty} g(x,y) f_{X,Y}(x,y)\, dx\, dy}$$
 
-### Independence
+### Independent Random Variables
 
-If $X$ and $Y$ are independent and admit densities, then
+Following on from the definition of independence for events, two random variables $X$ and $Y$ are said to be independent if the events $\{X \leq x\}$ and $\{Y \leq y\}$ are independent for all possible values of $x$ and $y$ of $X$, or formally:
+
+$$\boxed{P(X \leq x, Y \leq y) = P(X \leq x )\,P(Y \leq y)}$$
+
+For **discrete** random variables $X$ and $Y$, independence can be expressed in terms of the joint probability distribution as:
+
+$$\boxed{P(X=x_i, Y=y_j) = P(X=x_i)\,P(Y=y_j)}$$
+
+for all possible values $x_i$ and $y_j$ of $X$ and $Y$ respectively.
+
+For **continuous** random variables $X$ and $Y$, independence can be expressed in terms of the joint density as:
 
 $$\boxed{f_{X,Y}(x,y) = f_X(x)\,f_Y(y)}$$
 
-### Covariance and Correlation
+for all $x,y \in \mathbb{R}$.
 
-$$\boxed{\mathrm{Cov}(X,Y) = \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y]}$$
+Assuming that the expectations exist, if $X$ and $Y$ are independent random variables, then:
 
-The correlation coefficient is
+$$\boxed{\mathbb{E}[XY] = \mathbb{E}[X]\,\mathbb{E}[Y]}$$
 
-$$\boxed{\rho_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma_X\,\sigma_Y}}$$
+for both discrete and continuous random variables.
 
-- Independence $\Rightarrow$ zero correlation (when second moments exist).
-- The converse is false in general.
+Similarly, for functions $g(x)$ and $h(y)$, if $X$ and $Y$ are independent random variables, then:
 
-## Limit Theorems
+$$\boxed{\mathbb{E}[g(X)h(Y)] = \mathbb{E}[g(X)]\,\mathbb{E}[h(Y)]}$$
 
-### Law of Large Numbers
+#### Conditional Expectation of One Random Variable Given Another
 
-For i.i.d. random variables $X_1, X_2, \dots$ with $\mathbb{E}[X_i]=\mu$ (and suitable integrability conditions),
+For two discrete random variables $X$ and $Y$, the conditional expectation of $X$ given that $Y=y_j$ is defined as:
 
-$$\boxed{\frac{1}{N}\sum_{i=1}^{N} X_i \xrightarrow[]{\text{a.s.}} \mu}$$
+$$\boxed{\mathbb{E}[X \mid Y=y_j] = \sum_{i=1}^{k} x_i\, P(X=x_i \mid Y=y_j)}$$
 
-### Central Limit Theorem
+where $P(X=x_i \mid Y=y_j) = \frac{P(X=x_i, Y=y_j)}{P(Y=y_j)}$ provided that $P(Y=y_j) > 0$.
 
-For i.i.d. random variables with mean $\mu$ and variance $\sigma^2 \in (0,\infty)$, letting $S_N = \sum_{i=1}^{N} X_i$,
+#### Addition Rules for Independent Random Variables (Convolution)
 
-$$\boxed{\frac{S_N - N\mu}{\sigma\sqrt{N}} \xrightarrow[]{d} \mathcal{N}(0,1)}$$
+For two independent discrete random variables $X$ and $Y$, with probability distribution $(x_i, P(X=x_i))$ and $(y_j, P(Y=y_j))$ respectively, the probability distribution of the sum $Z = X + Y$ is given by:
+
+$$\boxed{P(Z=z_k) = \sum_{i=1}^{n} P(X=x_i)\,P(Y=z_k - x_i)}$$
+
+##### Example of Addition Rule for Independent Discrete Random Variables
+
+- Let two independent random variables $X$ and $Y$ both have binomial distributions, $X \sim \,\mathcal{B}(N, p)$ and $Y \sim \mathcal{B}(M, p)$, i.e. with the same success probability $p$ but different number of trials $N$ and $M$ respectively.
+
+Then
+
+$$Z = X + Y \sim \mathcal{B}(N + M, p)$$
+
+where $Z$ also has a binomial distribution with number of trials $N + M$ and success probability $p$.
+
+For two independent continuous random variables $X$ and $Y$, with probability density functions $f_X(x)$ and $f_Y(y)$ respectively, the probability density function of the sum $Z = X + Y$ is given by the **convolution** of the two densities:
+
+$$\boxed{f_Z(z) = \int_{-\infty}^{\infty} f_X(x)\, f_Y(z - x)\, dx}$$
+
+If $X$ and $Y$ are independent normal random variables, i.e. $X \sim \mathcal{N}(\mu_X, \sigma_X^2)$ and $Y \sim \mathcal{N}(\mu_Y, \sigma_Y^2)$, then:
+
+$$Z = X + Y \sim \mathcal{N}(\mu_X + \mu_Y, \sigma_X^2 + \sigma_Y^2)$$
+
+where $X$ and $Y$ are both normally distributed with means $\mu_X$ and $\mu_Y$ and variances $\sigma_X^2$ and $\sigma_Y^2$ respectively.
+
+### Covariance
+
+Moving on to consider two random variables, which may or may not be independent, the covariance between $X$ and $Y$ is defined as:
+
+$$\boxed{\mathrm{Cov}(X,Y) = \mathbb{E}[(X-\mathbb{E}[X])(Y-\mathbb{E}[Y])] = \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y]}$$
+
+provided that the expectations exist.
+
+The covariance has the following properties:
+
+- $\mathrm{Cov}(X,X) = \mathrm{Var}(X)$
+- $\mathrm{Cov}(X,Y) = \mathrm{Cov}(Y,X)$
+- $\mathrm{Cov} \left( \sum_{i=1}^{n} X_i, \sum_{j=1}^{m} Y_j \right) = \sum_{i=1}^{n} \sum_{j=1}^{m} \mathrm{Cov}(X_i, Y_j)$
+
+### Correlation
+
+The correlation between two random variables $X$ and $Y$ is given by the Pearson correlation coefficient:
+
+$$\boxed{\rho_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma(X)\,\sigma(Y)}}$$
+
+provided that the standard deviations $\sigma(X)$ and $\sigma(Y)$ are both greater than zero.
+
+Correlation is a measure of the linear relationship between two random variables, with the following properties:
+
+- $-1 \leq \rho_{X,Y} \leq 1$
+- $(\mathbb{E}[XY])^2 \leq \mathbb{E}[X^2]\,\mathbb{E}[Y^2]$ (Cauchy-Schwarz inequality)
+
+|$\rho_{X,Y}$ Value         | Interpretation                      |
+|---------------------------|-------------------------------------|
+| $-1$                      | Perfect negative linear correlation |
+| $( -1 < \rho_{X,Y} < 0 )$ | Negative linear correlation         |
+| $0$                       | No linear correlation               |
+| $( 0 < \rho_{X,Y} < 1 )$  | Positive linear correlation         |
+| $1$                       | Perfect positive linear correlation |
+
+### Relationship Between Independence and Correlation
+
+For two random variables $X$ and $Y$, the following applies:
+
+$$\boxed{X \text{ and } Y \text{ independent } \implies \rho_{X,Y} = 0}$$
+
+stating that if $X$ and $Y$ are independent, then they are uncorrelated.
+
+This can be proven as follows:
+
+```math
+\begin{aligned}
+\mathrm{Cov}(X,Y) &= \mathbb{E}[XY] - \mathbb{E}[X]\,\mathbb{E}[Y] \\\\
+&= \mathbb{E}[X]\,\mathbb{E}[Y] - \mathbb{E}[X]\,\mathbb{E}[Y] \\\\
+&= 0 \\\\
+\therefore \rho_{X,Y} &= \frac{\mathrm{Cov}(X,Y)}{\sigma(X)\,\sigma(Y)} = 0
+\end{aligned}
+```
+
+However, the converse is not necessarily true:
+
+- Independence is a strong condition, defined by the probabilities of events.
+- Correlation is a weaker condition, involving expectations ("averages").
+
+### Important Results for Covariances
+
+- For a sequence of random variables $X_1, X_2, \dots, X_n$:
+$$\boxed{\mathrm{Var}\!\left(\sum_{i=1}^{n} X_i\right) = \sum_{i=1}^{n} \sum_{j=1}^{n} \mathrm{Cov}(X_i, X_j)}$$
+- If the random variables $X_1, X_2, \dots, X_n$ are pairwise uncorrelated ($\mathrm{Cov}(X_i,X_j)=0$ whenever $i \neq j$), then:
+$$\boxed{\mathrm{Var}\!\left(\sum_{i=1}^{n} X_i\right) = \sum_{i=1}^{n} \mathrm{Cov}(X_i, X_i) = \sum_{i=1}^{n} \mathrm{Var}(X_i)}$$
+
+## Law of Large Numbers
+
+The Law of Large Numbers (LLN) describes the behaviour of the average of a sequence of independent, identically distributed (iid) random variables as the number of observations grows.
+
+Let $X_1, X_2, \dots$ be an infinite sequence of iid random variables with the same expectation $\mathbb{E}[X_i] = \mu$.
+
+Define the running sum:
+
+$$S_N = \sum_{i=1}^{N} X_i \quad \text{for } N = 1, 2, \dots$$
+
+Then the **Strong Law of Large Numbers** states:
+
+$$\boxed{\lim_{N \to \infty} \frac{S_N}{N} = \mu \quad \text{with probability one}}$$
+
+Each $S_N$ is a random variable, but the limit $\mu$ is not random. The sample mean converges to the true expected value as the sample size grows to infinity.
+
+## Central Limit Theorem
+
+The Central Limit Theorem (CLT) describes *how* the sum of iid random variables approaches the normal distribution, regardless of the original distribution of the individual variables.
+
+Let $X_1, X_2, \dots$ be an infinite sequence of iid random variables with:
+
+- Expectation $\mathbb{E}[X_i] = \mu$
+- Variance $\mathrm{Var}(X_i) = \sigma^2$
+
+Define the running sum $S_N = \sum_{i=1}^{N} X_i$ as before.
+
+Then for all $x \in \mathbb{R}$:
+
+$$\boxed{\lim_{N \to \infty} P\left(\frac{S_N - N\mu}{\sigma\sqrt{N}} \leq x\right) = \Phi(x)}$$
+
+where $\Phi(x)$ is the cumulative distribution function (CDF) of the standard normal distribution.
+
+**Interpretation**: As $N \to \infty$, the standardized sum $\frac{S_N - N\mu}{\sigma\sqrt{N}}$ converges in distribution to a standard normal $\mathcal{N}(0,1)$.
+
+### Example: Gaussian Distribution
+
+Suppose $X_1, X_2, \dots$ is a sequence of independent random variables, each with normal distribution $\mathcal{N}(\mu, \sigma^2)$.
+
+By repeated application of the addition theorem for normal distributions:
+
+$$S_N = \sum_{i=1}^{N} X_i \sim \mathcal{N}(N\mu, N\sigma^2)$$
+
+Therefore:
+
+$$\frac{S_N - N\mu}{\sigma\sqrt{N}} \sim \mathcal{N}(0, 1)$$
+
+**Note**: For Gaussian random variables, even at finite $N$, the standardized sum already has the exact normal distribution—no limiting process is required.
+
+### Example: Binomial Distribution
+
+Suppose $X_1, X_2, \dots$ is a sequence of independent random variables, each with the Bernoulli distribution:
+
+| $x$ | $P(x)$ |
+|-----|--------|
+| 0   | $1-p$  |
+| 1   | $p$    |
+
+Note that:
+
+- $\mathbb{E}[X_i] = p$
+- $\mathrm{Var}(X_i) = p - p^2 = p(1-p)$
+
+The sum $S_N = \sum_{i=1}^{N} X_i$ has the binomial distribution $S_N \sim B(N, p)$.
+
+The Central Limit Theorem tells us that:
+
+$$\frac{S_N - Np}{\sqrt{Np(1-p)}} \xrightarrow[]{d} \mathcal{N}(0, 1)$$
+
+is approximately distributed $\mathcal{N}(0,1)$ at large (but finite) values of $N$, and this approximation becomes more accurate as $N$ increases.
+
+**Practical application**: This result justifies using the normal distribution to approximate binomial probabilities when $N$ is large—a common technique in statistics and finance.
