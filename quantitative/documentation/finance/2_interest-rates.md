@@ -4,6 +4,10 @@
   - [Introduction](#introduction)
   - [Assumptions](#assumptions)
   - [Term Structure](#term-structure)
+  - [Term Structure Theories](#term-structure-theories)
+    - [Expectations Theory](#expectations-theory)
+    - [Market Segmentation Theory](#market-segmentation-theory)
+    - [Liquidity Premium Theory](#liquidity-premium-theory)
   - [Investment Returns](#investment-returns)
     - [Gross Return](#gross-return)
     - [Net Return](#net-return)
@@ -78,6 +82,42 @@
   - An interest rate with the term to maturity $t$.
   - The interest rate observed on market at time $t$, referred to as calendar time.
 - The notation $r(t, T)$ is used to denote the interest rate maturing at date $T$, observed at time $t$. This implies that the term to maturity is $T - t$.
+
+## Term Structure Theories
+
+Several theories exist to explain the shape of the term structure of interest rates. By plotting interest rates prevailing in the market and observing the different shapes over times and co-movement fo different maturities, forecasts can be formed based on these theories.
+
+### Expectations Theory
+
+- The main assumption of the expectations theory is that **bonds with different maturities are perfect substitutes for one another**.
+- This implies that investors do not have a preference for bonds with different maturities and so the two strategies below should yield the same return:
+  1. In year 1, invest a 1-year bond and hold until maturity. In year 2, invest in another 1-year bond and hold until maturity.
+  2. In year 1, invest in a 2-year bond and hold until maturity.
+- Although the _expected_ return is equivalent for both strategies, the _actual_ return may differ if interest rates change unexpectedly in year 2.
+- This theory helps explain why, in an empirical sense, interest rates for different maturities tend to move together and yield curves differ in shape.
+  - When interest rates at the front (shorter-term) of the yield curve are low, there exists the expectation that interest rates will rise in the future, leading to an upward sloping yield curve.
+  - Conversely, when interest rates at the front of the yield curve are high, there exists the expectation that interest rates will fall in the future, leading to a downward sloping yield curve.
+  - However, this theory does not explain why yield curves tend to be upward sloping on average.
+
+### Market Segmentation Theory
+
+- The main assumption of the market segmentation theory is that **bonds with different maturities are not substitutes for one another**.
+- This implies that interest rates for debt instruments with different maturities are entirely independent and evaluated separately.
+- The market segmentation theory does explain why yield curves tend to be upward sloping on average.
+  - Investors and lenders tend to prefer shorter holding periods, and hence for short-term bonds there is more demand, leading to lower interest rates (higher prices).
+  - Conversely, longer-term bonds are less preferred, leading to lower demand, higher interest rates (lower prices).
+- This theory does not explain why interest rates for different maturities tend to move together.
+
+### Liquidity Premium Theory
+
+- The main assumption of the liquidity premium theory is that **bonds with different maturities are substitutes, but not perfect substitutes for one another**.
+- Similar to the market segmentation theory, investors and lenders prefer shorter-term bonds, leading to lower interest rates for short-term debt instruments.
+  - Therefore, investors and lenders require a positive liquidity premium (additional compensation) to invest in longer-term bonds.
+- This theory explains why yield curves tend to be upward sloping on average, as well as why interest rates for different maturities tend to move together.
+- A _steep_, upward sloping curve indicates that future short-term rates will rise.
+- A _flatter_, upward sloping curve indicates that future short-term rates will not change.
+- A _flat_ yield curve indicates that future short-term rates will fall slightly.
+- A _downward_ sloping curve indicates that future short-term rates will fall significantly.
 
 ## Investment Returns
 

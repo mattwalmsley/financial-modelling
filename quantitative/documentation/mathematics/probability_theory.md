@@ -41,7 +41,7 @@
         - [Conditional Expectation Given an Event Example 1](#conditional-expectation-given-an-event-example-1)
         - [Conditional Expectation Given an Event Example 2](#conditional-expectation-given-an-event-example-2)
     - [Conditioning on a Partition](#conditioning-on-a-partition)
-        - [Conditional Expectation Given a Partition Example](#conditional-expectation-given-a-partition-example)
+      - [Conditional Expectation Given a Partition Example](#conditional-expectation-given-a-partition-example)
       - [Linearity of Conditional Expectation](#linearity-of-conditional-expectation)
       - [Expectation of Conditional Expectation](#expectation-of-conditional-expectation)
         - [Example of Expectation of Conditional Expectation](#example-of-expectation-of-conditional-expectation)
@@ -492,7 +492,7 @@ where $X=x_i$ is the event that the random variable $X$ takes the value $x_i$.
 
 ### Binomial Distribution
 
-- In general, for $N$ independet tosses of a unbiased coin, the probability of getting exactly $i$ heads is given by:
+- In general, for $N$ independent tosses of a unbiased coin, the probability of getting exactly $i$ heads is given by:
 
 $$\boxed{p_i = P(X=i) = \binom{N}{i} p_h^i p_t^{N-i} \text{ for } i=0, 1, 2, \dots, N}$$
 where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, representing the number of ways to choose $i$ heads from $N$ tosses.
@@ -521,8 +521,8 @@ where $\binom{N}{i} = \frac{N!}{i!(N-i)!}$ is the binomial coefficient, represen
 
 - A random variable $X$ can take the values $x_1, x_2, \dots, x_k$.
 - $\mathcal{U}$ is the partition defined (or determined, or generated) by the random variable $X$.
-- $\mathcal{U} = \{\{X=x_i\}\}$ is a partitiion of $\Omega$, or in other words $\mathcal{U} = \{B_1, B_2, \dots, B_k\}$ where $B_i = \{\omega \in \Omega: X(\omega) = x_i\}$ is the set of all outcomes where $X=x_i$..
-- For the random variable $X$ (number of heads), the following paritition is defined:
+- $\mathcal{U} = \{\{X=x_i\}\}$ is a partition of $\Omega$, or in other words $\mathcal{U} = \{B_1, B_2, \dots, B_k\}$ where $B_i = \{\omega \in \Omega: X(\omega) = x_i\}$ is the set of all outcomes where $X=x_i$..
+- For the random variable $X$ (number of heads), the following partition is defined:
 
 $$\{\{\omega_{ttt}\}, \{\omega_{tht}, \omega_{tth}, \omega_{htt}\}, \{\omega_{hht}, \omega_{hth}, \omega_{thh}\}, \{\omega_{hhh}\}\}$$
 
@@ -811,7 +811,7 @@ where $B(\omega)$ denotes the unique partition element in $\mathcal{U}$ that con
 - So $\mathbb{E}[X \mid \mathcal{U}]$ takes the value $\mathbb{E}[X \mid B_i]$ when $\omega \in B_i$ with probability $P(B_i)$.
 - It is necessary to assume that $P(B_j) > 0$ for all $j=1, \dots, m$ in order for the conditional expectation to be well-defined.
 
-##### Conditional Expectation Given a Partition Example
+#### Conditional Expectation Given a Partition Example
 
 Continuing with the coin toss example where $X$ is the number of heads in three tosses and $p_h$ is the probability of  head and $p_t$ the probability o a tail, consider the partition $\mathcal{U_1} = \{B_h, B_t\}$ where:
 
@@ -964,7 +964,7 @@ $$\boxed{f_X(x) = \begin{cases} 1 & 0 \le x \le 1 \\\\ 0 & \text{otherwise} \end
 
 ![Uniform Distribution](../images/uniform_distribution.png)
 
-$X$ on a uniform distribution on the the inveral $[0,1]$ can be defined as $X \sim \mathcal{U}[0,1]$.
+$X$ on a uniform distribution on the the interval $[0,1]$ can be defined as $X \sim \mathcal{U}[0,1]$.
 
 The expectation of $X$ is then given by:
 $$\mathbb{E}[X] = \int_{-\infty}^{\infty}x f_X(x)\, dx = \int_0^1 x \cdot 1 \, dx = \frac{1}{2}$$
