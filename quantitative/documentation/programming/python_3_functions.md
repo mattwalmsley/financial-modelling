@@ -639,12 +639,12 @@ lambda x : x = x + 5 # SyntaxError: cannot assign to lambda
 
 ### `lambda` versus `def` Functions
 
-| Feature                | `lambda` function                     | `def` function                  |
-|------------------------|---------------------------------------|---------------------------------|
-| Name                   | Anonymous (or assigned to a variable) | Has a name                      |
-| Number of expressions  | Only one                              | Multiple expressions/statements |
-| Readability            | Best for short operations             | Preferred for complex logic     |
-| Can contain `return`?    | No (implicit return)                  | Yes                             |
+| Feature               | `lambda` function                     | `def` function                  |
+| --------------------- | ------------------------------------- | ------------------------------- |
+| Name                  | Anonymous (or assigned to a variable) | Has a name                      |
+| Number of expressions | Only one                              | Multiple expressions/statements |
+| Readability           | Best for short operations             | Preferred for complex logic     |
+| Can contain `return`? | No (implicit return)                  | Yes                             |
 
 ### When to Use Lambda Functions
 
@@ -671,15 +671,15 @@ lambda x : x = x + 5 # SyntaxError: cannot assign to lambda
 
 Python functions are objects, and they have built-in attributes that store useful metadata.
 
-| Attribute         | Description                                              |
-|-------------------|----------------------------------------------------------|
-| `__name__`        | Name of the function                                     |
-| `__doc__`         | Docstring of the function                                |
-| `__annotations__` | Dictionary of parameter and return annotations           |
-| `__defaults__`    | Tuple of default argument values                         |
-| `__kwdefaults__`  | Dictionary of default values for keyword-only arguments  |
-| `__code__`        | `code` object containing function's bytecode and metadata  |
-| `__dict__`        | Dictionary for storing function attributes dynamically   |
+| Attribute         | Description                                               |
+| ----------------- | --------------------------------------------------------- |
+| `__name__`        | Name of the function                                      |
+| `__doc__`         | Docstring of the function                                 |
+| `__annotations__` | Dictionary of parameter and return annotations            |
+| `__defaults__`    | Tuple of default argument values                          |
+| `__kwdefaults__`  | Dictionary of default values for keyword-only arguments   |
+| `__code__`        | `code` object containing function's bytecode and metadata |
+| `__dict__`        | Dictionary for storing function attributes dynamically    |
 
 ### Accessing Function Attributes
 
@@ -754,13 +754,13 @@ for name, param in sig.parameters.items():
 # kwargs: VAR_KEYWORD, default=<class 'inspect._empty'>, annotation=<class 'inspect._empty'>
 ```
 
-| Parameter Kind          | Description                                                   |
-|-------------------------|---------------------------------------------------------------|
-| POSITIONAL_OR_KEYWORD   | Can be passed as a positional or keyword argument.            |
-| VAR_POSITIONAL (*args)  | Collects extra positional arguments.                          |
-| KEYWORD_ONLY            | Must be passed as a keyword argument.                         |
-| VAR_KEYWORD (**kwargs)  | Collects extra keyword arguments.                             |
-| POSITIONAL_ONLY         | Can only be passed as a positional argument, not by keyword.  |
+| Parameter Kind         | Description                                                  |
+| ---------------------- | ------------------------------------------------------------ |
+| POSITIONAL_OR_KEYWORD  | Can be passed as a positional or keyword argument.           |
+| VAR_POSITIONAL (*args) | Collects extra positional arguments.                         |
+| KEYWORD_ONLY           | Must be passed as a keyword argument.                        |
+| VAR_KEYWORD (**kwargs) | Collects extra keyword arguments.                            |
+| POSITIONAL_ONLY        | Can only be passed as a positional argument, not by keyword. |
 
 #### Retrieving Source Code & Bytecode using `inspect` and `dis`
 
@@ -815,11 +815,11 @@ print(inspect.ismethod(add))  # False
 - Python provides several built-in functions to work with iterables in a functional style.
 - `map()`, `zip()`, and `filter()` allow iterables to be processed or combined in a more concise and efficient way than using traditional loops.
 
-| Function | Purpose                                                | Return Type | Example Use Case                                                                 |
-|----------|--------------------------------------------------------|-------------|----------------------------------------------------------------------------------|
-| `map()`  | Applies a function to all items in an iterable         | Iterator    | Transforming each element of an iterable (e.g., squaring numbers)                |
-| `zip()`  | Combines multiple iterables into tuples                | Iterator    | Pairing items from two or more iterables (e.g., combining names and ages)        |
-| `filter()`| Filters items from an iterable based on a condition   | Iterator    | Removing elements that do not satisfy a condition (e.g., filtering even numbers) |
+| Function   | Purpose                                             | Return Type | Example Use Case                                                                 |
+| ---------- | --------------------------------------------------- | ----------- | -------------------------------------------------------------------------------- |
+| `map()`    | Applies a function to all items in an iterable      | Iterator    | Transforming each element of an iterable (e.g., squaring numbers)                |
+| `zip()`    | Combines multiple iterables into tuples             | Iterator    | Pairing items from two or more iterables (e.g., combining names and ages)        |
+| `filter()` | Filters items from an iterable based on a condition | Iterator    | Removing elements that do not satisfy a condition (e.g., filtering even numbers) |
 
 - Often more memory efficient than using explicit `for` loops, especially when working with large datasets, because they return iterators instead of creating a full list in memory.
 - Support a functional style of programming, where transformations or filters are applied to iterables in a declarative manner.
@@ -1166,37 +1166,37 @@ print(sort_by_age(data))
 
 The `operator` module provides function equivalents of standard operators, making functional programming cleaner and often faster.
 
-| Operator | Function Equivalent | Example |
-|----------|---------------------|---------|
-| `+`      | `operator.add`      | `add(3, 5)` → `8` |
-| `-`      | `operator.sub`      | `sub(10, 4)` → `6` |
-| `*`      | `operator.mul`      | `mul(3, 4)` → `12` |
-| `/`      | `operator.truediv`  | `truediv(8, 2)` → `4.0` |
-| `//`     | `operator.floordiv` | `floordiv(9, 2)` → `4` |
-| `%`      | `operator.mod`      | `mod(10, 3)` → `1` |
-| `**`     | `operator.pow`      | `pow(2, 3)` → `8` |
-| `==`     | `operator.eq`       | `eq(5, 5)` → `True` |
-| `!=`     | `operator.ne`       | `ne(4, 5)` → `True` |
-| `<`      | `operator.lt`       | `lt(3, 5)` → `True` |
-| `<=`     | `operator.le`       | `le(5, 5)` → `True` |
-| `>`      | `operator.gt`       | `gt(5, 3)` → `True` |
-| `>=`     | `operator.ge`       | `ge(5, 5)` → `True` |
-| `is`     | `operator.is_`      | `is_(a, b)` → `True if a is b` |
+| Operator | Function Equivalent | Example                               |
+| -------- | ------------------- | ------------------------------------- |
+| `+`      | `operator.add`      | `add(3, 5)` → `8`                     |
+| `-`      | `operator.sub`      | `sub(10, 4)` → `6`                    |
+| `*`      | `operator.mul`      | `mul(3, 4)` → `12`                    |
+| `/`      | `operator.truediv`  | `truediv(8, 2)` → `4.0`               |
+| `//`     | `operator.floordiv` | `floordiv(9, 2)` → `4`                |
+| `%`      | `operator.mod`      | `mod(10, 3)` → `1`                    |
+| `**`     | `operator.pow`      | `pow(2, 3)` → `8`                     |
+| `==`     | `operator.eq`       | `eq(5, 5)` → `True`                   |
+| `!=`     | `operator.ne`       | `ne(4, 5)` → `True`                   |
+| `<`      | `operator.lt`       | `lt(3, 5)` → `True`                   |
+| `<=`     | `operator.le`       | `le(5, 5)` → `True`                   |
+| `>`      | `operator.gt`       | `gt(5, 3)` → `True`                   |
+| `>=`     | `operator.ge`       | `ge(5, 5)` → `True`                   |
+| `is`     | `operator.is_`      | `is_(a, b)` → `True if a is b`        |
 | `is not` | `operator.is_not`   | `is_not(a, b)` → `True if a is not b` |
-| `and`    | `operator.and_`     | `and_(True, False)` → `False` |
-| `or`     | `operator.or_`      | `or_(True, False)` → `True` |
-| `not`    | `operator.not_`     | `not_(True)` → `False` |
+| `and`    | `operator.and_`     | `and_(True, False)` → `False`         |
+| `or`     | `operator.or_`      | `or_(True, False)` → `True`           |
+| `not`    | `operator.not_`     | `not_(True)` → `False`                |
 
 Other Useful operator Functions:
 
-| Function                            | Description                                | Example                                      |
-|-------------------------------------|--------------------------------------------|----------------------------------------------|
-| `operator.itemgetter(i)`            | Gets item at index `i` (returns `callable`)| `itemgetter(1)([4, 7, 9])` → `7`             |
-| `operator.attrgetter(attr)`         | Gets an attribute (returns `callable`)     | `attrgetter('age')(person)` → `person.age`   |
-| `operator.methodcaller(m, *args, **kwargs)` | Calls a method on an object | `methodcaller("upper")("hello")` → `"HELLO"` |
-| `operator.getitem(obj, key)`        | Gets an item from a collection | `getitem([10, 20, 30], 1)` → `20` |
-| `operator.setitem(obj, key, value)` | Sets an item in a collection | `setitem(my_dict, "a", 42)` → `my_dict["a"] = 42` |
-| `operator.delitem(obj, key)`        | Deletes an item from a collection | `delitem(my_list, 2)` → `del my_list[2]` |
+| Function                                    | Description                                 | Example                                           |
+| ------------------------------------------- | ------------------------------------------- | ------------------------------------------------- |
+| `operator.itemgetter(i)`                    | Gets item at index `i` (returns `callable`) | `itemgetter(1)([4, 7, 9])` → `7`                  |
+| `operator.attrgetter(attr)`                 | Gets an attribute (returns `callable`)      | `attrgetter('age')(person)` → `person.age`        |
+| `operator.methodcaller(m, *args, **kwargs)` | Calls a method on an object                 | `methodcaller("upper")("hello")` → `"HELLO"`      |
+| `operator.getitem(obj, key)`                | Gets an item from a collection              | `getitem([10, 20, 30], 1)` → `20`                 |
+| `operator.setitem(obj, key, value)`         | Sets an item in a collection                | `setitem(my_dict, "a", 42)` → `my_dict["a"] = 42` |
+| `operator.delitem(obj, key)`                | Deletes an item from a collection           | `delitem(my_list, 2)` → `del my_list[2]`          |
 
 ### Using `operator.add` with `reduce()`
 

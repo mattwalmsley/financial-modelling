@@ -386,11 +386,11 @@ print(approx_pi)  # Output: 355/113 (a well-known approximation of π)
   - 11-bit exponent (scales the number, e.g. -5 is the exponent in 1.5E-5)
   - 52-bit fraction (mantissa) (stores significant digits)
 
-    | **Component**       | **Bit Length** | **Purpose** |
-    |---------------------|----------------|-------------|
+    | **Component**       | **Bit Length** | **Purpose**                                                        |
+    | ------------------- | -------------- | ------------------------------------------------------------------ |
     | Sign Bit            | 1 bit          | Determines whether the number is positive (`0`) or negative (`1`). |
-    | Exponent            | 11 bits        | Stores the exponent with a **bias of 1023** (used for scaling). |
-    | Mantissa (Fraction) | 52 bits        | Stores the significant digits of the number (in binary). |
+    | Exponent            | 11 bits        | Stores the exponent with a **bias of 1023** (used for scaling).    |
+    | Mantissa (Fraction) | 52 bits        | Stores the significant digits of the number (in binary).           |
 
 This structure enables approximately 15 - 17 significant decimal digits of precision and an exponent range of about $\pm10^{308}$.
 
@@ -406,11 +406,11 @@ This structure enables approximately 15 - 17 significant decimal digits of preci
   - Exponent: `3` (biased using *bias 1023* → `3 + 1023 = 1026`)
 - Step 3: Encode into *IEEE 754* format
 
-    | **Component**             | **Binary Representation**                              | **Value** |
-    |---------------------------|--------------------------------------------------------|-------------|
-    | Sign Bit                  | `1`                                                    | Negative number |
-    | Exponent (11-bit, biased) | `10000000010`                                          | $1026_{10} = 10000000010_{2}$|
-    | Mantissa (52-bit)         | `1011010000000000000000000000000000000000000000000000` | Fractional part |
+    | **Component**             | **Binary Representation**                              | **Value**                     |
+    | ------------------------- | ------------------------------------------------------ | ----------------------------- |
+    | Sign Bit                  | `1`                                                    | Negative number               |
+    | Exponent (11-bit, biased) | `10000000010`                                          | $1026_{10} = 10000000010_{2}$ |
+    | Mantissa (52-bit)         | `1011010000000000000000000000000000000000000000000000` | Fractional part               |
 
 #### Floats Precision and Rounding Errors
 
@@ -1548,16 +1548,16 @@ cities = [london, southampton, paris] # homogenous list
   - The length and order of a tuple or string are fixed and cannot be changed.
   - Lists can be modified by adding, removing, or changing elements.
 
-| Feature                                | Tuple | List | String |
-|----------------------------------------|:-----:|:----:|:------:|
-| Mutable (Can be modified)              | ❌    | ✅   | ❌     |
-| Ordered (Elements maintain position)   | ✅    | ✅   | ✅     |
-| Indexable (Supports [] indexing)       | ✅    | ✅   | ✅     |
-| Iterable (Can loop over elements)      | ✅    | ✅   | ✅     |
-| Heterogeneous (Mixed data types allowed)| ✅    | ✅   | ❌     |
-| Homogeneous (Same data types allowed)  | ✅    | ✅   | ✅     |
-| Length can change (Supports resizing)  | ❌    | ✅   | ❌     |
-| Order can change (Elements can be rearranged) | ❌    | ✅   | ❌     |
+| Feature                                       | Tuple | List  | String |
+| --------------------------------------------- | :---: | :---: | :----: |
+| Mutable (Can be modified)                     |   ❌   |   ✅   |   ❌    |
+| Ordered (Elements maintain position)          |   ✅   |   ✅   |   ✅    |
+| Indexable (Supports [] indexing)              |   ✅   |   ✅   |   ✅    |
+| Iterable (Can loop over elements)             |   ✅   |   ✅   |   ✅    |
+| Heterogeneous (Mixed data types allowed)      |   ✅   |   ✅   |   ❌    |
+| Homogeneous (Same data types allowed)         |   ✅   |   ✅   |   ✅    |
+| Length can change (Supports resizing)         |   ❌   |   ✅   |   ❌    |
+| Order can change (Elements can be rearranged) |   ❌   |   ✅   |   ❌    |
 
 ### Dictionaries (`dict`)
 
@@ -1590,21 +1590,21 @@ _variable = 5
 myVar123 = 'hello'
 ```
 
-| Identifier                  | Example            | Case Style           | Description                                                                                                   |
-|:---------------------------:|:------------------:|:--------------------:|---------------------------------------------------------------------------------------------------------------|
-| Public variable             | `variable`         | snake_case           | A variable that can be accessed from outside the class or module.                                             |
-| Protected variable          | `_variable`        | snake_case           | Indicates that a variable is intended for internal use within a class or module (not strictly enforced).      |
-| Private variable            | `__variable`       | snake_case           | A variable that is intended to be private to the class. Name mangling occurs (e.g., `__ClassName__variable`). |
-| Special (*dunder*) variable | `__name__`         | snake_case           | Variables reserved for built-in functionalities that should not be created by users to avoid naming conflicts.|
-| Public method               | `method()`         | snake_case           | A method that can be accessed from outside the class.                                                         |
-| Protected method            | `_method()`        | snake_case           | Indicates that a method is intended for internal use within a class or module.                                |
-| Private method              | `__method()`       | snake_case           | A method that is intended to be private to the class.                                                         |
-| Special (*dunder*) method   | `__init__()`       | snake_case           | Methods reserved for built-in functionalities that should not be created by users to avoid naming conflicts.  |
-| Constants                   | `CONSTANT_NAME`    | SCREAMING_SNAKE_CASE | Typically written in all uppercase with words separated by underscores.                                       |
-| Class names                 | `ClassName`        | PascalCase           | Follow the CapitalizedWords convention (also known as CamelCase).                                             |
-| Module names                | `module_name`      | snake_case           | Should be short and all lowercase; underscores can be used to improve readability.                            |
-| Package names               | `packagename`      | lowercase            | Should be all lowercase and can include underscores if necessary.                                             |
-| Function names              | `function_name`    | snake_case           | Should be all lowercase with words separated by underscores.                                                  |
+|         Identifier          |     Example     |      Case Style      | Description                                                                                                    |
+| :-------------------------: | :-------------: | :------------------: | -------------------------------------------------------------------------------------------------------------- |
+|       Public variable       |   `variable`    |      snake_case      | A variable that can be accessed from outside the class or module.                                              |
+|     Protected variable      |   `_variable`   |      snake_case      | Indicates that a variable is intended for internal use within a class or module (not strictly enforced).       |
+|      Private variable       |  `__variable`   |      snake_case      | A variable that is intended to be private to the class. Name mangling occurs (e.g., `__ClassName__variable`).  |
+| Special (*dunder*) variable |   `__name__`    |      snake_case      | Variables reserved for built-in functionalities that should not be created by users to avoid naming conflicts. |
+|        Public method        |   `method()`    |      snake_case      | A method that can be accessed from outside the class.                                                          |
+|      Protected method       |   `_method()`   |      snake_case      | Indicates that a method is intended for internal use within a class or module.                                 |
+|       Private method        |  `__method()`   |      snake_case      | A method that is intended to be private to the class.                                                          |
+|  Special (*dunder*) method  |  `__init__()`   |      snake_case      | Methods reserved for built-in functionalities that should not be created by users to avoid naming conflicts.   |
+|          Constants          | `CONSTANT_NAME` | SCREAMING_SNAKE_CASE | Typically written in all uppercase with words separated by underscores.                                        |
+|         Class names         |   `ClassName`   |      PascalCase      | Follow the CapitalizedWords convention (also known as CamelCase).                                              |
+|        Module names         |  `module_name`  |      snake_case      | Should be short and all lowercase; underscores can be used to improve readability.                             |
+|        Package names        |  `packagename`  |      lowercase       | Should be all lowercase and can include underscores if necessary.                                              |
+|       Function names        | `function_name` |      snake_case      | Should be all lowercase with words separated by underscores.                                                   |
 
 ## Python Comments
 

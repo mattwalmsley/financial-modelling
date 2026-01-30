@@ -171,8 +171,8 @@ r_{k}(t) &= \sum_{i=0}^{k-1}r(t-i)
 
 - The prices for a stock on 6 consecutive business days ($t=[1,6]$) are as shown in the table below:
 
-| Time, $t$ | Price, $P(t)$|
-|:---------:|:-------------:|
+| Time, $t$ | Price, $P(t)$ |
+| :-------: | :-----------: |
 |     1     |      105      |
 |     2     |      111      |
 |     3     |      102      |

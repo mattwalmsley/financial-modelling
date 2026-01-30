@@ -385,11 +385,11 @@ The slope $\frac{\mu_T - r_f}{\sigma_T}$ is the **Sharpe Ratio** of the tangency
 
 #### Efficient Frontiers
 
-| Without Risk-Free Asset | With Risk-Free Asset |
-|------------------------|----------------------|
-| Hyperbola in $(\sigma, \mu)$-space | Straight line (CML) |
-| Upper branch is efficient | Line from $(0, r_f)$ tangent to risky frontier |
-| Minimum variance portfolio at vertex | Tangency portfolio is optimal risky portfolio |
+| Without Risk-Free Asset              | With Risk-Free Asset                           |
+| ------------------------------------ | ---------------------------------------------- |
+| Hyperbola in $(\sigma, \mu)$-space   | Straight line (CML)                            |
+| Upper branch is efficient            | Line from $(0, r_f)$ tangent to risky frontier |
+| Minimum variance portfolio at vertex | Tangency portfolio is optimal risky portfolio  |
 
 ---
 
@@ -417,12 +417,12 @@ A **utility function** $U(W)$ represents preferences over wealth levels:
 
 #### Examples of Utility Functions
 
-| Utility Function | Formula | ARA | RRA |
-|-----------------|---------|-----|-----|
-| Quadratic | $U(W) = W - \frac{b}{2}W^2$ | $\frac{b}{1-bW}$ (IARA) | $\frac{bW}{1-bW}$ |
-| Exponential | $U(W) = -e^{-aW}$ | $a$ (CARA) | $aW$ |
-| Power/CRRA | $U(W) = \frac{W^{1-\gamma}}{1-\gamma}$ | $\frac{\gamma}{W}$ (DARA) | $\gamma$ (CRRA) |
-| Logarithmic | $U(W) = \ln(W)$ | $\frac{1}{W}$ (DARA) | $1$ (CRRA) |
+| Utility Function | Formula                                | ARA                       | RRA               |
+| ---------------- | -------------------------------------- | ------------------------- | ----------------- |
+| Quadratic        | $U(W) = W - \frac{b}{2}W^2$            | $\frac{b}{1-bW}$ (IARA)   | $\frac{bW}{1-bW}$ |
+| Exponential      | $U(W) = -e^{-aW}$                      | $a$ (CARA)                | $aW$              |
+| Power/CRRA       | $U(W) = \frac{W^{1-\gamma}}{1-\gamma}$ | $\frac{\gamma}{W}$ (DARA) | $\gamma$ (CRRA)   |
+| Logarithmic      | $U(W) = \ln(W)$                        | $\frac{1}{W}$ (DARA)      | $1$ (CRRA)        |
 
 - **CARA**: Constant Absolute Risk Aversion
 - **CRRA**: Constant Relative Risk Aversion
@@ -865,13 +865,13 @@ where $\phi$ is the standard normal PDF.
 
 **Comparison**:
 
-| Property | VaR | Expected Shortfall |
-|----------|-----|-------------------|
-| Intuitive | Yes | Less so |
-| Subadditive | No | Yes |
-| Tail risk | Ignores | Captures |
-| Coherent | No | Yes |
-| Regulatory use | Basel II/III | Basel III (FRTB) |
+| Property       | VaR          | Expected Shortfall |
+| -------------- | ------------ | ------------------ |
+| Intuitive      | Yes          | Less so            |
+| Subadditive    | No           | Yes                |
+| Tail risk      | Ignores      | Captures           |
+| Coherent       | No           | Yes                |
+| Regulatory use | Basel II/III | Basel III (FRTB)   |
 
 **Fundamental Review of the Trading Book (FRTB)**:
 

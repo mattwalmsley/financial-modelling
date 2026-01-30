@@ -680,12 +680,12 @@ secure_function("guest")  # Output: Access denied.
 
 ### Summary of Dispatching Methods in Decorators
 
-| Dispatch Type  | Mechanism                                      | Example Use Case                               |
-|----------------|------------------------------------------------|-----------------------------------------------|
-| Single Dispatch| Dispatches based on the type of the first argument | Overloading functions for different types      |
-| Multi Dispatch | Dispatches based on the types of multiple arguments | Overloading functions with multiple arguments  |
-| Value Dispatch | Dispatches based on argument values            | Priority-based execution, feature toggling     |
-| Method Dispatch| Dispatches methods in class decorators         | Role-based access control, permission systems  |
+| Dispatch Type   | Mechanism                                           | Example Use Case                              |
+| --------------- | --------------------------------------------------- | --------------------------------------------- |
+| Single Dispatch | Dispatches based on the type of the first argument  | Overloading functions for different types     |
+| Multi Dispatch  | Dispatches based on the types of multiple arguments | Overloading functions with multiple arguments |
+| Value Dispatch  | Dispatches based on argument values                 | Priority-based execution, feature toggling    |
+| Method Dispatch | Dispatches methods in class decorators              | Role-based access control, permission systems |
 
 ## Dispatching with Metaclasses
 

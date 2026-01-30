@@ -55,10 +55,10 @@
 - In each state, the price of the stocks can only take one value:
 
 |            | State I | State II |
-|------------|:-------:|:--------:|
-| $P_{A}(1)$ |  20 USD |  30 USD  |
-| $P_{B}(1)$ |  15 USD |  35 USD  |
-| $P_{C}(1)$ |  50 USD | 100 USD  |
+| ---------- | :-----: | :------: |
+| $P_{A}(1)$ | 20 USD  |  30 USD  |
+| $P_{B}(1)$ | 15 USD  |  35 USD  |
+| $P_{C}(1)$ | 50 USD  | 100 USD  |
 
 - Notice that in both states, the following holds true: $P_{A}(1) + 2P_{B}(1) = P_{C}(1)$.
   - However, this does not hold at time $t = 0$ where $25 + 2 \times 20 = 65$ which is less than the price of stock C (80 USD).

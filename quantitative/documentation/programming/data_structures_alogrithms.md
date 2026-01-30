@@ -204,9 +204,9 @@ For an array of integers in Python, where each integer takes up 4 bytes (32 bits
 - Accessing `numbers[0]` corresponds to memory location `0x1000`.
 - Accessing `numbers[1]` corresponds to memory location `0x1004`, and so on.
 
-|  0x1000   |  0x1004  |  0x1008  |  0x100C  |  0x1010  |
-|:---------:|:--------:|:--------:|:--------:|:--------:|
-|     1     |    2     |    3     |    4     |    5     |
+| 0x1000 | 0x1004 | 0x1008 | 0x100C | 0x1010 |
+| :----: | :----: | :----: | :----: | :----: |
+|   1    |   2    |   3    |   4    |   5    |
 
 #### Multi-dimensional Array
 
@@ -243,9 +243,9 @@ print(matrix)  # Output: [[1, 2, 3], [4, 5, 10], [7, 8, 9]]
 - Each integer takes up 4 bytes of memory, and they are stored sequentially in memory.
 - Memory addresses are contiguous, with no gaps between them.
 
-|   0x1000  |  0x1004  |  0x1008  |  0x100C  |  0x1010  |  0x1014  |  0x1018  |  0x101C  |  0x1020  |
-|:---------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
-|     1     |     2    |     3    |     4    |     5    |     6    |     7    |     8    |     9    |
+| 0x1000 | 0x1004 | 0x1008 | 0x100C | 0x1010 | 0x1014 | 0x1018 | 0x101C | 0x1020 |
+| :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: |
+|   1    |   2    |   3    |   4    |   5    |   6    |   7    |   8    |   9    |
 
 ##### Column-Major Order
 
@@ -258,9 +258,9 @@ print(matrix)  # Output: [[1, 2, 3], [4, 5, 10], [7, 8, 9]]
 - Each integer takes up 4 bytes of memory, and they are stored sequentially in memory.
 - Memory addresses are contiguous, with no gaps between them.
 
-|   0x1000  |  0x1004  |  0x1008  |  0x100C  |  0x1010  |  0x1014  |  0x1018  |  0x101C  |  0x1020  |
-|:---------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
-|     1     |     4    |     7    |     2    |     5    |     8    |     3    |     6    |     9    |
+| 0x1000 | 0x1004 | 0x1008 | 0x100C | 0x1010 | 0x1014 | 0x1018 | 0x101C | 0x1020 |
+| :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: | :----: |
+|   1    |   4    |   7    |   2    |   5    |   8    |   3    |   6    |   9    |
 
 #### Operations on Arrays
 
@@ -331,45 +331,45 @@ Linked lists are fundamental data structures used for storing collections of ele
   - In a singly linked list, each node points to the next node in the sequence.
   - Traversal in a singly linked list is forward-only.
 
-| Node  |  Memory Address | Data (Value, Next Pointer) |
-|:-----:|:---------------:|:--------------------------:|
-|   0   |     0xABCD      |         (10, 0xBDEF)       |
-|   1   |     0xBDEF      |         (20, 0xC987)       |
-|   2   |     0xC987      |         (30, 0xDEFA)       |
-|   3   |     0xDEFA      |         (40, NULL)         |
+| Node  | Memory Address | Data (Value, Next Pointer) |
+| :---: | :------------: | :------------------------: |
+|   0   |     0xABCD     |        (10, 0xBDEF)        |
+|   1   |     0xBDEF     |        (20, 0xC987)        |
+|   2   |     0xC987     |        (30, 0xDEFA)        |
+|   3   |     0xDEFA     |         (40, NULL)         |
 
 - **Doubly Linked List**:
   - In a doubly linked list, each node has pointers to both the next and previous nodes.
   - Traversal in a doubly linked list can be done in both forward and backward directions.
 
-| Node  |  Memory Address | Data (Previous Pointer, Value, Next Pointer) |
-|:-----:|:---------------:|:--------------------------------------------:|
-|   0   |     0xABCD      |               (NULL, 10, 0xBDEF)             |
-|   1   |     0xBDEF      |               (0xABCD, 20, 0xC987)           |
-|   2   |     0xC987      |               (0xBDEF  30, 0xDEFA)           |
-|   3   |     0xDEFA      |               (0xC987, 40, NULL)             |
+| Node  | Memory Address | Data (Previous Pointer, Value, Next Pointer) |
+| :---: | :------------: | :------------------------------------------: |
+|   0   |     0xABCD     |              (NULL, 10, 0xBDEF)              |
+|   1   |     0xBDEF     |             (0xABCD, 20, 0xC987)             |
+|   2   |     0xC987     |             (0xBDEF  30, 0xDEFA)             |
+|   3   |     0xDEFA     |              (0xC987, 40, NULL)              |
 
 - **Circular Singly Linked List**:
   - In a circular singly linked list, the last node points back to the first node, forming a circular structure.
   - Circular linked lists are useful for applications requiring cyclic data structures in one direction.
 
-| Node  |  Memory Address | Data (Value, Next Pointer) |
-|:-----:|:---------------:|:--------------------------:|
-|   0   |     0xABCD      |         (10, 0xBDEF)       |
-|   1   |     0xBDEF      |         (20, 0xC987)       |
-|   2   |     0xC987      |         (30, 0xDEFA)       |
-|   3   |     0xDEFA      |         (40, 0xABCD)       |
+| Node  | Memory Address | Data (Value, Next Pointer) |
+| :---: | :------------: | :------------------------: |
+|   0   |     0xABCD     |        (10, 0xBDEF)        |
+|   1   |     0xBDEF     |        (20, 0xC987)        |
+|   2   |     0xC987     |        (30, 0xDEFA)        |
+|   3   |     0xDEFA     |        (40, 0xABCD)        |
 
 - **Circular Doubly Linked List**:
   - In a circular doubly linked list, the last node points back to the first node and the first node points to the last node, forming a bi-directional circular structure.
   - Circular linked lists are useful for applications requiring cyclic data structures in both directions.
 
-| Node  |  Memory Address | Data (Previous Pointer, Value, Next Pointer) |
-|:-----:|:---------------:|:--------------------------------------------:|
-|   0   |     0xABCD      |               (0xDEFA, 10, 0xBDEF)           |
-|   1   |     0xBDEF      |               (0xABCD, 20, 0xC987)           |
-|   2   |     0xC987      |               (0xBDEF  30, 0xDEFA)           |
-|   3   |     0xDEFA      |               (0xC987, 40, 0xABCD)             |
+| Node  | Memory Address | Data (Previous Pointer, Value, Next Pointer) |
+| :---: | :------------: | :------------------------------------------: |
+|   0   |     0xABCD     |             (0xDEFA, 10, 0xBDEF)             |
+|   1   |     0xBDEF     |             (0xABCD, 20, 0xC987)             |
+|   2   |     0xC987     |             (0xBDEF  30, 0xDEFA)             |
+|   3   |     0xDEFA     |             (0xC987, 40, 0xABCD)             |
 
 #### Operations on Linked Lists
 
@@ -477,12 +477,12 @@ XOR linked lists, also known as memory-efficient doubly linked lists, are a vari
   2. **XOR Pointer**: A computed value obtained by performing the XOR operation on the memory addresses of the previous and next nodes.
 - The symbol $\oplus$ corresponds to the logical XOR operation.
 
-| Node  |  Memory Address | Data (Value, XOR of Previous and Next Pointers) |
-|:-----:|:---------------:|:-----------------------------------------------:|
-|   0   |     0xABCD      |          (10, NULL $\oplus$ 0xBDEF)             |
-|   1   |     0xBDEF      |          (20, 0xABCD $\oplus$ 0xC987)           |
-|   2   |     0xC987      |          (30, 0xBDEF $\oplus$ 0xDEFA)           |
-|   3   |     0xDEFA      |          (40, 0xC987 $\oplus$ NULL)             |
+| Node  | Memory Address | Data (Value, XOR of Previous and Next Pointers) |
+| :---: | :------------: | :---------------------------------------------: |
+|   0   |     0xABCD     |           (10, NULL $\oplus$ 0xBDEF)            |
+|   1   |     0xBDEF     |          (20, 0xABCD $\oplus$ 0xC987)           |
+|   2   |     0xC987     |          (30, 0xBDEF $\oplus$ 0xDEFA)           |
+|   3   |     0xDEFA     |           (40, 0xC987 $\oplus$ NULL)            |
 
 #### Operations on XOR Linked Lists
 

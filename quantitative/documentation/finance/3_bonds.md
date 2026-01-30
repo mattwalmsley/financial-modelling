@@ -87,10 +87,10 @@ $$y(T) = -\frac{\log(d(T))}{T}$$
 - In this example, there are 3 bonds:
 
 |        |      Coupon      | Face Value | Time to Maturity | Market Price |
-| ------ |:----------------:|:----------:|:----------------:|:------------:|
-| Bond 1 |       Zero       | 1,000 USD  |      6 Months    |    985 USD   |
+| ------ | :--------------: | :--------: | :--------------: | :----------: |
+| Bond 1 |       Zero       | 1,000 USD  |     6 Months     |   985 USD    |
 | Bond 2 | 5% (Semi-Annual) | 10,000 USD |      1 Year      |  10,124 USD  |
-| Bond 3 |    7% (Annual)   | 10,000 USD |      2 Years     |  10,507 USD  |
+| Bond 3 |   7% (Annual)    | 10,000 USD |     2 Years      |  10,507 USD  |
 
 - The tenors for the yield curve will be the maturities of the bonds: $T_{1} = 0.5$, $T_{2} = 1$ and $T_{3} = 2$.
 - The market prices of the bonds are used to calibrate the discount factors $d(T_{1})$, $d(T_{2})$ and $d(T_{3})$, or equivalently, the yields $y(T_{1})$, $y(T_{2})$ and $y(T_{3})$.

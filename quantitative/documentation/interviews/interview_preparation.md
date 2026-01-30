@@ -176,14 +176,14 @@ public class SampleCollection
 
 #### List
 
-| Operation                 | Time Complexity | Notes                                |
-|---------------------------|-----------------|--------------------------------------|
-| `my_list.append(item)`    | **O(1)**        | Fast                                |
-| `my_list.pop()`           | **O(1)**        | Fast                                |
-| `my_list.insert(0, item)` | **O(n)**        | Slow (shifts all items)             |
-| `my_list.pop(0)`          | **O(n)**        | Slow (shifts all items)             |
-| `my_list[index]`          | **O(1)**        | Fast                                |
-| `item in my_list`         | **O(n)**        | Slow (requires looping)             |
+| Operation                 | Time Complexity | Notes                   |
+| ------------------------- | --------------- | ----------------------- |
+| `my_list.append(item)`    | **O(1)**        | Fast                    |
+| `my_list.pop()`           | **O(1)**        | Fast                    |
+| `my_list.insert(0, item)` | **O(n)**        | Slow (shifts all items) |
+| `my_list.pop(0)`          | **O(n)**        | Slow (shifts all items) |
+| `my_list[index]`          | **O(1)**        | Fast                    |
+| `item in my_list`         | **O(n)**        | Slow (requires looping) |
 
 Use `collections.deque` for fast operations at the beginning of a sequence.
 
@@ -192,7 +192,7 @@ Use `collections.deque` for fast operations at the beginning of a sequence.
 Dictionaries are meant for grouping or accumulating values based on a key. Python "dictionaries" are called hash maps (or sometimes "associative arrays") in many other programming languages.
 
 | Operation                     | Time Complexity | Notes                    |
-|-------------------------------|-----------------|--------------------------|
+| ----------------------------- | --------------- | ------------------------ |
 | `mapping[key] = value`        | **O(1)**        | Inserting/updating       |
 | `mapping[key]`                | **O(1)**        | Reading/Lookup           |
 | `mapping.get(key)`            | **O(1)**        | Safe Lookup              |
@@ -212,12 +212,12 @@ Hashing ensures dictionaries are very fast at all operations related to key look
 
 ##### Other Dictionary Operations
 
-| Operation                     | Time Complexity | Explanation       |
-|-------------------------------|-----------------|-------------------|
-| `next(iter(mapping))`         | **O(1)**        | Get first item    |
-| `next(reversed(mapping))`     | **O(1)**        | Get last item     |
-| `value in mapping.values()`   | **O(n)**        | Value containment |
-| `mapping.update(iterable)`    | **O(k)**        | Add **k** items   |
+| Operation                   | Time Complexity | Explanation       |
+| --------------------------- | --------------- | ----------------- |
+| `next(iter(mapping))`       | **O(1)**        | Get first item    |
+| `next(reversed(mapping))`   | **O(1)**        | Get last item     |
+| `value in mapping.values()` | **O(n)**        | Value containment |
+| `mapping.update(iterable)`  | **O(k)**        | Add **k** items   |
 
 Key lookups are **O(1)**, but value lookups (`value in my_dict.values()`) are **O(n)** due to looping over the whole dictionary.
 
@@ -248,18 +248,18 @@ Key lookups are **O(1)**, but value lookups (`value in my_dict.values()`) are **
 
 #### Set
 
-| Operation                 | Time Complexity | Notes                 |
-|---------------------------|-----------------|-----------------------|
-| `my_set.add(item)`       | **O(1)**         | Add (no error raised) |
-| `my_set.remove(item)`    | **O(1)**         | Remove (error raised) |
-| `my_set.discard(item)`   | **O(1)**         | Safe Remove           |
-| `item in my_set`         | **O(1)**         | Membership test       |
-| `for item in my_set:`    | **O(n)**         | For sets of size n    |
+| Operation              | Time Complexity | Notes                 |
+| ---------------------- | --------------- | --------------------- |
+| `my_set.add(item)`     | **O(1)**        | Add (no error raised) |
+| `my_set.remove(item)`  | **O(1)**        | Remove (error raised) |
+| `my_set.discard(item)` | **O(1)**        | Safe Remove           |
+| `item in my_set`       | **O(1)**        | Membership test       |
+| `for item in my_set:`  | **O(n)**        | For sets of size n    |
 
 ##### Set Operations and Time Complexity
 
 | Big O    | Operation      | Explanation               |
-|----------|----------------|---------------------------|
+| -------- | -------------- | ------------------------- |
 | **O(n)** | `set1 & set2`  | **Intersection**          |
 | **O(n)** | `set1 \| set2` | **Union**                 |
 | **O(n)** | `set1 ^ set2`  | **Symmetric Difference**  |

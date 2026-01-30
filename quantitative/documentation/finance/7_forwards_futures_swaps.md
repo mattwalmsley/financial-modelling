@@ -647,7 +647,7 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - For a US base exporting company which is due to receive a payment of 1 million EUR in November when the current month is May, the risk of adverse moves in the EUR/USD exchange rate can be mitigated using futures assuming the following EUR/USD rates in this scenario:
 
 |          |   Spot   | December Futures |
-|----------|:--------:|:----------------:|
+| -------- | :------: | :--------------: |
 | May      | 1.15 USD |     1.18 USD     |
 | November | 1.02 USD |     1.03 USD     |
 
@@ -677,10 +677,10 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - The number of futures contracts required to cover 10,000 tonnes would be $frac{10000}{11} \approx 900$ and these contracts should expire no earlier than December.
 - Assuming the company takes a short position in 900 December copper futures contracts and that the following conditions are true in this scenario:
 
-|         |   Spot   | December Futures  |
-| ------  |:--------:|:-----------------:|
-|  April  | 3.05 /lb |      3.11 /lb     |
-| November| 3.15 /lb |      3.16 /lb     |
+|          |   Spot   | December Futures |
+| -------- | :------: | :--------------: |
+| April    | 3.05 /lb |     3.11 /lb     |
+| November | 3.15 /lb |     3.16 /lb     |
 
 - If, at the end of November, the company has produced 16,000 tonnes of copper in the last two months, the combined position's value can be calculated as follows:
   - The cash position can be calculated to have increased by $16000 \times 2204.62 \times (3.15-3.05) = 3,527,392 \text{ USD}$
@@ -707,9 +707,9 @@ b(t) &= -(r+s-y)(T-t)S(t) \\
 - The CME JPY/USD futures contract has a contract size of 12.5 million JPY so two futures contracts would be required to gain exposure to 25 million JPY.
 - Assume the following scenario for spot and futures prices, assuming exposure is obtained through a 3 month JPY/USD futures contract with a margin requirement of 4000 USD per contract:
 
-|             |     Spot   | 3 Month Futures |
-| ----------- |:----------:|:---------------:|
-|      T(0)   | 0.009 USD  |  0.0090895 USD  |
+|             |    Spot    | 3 Month Futures |
+| ----------- | :--------: | :-------------: |
+| T(0)        | 0.009 USD  |  0.0090895 USD  |
 | T(2 months) | 0.0097 USD | 0.00970035 USD  |
 
 - At time 0, To obtain a cash position of 25 million JPY, an investment of $0.009 \times 25000000 = 225,000 \text{ USD}$ would be required, whereas the futures position of two futures contract would only required $2 \times 4000 = 8000 \text{ USD}$ to be posted into a margin account as the initial investment.
@@ -1078,10 +1078,10 @@ $$(t_{i}-t_{i-1})L_{i-1}N$$
 - The contracted notional amount is 10,000,000 USD and the swap fate (i.e. the fixed interest rate) is 3%.
 - The payments are semi-annual and the floating interest rate is the 6-month LIBOR rate, defined in the table below.
 
-|     Date    | 6-month LIBOR |
-| ----------- |:-------------:|
-|      $t$      |      2.8%     |
-| $t$ + 6 months|      3.1%     |
+| Date           | 6-month LIBOR |
+| -------------- | :-----------: |
+| $t$            |     2.8%      |
+| $t$ + 6 months |     3.1%      |
 
 - The first two cash flows in the swap contract can be calculated using the table below as follows:
   - The first payment is due 6 months after the contract origination at $t$ + 6 months:
@@ -1255,11 +1255,11 @@ S &= \frac{m(1- d(t_{J}))}{\sum_{j=1}^{J}d(t_{j})} \\\\
 
 - LIBOR rates are given in percentages.
 
-| Tenor | Rate |
-|:-----:|:----:|
-|   1M  | 0.8  |
-|   2M  | 1.0  |
-|   3M  | 1.3  |
+| Tenor | Rate  |
+| :---: | :---: |
+|  1M   |  0.8  |
+|  2M   |  1.0  |
+|  3M   |  1.3  |
 
 - The cash LIBOR rates for 1, 2, and 3 months can be denoted as follows:
 $$L\left(\frac{1}{12}\right)=0.008, \space L\left(\frac{2}{12}\right)=0.01, \space L\left(\frac{3}{12}\right)=0.013$$
@@ -1290,9 +1290,9 @@ y\left(\frac{3}{12}\right) &= -\frac{\log(0.99676)}{\left(\frac{3}{12}\right)} =
 - The contract price is defined in the [Eurodollar Futures Contract Specification](#eurodollar-futures-contract-specification) as being 100% minus the contracted futures interest rate %, such that $P=100(1-F(t,T,T+0.25))$ where $F(t,T,T+0.25)$ is the futures interest rate as a decimal at time $t$ for a term between $T$ and $T+0.25$.
 
 | Tenor | Price |
-|:-----:|:-----:|
-|   6M  | 98.4  |
-|   9M  | 98.0  |
+| :---: | :---: |
+|  6M   | 98.4  |
+|  9M   | 98.0  |
 |  12M  | 97.6  |
 |  15M  | 97.3  |
 |  18M  | 97.0  |
@@ -1350,10 +1350,10 @@ y(T_{i}) &= -\frac{\log(P(0,T_{i}))}{T_{i}} \\\\
 
 - Fixed swap rates are given in percentages.
 
-| Tenor | Rate|
-|:-----:|:---:|
-|   2Y  | 2.3 |
-|   4Y  | 2.7 |
+| Tenor | Rate  |
+| :---: | :---: |
+|  2Y   |  2.3  |
+|  4Y   |  2.7  |
 
 - Recalling the formula for the [fair swap rate](#fair-swap-rate) for a swap contract with semi-annual payments ($m=2$):
 

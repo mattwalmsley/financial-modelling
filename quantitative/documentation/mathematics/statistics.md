@@ -76,9 +76,9 @@ $$\text{Net Return} = \frac{P(t)-P(t-1)}{P(t-1)}$$
 
 - A price time series is given in the table below.
 
-|   Time    | Value, P(t) |   Daily Gross Rate of Return    |
-| ----------|:-----------:|:------------------------------: |
-| **t = 1** |     124     |                 -               |
+| Time      | Value, P(t) |   Daily Gross Rate of Return    |
+| --------- | :---------: | :-----------------------------: |
+| **t = 1** |     124     |                -                |
 | **t = 2** |     131     | $\frac{131-124}{124} = 5.65\%$  |
 | **t = 3** |     128     | $\frac{128-131}{131} = -2.29\%$ |
 | **t = 4** |     134     | $\frac{134-128}{128} = 4.69\%$  |
@@ -99,23 +99,23 @@ $$\text{Net Return} = \frac{P(t)-P(t-1)}{P(t-1)}$$
 
 - The daily gross rates of return are given in the table below for a one week period.
 
-|    Day  | Return |
-| --------|:------:|
+| Day     | Return |
+| ------- | :----: |
 | **Mon** |  0.7%  |
-| **Tue** |  -0.2% |
+| **Tue** | -0.2%  |
 | **Wed** |  1.2%  |
 | **Thu** |  0.8%  |
-| **Fri** |  -0.7% |
+| **Fri** | -0.7%  |
 
 - The weekly gross rate of return can be calculated by tracking the value of 1 USD
 
-|    Day  | Multiplier |                   Value                 |
-| --------|:----------:|:---------------------------------------:|
-| **Mon** |   1.007    |                $1(1.007)$               |
-| **Tue** |   0.998    |            $1(1.007)(0.998)$            |
-| **Wed** |   1.012    |        $1(1.007)(0.998)(1.012)$         |
-| **Thu** |   1.008    |     $1(1.007)(0.998)(1.012)(1.008)$     |
-| **Fri** |   0.993    |  $1(1.007)(0.998)(1.012)(1.008)(0.993)$ |
+| Day     | Multiplier |                 Value                  |
+| ------- | :--------: | :------------------------------------: |
+| **Mon** |   1.007    |               $1(1.007)$               |
+| **Tue** |   0.998    |           $1(1.007)(0.998)$            |
+| **Wed** |   1.012    |        $1(1.007)(0.998)(1.012)$        |
+| **Thu** |   1.008    |    $1(1.007)(0.998)(1.012)(1.008)$     |
+| **Fri** |   0.993    | $1(1.007)(0.998)(1.012)(1.008)(0.993)$ |
 
 - The gross rate of return for week can be calculated by $\frac{1(1.007)(0.998)(1.012)(1.008)(0.993) - 1}{1} = (1.007)(0.998)(1.012)(1.008)(0.993) - 1 = 0.0180 = 1.80\%$
 - The sum of the daily rates of return is therefore equal to the weekly rate of return:

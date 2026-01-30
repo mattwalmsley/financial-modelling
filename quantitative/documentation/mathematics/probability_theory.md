@@ -199,11 +199,11 @@ Both notations are context-dependent, and familiarity with both is important.
 - An **event** is a set of possible outcomes and (equivalently) an event of the sample space $\Omega$.
   - An event $A$, has occurred if the actual outcome $\omega$ is an element of the event $A$, i.e. $\omega \in A$.
 
-| Probability Theory | Set Theory |
-|:------------------:|:----------:|
+|  Probability Theory   |    Set Theory     |
+| :-------------------: | :---------------: |
 | Sample Space $\Omega$ | Universal Set $U$ |
-| Outcome $\omega$ | Element $x$ |
-| Event $A$ | Subset $A$ |
+|   Outcome $\omega$    |    Element $x$    |
+|       Event $A$       |    Subset $A$     |
 
 - A *probability measure* assigns to each outcome $\omega \in \Omega$ a number $P(\omega) \in [0,1]$ such that:
   $$\boxed{\sum_{\omega \in \Omega} P(\omega) = 1}$$
@@ -456,26 +456,26 @@ where $X=x_i$ is the event that the random variable $X$ takes the value $x_i$.
 - The probability space and random variable $X$ can be represented as a table:
 
 | Outcome $\omega$ | $P(\omega)$ | $X(\omega)$ |
-|:----------------:|:-----------:|:----------:|
-| $\omega_1$       | $p_1$       | $x_1$      |
-| $\omega_2$       | $p_2$       | $x_2$      |
-| $\vdots$         | $\vdots$    | $\vdots$   |
-| $\omega_n$       | $p_n$       | $x_n$      |
+| :--------------: | :---------: | :---------: |
+|    $\omega_1$    |    $p_1$    |    $x_1$    |
+|    $\omega_2$    |    $p_2$    |    $x_2$    |
+|     $\vdots$     |  $\vdots$   |  $\vdots$   |
+|    $\omega_n$    |    $p_n$    |    $x_n$    |
 
 #### Probability Distribution of a Coin Toss
 
 - For a biased coin, the probability space and random variable $X$ (number of heads in three tosses) is given by:
 
-| Outcome $\omega$ | $P(\omega)$  | $X(\omega)$ (Number of Heads) |
-|:----------------:|:------------:|:-----------------------------:|
-| $\omega_{hhh}$   | $p_h^3$      | 3                             |
-| $\omega_{hht}$   | $p_h^2 p_t$  | 2                             |
-| $\omega_{hth}$   | $p_h^2 p_t$  | 2                             |
-| $\omega_{thh}$   | $p_h^2 p_t$  | 1                             |
-| $\omega_{htt}$   | $p_h p_t^2$  | 2                             |
-| $\omega_{tht}$   | $p_h p_t^2$  | 1                             |
-| $\omega_{tth}$   | $p_h p_t^2$  | 1                             |
-| $\omega_{ttt}$   | $p_t^3$      | 0                             |
+| Outcome $\omega$ | $P(\omega)$ | $X(\omega)$ (Number of Heads) |
+| :--------------: | :---------: | :---------------------------: |
+|  $\omega_{hhh}$  |   $p_h^3$   |               3               |
+|  $\omega_{hht}$  | $p_h^2 p_t$ |               2               |
+|  $\omega_{hth}$  | $p_h^2 p_t$ |               2               |
+|  $\omega_{thh}$  | $p_h^2 p_t$ |               1               |
+|  $\omega_{htt}$  | $p_h p_t^2$ |               2               |
+|  $\omega_{tht}$  | $p_h p_t^2$ |               1               |
+|  $\omega_{tth}$  | $p_h p_t^2$ |               1               |
+|  $\omega_{ttt}$  |   $p_t^3$   |               0               |
 
 - The *outcome* column is referred to as the **sample space**.
 - The *outcome* column and the *probability* column together are referred to as a **finite probability space**.
@@ -483,12 +483,12 @@ where $X=x_i$ is the event that the random variable $X$ takes the value $x_i$.
 
 - The resulting **probability distribution** of $X$ is calculated by summing the probabilities of outcomes that yield the same value of $X$:
 
-| $X=x_i$ (Number of Heads) | $P(X=x_i)$                                                                   |
-|:-------------------------:|:----------------------------------------------------------------------------:|
-| 0                         | $P(X=0) = P(\omega_{ttt}) = p_t^3$                                           |
-| 1                         | $P(X=1) = P(\omega_{tht}) + P(\omega_{tth}) + P(\omega_{htt}) = 3 p_h p_t^2$ |
-| 2                         | $P(X=2) = P(\omega_{hht}) + P(\omega_{hth}) + P(\omega_{thh}) = 3 p_h^2 p_t$ |
-| 3                         | $P(X=3) = P(\omega_{hhh}) = p_h^3$                                           |
+| $X=x_i$ (Number of Heads) |                                  $P(X=x_i)$                                  |
+| :-----------------------: | :--------------------------------------------------------------------------: |
+|             0             |                      $P(X=0) = P(\omega_{ttt}) = p_t^3$                      |
+|             1             | $P(X=1) = P(\omega_{tht}) + P(\omega_{tth}) + P(\omega_{htt}) = 3 p_h p_t^2$ |
+|             2             | $P(X=2) = P(\omega_{hht}) + P(\omega_{hth}) + P(\omega_{thh}) = 3 p_h^2 p_t$ |
+|             3             |                      $P(X=3) = P(\omega_{hhh}) = p_h^3$                      |
 
 ### Binomial Distribution
 
@@ -571,12 +571,12 @@ $$\boxed{\mathbb{E}[X] = N p_h}$$
 - For a function $f: \mathbb{R} \to \mathbb{R}$ and a random variable $X$, the composition $f(X)$ is also a random variable defined by:
 $$\boxed{f(X)(\omega) = f(X(\omega)) \text{ for all } \omega \in \Omega}$$
 
-|$\Omega$     | $X$        | $f(X)$   |
-|:-----------:|:----------:|:--------:|
-| $\omega_1$  |  $x_1$     | $f(x_1)$ |
-| $\omega_2$  |  $x_2$     | $f(x_2)$ |
-| $\vdots$    |  $\vdots$  | $\vdots$ |
-| $\omega_n$  |  $x_n$     | $f(x_n)$ |
+|  $\Omega$  |   $X$    |  $f(X)$  |
+| :--------: | :------: | :------: |
+| $\omega_1$ |  $x_1$   | $f(x_1)$ |
+| $\omega_2$ |  $x_2$   | $f(x_2)$ |
+|  $\vdots$  | $\vdots$ | $\vdots$ |
+| $\omega_n$ |  $x_n$   | $f(x_n)$ |
 
 Therefore, it follows that the expectation of $f(X)$ is given by:
 $$\boxed{\mathbb{E}[f(X)] = \sum_{i=1}^{k}{f(x_i) P(X = x_i)} = \sum_{\omega \in \Omega}{f(X(\omega)) P(\omega)}}$$
@@ -588,11 +588,11 @@ where $X$ can take the values $x_1, x_2, \dots, x_k$ with probabilities $p_1, p_
 - The random variable $f(X)$ is given by:
 
 | $X$ (Number of Heads) | $f(X) = X^2$ |
-|:---------------------:|:------------:|
-| 0                     | 0            |
-| 1                     | 1            |
-| 2                     | 4            |
-| 3                     | 9            |
+| :-------------------: | :----------: |
+|           0           |      0       |
+|           1           |      1       |
+|           2           |      4       |
+|           3           |      9       |
 
 - The expectation of $f(X)$ is calculated as follows:
 
@@ -682,12 +682,12 @@ $$\boxed{\sigma_X = \sigma(X) = \sqrt{\text{Var}(X)}}$$
 - In certain applications, multiple probability measures may be considered on the same sample space $\Omega$, and the expectation and variance of a random variable $X$ may differ depending on the chosen measure (e.g. $P$ or $Q$).
   - $\mathbb{E}^P[X]$ or $\mathbb{E}^Q[X]$ may yield different results.
 
-|$\Omega$     | $P(\omega)$  | $Q(\omega)$  | $X(\omega)$ |
-|:-----------:|:------------:|:------------:|:-----------:|
-| $\omega_1$  |  $p_1$       |  $q_1$       | $x_1$       |
-| $\omega_2$  |  $p_2$       |  $q_2$       | $x_2$       |
-| $\vdots$    |  $\vdots$    |  $\vdots$    | $\vdots$    |
-| $\omega_n$  |  $p_n$       |  $q_n$       | $x_n$       |
+|  $\Omega$  | $P(\omega)$ | $Q(\omega)$ | $X(\omega)$ |
+| :--------: | :---------: | :---------: | :---------: |
+| $\omega_1$ |    $p_1$    |    $q_1$    |    $x_1$    |
+| $\omega_2$ |    $p_2$    |    $q_2$    |    $x_2$    |
+|  $\vdots$  |  $\vdots$   |  $\vdots$   |  $\vdots$   |
+| $\omega_n$ |    $p_n$    |    $q_n$    |    $x_n$    |
 
 The **Radon-Nikodym derivative** allows us to relate two probability measures defined on the same measurable space, by defining the Radon-Nikodym derivates to be the random variable:
 $$\boxed{Z(\omega) = \frac{Q(\omega)}{P(\omega)} \text{ for all } \omega \in \Omega \text{ where } P(\omega) > 0}$$
@@ -1172,7 +1172,7 @@ where $a \leq b$ and $c \leq d$.
 - Using the coin toss example where $X$ is the number of heads in three tosses, $p_h$ is the probability of head and $p_t$ the probability of a tail, let $Y$ be the number of tails in the second and third tosses **only**.
 
 | Outcome $\omega$ | $P(\omega)$ | $X(\omega)$ | $Y(\omega)$ |
-|------------------|-------------|-------------|-------------|
+| ---------------- | ----------- | ----------- | ----------- |
 | $\omega_{hhh}$   | $p_h^3$     | 3           | 0           |
 | $\omega_{hht}$   | $p_h^2 p_t$ | 2           | 1           |
 | $\omega_{hth}$   | $p_h^2 p_t$ | 2           | 1           |
@@ -1185,7 +1185,7 @@ where $a \leq b$ and $c \leq d$.
 The joint probability distribution of $X$ and $Y$ is therefore given by:
 
 | $X \backslash Y$ | $y_j = 0$              | $1$                     | $2$                    |
-|------------------|------------------------|-------------------------|------------------------|
+| ---------------- | ---------------------- | ----------------------- | ---------------------- |
 | $x_i = 0$        | $P(X=0,Y=0)=0$         | $P(X=0,Y=1)=0$          | $P(X=0,Y=2)=p_t^3$     |
 | $1$              | $P(X=1,Y=0)=0$         | $P(X=1,Y=1)=2p_h p_t^2$ | $P(X=1,Y=2)=p_h p_t^2$ |
 | $2$              | $P(X=2,Y=0)=p_h^2 p_t$ | $P(X=2,Y=1)=2p_h^2 p_t$ | $P(X=2,Y=2)=0$         |
@@ -1306,8 +1306,8 @@ Correlation is a measure of the linear relationship between two random variables
 - $-1 \leq \rho_{X,Y} \leq 1$
 - $(\mathbb{E}[XY])^2 \leq \mathbb{E}[X^2]\,\mathbb{E}[Y^2]$ (Cauchy-Schwarz inequality)
 
-|$\rho_{X,Y}$ Value         | Interpretation                      |
-|---------------------------|-------------------------------------|
+| $\rho_{X,Y}$ Value        | Interpretation                      |
+| ------------------------- | ----------------------------------- |
 | $-1$                      | Perfect negative linear correlation |
 | $( -1 < \rho_{X,Y} < 0 )$ | Negative linear correlation         |
 | $0$                       | No linear correlation               |
@@ -1399,7 +1399,7 @@ $$\frac{S_N - N\mu}{\sigma\sqrt{N}} \sim \mathcal{N}(0, 1)$$
 Suppose $X_1, X_2, \dots$ is a sequence of independent random variables, each with the Bernoulli distribution:
 
 | $x$ | $P(x)$ |
-|-----|--------|
+| --- | ------ |
 | 0   | $1-p$  |
 | 1   | $p$    |
 

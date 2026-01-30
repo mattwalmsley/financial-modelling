@@ -307,12 +307,12 @@ The `importlib` module provides a programmatic way to import modules in Python. 
 
 #### Summary of Importing Statements
 
-| Import Statement                      | `sys.modules` Entries                  | `globals()` Entries |
-|---------------------------------------|----------------------------------------|---------------------|
-| `import package1`                     | `'package1'`                           | `'package1'`        |
-| `import package1.module1`             | `'package1', 'package1.module1'`       | `'package1'`        |
-| `from package1 import module1`        | `'package1', 'package1.module1'`       | `'module1'`         |
-| `from package1.module1 import func1`  | `'package1', 'package1.module1'`       | `'func1'`           |
+| Import Statement                     | `sys.modules` Entries            | `globals()` Entries |
+| ------------------------------------ | -------------------------------- | ------------------- |
+| `import package1`                    | `'package1'`                     | `'package1'`        |
+| `import package1.module1`            | `'package1', 'package1.module1'` | `'package1'`        |
+| `from package1 import module1`       | `'package1', 'package1.module1'` | `'module1'`         |
+| `from package1.module1 import func1` | `'package1', 'package1.module1'` | `'func1'`           |
 
 ### Example Package Structure
 
@@ -665,13 +665,13 @@ If `/path1` and `/path2` are both in `sys.path`, Python treats `namespace_pkg` a
 
 ### Key Differences: Namespace Packages versus Regular Packages
 
-| Feature                      | Regular Package (`__init__.py` exists) | Namespace Package (`__init__.py` missing) |
-|------------------------------|:--------------------------------------:|:-----------------------------------------:|
-| Defined by                   | Directory with `__init__.py`           | Directory without `__init__.py`           |
-| Supports sub-packages        | ✅                                     | ✅                                        |
-| Spans multiple locations     | ❌                                     | ✅                                        |
-| Listed in `sys.modules`      | ✅                                     | ✅                                        |
-| Contains `__file__` attribute| ✅     (points to `__init__.py`)       | ❌    (`__file__` is absent)              |
+| Feature                       | Regular Package (`__init__.py` exists) | Namespace Package (`__init__.py` missing) |
+| ----------------------------- | :------------------------------------: | :---------------------------------------: |
+| Defined by                    |      Directory with `__init__.py`      |      Directory without `__init__.py`      |
+| Supports sub-packages         |                   ✅                    |                     ✅                     |
+| Spans multiple locations      |                   ❌                    |                     ✅                     |
+| Listed in `sys.modules`       |                   ✅                    |                     ✅                     |
+| Contains `__file__` attribute |    ✅     (points to `__init__.py`)     |        ❌    (`__file__` is absent)        |
 
 ### When to Use Implicit Namespace Packages
 
