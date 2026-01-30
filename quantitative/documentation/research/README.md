@@ -45,6 +45,8 @@ The [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Y
     }
   ],
   "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.bibtex-format.sort.enabled": true,
+  "latex-workshop.bibtex-fields.sort.enabled": true,
   "latex-workshop.formatting.latex": "latexindent",
   "latex-workshop.formatting.latexindent.path": "latexindent",
   "latex-workshop.formatting.latexindent.args": [
