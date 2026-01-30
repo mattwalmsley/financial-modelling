@@ -8,6 +8,14 @@ The [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Y
 
 ```json
 {
+  "[latex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop",
+    "editor.formatOnSave": true
+  },
+  "[bibtex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop",
+    "editor.formatOnSave": true
+  },
   "latex-workshop.latex.autoBuild.run": "onSave",
   "latex-workshop.latex.outDir": "%DIR%/out",
   "latex-workshop.latex.tools": [
@@ -39,6 +47,10 @@ The [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Y
   "latex-workshop.view.pdf.viewer": "tab",
   "latex-workshop.formatting.latex": "latexindent",
   "latex-workshop.formatting.latexindent.path": "latexindent",
-  "latex-workshop.formatting.latexindent.args": ["-w", "-c", "%DIR%/"],
+  "latex-workshop.formatting.latexindent.args": [
+    "-c",
+    "/tmp/",
+    "%TMPFILE%"
+  ]
 }
 ```
