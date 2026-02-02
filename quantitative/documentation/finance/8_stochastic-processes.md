@@ -19,12 +19,23 @@
     - [The Binomial Distribution](#the-binomial-distribution)
     - [Modelling Asset Prices using Random Walks](#modelling-asset-prices-using-random-walks)
   - [Brownian Motion](#brownian-motion)
+    - [Wiener Process Definition](#wiener-process-definition)
+    - [Wiener Process Properties](#wiener-process-properties)
+    - [Useful Results for the Wiener Process](#useful-results-for-the-wiener-process)
     - [Brownian Motion with Drift](#brownian-motion-with-drift)
     - [Modelling Asset Prices using Brownian Motion](#modelling-asset-prices-using-brownian-motion)
   - [The Log-Normal Model](#the-log-normal-model)
     - [Modelling Asset Prices with the Log-Normal Model](#modelling-asset-prices-with-the-log-normal-model)
       - [Standard distribution of the Log-Normal Model](#standard-distribution-of-the-log-normal-model)
     - [Limitations of the Log-Normal Model](#limitations-of-the-log-normal-model)
+  - [Stochastic Calculus](#stochastic-calculus)
+    - [Differential Form of Brownian Motion](#differential-form-of-brownian-motion)
+    - [Differential Form of Brownian Motion with Drift](#differential-form-of-brownian-motion-with-drift)
+    - [Differential Form of Geometric Brownian Motion](#differential-form-of-geometric-brownian-motion)
+    - [Drift Parameter Conventions](#drift-parameter-conventions)
+  - [Geometric Brownian Motion Examples](#geometric-brownian-motion-examples)
+    - [Example: Probability of Price Increase over a Period](#example-probability-of-price-increase-over-a-period)
+    - [Example: Probability of Consecutive Annual Increases](#example-probability-of-consecutive-annual-increases)
 
 ## Introduction
 
@@ -376,15 +387,48 @@ S_{n} &=  2Z_{n}-n\\
   - For any real time $t \geq 0$, the number of moves will be some integer close to $mt$.
 - The scaled random walks, with a floor function $\lfloor mt \rfloor$, are therefore:
 $$S_{t}^{(m)} = \sum_{j=1}^{\lfloor mt \rfloor} \frac{X_{j}}{\sqrt{m}}$$
-- **Brownian motion** is a continuous time stochastic process which is conventionally denoted $W(t)$ and has the following properties:
-  - $W(0) = 0$ with probability 1.
-  - The sample paths of $W(t)$ are continuous with probability 1.
-  - $W(s) - W(t)$ is independent of the move $W(r) -W(s)$ for $t < s < r$.
-    - In other words, the displacement of the particle over any time interval only depends on the length of the interval and not on its location, and that the displacements over disjoint intervals are independent of each other.
-  - $W(t) - W(s)$ is normally distributed with mean 0 and variance $|t-s|$ for any $t,s \geq 0$.
+
+### Wiener Process Definition
+
+> The **Wiener process** $W(t)$ (also known as **Brownian motion**) is a continuous-time stochastic process defined on $t \geq 0$ satisfying the following criteria:
+
+1. $W(0) = 0$.
+2. The sample paths of $W(t)$ are continuous.
+3. The increments of $W(t)$ are **independent**: for any set of times $0 \leq t_{1} < t_{2} < \dots < t_{n}$, the random variables $W(t_{2}) - W(t_{1}), W(t_{3}) - W(t_{2}), \dots, W(t_{n}) - W(t_{n-1})$ are independent.
+4. For any $0 \leq s < t$, the increments are **normally distributed**: $W(t) - W(s) \sim \mathcal{N}(0, t - s)$.
+
+- These conditions are both necessary and sufficient to define the Wiener process.
 - Due to the central limit theorem, the distribution of any increment $S_{t_{2}}^{(m)} - S_{t_{1}}^{(m)}$ converges to a normal distribution as $m \rightarrow \infty$.
   - The independence of moves in the random walk passes to the independence of increments in the limit.
 - The random walk converges to Brownian motion: $S_{t}^{(m)} \rightarrow W(t) \text{ as } m \rightarrow \infty$ in the sense of weak convergence of stochastic processes.
+
+### Wiener Process Properties
+
+- The Wiener process is both a **martingale** and a **Markov process**.
+- The sample paths appear highly irregular, and are not differentiable anywhere.
+- The sample paths look similar on all scales (self-similar/fractal-like behaviour).
+- Because of the irregular nature of the sample paths, the "length" of a path between any two different (finite) times is actually infinite.
+
+### Useful Results for the Wiener Process
+
+- Since $W(t) \sim \mathcal{N}(0, t)$, the probability density function of $W(t)$ is:
+$$f_{W(t)}(x) = \frac{1}{\sqrt{2\pi t}} \exp \left( -\frac{x^{2}}{2t} \right)$$
+- The expectation and variance are: $\mathbb{E}[W(t)] = 0$ and $\text{Var}(W(t)) = t$.
+- The **covariance** of the Wiener process at two different times is:
+$$\text{Cov}(W(s), W(t)) = \min(s, t)$$
+
+**Proof of covariance result:** Consider the case where $s > t$. Then:
+
+```math
+\begin{aligned}
+\text{Cov}(W(s), W(t)) &= \text{Cov}\left(W(t) + (W(s) - W(t)), W(t)\right) \\
+&= \text{Cov}(W(t), W(t)) + \text{Cov}(W(s) - W(t), W(t) - W(0)) \\
+&= \text{Var}(W(t)) + 0 \\
+&= t
+\end{aligned}
+```
+
+where the last-but-one step followed because $W(s) - W(t)$ is independent of $W(t) - W(0)$ from the definition of the Wiener process. Similarly, if $t > s$, we have $\text{Cov}(W(s), W(t)) = s$, and hence the result $\text{Cov}(W(s), W(t)) = \min(s, t)$ follows.
 
 ### Brownian Motion with Drift
 
@@ -536,3 +580,88 @@ B =\sqrt{\text{Var}(e^{\mu + \sigma (Z)} - 1)} \Longrightarrow &= BS(t)
 - As daily returns are independent as well as uncorrelated, the model cannot replicate volatility clustering and the autocorrelation function for absolute return values will be 0.
 - Given the distribution of Brownian increments $W(t + 1) - W(t)$ is normal, the asset returns will not have a fat-tailed distribution in the log-normal model.
 - Overall, the log-normal model fails to accurately model a lot of the widely accepted empirical properties of asset prices and can only be used to approximate prices; however, option pricing model still use the log-normal model as a base.
+
+## Stochastic Calculus
+
+- It is sometimes convenient to consider how continuous-time stochastic processes evolve over a short period of time $dt$.
+- This involves writing such processes using a "differential" notation known as **stochastic differential equations (SDEs)**.
+
+### Differential Form of Brownian Motion
+
+- Consider Brownian motion $W(t)$. Over a short period of time $dt$, the process will change from $W(t)$ to $W(t + dt)$.
+- The change in the process is written as $dW(t)$:
+$$dW(t) = W(t + dt) - W(t)$$
+- Since the Wiener process is non-differentiable, $dW(t)$ does not, in itself, have a rigorous mathematical meaning (at least, not in the limit $dt \rightarrow 0$).
+- However, from a practical point-of-view, $dW(t)$ can be considered a random variable which, following from the definition of Brownian motion, will be normally distributed:
+$$dW(t) \sim \mathcal{N}(0, dt)$$
+
+### Differential Form of Brownian Motion with Drift
+
+- Brownian motion with drift is defined as $X(t) = X(0) + mt + \sigma W(t)$.
+- Over a short period of time $dt$, the change in $X(t)$ is:
+$$dX(t) = m \, dt + \sigma \, dW(t)$$
+- This is an example of a **stochastic differential equation (SDE)**.
+
+### Differential Form of Geometric Brownian Motion
+
+- Geometric Brownian motion (GBM) can be written as:
+$$Y(t) = Y(0) \exp \left[ \left(\mu - \frac{\sigma^{2}}{2} \right) t + \sigma W(t) \right]$$
+- In differential form, this becomes:
+$$dY(t) = \mu Y(t) \, dt + \sigma Y(t) \, dW(t)$$
+- One might expect to see $\mu - \frac{\sigma^{2}}{2}$ rather than $\mu$ as the coefficient in the first term.
+- The reason is that the Wiener process $W(t)$ is not a smooth function, and so when "differentiating" any function of $W(t)$, a different set of rules apply (**Itô's lemma**).
+- In particular:
+$$d(e^{\sigma W(t)}) = e^{\sigma W(t)} \left[ \sigma \, dW(t) + \frac{1}{2} \sigma^{2} \, dt \right]$$
+
+### Drift Parameter Conventions
+
+- The parameter $\mu$ is commonly used to denote the expected growth rate of $Y(t)$, defined such that:
+$$\mathbb{E}[Y(t)] = Y(0) \exp(\mu t)$$
+- This is called the **drift** of the GBM process.
+- The parameter $m$ (the drift of the **logarithm** of the GBM process) is related by:
+$$m = \mu - \frac{\sigma^{2}}{2}$$
+- **Warning:** Some authors use $\mu$ where others use $m$, i.e. to denote the drift of the logarithm of the GBM process, which can be confusing.
+
+## Geometric Brownian Motion Examples
+
+### Example: Probability of Price Increase over a Period
+
+Suppose that the price of a particular stock follows geometric Brownian motion with drift $\mu$ and volatility $\sigma$. Calculate the probability that the stock price rises over a ten-year period.
+
+**Solution:**
+
+Let $S(0)$ denote the share price at the start, and $S(t)$ denote the share price $t$ years later.
+
+```math
+\begin{aligned}
+\text{Prob}(S(t) > S(0)) &= \text{Prob}\left(\frac{S(t)}{S(0)} > 1\right) = \text{Prob}\left(\log\frac{S(t)}{S(0)} > 0\right)
+\end{aligned}
+```
+
+Since the share price follows GBM with drift $\mu$ and volatility $\sigma$:
+$$\log\frac{S(t)}{S(0)} \sim \mathcal{N}\left(\left(\mu - \frac{\sigma^{2}}{2}\right)t, \sigma^{2}t\right)$$
+
+Therefore:
+$$\text{Prob}\left(\log\frac{S(t)}{S(0)} > 0\right) = 1 - \Phi\left(\frac{0 - (\mu - \frac{1}{2}\sigma^{2})t}{\sigma\sqrt{t}}\right) = \Phi\left(\frac{(\mu - \frac{1}{2}\sigma^{2})t}{\sigma\sqrt{t}}\right)$$
+
+where $\Phi(x)$ denotes the cumulative standard normal distribution.
+
+**Numerical example:** With $\mu = 0.1$, $\sigma = 0.25$ and $t = 10$:
+$$\text{Prob}(S(10) > S(0)) = \Phi\left(\frac{(0.1 - \frac{1}{2} \times 0.25^{2}) \times 10}{0.25 \times \sqrt{10}}\right) = \Phi(0.8696) = \boxed{0.8077}$$
+
+### Example: Probability of Consecutive Annual Increases
+
+Using the same GBM model, calculate the probability that the stock price rises in every calendar year over a ten-year period.
+
+**Solution:**
+
+The probability that the share price rises over one single year is:
+$$p = \text{Prob}(S(n+1) > S(n)) = \Phi\left(\frac{\mu - \frac{1}{2}\sigma^{2}}{\sigma}\right)$$
+
+Since the share price movements in each year are independent, the probability that the share price rises in every year in the ten-year period is:
+$$\text{Prob} = p^{10} = \left[\Phi\left(\frac{\mu - \frac{1}{2}\sigma^{2}}{\sigma}\right)\right]^{10}$$
+
+**Numerical example:** With $\mu = 0.1$ and $\sigma = 0.25$:
+$$\text{Prob} = \left[\Phi\left(\frac{0.1 - \frac{1}{2} \times 0.25^{2}}{0.25}\right)\right]^{10} = [\Phi(0.275)]^{10} = (0.6083)^{10} = \boxed{0.00694}$$
+
+So less than 1% chance of the stock rising every single year.

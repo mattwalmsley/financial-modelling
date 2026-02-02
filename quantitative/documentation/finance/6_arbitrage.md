@@ -3,10 +3,13 @@
 - [Arbitrage](#arbitrage)
   - [Conceptual Introduction](#conceptual-introduction)
   - [Formal Definition](#formal-definition)
+    - [Portfolios and Trading Strategies](#portfolios-and-trading-strategies)
   - [Applying the Concept of Arbitrage](#applying-the-concept-of-arbitrage)
+    - [Assumptions](#assumptions)
   - [Arbitrage Examples](#arbitrage-examples)
     - [Example 1: Stocks](#example-1-stocks)
     - [Example 2: Bonds](#example-2-bonds)
+    - [Example 3: Forward Contract Mispricing](#example-3-forward-contract-mispricing)
   - [The Law of One Price](#the-law-of-one-price)
     - [Law of One Price Example 1: Stocks](#law-of-one-price-example-1-stocks)
     - [Law of One Price Example 2: Bonds](#law-of-one-price-example-2-bonds)
@@ -35,11 +38,44 @@
     - In other words, at a time $T$, there is **no** chance of losing money and there is a positive chance of losing money - the opportunity to make a riskless profit.
 - A portfolio will be presented that can be entered without cost ($V(0) = 0$) and will yield a certain and positive profit at some time $t > 0$.
 
+> An **arbitrage opportunity** is a trading strategy which requires zero initial investment, never incurs any loss, and may make a profit (with non-zero probability).
+
+- When we say "zero initial investment", this does allow an investor to borrow money from a bank in order to fund purchases of other assets, as long as the repayment of the loan, plus interest, is included when calculating the final profit or loss.
+
+### Portfolios and Trading Strategies
+
+> A **portfolio** is simply a collection of one or more investments (assets).
+
+- Assets can include shares, derivatives, and cash (stored in the bank).
+- Your **position** in each asset is simply how many units of that asset you hold.
+- In principle, your position in a particular asset can be both positive (**long**) and negative (**short**), although short-selling of shares is not always legally permitted.
+- The contents of a portfolio can be adjusted over time, by buying or selling assets.
+
+> A **trading strategy** is a set of rules which determine how you will adjust the contents of your portfolio at various times in the future.
+
+- The rules tell you what to do under every possible circumstance that might occur, and so can be specified in advance.
+
 ## Applying the Concept of Arbitrage
 
 - The **basic principle** is that arbitrage cannot exist - economic equilibrium will always be found.
 - If assumptions are made which imply that a portfolio with arbitrage exists, these assumptions are invalid.
 - Following this idea, assume 2 assets do not have the same price. Then show that this assumption allows the construction of a portfolio with arbitrage. Finally, conclude that the assets must have the same price as the assumption that the prices of the two assets were different was wrong.
+- Generally speaking, arbitrage opportunities exist in the market only for very short periods of time because traders would immediately exploit such an opportunity, causing the market prices to adjust.
+  - Many traders buying an underpriced asset would drive the price up (demand exceeds supply).
+  - Many traders selling an overpriced asset would drive the price down (supply exceeds demand).
+  - The prices would therefore converge very quickly and the arbitrage opportunity would no longer exist.
+
+### Assumptions
+
+- In order to construct portfolios that replicate particular derivatives, the following assumptions are typically made:
+  - The underlying asset must be tradable (e.g. a share).
+  - Short-selling of shares is legally allowed.
+  - Access to a bank account where unlimited quantities of money (cash) can be invested and borrowed at the same interest rate $r$.
+  - Trading in "fractional amounts" of shares and derivatives is possible.
+  - The market is liquid (unlimited quantities of shares can be traded without affecting the market price).
+  - There are no transaction costs (bid-offer spreads or taxes).
+- In practice, none of these is precisely true, so much of the theory is an idealisation (and so an approximation) of the true situation.
+- It is also commonly assumed that, during the lifetime of any derivative, the underlying share does not pay any dividends.
 
 ## Arbitrage Examples
 
@@ -117,6 +153,29 @@ PV &= \sum_{i=1}^{N} \frac{c_i}{(1 + r(t_i))^{t_i}} \\
   - After 3 years, the debt from taking out the 3 loans is cleared. The cash investment of 1,166.55 USD which was invested at the risk-free annually compounded interest rate of 2% can be realized as follows:
 $$1166.55 \times (1 + 0.02)^{3} = \boxed{1,237.95 \space USD}$$
 - This arbitrage opportunity yields a profit of 1,237.95 USD with zero risk of losing money.
+
+### Example 3: Forward Contract Mispricing
+
+- Suppose at time $t$, the market price $F_{t}$ of a forward contract on a share satisfies the inequality:
+$$F_{t} < S_{t} - Ke^{-r(T-t)}$$
+- Where $S_{t}$ is the price of the underlying share, $K$ is the strike price of the forward contract, $r$ is the continuously-compounded risk-free interest rate, and $T$ is the delivery date of the forward.
+- As proved elsewhere, if there is no arbitrage, then the price $F_{t}$ of the forward contract should be related to the share price $S_{t}$ by:
+$$F_{t} = S_{t} - Ke^{-r(T-t)}$$
+- If this equality does not hold, then there is an arbitrage opportunity.
+- When $F_{t} < S_{t} - Ke^{-r(T-t)}$, equivalently $S_{t} - F_{t} - Ke^{-r(T-t)} > 0$, the forward is cheaper than the no-arbitrage price at time $t$.
+- The arbitrage can be exploited by buying the forward contract and selling the share:
+  - **At time $t$:**
+    - Borrow a share from the market.
+    - Sell the share in the market for $S_{t}$.
+    - Buy the forward contract for $F_{t}$.
+    - Put $S_{t} - F_{t} > 0$ into the bank. (At time $t$ no initial investment is made.)
+  - **At time $T$:**
+    - The money in the bank has grown to $(S_{t} - F_{t})e^{r(T-t)}$, which is withdrawn.
+    - "Close out" the forward contract at a cost $K$, receiving a share.
+    - Return this share to the lender in the market.
+- At time $T$, the remaining cash position is:
+$$X = (S_{t} - F_{t})e^{r(T-t)} - K = \left[S_{t} - F_{t} - Ke^{-r(T-t)}\right]e^{r(T-t)}$$
+- This is strictly positive because the factor in square brackets is strictly positive. Hence, a risk-free profit of $X$ has been made.
 
 ## The Law of One Price
 

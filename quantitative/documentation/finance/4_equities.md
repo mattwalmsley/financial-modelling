@@ -6,6 +6,7 @@
     - [Dividends](#dividends)
     - [Valuation](#valuation)
     - [Volatility](#volatility)
+    - [Historical Price Analysis and Log-Returns](#historical-price-analysis-and-log-returns)
 
 ## Introduction
 
@@ -49,3 +50,29 @@
 - Relevant news being announced (by either the company themselves or by the media) can increase the volatility of company's share price.
 - The volatility level of the majority of share prices is viewed as being too high to be solely based on expectations.
 - Purely speculative activity, separate from economic fundamentals, is viewed as the main reason for the excess volatility on share prices.
+
+### Historical Price Analysis and Log-Returns
+
+- Unlike risk-free investments where future values are known with certainty, stock prices exhibit random movements that cannot be predicted deterministically.
+- The historical behaviour of stock prices can be analysed statistically to inform mathematical models.
+
+**Log-Returns Definition:**
+
+For a stock with closing price $S_i$ on day $i$, the logarithmic (fractional) daily return is defined as:
+
+$$L_i = \log\left(\frac{S_i}{S_{i-1}}\right) = \log S_i - \log S_{i-1}$$
+
+**Empirical Observations:**
+
+When histogramming daily log-returns for typical stocks, two key observations emerge:
+
+1. **Daily log-returns are approximately normally distributed** - the histogram resembles a bell curve centered near zero.
+2. **There appear to be no serial correlations** in the daily log-returns - knowing today's return provides no useful information for predicting tomorrow's return.
+
+These empirical observations motivate the choice of **Geometric Brownian Motion (GBM)** as a mathematical model for stock price movements, where the log-price follows a Brownian motion with drift.
+
+**Risk Aversion and Expected Returns:**
+
+Since investors can obtain a guaranteed rate of return by depositing money in a bank, most investors are **risk-averse** and will only purchase risky assets (such as shares) if the expected (mean) return $\mu$ exceeds the risk-free rate.
+
+Due to this widespread risk aversion, shares trade at prices such that expected returns are greater than the risk-free rate - the difference being compensation for bearing the additional risk.

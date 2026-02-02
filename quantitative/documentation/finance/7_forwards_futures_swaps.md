@@ -70,6 +70,16 @@
       - [Deposits: out to 3 months](#deposits-out-to-3-months)
       - [Futures: 6 months out to 18 months](#futures-6-months-out-to-18-months)
       - [Swaps: 2 years out to 4 years](#swaps-2-years-out-to-4-years)
+  - [Interest Rate Caps and Floors](#interest-rate-caps-and-floors)
+    - [Interest Rate Caps](#interest-rate-caps)
+    - [Interest Rate Floors](#interest-rate-floors)
+  - [Swaptions](#swaptions)
+  - [Currency Swaps](#currency-swaps)
+  - [Commodity Swaps](#commodity-swaps)
+  - [Credit Derivatives](#credit-derivatives)
+    - [Credit Default Swaps (CDS)](#credit-default-swaps-cds)
+    - [Credit Indices](#credit-indices)
+    - [Asset-Backed Securities](#asset-backed-securities)
 
 ## Derivatives Introduction
 
@@ -1426,3 +1436,93 @@ y(4) &= -\frac{\log(0.898)}{4} \\\\
 - The final curve can then be plotted as follows:
 
   ![LIBOR Curve](../images/libor-curve-example.png "LIBOR Curve")
+
+## Interest Rate Caps and Floors
+
+### Interest Rate Caps
+
+An **interest rate cap** is a stream of call options (called **caplets**) on a reference interest rate, with pre-determined intervals and strike rate.
+
+- The buyer receives a payment at the end of an interval if the interest rate exceeds the strike rate.
+- If the interest rate is less than the strike rate, the buyer receives no payment.
+- **Primary use**: Provides a hedge against rising interest rates.
+
+### Interest Rate Floors
+
+An **interest rate floor** is a stream of put options (called **floorlets**) on a reference interest rate, with pre-determined intervals and strike rate.
+
+- The buyer receives a payment at the end of an interval if the interest rate is less than the strike rate.
+- If the interest rate is more than the strike rate, the buyer receives no payment.
+- **Primary use**: Provides a hedge against falling interest rates.
+
+## Swaptions
+
+A **swaption** (swap option) gives the buyer the right, but not the obligation, to enter into a swap in exchange for a premium.
+
+- OTC contracts that are highly customizable.
+- Upon entering a swaption, buyer and seller agree on: price, maturity, notional, and stream of interest rate payments.
+- Execution can be American, European, or Bermudan style.
+
+**Types of swaptions:**
+- **Payer swaption**: Gives holder the option to pay the fixed rate and receive the floating rate (exercised if fixed swap rate is above the strike rate).
+- **Receiver swaption**: Gives holder the option to pay the floating rate and receive the fixed rate (exercised if fixed swap rate is below the strike rate).
+
+## Currency Swaps
+
+A **currency swap** involves exchanging interest rate payments where each stream is in a different currency.
+
+- Can be thought of as borrowing in one currency and lending in another.
+- Can be fixed/fixed, floating/fixed, or floating/floating.
+- Used by multinational enterprises (MNEs), financial institutions, and investors for hedging long-term investments.
+
+**Example**: A US firm with business in the UK can use a currency swap to secure a more desirable loan rate in GBP than if they directly borrowed from a UK bank.
+
+## Commodity Swaps
+
+**Commodity swaps** have cash flows based on the price of an underlying commodity.
+
+- Effectively a series of OTC forward contracts.
+- Used to hedge price fluctuations for a commodity over a longer period.
+- Typically financially settled (no physical delivery).
+- The **floating leg** is linked to the market price of a commodity or commodity index.
+- The **fixed leg** price is specified in the contract.
+
+## Credit Derivatives
+
+Credit derivatives emerged in the early 1990s and allow the transfer of credit risk without trading the underlying asset.
+
+### Credit Default Swaps (CDS)
+
+A **credit default swap (CDS)** is a contract where:
+- The **CDS buyer** pays a premium to the **CDS seller** for protection against default by the **reference entity** (the debt issuer/borrower).
+- If the reference entity defaults (a **credit event**), the CDS buyer receives compensation from the CDS seller.
+
+```
+        Premium (paid for lifetime of contract or until credit event)
+CDS     ─────────────────────────────────────────────────────────────>   CDS
+Buyer                                                                    Seller
+        <─────────────────────────────────────────────────────────────
+        Payoff in case of reference entity default
+```
+
+**Benefits of CDS:**
+- Credit risks can be traded like market risks.
+- Transfer credit risk to a third party.
+- Allows credit risk diversification.
+
+### Credit Indices
+
+- **Markit CDX.NA.IG**: Index representing the 125 most liquid, investment-grade North American companies.
+- **Markit iTraxx Europe Main**: Index representing the 125 most liquid, investment-grade European companies.
+- Indices are updated semi-annually (March and September).
+- Represent the cost of buying protection against the 125 constituents.
+
+### Asset-Backed Securities
+
+**Asset-backed securities (ABS)** are created from a portfolio of debt (loans, bonds, credit card receivables, mortgages).
+
+- Income from the assets is typically **tranched**.
+- The **waterfall** defines the hierarchy of how income is paid: first to the senior tranche, then to the next highest, etc.
+- Examples include:
+  - **Collateralized Debt Obligations (CDOs)**
+  - **Basket CDS**

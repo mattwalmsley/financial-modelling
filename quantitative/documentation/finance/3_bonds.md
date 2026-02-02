@@ -2,8 +2,20 @@
 
 - [Bonds](#bonds)
   - [Introduction](#introduction)
+  - [Types of Fixed Income Securities](#types-of-fixed-income-securities)
+    - [Treasury Securities](#treasury-securities)
+    - [Municipal Bonds](#municipal-bonds)
+    - [Corporate Bonds](#corporate-bonds)
+  - [Credit Ratings](#credit-ratings)
   - [Bond Pricing Model](#bond-pricing-model)
   - [Yield to Maturity](#yield-to-maturity)
+  - [Current Yield](#current-yield)
+  - [Bond Returns and Interest Rate Risk](#bond-returns-and-interest-rate-risk)
+  - [Bond Duration](#bond-duration)
+    - [Duration Formula](#duration-formula)
+    - [Properties of Duration](#properties-of-duration)
+    - [Using Duration to Estimate Price Changes](#using-duration-to-estimate-price-changes)
+  - [Bond Convexity](#bond-convexity)
   - [Yield Curves](#yield-curves)
     - [Discount and Spot Rate Curves](#discount-and-spot-rate-curves)
     - [Building a Yield Curve](#building-a-yield-curve)
@@ -20,6 +32,75 @@
   ![Bond Process](../images/bond-process.png "Bond Process")
 
 - Bonds can be bought and sold after issue on the markets and will have a **market value** - this is rarely the same as the par value.
+
+## Types of Fixed Income Securities
+
+### Treasury Securities
+
+- **Treasury notes (T-notes)** have maturities between 1 and 10 years.
+- **Treasury bonds (T-bonds)** have maturities between 10 and 30 years.
+- Principal features:
+  - Very low interest rates compared to corporate bonds.
+  - No default risk (government can print money to pay debt).
+  - However, they are NOT risk-free as they are subject to **interest rate risk**.
+- **Treasury Inflation-Protected Securities (TIPS)**:
+  - Returns are linked to the inflation rate via the Consumer Price Index (CPI).
+  - Principal amount adjusts based on CPI to prevent erosion from inflation.
+  - Maturities of 5, 10, and 30 years; pays interest twice per year.
+- **Separate Trading of Registered Interest and Principal Securities (STRIPS)**:
+  - Fixed coupon payments are separated from each other and the principal.
+  - Each part is considered a separate zero-coupon bond.
+  - Example: A 5-year T-note would be stripped into 11 separate securities (10 semi-annual coupons + 1 principal payment).
+
+### Municipal Bonds
+
+- Issued by local governments (state, county, city, school districts).
+- Used to finance public projects: infrastructure, educational facilities, utilities.
+- **Tax advantage**: Interest received is largely exempt from federal income taxes.
+- To compare municipal bonds with taxable bonds, calculate the **tax equivalent rate**:
+
+$$i_a = i_b(1 - t)$$
+
+Where:
+
+- $i_a$ = After-tax (equivalent tax-exempt) yield on a taxable bond
+- $i_b$ = Before-tax yield on the taxable bond
+- $t$ = Marginal income tax rate
+
+**Example:** If a corporate bond yields 5% and a municipal bond yields 3.6%, the municipal bond provides a higher after-tax return if the investor's marginal tax rate exceeds 28%.
+
+### Corporate Bonds
+
+- Issued by large corporations for long-term borrowing.
+- Typically have face values of USD 1,000, 5,000, or 10,000.
+- Fixed coupon payments generally paid semi-annually.
+- Risk levels vary significantly between issuers and bond types.
+- **Investment grade bonds** (rated BBB/Baa or higher):
+  - High capacity to honour interest payments and repay principal.
+  - Low default risk; less vulnerable to market conditions.
+- **Sub-investment grade bonds (junk bonds)** (rated below BBB/Baa):
+  - Higher default risk; more speculative.
+  - More susceptible to changing market conditions.
+  - Higher yields to compensate for increased risk.
+
+## Credit Ratings
+
+Credit rating agencies (Standard & Poor's, Moody's, Fitch) rate the creditworthiness of bonds:
+
+| S&P Rating | Moody's Rating | Description                                             |
+| ---------- | -------------- | ------------------------------------------------------- |
+| AAA        | Aaa            | Highest rating, best quality, lowest risk               |
+| AA         | Aa             | Very high quality bond                                  |
+| A          | A              | Good quality but more vulnerable to market conditions   |
+| BBB        | Baa            | Adequate but lacks long-term reliability                |
+| BB         | Ba             | Speculative elements, susceptible to adverse conditions |
+| B          | B              | Lacks features of a desirable investment                |
+| CCC        | Caa            | Poor rating                                             |
+| CC         | Ca             | Very poor, highly speculative                           |
+| C          | C              | Lowest rating and quality                               |
+
+- **Risk premium**: The spread between interest rates on bonds with default risk and default-free bonds (e.g., U.S. Treasuries).
+- Bonds with higher default risk have higher positive risk premiums.
 
 ## Bond Pricing Model
 
@@ -47,6 +128,87 @@ $$P = \sum_{j=1}^{J}\frac{c_j}{(1 + y)^{T_j}}$$
 - For a periodically compounded yield to maturity $y$, with $m$ periods per year, the bond price is as follows:
 
 $$P = \sum_{j=1}^{J}\frac{c_j}{(1 + \frac{y}{m})^{mT_j}}$$
+
+## Current Yield
+
+- The **current yield** is an approximation of yield to maturity, representing the annual income of a bond.
+- Found by dividing the annual coupon payment by the current market price:
+
+$$i_{\text{current yield}} = \frac{C}{P}$$
+
+- Important properties:
+  - Provides a good estimation when the price is near par and the bond has long-term maturity.
+  - A change in current yield indicates that YTM is changing in the same direction.
+
+## Bond Returns and Interest Rate Risk
+
+- The rate of return on a bond can be decomposed into two parts:
+
+$$\text{Rate of Return} = \frac{C + P_{t+1} - P_t}{P_t} = i_{cy} + cg$$
+
+Where:
+
+- $i_{cy} = C/P_t$ is the current yield
+- $cg = (P_{t+1} - P_t)/P_t$ is the capital gain (or loss)
+
+- **Interest rate risk** is the uncertainty of an asset's return due to changes in interest rates.
+- Long-term bond prices and returns are more volatile, so they have **higher interest rate risk**.
+- Bonds whose maturity equals the holding period have no interest rate risk.
+
+## Bond Duration
+
+**Duration** is defined as the weighted average time until a bond's cash flows are received. It provides a more accurate measure of interest rate risk than maturity alone.
+
+Consider two bonds with the same maturity but different cash flows:
+
+- A 5% coupon bond with 5-year maturity
+- A zero-coupon bond with 5-year maturity
+
+The duration (and thus interest rate risk) is **less for the coupon bond** because the bondholder receives cash flows sooner.
+
+### Duration Formula
+
+$$\text{Duration} = \frac{\sum_{t=1}^{n} t \cdot \frac{CF_t}{(1+i)^t}}{\sum_{t=1}^{n} \frac{CF_t}{(1+i)^t}}$$
+
+Where:
+
+- $CF_t$ = Cash flow (coupon + principal) at time $t$
+- $i$ = Interest rate (yield to maturity)
+- $n$ = Number of periods until maturity
+
+### Properties of Duration
+
+1. As **maturity increases**, duration increases (all else equal).
+2. As **interest rates increase**, duration of a coupon bond decreases (all else equal).
+3. As **coupon rate increases**, duration decreases (all else equal).
+4. Duration is **additive**: the duration of a portfolio is the weighted average of the individual durations.
+
+### Using Duration to Estimate Price Changes
+
+For a given change in interest rates, the percentage price change is approximated by:
+
+$$\%\Delta P \approx -\text{DUR} \times \frac{\Delta i}{1 + i}$$
+
+Where:
+
+- $\%\Delta P$ = Percentage change in bond price
+- $\text{DUR}$ = Duration
+- $\Delta i$ = Change in interest rate
+
+**Key insight**: As duration increases, so does the percentage change in a bond's market value for a given change in interest rates. Hence, **larger duration implies larger interest rate risk**.
+
+## Bond Convexity
+
+**Convexity** measures the curvature of the relationship between bond prices and yields. It represents the extent to which duration changes given a change in interest rates.
+
+Properties of convexity:
+
+- As YTM increases, bond price decreases at a **decreasing rate** (the curve bends).
+- A bond with **more convexity** is more sensitive to interest rate changes.
+- As coupon rate increases, convexity decreases.
+- **Zero-coupon bonds have the highest convexity**.
+
+Convexity is used alongside duration for more accurate price change estimates, especially for large interest rate movements.
 
 ## Yield Curves
 

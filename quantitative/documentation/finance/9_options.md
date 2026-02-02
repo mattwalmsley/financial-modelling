@@ -16,10 +16,14 @@
     - [Application of Option Bounds Example](#application-of-option-bounds-example)
     - [Arbitrage Bounds on American Style Options](#arbitrage-bounds-on-american-style-options)
       - [Intrinsic Value](#intrinsic-value)
+      - [Time Value of Options](#time-value-of-options)
       - [Bounds for American Calls](#bounds-for-american-calls)
       - [Bounds for American Puts](#bounds-for-american-puts)
   - [Put-Call Parity](#put-call-parity)
     - [Deriving the Put Call Parity Using Arbitrage principles](#deriving-the-put-call-parity-using-arbitrage-principles)
+    - [Put-Call Parity Arbitrage Example](#put-call-parity-arbitrage-example)
+    - [Delta Relationship from Put-Call Parity](#delta-relationship-from-put-call-parity)
+    - [Capped European Options](#capped-european-options)
   - [The Binomial Model](#the-binomial-model)
     - [One-Step Binomial Model](#one-step-binomial-model)
       - [Example: One-Step Binomial Model](#example-one-step-binomial-model)
@@ -28,11 +32,32 @@
         - [One-Step Binomial Model General Case Derivation](#one-step-binomial-model-general-case-derivation)
       - [One-Step Risk Neutral Pricing](#one-step-risk-neutral-pricing)
         - [Example: One-Step Risk Neutral Pricing](#example-one-step-risk-neutral-pricing)
+      - [No-Arbitrage Condition in the Binomial Model](#no-arbitrage-condition-in-the-binomial-model)
+      - [Fundamental Theorems of Asset Pricing](#fundamental-theorems-of-asset-pricing)
+        - [First Fundamental Theorem](#first-fundamental-theorem)
+        - [Second Fundamental Theorem](#second-fundamental-theorem)
+      - [Complete and Incomplete Markets](#complete-and-incomplete-markets)
+        - [Example: Complete Market (Two-State Model)](#example-complete-market-two-state-model)
+        - [Example: Incomplete Market (Three-State Trinomial Model)](#example-incomplete-market-three-state-trinomial-model)
+      - [Example: Numerical Call Option Pricing](#example-numerical-call-option-pricing)
+      - [Put-Call Parity in the Binomial Model](#put-call-parity-in-the-binomial-model)
     - [Two-Step Binomial Model](#two-step-binomial-model)
       - [Asset Price Distribution in the Two-Step Binomial Model](#asset-price-distribution-in-the-two-step-binomial-model)
       - [Example: Two-Step Binomial Model](#example-two-step-binomial-model)
+      - [Example: Lookback Option Pricing with Dynamic Hedging](#example-lookback-option-pricing-with-dynamic-hedging)
+        - [Step 1: Construct the Stock Price Tree](#step-1-construct-the-stock-price-tree)
+        - [Step 2: Calculate Risk-Neutral Probabilities](#step-2-calculate-risk-neutral-probabilities)
+        - [Step 3: Work Backwards Through the Tree](#step-3-work-backwards-through-the-tree)
+        - [Step 4: Dynamic Hedging Strategy](#step-4-dynamic-hedging-strategy)
     - [The Full Binomial Model](#the-full-binomial-model)
     - [Call Pricing using the Binomial Model](#call-pricing-using-the-binomial-model)
+    - [Pricing American Options in the Binomial Model](#pricing-american-options-in-the-binomial-model)
+      - [Intrinsic Value Function](#intrinsic-value-function)
+      - [Recursive Pricing Algorithm for American Options](#recursive-pricing-algorithm-for-american-options)
+      - [Example: American Put Option in Two-Period Binomial Model](#example-american-put-option-in-two-period-binomial-model)
+      - [Supermartingale Property](#supermartingale-property)
+      - [American Calls on Non-Dividend Paying Stocks](#american-calls-on-non-dividend-paying-stocks)
+      - [Stopping Times and Optimal Exercise](#stopping-times-and-optimal-exercise)
   - [Binomial Model Approximation to a Log-Normal Model](#binomial-model-approximation-to-a-log-normal-model)
   - [The Black-Scholes Option Pricing Model](#the-black-scholes-option-pricing-model)
     - [Call options](#call-options)
@@ -43,6 +68,9 @@
       - [Fixed Volatility and Asset Returns following a Log-Normal Process](#fixed-volatility-and-asset-returns-following-a-log-normal-process)
       - [Continuous Portfolio Rebalancing (Delta Hedging)](#continuous-portfolio-rebalancing-delta-hedging)
     - [The Black-Scholes Theory in Practice](#the-black-scholes-theory-in-practice)
+    - [The Black-Scholes Partial Differential Equation](#the-black-scholes-partial-differential-equation)
+    - [Example: Pricing a European Call Option](#example-pricing-a-european-call-option)
+    - [Example: Digital (Binary) Call Option](#example-digital-binary-call-option)
   - [Option Greeks](#option-greeks)
     - [Delta](#delta)
     - [Gamma](#gamma)
@@ -60,6 +88,28 @@
   - [Implied Volatility](#implied-volatility)
     - [Volatility Surfaces](#volatility-surfaces)
     - [Greeks using Implied Volatility](#greeks-using-implied-volatility)
+  - [Exotic Options](#exotic-options)
+    - [Vanilla vs Exotic Options](#vanilla-vs-exotic-options)
+    - [Packages (Option Strategies)](#packages-option-strategies)
+      - [Bull Spread](#bull-spread)
+      - [Bear Spread](#bear-spread)
+      - [Straddle](#straddle)
+      - [Strangle](#strangle)
+      - [Butterfly Spread](#butterfly-spread)
+    - [Chooser Options](#chooser-options)
+    - [Forward Start Options](#forward-start-options)
+    - [Compound Options](#compound-options)
+    - [Binary (Digital) Options](#binary-digital-options)
+      - [Cash-or-Nothing Options](#cash-or-nothing-options)
+      - [Asset-or-Nothing Options](#asset-or-nothing-options)
+    - [Barrier Options](#barrier-options)
+      - [Types of Barrier Options](#types-of-barrier-options)
+      - [Barrier Option Parity](#barrier-option-parity)
+      - [Rebate Options](#rebate-options)
+    - [Lookback Options](#lookback-options)
+    - [Asian Options](#asian-options)
+      - [Types of Asian Options](#types-of-asian-options)
+    - [Summary: Exotic Options Classification](#summary-exotic-options-classification)
 
 ## Introduction
 
@@ -273,6 +323,28 @@ K &< e^{r(T-t)}(S(t) - C(t)) \\
 
 $$C(S(t), t) =\text{max}\{0,S(t)-K\}$$
 
+- Similarly, the intrinsic value of a put option at time $t$ is:
+
+$$P(S(t), t) = \text{max}\{0, K - S(t)\}$$
+
+- Options that are at-the-money (ATM) or out-of-the-money (OTM) have **zero intrinsic value**.
+
+#### Time Value of Options
+
+- The **time value** (or **extrinsic value**) of an option is the difference between its actual market price and its intrinsic value:
+
+$$\text{Time Value} = \text{Option Price} - \text{Intrinsic Value}$$
+
+- Time value arises from the possibility that the intrinsic value may increase between the current time $t$ and expiry $T$.
+- For a call option with market price $C_t$ when the underlying has price $S_t$:
+  - Intrinsic value: $I_t = \text{max}(S_t - K, 0)$
+  - Time value: $C_t - I_t$
+- For a put option with market price $P_t$:
+  - Intrinsic value: $I_t = \text{max}(K - S_t, 0)$
+  - Time value: $P_t - I_t$
+- **Key insight**: Options that are ATM or OTM have their entire value (price) comprised of time value. Their worth at time $t < T$ comes from the possibility that the stock price might move favourably between $t$ and $T$.
+- Time value is always non-negative and decreases as the option approaches expiry (a phenomenon known as **time decay** or **theta decay**).
+
 #### Bounds for American Calls
 
 - An American style call will never be less than a European style call (assuming the same strike and expiry) because of the increased optionality that American options have.
@@ -353,6 +425,55 @@ $$C(t) - P(t) = S(t) - e^{-r(T-t)}K$$
     - The put $P(T)$ will expire worthless.
   - In either case the positions are all closed and a risk-free profit of $e^{r(T-t)} (P(t) + S(t) - C(t)) - K > 0$ is retained.
 - If either of these inequalities are true, an arbitrage portfolio can be constructed leading to the conclusion that $C(t) - P(t) = S(t) - e^{-r(T-t)}K$ must be true.
+
+### Put-Call Parity Arbitrage Example
+
+- Suppose that the market prices of a stock $S_{0}$, a European put $P_{0}$, and a European call $C_{0}$ on it, satisfy the following relationship at time 0:
+$$S_{0} - Ke^{-rT} < C_{0} - P_{0}$$
+- Where $r$ is the continuously-compounded risk-free interest rate, $K$ is the strike price for both options, and $T$ is the time to expiry.
+- This inequality implies an arbitrage opportunity because the put-call parity relationship does not hold.
+- To exploit the arbitrage opportunity:
+  - **At time 0:**
+    - Buy a share for price $S_{0}$.
+    - Buy a put option for price $P_{0}$.
+    - Sell (write) a call option for price $C_{0}$.
+    - These transactions are funded by borrowing $S_{0} + P_{0} - C_{0} > 0$ from the bank (no initial investment is required).
+  - **At time $T$:**
+    - The debt owed to the bank is $(S_{0} + P_{0} - C_{0})e^{rT}$.
+    - There are three possibilities:
+      1. If $S_{T} > K$: The holder of the call option exercises, paying $K$ in cash and receiving the share. The put option expires worthless.
+      2. If $S_{T} < K$: Exercise the put option, giving the share to the writer and receiving $K$. The call option expires worthless.
+      3. If $S_{T} = K$: Sell the share in the market for price $S_{T} = K$. Both options expire worthless.
+- In all three cases, the final cash position at time $T$ is:
+$$X = K - (S_{0} + P_{0} - C_{0})e^{rT} = \left[Ke^{-rT} - S_{0} - P_{0} + C_{0}\right]e^{rT}$$
+- This is strictly positive because the factor in square brackets equals $Ke^{-rT} - S_{0} + (C_{0} - P_{0}) > 0$ from the original inequality. Hence, a risk-free profit of $X$ has been made.
+
+### Delta Relationship from Put-Call Parity
+
+- The **delta** of an option measures the sensitivity of its price to changes in the price of the underlying asset.
+- For European call and put options, the deltas at time 0 are defined as:
+$$\Delta_{c} = \frac{\partial C_{0}}{\partial S_{0}}, \quad \Delta_{p} = \frac{\partial P_{0}}{\partial S_{0}}$$
+- Using no-arbitrage principles, the deltas for European call and put options on the same underlying stock with the same strike and expiry are related by:
+$$\Delta_{c} - \Delta_{p} = 1$$
+- **Derivation:** The put-call parity relation states that $C_{0} + Ke^{-rT} = P_{0} + S_{0}$. Partially differentiating both sides with respect to $S_{0}$:
+$$\frac{\partial C_{0}}{\partial S_{0}} + 0 = \frac{\partial P_{0}}{\partial S_{0}} + 1$$
+$$\therefore \Delta_{c} = \Delta_{p} + 1$$
+
+### Capped European Options
+
+- A **capped European option** is similar to an ordinary European option, except that the payoff is capped at some pre-agreed level $B$.
+- The payoff $X_{T}$ of a capped European call option with strike $K$, expiry time $T$, and cap $B$ is:
+
+$$X_{T} = \begin{cases} 0 & \text{if } S_{T} < K \\ S_{T} - K & \text{if } K \leq S_{T} \leq K + B \\ B & \text{if } S_{T} > K + B \end{cases}$$
+
+- This can alternatively be written as:
+$$X_{T} = \max(S_{T} - K, 0) - \max(S_{T} - (K + B), 0)$$
+- Therefore, a capped call option can be replicated by:
+  - Purchasing one ordinary call option with strike $K$.
+  - Selling (writing) one ordinary call option with strike $K + B$.
+- By the Law of One Price, the price of the capped call option at time $t$ is:
+$$X_{t} = C_{t}(K) - C_{t}(K + B)$$
+- Where $C_{t}(K)$ denotes the price of an ordinary call option with strike $K$.
 
 ## The Binomial Model
 
@@ -565,6 +686,98 @@ D_{0} &= \left[\frac{D_{1}}{1+r} \right] \\\\
 \end{aligned}
 ```
 
+#### No-Arbitrage Condition in the Binomial Model
+
+- For the one-step binomial model to be free of arbitrage opportunities, the following condition must hold:
+$$S_{1}^{(d)} < S_{0}(1+R) < S_{1}^{(u)}$$
+- Where $S_{1}^{(d)}$ and $S_{1}^{(u)}$ are the down and up stock prices at time 1, and $R$ is the risk-free interest rate.
+- **Proof by contradiction:** Consider what happens when this condition is violated:
+  1. **Case 1:** $S_{0}(1+R) \leq S_{1}^{(d)} < S_{1}^{(u)}$
+     - At time 0: Borrow $S_{0}$ from the bank and buy one share (no initial investment).
+     - At time 1: If $S_{1} = S_{1}^{(d)}$, profit = $S_{1}^{(d)} - S_{0}(1+R) \geq 0$. If $S_{1} = S_{1}^{(u)}$, profit = $S_{1}^{(u)} - S_{0}(1+R) > 0$.
+     - This is an arbitrage: both outcomes yield non-negative profit, with at least one strictly positive.
+  2. **Case 2:** $S_{1}^{(d)} < S_{1}^{(u)} \leq S_{0}(1+R)$
+     - At time 0: Short sell one share for $S_{0}$ and invest in the bank.
+     - At time 1: Withdraw $S_{0}(1+R)$ and buy back the share for $S_{1}$.
+     - If $S_{1} = S_{1}^{(u)}$, profit = $S_{0}(1+R) - S_{1}^{(u)} \geq 0$. If $S_{1} = S_{1}^{(d)}$, profit = $S_{0}(1+R) - S_{1}^{(d)} > 0$.
+     - This is also an arbitrage opportunity.
+
+#### Fundamental Theorems of Asset Pricing
+
+- The **Fundamental Theorems of Asset Pricing** establish deep connections between the absence of arbitrage, the existence of risk-neutral measures, and market completeness.
+
+##### First Fundamental Theorem
+
+- **Statement:** A market is arbitrage-free if and only if there exists at least one risk-neutral probability measure (also called an equivalent martingale measure).
+- In the context of the binomial model:
+  - If the no-arbitrage condition $d < 1+R < u$ holds, then the risk-neutral probabilities $q_u = \frac{(1+R)-d}{u-d}$ and $q_d = 1-q_u$ exist and are strictly positive.
+  - Conversely, if such positive probabilities exist, no arbitrage opportunities can arise.
+- The risk-neutral measure $Q$ has the property that the discounted price process is a **martingale**:
+$$S_{0} = \frac{1}{1+R} E^{Q}[S_{1}]$$
+
+##### Second Fundamental Theorem
+
+- **Statement:** An arbitrage-free market is **complete** if and only if the risk-neutral probability measure is **unique**.
+- A market is **complete** if every derivative (contingent claim) can be replicated by a self-financing portfolio of traded assets.
+- In the one-step binomial model with two states and two assets (stock and bond), the market is complete because:
+  - The system of equations for replication has exactly two unknowns ($\Delta$ and $\beta$) and two equations (one for each state).
+  - This system always has a unique solution.
+
+#### Complete and Incomplete Markets
+
+- A market is **complete** if any contingent claim (derivative) can be perfectly replicated using a portfolio of the underlying assets.
+- A market is **incomplete** if there exist contingent claims that cannot be replicated.
+
+##### Example: Complete Market (Two-State Model)
+
+- In the standard one-step binomial model with:
+  - Two possible outcomes: up ($S_{1}^{(u)}$) and down ($S_{1}^{(d)}$)
+  - Two tradeable assets: stock and risk-free bond
+- Any derivative with payoff $V_{1}^{(u)}$ in the up state and $V_{1}^{(d)}$ in the down state can be replicated by choosing:
+$$\Delta = \frac{V_{1}^{(u)} - V_{1}^{(d)}}{S_{1}^{(u)} - S_{1}^{(d)}}, \quad \beta = \frac{V_{1}^{(d)} \cdot S_{1}^{(u)} - V_{1}^{(u)} \cdot S_{1}^{(d)}}{(1+R)(S_{1}^{(u)} - S_{1}^{(d)})}$$
+
+##### Example: Incomplete Market (Three-State Trinomial Model)
+
+- Consider a one-period trinomial model where the stock price at time 1 can take three values: $S_{1}^{(u)}$, $S_{1}^{(m)}$, and $S_{1}^{(d)}$.
+- Suppose $S_{0} = 100$, $S_{1}^{(u)} = 150$, $S_{1}^{(m)} = 100$, $S_{1}^{(d)} = 50$, and $R = 10\%$.
+- The no-arbitrage condition $S_{1}^{(d)} < S_{0}(1+R) < S_{1}^{(u)}$ is satisfied: $50 < 110 < 150$.
+- By the First Fundamental Theorem, at least one risk-neutral measure exists.
+- To replicate a derivative with payoff $(V_{1}^{(u)}, V_{1}^{(m)}, V_{1}^{(d)})$, we need:
+$$\Delta \cdot S_{1}^{(u)} + \beta(1+R) = V_{1}^{(u)}$$
+$$\Delta \cdot S_{1}^{(m)} + \beta(1+R) = V_{1}^{(m)}$$
+$$\Delta \cdot S_{1}^{(d)} + \beta(1+R) = V_{1}^{(d)}$$
+- This is a system of three equations with two unknowns ($\Delta$, $\beta$), which generally has no solution.
+- **Example:** A call option with strike $K = 100$ has payoffs $V_{1}^{(u)} = 50$, $V_{1}^{(m)} = 0$, $V_{1}^{(d)} = 0$.
+  - Solving the first two equations: $150\Delta + 1.1\beta = 50$ and $100\Delta + 1.1\beta = 0$ gives $\Delta = 1$ and $\beta = -\frac{100}{1.1}$.
+  - Checking the third equation: $50(1) + 1.1(-\frac{100}{1.1}) = 50 - 100 = -50 \neq 0$.
+  - The replicating portfolio does not exist, so the market is incomplete.
+- In incomplete markets, derivatives may have a range of no-arbitrage prices rather than a unique fair price.
+
+#### Example: Numerical Call Option Pricing
+
+- **Setup:** $S_{0} = 100$, $S_{1}^{(u)} = 110$, $S_{1}^{(d)} = 95$, $R = 5\%$, strike $K = 105$.
+- **Step 1: Calculate risk-neutral probabilities**
+$$q_u = \frac{(1+R)S_{0} - S_{1}^{(d)}}{S_{1}^{(u)} - S_{1}^{(d)}} = \frac{1.05 \times 100 - 95}{110 - 95} = \frac{105 - 95}{15} = \frac{10}{15} = \frac{2}{3}$$
+$$q_d = 1 - q_u = \frac{1}{3}$$
+- **Step 2: Determine payoffs**
+$$V_{1}^{(u)} = \max(S_{1}^{(u)} - K, 0) = \max(110 - 105, 0) = 5$$
+$$V_{1}^{(d)} = \max(S_{1}^{(d)} - K, 0) = \max(95 - 105, 0) = 0$$
+- **Step 3: Calculate option price**
+$$V_{0} = \frac{1}{1+R}\left[q_u V_{1}^{(u)} + q_d V_{1}^{(d)}\right] = \frac{1}{1.05}\left[\frac{2}{3} \times 5 + \frac{1}{3} \times 0\right] = \frac{10/3}{1.05} = \frac{10}{3.15} \approx 3.17$$
+
+#### Put-Call Parity in the Binomial Model
+
+- Put-call parity holds in the one-period binomial model as a consequence of no-arbitrage.
+- Given $S_{1}^{(d)} < K < S_{1}^{(u)}$, the payoffs are:
+  - Call: $C_{1}^{(u)} = S_{1}^{(u)} - K$, $C_{1}^{(d)} = 0$
+  - Put: $P_{1}^{(u)} = 0$, $P_{1}^{(d)} = K - S_{1}^{(d)}$
+- Using risk-neutral pricing:
+$$C_{0} = \frac{q_u(S_{1}^{(u)} - K)}{1+R}, \quad P_{0} = \frac{q_d(K - S_{1}^{(d)})}{1+R}$$
+- Computing $S_{0} + P_{0} - C_{0}$:
+$$S_{0} + P_{0} - C_{0} = \frac{1}{1+R}\left[q_d S_{1}^{(d)} + q_u S_{1}^{(u)} + q_d(K - S_{1}^{(d)}) - q_u(S_{1}^{(u)} - K)\right]$$
+$$= \frac{1}{1+R}\left[q_d K + q_u K\right] = \frac{K(q_d + q_u)}{1+R} = \frac{K}{1+R}$$
+- Therefore: $C_{0} + \frac{K}{1+R} = P_{0} + S_{0}$, which is the one-period analogue of the continuous-time put-call parity.
+
 ### Two-Step Binomial Model
 
 - The [one-step binomial model](#one-step-binomial-model) is extended by considering three times: $t=0$, $t=1$ and $t=2$
@@ -673,6 +886,62 @@ D_{0} &= E^{\text{bin}(;2,\tilde{p})} \left[ \frac{D_{2}}{(1+r)^{2}} \right] \\\
 \end{aligned}
 ```
 
+#### Example: Lookback Option Pricing with Dynamic Hedging
+
+- A **lookback option** is a path-dependent derivative whose payoff depends on the maximum (or minimum) price of the underlying asset over the life of the option.
+- Consider pricing a lookback option in a two-period binomial model with the following parameters:
+  - Initial stock price: $S_{0} = 100$
+  - Up factor: $u = 1.2$ (i.e., $S$ goes up by 20%)
+  - Down factor: $d = 0.9$ (i.e., $S$ goes down by 10%)
+  - Risk-free rate: $R = 10\%$ per period
+  - Payoff: $V_{2} = S_{\max} - S_{2}$, where $S_{\max}$ is the maximum stock price observed at times 0, 1, and 2.
+
+##### Step 1: Construct the Stock Price Tree
+
+| Outcome       | $S_{0}$ | $S_{1}$ | $S_{2}$ | $S_{\max}$ | $V_{2}$ |
+| ------------- | ------- | ------- | ------- | ---------- | ------- |
+| $\omega_{uu}$ | 100     | 120     | 144     | 144        | 0       |
+| $\omega_{ud}$ | 100     | 120     | 108     | 120        | 12      |
+| $\omega_{du}$ | 100     | 90      | 108     | 108        | 0       |
+| $\omega_{dd}$ | 100     | 90      | 81      | 100        | 19      |
+
+##### Step 2: Calculate Risk-Neutral Probabilities
+
+$$q_u = \frac{1+R - d}{u - d} = \frac{1.1 - 0.9}{1.2 - 0.9} = \frac{0.2}{0.3} = \frac{2}{3}$$
+$$q_d = 1 - q_u = \frac{1}{3}$$
+
+##### Step 3: Work Backwards Through the Tree
+
+**At time 1 (up node, $S_{1} = 120$):**
+$$V_{1}^{(u)} = \frac{1}{1+R}\left[q_u V_{2}^{(uu)} + q_d V_{2}^{(ud)}\right] = \frac{1}{1.1}\left[\frac{2}{3}(0) + \frac{1}{3}(12)\right] = \frac{4}{1.1} \approx 3.64$$
+
+**At time 1 (down node, $S_{1} = 90$):**
+$$V_{1}^{(d)} = \frac{1}{1+R}\left[q_u V_{2}^{(du)} + q_d V_{2}^{(dd)}\right] = \frac{1}{1.1}\left[\frac{2}{3}(0) + \frac{1}{3}(19)\right] = \frac{19/3}{1.1} \approx 5.76$$
+
+**At time 0:**
+$$V_{0} = \frac{1}{1+R}\left[q_u V_{1}^{(u)} + q_d V_{1}^{(d)}\right] = \frac{1}{1.1}\left[\frac{2}{3}(3.64) + \frac{1}{3}(5.76)\right] \approx 3.95$$
+
+##### Step 4: Dynamic Hedging Strategy
+
+Suppose we sell this lookback option for $V_{0} \approx 3.95$. To hedge our obligation, we must dynamically replicate the option payoff.
+
+**At time 0:**
+$$\Delta_{0} = \frac{V_{1}^{(u)} - V_{1}^{(d)}}{S_{1}^{(u)} - S_{1}^{(d)}} = \frac{3.64 - 5.76}{120 - 90} = \frac{-2.12}{30} \approx -0.071$$
+- Buy $\Delta_{0} \approx -0.071$ shares (i.e., short 0.071 shares), costing $-0.071 \times 100 = -7.1$ (receive 7.1).
+- Invest the remainder: $3.95 + 7.1 = 11.05$ in the bank.
+
+**At time 1 (if up, $S_{1} = 120$):**
+- Portfolio value: $(-0.071)(120) + 11.05(1.1) = -8.52 + 12.16 = 3.64 = V_{1}^{(u)}$ ✓
+- Rebalance: $\Delta_{1}^{(u)} = \frac{V_{2}^{(uu)} - V_{2}^{(ud)}}{S_{2}^{(uu)} - S_{2}^{(ud)}} = \frac{0 - 12}{144 - 108} = -\frac{1}{3}$
+- Adjust to hold $-\frac{1}{3}$ shares, borrowing as needed.
+
+**At time 1 (if down, $S_{1} = 90$):**
+- Portfolio value: $(-0.071)(90) + 11.05(1.1) = -6.39 + 12.16 = 5.77 \approx V_{1}^{(d)}$ ✓
+- Rebalance: $\Delta_{1}^{(d)} = \frac{V_{2}^{(du)} - V_{2}^{(dd)}}{S_{2}^{(du)} - S_{2}^{(dd)}} = \frac{0 - 19}{108 - 81} = -\frac{19}{27}$
+
+**At time 2:**
+The replicating portfolio exactly matches the option payoff in all four scenarios, demonstrating that the option can be perfectly hedged through dynamic trading.
+
 ### The Full Binomial Model
 
 - The full binomial expands the [two-step binomial model](#two-step-binomial-model) for an arbitrary number of steps $n$ > 0.
@@ -774,6 +1043,103 @@ C_{0} &= \sum_{M<j \leq n} \frac{n!}{j!(n-j)!} \tilde{p}^{j} \tilde{q}^{n-j} \fr
 
 - $\phi_{2}$ is the probability of being larger than $M$ in the binomial distribution.
 - These formulae can be continued to derived the Black-Scholes formula.
+
+### Pricing American Options in the Binomial Model
+
+- The binomial model can be adapted to price American options, which can be exercised at any time up to and including expiry.
+- At each node of the binomial tree, the holder must decide whether to:
+  1. **Exercise immediately** and receive the intrinsic value $g(S_{n})$, or
+  2. **Continue holding** the option (the "continuation value").
+- The rational holder will always choose the action that maximizes value.
+
+#### Intrinsic Value Function
+
+- For non-path-dependent American options, the intrinsic value function $g(s)$ specifies the payoff if exercised when the stock price is $s$:
+  - **American Call:** $g(s) = \max(s - K, 0)$
+  - **American Put:** $g(s) = \max(K - s, 0)$
+- The intrinsic value is always non-negative since a rational holder would never exercise when the payoff is negative.
+
+#### Recursive Pricing Algorithm for American Options
+
+The pricing algorithm works backwards through the binomial tree:
+
+1. **At expiry (time $N$):** Set $V_{N,i} = g(S_{N,i})$ for each node $i = 0, 1, \ldots, N$.
+
+2. **Working backwards** (for $n = N-1, N-2, \ldots, 0$): At each node $(n, i)$, compute:
+$$V_{n,i} = \max\left\{g(S_{n,i}), \frac{1}{1+R}\left[q_u V_{n+1,i+1} + q_d V_{n+1,i}\right]\right\}$$
+   - The first term is the **immediate exercise value**.
+   - The second term is the **continuation value** (discounted expected value of holding).
+
+3. **Option price today:** $V_{0} = V_{0,0}$.
+
+#### Example: American Put Option in Two-Period Binomial Model
+
+- **Parameters:** $S_{0} = 100$, $u = 1.1$, $d = 0.9$, $R = 5\%$, $K = 100$.
+- **Stock price tree:**
+
+| Node    | $S_{0}$ | $S_{1}$ | $S_{2}$ |
+| ------- | ------- | ------- | ------- |
+| $(0,0)$ | 100     | -       | -       |
+| $(1,1)$ | -       | 110     | -       |
+| $(1,0)$ | -       | 90      | -       |
+| $(2,2)$ | -       | -       | 121     |
+| $(2,1)$ | -       | -       | 99      |
+| $(2,0)$ | -       | -       | 81      |
+
+- **Risk-neutral probabilities:**
+$$q_u = \frac{1.05 - 0.9}{1.1 - 0.9} = 0.75, \quad q_d = 0.25$$
+
+- **Step 1: Intrinsic values at expiry ($n = 2$):**
+  - $g(121) = \max(100 - 121, 0) = 0$
+  - $g(99) = \max(100 - 99, 0) = 1$
+  - $g(81) = \max(100 - 81, 0) = 19$
+
+- **Step 2: Work backwards to $n = 1$:**
+  - At node $(1,1)$ with $S_{1} = 110$:
+    - Immediate exercise: $g(110) = \max(100 - 110, 0) = 0$
+    - Continuation value: $\frac{1}{1.05}[0.75 \times 0 + 0.25 \times 1] = 0.238$
+    - $V_{1,1} = \max(0, 0.238) = 0.238$
+  - At node $(1,0)$ with $S_{1} = 90$:
+    - Immediate exercise: $g(90) = \max(100 - 90, 0) = 10$
+    - Continuation value: $\frac{1}{1.05}[0.75 \times 1 + 0.25 \times 19] = 5.238$
+    - $V_{1,0} = \max(10, 5.238) = 10$ **(Early exercise is optimal!)**
+
+- **Step 3: Work backwards to $n = 0$:**
+  - Immediate exercise: $g(100) = 0$
+  - Continuation value: $\frac{1}{1.05}[0.75 \times 0.238 + 0.25 \times 10] = 2.55$
+  - $V_{0} = \max(0, 2.55) = 2.55$
+
+- **Conclusion:** The American put is worth $2.55$ at time 0. Early exercise is optimal at node $(1,0)$ where the stock price falls to 90.
+
+#### Supermartingale Property
+
+- For American options, the discounted price process under the risk-neutral measure is a **supermartingale**:
+$$\frac{V_{n}}{(1+R)^{n}} \geq E^{Q}_{n}\left[\frac{V_{n+1}}{(1+R)^{n+1}}\right]$$
+- Equality holds at nodes where it is not optimal to exercise early.
+- Strict inequality holds at nodes where early exercise is optimal.
+
+#### American Calls on Non-Dividend Paying Stocks
+
+- For American call options on stocks that pay no dividends, early exercise is **never optimal**.
+- This can be proven using **Jensen's inequality** for convex functions.
+- The payoff function $g(s) = \max(s - K, 0)$ is convex with $g(0) = 0$.
+- Therefore: $C_{A}(S_{0}, 0) = C_{E}(S_{0}, 0)$ (American and European call prices are equal).
+
+**Proof sketch:**
+1. The discounted stock price is a martingale under $Q$: $S_{n} = \frac{1}{1+R}E^{Q}_{n}[S_{n+1}]$.
+2. By Jensen's inequality for convex $g$: $g(S_{n}) \leq E^{Q}_{n}\left[\frac{g(S_{n+1})}{1+R}\right]$.
+3. This shows the discounted payoff process is a submartingale.
+4. By the optional stopping theorem, the maximum expected discounted payoff is achieved by exercising at expiry.
+
+#### Stopping Times and Optimal Exercise
+
+- A stopping time $\tau$ is a strategy for when to exercise the American option.
+- The price of an American option can be expressed as:
+$$V_{0} = \max_{\tau \in \mathcal{T}_{0}} E^{Q}\left[\frac{g(S_{\tau})}{(1+R)^{\tau}}\right]$$
+- Where $\mathcal{T}_{0}$ is the set of all valid stopping times.
+- The **optimal stopping time** $\tau^{*}$ satisfies:
+$$\tau^{*} = \min\{n : V_{n} = g(S_{n})\}$$
+- In words: exercise as soon as the option price equals the intrinsic value.
 
 ## Binomial Model Approximation to a Log-Normal Model
 
@@ -1002,6 +1368,68 @@ $$N(-x) = 1 - N(x) \Longrightarrow N(x) - 1 = -N(-x)$$
   - These prices are inputted into the Black-Scholes model to calculate the value of the volatility $\sigma$ - referred to as the **implied volatility**.
 - The implied volatility is often more useful than the outright option price.
 - The Black-Scholes model is also very useful for hedging and risk management purposes through the use of the [option Greeks](#option-greeks) (sensitivities).
+
+### The Black-Scholes Partial Differential Equation
+
+- The Black-Scholes formula can also be derived by solving a partial differential equation (PDE).
+- For a European option with price $V(S, t)$ that depends only on the stock price $S$ and time $t$, the Black-Scholes PDE is:
+
+$$\frac{\partial V}{\partial t} + \frac{1}{2}\sigma^{2}S^{2}\frac{\partial^{2} V}{\partial S^{2}} + rS\frac{\partial V}{\partial S} - rV = 0$$
+
+- This equation must be solved subject to appropriate **boundary conditions** which depend on the type of option:
+  - **For a call option:**
+    - Terminal condition: $C(S, T) = \max(S - K, 0)$ for all $S \geq 0$
+    - As $S \to 0$: $C(0, t) = 0$ for all $t \in [0, T]$
+    - As $S \to \infty$: $C(S, t) \sim S$ for all $t \in [0, T]$
+  - **For a put option:**
+    - Terminal condition: $P(S, T) = \max(K - S, 0)$ for all $S \geq 0$
+    - As $S \to 0$: $P(0, t) = Ke^{-r(T-t)}$ for all $t \in [0, T]$
+    - As $S \to \infty$: $P(S, t) \to 0$ for all $t \in [0, T]$
+
+- The PDE approach is particularly useful for:
+  - Pricing exotic options that don't have closed-form solutions
+  - Numerical methods (finite difference schemes)
+  - Understanding the relationship between option price dynamics and hedging
+
+### Example: Pricing a European Call Option
+
+- **Problem:** A European call option has strike $K = 105$ and expiry $T = 0.25$ years (3 months). The underlying stock price is $S_{0} = 100$, volatility $\sigma = 0.3$ (annualized), and the risk-free rate is $r = 0.05$ per year.
+
+- **Step 1: Calculate $d_{+}$ and $d_{-}$**
+
+$$d_{+} = \frac{\ln(S_{0}/K) + (r + \sigma^{2}/2)T}{\sigma\sqrt{T}} = \frac{\ln(100/105) + (0.05 + 0.045)(0.25)}{0.3\sqrt{0.25}}$$
+$$d_{+} = \frac{-0.04879 + 0.02375}{0.15} = \frac{-0.02504}{0.15} = -0.1669$$
+$$d_{-} = d_{+} - \sigma\sqrt{T} = -0.1669 - 0.15 = -0.3169$$
+
+- **Step 2: Look up cumulative normal distribution values**
+$$N(d_{+}) = N(-0.1669) \approx 0.4337$$
+$$N(d_{-}) = N(-0.3169) \approx 0.3757$$
+
+- **Step 3: Apply the Black-Scholes formula**
+$$C_{0} = S_{0}N(d_{+}) - Ke^{-rT}N(d_{-})$$
+$$C_{0} = 100(0.4337) - 105e^{-0.05 \times 0.25}(0.3757)$$
+$$C_{0} = 43.37 - 105(0.9876)(0.3757)$$
+$$C_{0} = 43.37 - 38.97 = 4.40$$
+
+- The fair price of the call option is approximately **$4.40**.
+
+### Example: Digital (Binary) Call Option
+
+- A **digital call option** (also called a binary call) pays a fixed amount $M$ if the stock price at expiry is at or above the strike, and zero otherwise:
+$$C_{T} = \begin{cases} M & \text{if } S_{T} \geq K \\ 0 & \text{otherwise} \end{cases}$$
+
+- **Derivation:** The price at time $t < T$ is the discounted expected payoff under the risk-neutral measure:
+$$C_{t} = e^{-r(T-t)}E^{Q}[C_{T}] = e^{-r(T-t)} \cdot M \cdot Q(S_{T} \geq K)$$
+
+- Under the risk-neutral measure, $\ln(S_{T}/S_{t})$ is normally distributed with mean $(r - \sigma^{2}/2)(T-t)$ and variance $\sigma^{2}(T-t)$.
+
+- The probability that $S_{T} \geq K$ is:
+$$Q(S_{T} \geq K) = Q\left(\ln(S_{T}/S_{t}) \geq \ln(K/S_{t})\right) = \Phi(d_{-})$$
+
+- Where $d_{-}$ is defined as before. Therefore:
+$$\boxed{C_{t} = Me^{-r(T-t)}\Phi(d_{-})}$$
+
+- **Note:** The digital call option price is proportional to $\Phi(d_{-})$, whereas the standard call's delta is $\Phi(d_{+})$. This difference has implications for hedging digital options.
 
 ## Option Greeks
 
@@ -1381,3 +1809,255 @@ $$C(S,t;K,T,\sigma_{imp}, r) = c$$
 ### Greeks using Implied Volatility
 
 - The implied volatility can be used as the volatility parameter $\sigma$ in the Black-Scholes model to derive the implied volatility greeks.
+
+## Exotic Options
+
+Exotic options differ from standard (vanilla) options in one or more characteristics, offering customised risk-return profiles to meet specific hedging or speculative needs.
+
+### Vanilla vs Exotic Options
+
+**Plain vanilla options** are the most basic derivatives with simple expiration dates, exercise prices, and no additional features. **Exotic options** are tailored versions with modified characteristics.
+
+| Feature    | Vanilla Options                       | Exotic Options                                    |
+| ---------- | ------------------------------------- | ------------------------------------------------- |
+| Payoff     | Depends only on price at expiry       | May depend on prices throughout the option's life |
+| Underlying | Single asset                          | May involve multiple assets/indices               |
+| Settlement | Standard                              | May have conditional settlement rules             |
+| Pricing    | Closed-form solutions often available | Often requires numerical methods                  |
+
+**Reasons for exotic derivatives:**
+
+- Create customised hedges for specific risk exposures
+- Address tax and regulatory requirements
+- Gain exposure to specific market views
+- Reduce costs compared to vanilla alternatives
+- Avoid market manipulation concerns
+
+### Packages (Option Strategies)
+
+**Packages** are portfolios of vanilla options designed to achieve specific payoff profiles. They are often structured to have zero initial cost.
+
+#### Bull Spread
+
+A **bull spread** profits from moderate rises in the underlying price.
+
+**Bull Call Spread:** Long one call at strike $K_1$, short one call at strike $K_2$ where $K_1 < K_2$.
+
+$$\text{Payoff} = \max(0, S_T - K_1) - \max(0, S_T - K_2)$$
+
+![Bull Spread Profit](../images/bull-spread.png)
+
+| Region            | Payoff      |
+| ----------------- | ----------- |
+| $S_T \leq K_1$    | $0$         |
+| $K_1 < S_T < K_2$ | $S_T - K_1$ |
+| $S_T \geq K_2$    | $K_2 - K_1$ |
+
+The maximum profit is capped at $K_2 - K_1$, achieved when $S_T \geq K_2$.
+
+#### Bear Spread
+
+A **bear spread** profits from moderate falls in the underlying price.
+
+**Bear Put Spread:** Long one put at strike $K_2$, short one put at strike $K_1$ where $K_1 < K_2$.
+
+$$\text{Payoff} = \max(0, K_2 - S_T) - \max(0, K_1 - S_T)$$
+
+![Bear Spread Profit](../images/bear-spread.png)
+
+#### Straddle
+
+A **straddle** is a non-directional strategy that profits from large price movements in either direction.
+
+**Long Straddle:** Long one call and one put with the same strike $K$ and expiration.
+
+$$\text{Payoff} = \max(0, S_T - K) + \max(0, K - S_T) = |S_T - K|$$
+
+![Straddle Profit](../images/straddle.png)
+
+- Profitable when $|S_T - K| > \text{Premium paid}$
+- Maximum loss equals the total premium paid (at $S_T = K$)
+- **Risk for short straddle is unlimited**
+
+#### Strangle
+
+A **strangle** is similar to a straddle but uses different strike prices, making it cheaper but requiring larger price movements for profitability.
+
+**Long Strangle:** Long one put at strike $K_1$ and one call at strike $K_2$ where $K_1 < K_2$.
+
+$$\text{Payoff} = \max(0, K_1 - S_T) + \max(0, S_T - K_2)$$
+
+![Strangle Profit](../images/strangle.png)
+
+#### Butterfly Spread
+
+A **butterfly spread** is a non-directional strategy that profits when the underlying price stays near a target level.
+
+**Long Butterfly:** Long one call at $K_1$, short two calls at $K_2$, long one call at $K_3$ where $K_1 < K_2 < K_3$ and $K_2 = \frac{K_1 + K_3}{2}$.
+
+![Butterfly Spread Profit](../images/butterfly-spread.png)
+
+- **Long butterfly:** Profits when realised volatility is lower than implied volatility
+- **Short butterfly:** Profits when realised volatility is higher than implied volatility
+
+### Chooser Options
+
+A **chooser option** gives the holder the right to decide, at a specified time $T_1$, whether the option will be a European call or put with expiration at $T_2 > T_1$.
+
+**Key properties:**
+
+- Premium is paid upfront at time 0
+- Decision must be made by time $T_1$
+- Matures at time $T_2$
+- For non-dividend paying stocks, can be replicated by a call expiring at $T_2$ plus a put expiring at $T_1$
+
+**Tutorial Question:** *Is there ever an optimal time to make the choice before $T_1$ if maturities and strikes for calls and puts are always the same?*
+
+**Answer:** No - choosing early is never optimal because the resulting cash flows will always be the same. A commitment before maturity is unnecessary since waiting provides more information without cost.
+
+### Forward Start Options
+
+A **forward start option** begins at a future date $T_1$, but the premium is paid in advance. The strike is typically set at-the-money when the option starts.
+
+**Applications:** Common in employee stock option plans and executive compensation.
+
+### Compound Options
+
+A **compound option** is an option on another option. Four types exist:
+
+- Call on call
+- Put on call  
+- Call on put
+- Put on put
+
+**Advantage:** Lower premium compared to regular options, useful when there is uncertainty about whether the underlying option will be needed.
+
+### Binary (Digital) Options
+
+**Binary options** have discontinuous payoffs - they pay a fixed amount or nothing at all.
+
+#### Cash-or-Nothing Options
+
+$$\text{Cash-or-nothing call payoff} = \begin{cases} Q & \text{if } S_T > K \\ 0 & \text{otherwise} \end{cases}$$
+
+![Binary Call Profit](../images/binary-call.png)
+
+$$\text{Cash-or-nothing put payoff} = \begin{cases} Q & \text{if } S_T < K \\ 0 & \text{otherwise} \end{cases}$$
+
+![Binary Put Profit](../images/binary-put.png)
+
+**Black-Scholes pricing:** In a risk-neutral world, the probability of $S_T > K$ is $N(d_2)$, so:
+
+$$\text{Cash-or-nothing call value} = Qe^{-rT}N(d_2)$$
+$$\text{Cash-or-nothing put value} = Qe^{-rT}N(-d_2)$$
+
+#### Asset-or-Nothing Options
+
+$$\text{Asset-or-nothing call payoff} = \begin{cases} S_T & \text{if } S_T > K \\ 0 & \text{otherwise} \end{cases}$$
+
+**Important relationship:** A regular European call equals:
+
+- Long position in an asset-or-nothing call
+- Short position in a cash-or-nothing call (with cash payoff = strike price)
+
+### Barrier Options
+
+**Barrier options** are path-dependent options whose existence depends on whether the underlying price reaches a specified barrier level.
+
+#### Types of Barrier Options
+
+| Type             | Barrier Condition      | Effect                      |
+| ---------------- | ---------------------- | --------------------------- |
+| **Down-and-out** | Price drops to barrier | Option ceases to exist      |
+| **Up-and-out**   | Price rises to barrier | Option ceases to exist      |
+| **Down-and-in**  | Price drops to barrier | Option comes into existence |
+| **Up-and-in**    | Price rises to barrier | Option comes into existence |
+
+**Barrier Option Profit Examples:**
+
+![Up-and-Out Call Profit](../images/up-and-out-call.png)
+
+![Down-and-Out Put Profit](../images/down-and-out-put.png)
+
+#### Barrier Option Parity
+
+An important parity relationship exists:
+
+$$\boxed{\text{Knock-in option} + \text{Knock-out option} = \text{Vanilla option}}$$
+
+This holds because:
+
+- A knock-out is worth nothing once the barrier is hit, while a knock-in has the same value as a regular option
+- A knock-in is worth nothing if the barrier is not hit, while a knock-out has the same value as a vanilla option
+
+**Tutorial Question:** *How is a European call the sum of a down-and-out call and a down-and-in call? Can this be done for American options?*
+
+**Answer:** The parity works because exactly one of the two barrier options will have value at expiry depending on whether the barrier was hit. This argument cannot be directly applied to American options due to early exercise considerations.
+
+**Tutorial Question:** *When the barrier is greater than the strike price, why is a down-and-out put worth zero?*
+
+**Answer:** Barrier options are only in the money when $S_T < K$. For a down-and-out put with barrier $H > K$, once the price drops to hit the barrier $H$, the option ceases to exist. Since $H > K$, the option cannot be in the money when it is "alive."
+
+#### Rebate Options
+
+**Rebate options** pay a fixed amount if the underlying reaches a specified barrier:
+
+- **Down rebate:** Pays if price drops to barrier
+- **Up rebate:** Pays if price rises to barrier
+
+**Note:** Barrier options are more difficult to hedge than standard options due to discontinuities in the payoff at the barrier level.
+
+### Lookback Options
+
+**Lookback options** allow the holder to exercise based on the most favourable underlying price during the option's lifetime.
+
+| Type                   | Payoff                  |
+| ---------------------- | ----------------------- |
+| Floating lookback call | $S_T - S_{\min}$        |
+| Floating lookback put  | $S_{\max} - S_T$        |
+| Fixed lookback call    | $\max(S_{\max} - K, 0)$ |
+| Fixed lookback put     | $\max(K - S_{\min}, 0)$ |
+
+**Properties:**
+
+- Traded OTC only
+- Cash settled
+- More expensive than vanilla options (always exercise at optimal historical price)
+
+### Asian Options
+
+**Asian options** have payoffs that depend on the average price of the underlying over a predetermined period.
+
+#### Types of Asian Options
+
+| Type           | Payoff (Call)            | Payoff (Put)             |
+| -------------- | ------------------------ | ------------------------ |
+| Average price  | $\max(\bar{S} - K, 0)$   | $\max(K - \bar{S}, 0)$   |
+| Average strike | $\max(S_T - \bar{S}, 0)$ | $\max(\bar{S} - S_T, 0)$ |
+
+where $\bar{S}$ is the average price (arithmetic or geometric) over the averaging period.
+
+**Tutorial Question:** *Why are Asian options popular and for what types of market events?*
+
+**Answer:** Asian options are popular for users concerned about:
+
+1. **Exchange rate changes over time** - importers/exporters hedging currency exposure
+2. **Highly volatile markets** - averaging reduces impact of price spikes
+3. **Inefficient pricing due to low liquidity** - prevents manipulation of settlement price
+
+**Key advantage:** Because average prices are less volatile than actual prices, Asian options cost less than vanilla options.
+
+**Tutorial Question:** *Why is delta hedging easier for Asian options than vanilla options?*
+
+**Answer:** As time passes, the payoff of an Asian option increases in certainty because more price observations become "locked in" to the average. This causes delta to approach zero as maturity approaches, making delta hedging easier than for vanilla options where delta can change dramatically near expiry.
+
+### Summary: Exotic Options Classification
+
+| Category           | Examples                                             | Key Feature                     |
+| ------------------ | ---------------------------------------------------- | ------------------------------- |
+| **Packages**       | Bull/bear spreads, straddles, strangles, butterflies | Combinations of vanilla options |
+| **Path-dependent** | Asian, lookback, barrier                             | Payoff depends on price path    |
+| **Time-dependent** | Chooser, forward start, cliquet                      | Features related to timing      |
+| **Multi-asset**    | Basket, spread, quanto                               | Multiple underlyings            |
+| **Digital**        | Cash-or-nothing, asset-or-nothing                    | Discontinuous payoffs           |
+| **Compound**       | Call on call, put on put                             | Options on options              |

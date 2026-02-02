@@ -1306,6 +1306,22 @@ Correlation is a measure of the linear relationship between two random variables
 - $-1 \leq \rho_{X,Y} \leq 1$
 - $(\mathbb{E}[XY])^2 \leq \mathbb{E}[X^2]\,\mathbb{E}[Y^2]$ (Cauchy-Schwarz inequality)
 
+**Proof that $-1 \leq \rho_{X,Y} \leq 1$:**
+
+Let $\tilde{X} = X - \mathbb{E}[X]$ and $\tilde{Y} = Y - \mathbb{E}[Y]$ be the centred random variables. Then:
+
+$$\rho_{X,Y} = \frac{\mathbb{E}[\tilde{X}\tilde{Y}]}{\sqrt{\mathbb{E}[\tilde{X}^2]}\sqrt{\mathbb{E}[\tilde{Y}^2]}}$$
+
+By the Cauchy-Schwarz inequality applied to the random variables $\tilde{X}$ and $\tilde{Y}$:
+
+$$(\mathbb{E}[\tilde{X}\tilde{Y}])^2 \leq \mathbb{E}[\tilde{X}^2]\,\mathbb{E}[\tilde{Y}^2]$$
+
+Taking square roots:
+
+$$|\mathbb{E}[\tilde{X}\tilde{Y}]| \leq \sqrt{\mathbb{E}[\tilde{X}^2]}\sqrt{\mathbb{E}[\tilde{Y}^2]}$$
+
+Dividing both sides by the denominators gives $|\rho_{X,Y}| \leq 1$, i.e. $-1 \leq \rho_{X,Y} \leq 1$.
+
 | $\rho_{X,Y}$ Value        | Interpretation                      |
 | ------------------------- | ----------------------------------- |
 | $-1$                      | Perfect negative linear correlation |

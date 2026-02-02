@@ -3,6 +3,8 @@
 - [Introduction](#introduction)
   - [Financial Markets](#financial-markets)
     - [Money Markets](#money-markets)
+      - [Money Market Instruments](#money-market-instruments)
+      - [Treasury Bill Yields](#treasury-bill-yields)
     - [Capital Markets](#capital-markets)
     - [Foreign Exchange Markets (Forex/FX)](#foreign-exchange-markets-forexfx)
     - [Derivatives Markets](#derivatives-markets)
@@ -34,15 +36,45 @@
 ### Money Markets
 
 - The **money market** is for the trading of short-term debt instruments, generally with maturities of less than one year.
+- Key characteristics:
+  - Maturities of one year or less (can be as short as one day)
+  - Large transaction volumes (typically exceeding USD 1 million per transaction)
+  - Very low default risk
+  - High liquidity
+- **Wholesale market**: Trades involve large financial institutions.
+- **Retail market**: Individual investors can access money markets via bank money market accounts or money market mutual funds.
 - Market participants include banks, financial institutions, corporations and governments.
-- Examples of traded instruments include:
-  - Treasury bills
-  - Federal funds
-  - Repurchase agreements (repos)
-  - Negotiable certificates of deposit (CDs)
-  - Commercial paper and assets backed commercial paper (ABCP)
-  - Eurodollars
-  - Bankers' acceptances
+- **Money markets vs. banks**: Banks are more heavily regulated (reserve requirements, government regulations), giving money markets a cost advantage for short-term debt transactions.
+
+#### Money Market Instruments
+
+| Instrument                | Issued By                | Bought By            | Typical Maturities  | Secondary Market |
+| ------------------------- | ------------------------ | -------------------- | ------------------- | ---------------- |
+| **UK Treasury Bills**     | UK Govt.                 | Consumers, firms     | 28, 91, 182 days    | Poor             |
+| **US Treasury Bills**     | US Govt.                 | Consumers, firms     | 4, 13, 26, 52 weeks | Very good        |
+| **Federal Funds**         | Banks                    | Banks                | Up to 7 days        | N/A              |
+| **Repurchase Agreements** | Banks, firms             | Banks, firms         | Up to 15 days       | Good             |
+| **Negotiable CDs**        | Banks                    | Firms                | 14 to 120 days      | Good             |
+| **Commercial Paper**      | Firms, finance companies | Firms                | Up to 270 days      | Poor             |
+| **Banker's Acceptances**  | Banks                    | Firms                | 30 to 180 days      | Good             |
+| **Eurodollars**           | Non-US banks             | Firms, banks, govts. | Up to 1 year        | Poor             |
+
+#### Treasury Bill Yields
+
+Treasury bills are zero-coupon instruments bought at a discount to face value. The return is calculated using:
+
+**Discount Yield** (annualized):
+$$i_{\text{discount}} = \frac{FV - P_0}{FV} \times \frac{360}{n}$$
+
+**Bond Equivalent Yield** (for comparison with other securities):
+$$i_{\text{bond equivalent}} = \frac{FV - P_0}{P_0} \times \frac{365}{n}$$
+
+Where $FV$ = face value, $P_0$ = purchase price, $n$ = days until maturity.
+
+**Example**: A 28-day US Treasury bill purchased for \$995.62 with face value \$1,000:
+
+- Discount yield: $\frac{1000 - 995.62}{1000} \times \frac{360}{28} = 5.63\%$
+- Bond equivalent yield: $\frac{1000 - 995.62}{995.62} \times \frac{365}{28} = 5.74\%$
 
 ### Capital Markets
 
