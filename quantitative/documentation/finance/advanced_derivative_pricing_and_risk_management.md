@@ -13,11 +13,8 @@
     - [Introduction](#introduction)
     - [Portfolio Formulation](#portfolio-formulation)
     - [Single Financial Instrument (n = 1)](#single-financial-instrument-n--1)
-      - [Optimal Position](#optimal-position)
-      - [Risk and Correlation](#risk-and-correlation)
     - [Delta Hedging](#delta-hedging)
-      - [Taylor Approximation for the Optimal Hedge](#taylor-approximation-for-the-optimal-hedge)
-      - [Geometric Brownian Motion Example](#geometric-brownian-motion-example)
+      - [Delta Hedging Example with Geometric Brownian Motion](#delta-hedging-example-with-geometric-brownian-motion)
       - [Relation to Black-Scholes Delta](#relation-to-black-scholes-delta)
     - [General Case (Multiple Financial Instruments)](#general-case-multiple-financial-instruments)
       - [Convexity and Optimization](#convexity-and-optimization)
@@ -216,38 +213,138 @@ where the vector $\mathbf{h} = \begin{pmatrix} h_1 \\ \vdots \\ h_n \end{pmatrix
 
 The entries $h_i$ are in principle integers denoting the amount of units of the $i$th financial instrument in the portfolio; however, in order to simplify the mathematics, we allow $h_i$ to be real numbers.
 
+Expressions of type $a_1 b_1 + a_2 b_2 + \dots + a_n b_n$ can be written as the dot product of two vectors $\mathbf{a}^T \mathbf{b}$.
+
+$$\mathbf{a} = \begin{pmatrix} a_1 \\ a_2 \\ \vdots \\ a_n \end{pmatrix}, \quad \mathbf{b} = \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{pmatrix}$$
+
+$$\mathbf{a}^T  = \begin{pmatrix} a_1 & a_2 & \dots & a_n \end{pmatrix}, \quad \mathbf{b}^T = \begin{pmatrix} b_1 & b_2 & \dots & b_n \end{pmatrix}$$
+
+$$a_1 b_1 + a_2 b_2 + \dots + a_n b_n = \sum_{i=1}^{n}{a_ib_i} = \mathbf{a}^T \mathbf{b} = \begin{pmatrix} a_1 & a_2 & \dots & a_n \end{pmatrix} \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{pmatrix}$$
+
+> Note that bold letters denote vectors in this documentation, other texts may use alternative notation such as an arrow above the letter (e.g., $\vec{a}$) or a tilde (e.g., $\tilde{a}$).
+
+To satisfy the quadratic hedging objective, we need to choose $h_0$ and $\mathbf{h}$ such that the constants $h_0, h_1, \ldots, h_n$:
+
+- Satisfy $\mathbb{E}[h_0 + \sum_{i=1}^n{h_i Z_i - L}] = 0$
+- Minimise $\text{Var}(h_0 + \mathbf{h}^T\mathbf{Z} - L)$
+
+The set $(h_0, \mathbf{h})$ specifies the portfolio of financial instruments to use for hedging and $h_0$ is the amount invested in a risk-free asset, e.g. a bank account or government bond.
+
+The positions $h_1, h_2, \ldots, h_n$ are associated with the random variables $Z_1, Z_2, \ldots, Z_n$ representing the values of the risky assets/instruments.
+
+Formally, the solution of minimising the variance $\text{Var}(h_0 + \mathbf{h}^T\mathbf{Z} - L)$ is a standard linear regression of $L$ onto the regressors $Z_1, Z_2, \ldots, Z_n$.
+
+The solution is obtained by first considering the simpler case of $n=1$.
+
 ### Single Financial Instrument (n = 1)
 
-For $A = h_0 + hZ$:
-$$\text{Var}(A - L) = h^2 \text{Var}(Z) + \text{Var}(L) - 2h\text{Cov}(Z, L)$$
+For a single financial instrument $n=1$, $\mathbf{Z}=Z$ and the optimal hedging portfolio has the value $A = h_0 + hZ$:.
 
-#### Optimal Position
+$(h_0, h)$ are chosen such that $\mathbb{E}[A - L] = 0$ and $\text{Var}(A - L)$ is minimised.
 
-Minimal variance is achieved when:
-$$h^* = \frac{\text{Cov}(Z, L)}{\text{Var}(Z)}$$
-From $E[A - L] = 0$, we get:
-$$h_0^* = E[L] - h^* E[Z]$$
+```math
+\begin{aligned}
+\text{Var}(A - L) = \text{Var}(h_0 + hZ - L) &= \text{Var}(h_0 + hZ) + Var(L) - 2\text{Cov}(hZ, L) \\
+&= \text{Var}(hZ) + \text{Var}(L) - 2\text{Cov}(hZ, L) \\
+&=h^2 \text{Var}(Z) + \text{Var}(L) - 2h\text{Cov}(Z, L)
+\end{aligned}
+```
 
-#### Risk and Correlation
+Where the following properties are used:
 
-The variance of the optimal hedging error is:
-$$\text{Var}(A^* - L) = \text{Var}(L) \left( 1 - \text{Corr}(L, Z)^2 \right)$$
-Hedging exploits correlations to reduce risk. If $\text{Cov}(L, Z) = 0$, no risk reduction is achieved: $\text{Var}(A^* - L) = \text{Var}(L)$.
+- $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y) - 2\text{Cov}(X, Y)$
+- $\text{Var}(X + c) = \text{Var}(X)$ for any constant $c$
+- $\text{Var}(aX) = a^2 \text{Var}(X)$ for any constant $a$
+- $\text{Cov}(aX, Y) = a \text{Cov}(X, Y)$ for any constant $a$
+
+Since the variance $\text{Var}(A - L)$ is a quadratic function of $h$ and the factor $h^2$ is positive, the variance is a convex function of $h$ and has a unique minimum. This minimum is found by setting the derivative with respect to $h$ to zero:
+
+$$\boxed{h^* = \frac{\text{Cov}(Z, L)}{\text{Var}(Z)}}$$
+
+Using $E[A - L] = 0$ to determine $h_0$:
+
+```math
+E[A - L] = E[h_0 + hZ - L] = h_0 + hE[Z] - E[L] = 0
+```
+
+From the condition $\mathbb{E}[A^* - L]=0$, the optimal risk-free position is therefore:
+
+$$\boxed{h_0^* = E[L] - h^* E[Z]}$$
+
+Using quadratic hedging portfolio, given by $(h_0^*, h^*)$, to calculate the variance of the hedging error $A^* - L$ for the optimal portfolio value $A^* = h_0^* + h^* Z$:
+
+```math
+\begin{aligned}
+\text{Var}(A^* - L) &= \text{Var}(A*) + \text{Var}(L) - 2\text{Cov}(A^*, L) \\\\
+&= \text{Var} \left(\frac{\text{Cov}(L, Z)}{\text{Var}(Z)} Z \right) + \text{Var}(L) - 2 \text{Cov} \left( \frac{\text{Cov}(L,Z)}{\text{Var}(Z)}Z,L \right) \\\\
+&= \frac{\text{Cov}(L,Z)^2}{\text{Var}(Z)^2} \text{Var}(Z) + \text{Var}(L) - 2 \frac{\text{Cov}(L,Z)}{\text{Var}(Z)} \text{Cov}(Z,L) \\\\
+&= \text{Var}(L) - \frac{\text{Cov}(L,Z)^2}{\text{Var}(Z)}
+\end{aligned}
+```
+
+Hence, the variance of the hedging error can be written in terms of the correlation coefficient $\text{Corr}(L, Z) = \frac{\text{Cov}(L, Z)}{\sqrt{\text{Var}(L)}\sqrt{\text{Var}(Z)}}$:
+
+$$\boxed{\text{Var}(A^* - L) = \text{Var}(L) \left( 1 - \text{Corr}(L, Z)^2 \right)}$$
+
+The hedging portfolio reduces the risk associated with the liability $L$, measured by its variance $\text{Var}(L)$, without hedging. The worst case scenario is when $\text{Cov}(L,Z) = 0$ when the hedging instrument $Z$ is uncorrelated with the liability $L$. In this case, quadratic hedging does not provide any improvement on the intrinsic risk of the liability since $h^*_0 = E[L]$ and $h^* = 0$ so the variance of the hedging error is $\text{Var}(A^* - L) = \text{Var}(L)$.
+
+> Simply put, hedging exploits correlations to reduce risk. If $\text{Cov}(L, Z) = 0$, no risk reduction is achieved: $\text{Var}(A^* - L) = \text{Var}(L)$.
 
 ### Delta Hedging
 
-If the liability $L = f(S_t)$ where $f$ is a differentiable function of the underlying asset $S_t$.
+Using  the following assumptions:
 
-#### Taylor Approximation for the Optimal Hedge
+- That the price of a financial contract is given by a function $f$ of the price of an underlying asset $S_t$ at time $t$
+- The function $f$ is assumed to be known at time $0$ and differentiable
 
-Expanding $f(S_t)$ around $\bar{S}_t = E[S_t]$:
+The aim is to hedge the liability $L = f(S_t)$ by taking a position $h$ in the underlying asset and position $h_0$ in a risk-free investment, e.g. a unit zero-coupon bond maturing at time $t$.
+
+Taking the optimal quadratic hedge for $n=1$:
+
+$$h^* = \frac{\text{Cov}(S_t, f(S_t))}{\text{Var}(S_t)}, \quad h_0^* = E[f(S_t)] - h^* E[S_t]$$
+
+The Taylor expansion of $f(S_t)$ around the expected value $\bar{S}_t = E[S_t]$ provides an approximation for the optimal hedge.
+
 $$L = f(S_t) \approx f(\bar{S}_t) + f'(\bar{S}_t)(S_t - \bar{S}_t)$$
-The optimal hedge is:
-$$h^* = f'(\bar{S}_t), \quad h_0^* = f(\bar{S}_t) - f'(\bar{S}_t)\bar{S}_t$$
-For small $t$, $\bar{S}_t \approx S_0$, yielding the **Delta Hedge**:
+
+The optimal hedge is therefore:
+
+```math
+\begin{aligned}
+h^* & = \frac{\text{Cov}(S_t, f(\bar{S}_t) + f'(\bar{S}_t)(S_t - \bar{S}_t))}{\text{Var}(S_t)} \\\\
+& = \frac{f'(\bar{S}_t) \text{Cov}(S_t, S_t - \bar{S}_t)}{\text{Var}(S_t)} \\\\
+& = \frac{f'(\bar{S}_t) \text{Var}(S_t)}{\text{Var}(S_t)} \\\\
+& = f'(\bar{S_t})
+\end{aligned}
+```
+
+and
+
+```math
+\begin{aligned}
+h_0^* & = E[f(S_t) + f'(\bar{S}_t)(S_t - \bar{S}_t)] - f'(\bar{S}_t)S_t \\\\
+& = f(\bar{S}_t) - f'(\bar{S}_t) \bar{S}_t
+\end{aligned}
+```
+
+The hedging error is therefore:
+
+```math
+\begin{aligned}
+h^*_0 + h^*St - f(S_t) &= f(\bar{S}_t) - f'(\bar{S}_t) \bar{S}_t + f'(\bar{S}_t) S_t - f(S_t) \\\\
+&= f(\bar{S}_t) + f'(\bar{S}_t)(S_t - \bar{S}_t) - f(S_t)
+\end{aligned}
+```
+
+This is just the error made by approximating $f(S_t)$ by its linear Taylor expansion around $\bar{S}_t$.
+
+If $t$ is small, $\bar{S}_t \approx S_0$, and the delta hedge can be obtained:
+
 $$h^* = f'(S_0), \quad h_0^* = f(S_0) - f'(S_0)S_0$$
 
-#### Geometric Brownian Motion Example
+The approximation of the optimal hedge does not need any knowledge of an underlying pdf of the asset price $S_t$. However, the approximation is only valid for small times $t$ so that is can only be used reasonably with frequent re-adjustments of the hedge (dynamic hedging). This usually leads to high transaction costs in practice.
+
+#### Delta Hedging Example with Geometric Brownian Motion
 
 Assuming risk-neutral GBM for $S_t$:
 $$S_T = S_0 e^{(r_{0,T} - \frac{1}{2}\sigma_0^2)T + \sigma_0\sqrt{T}W}, \quad W \sim N(0,1)$$
