@@ -15,7 +15,7 @@
     - [Single Financial Instrument (n = 1)](#single-financial-instrument-n--1)
     - [Delta Hedging](#delta-hedging)
       - [Delta Hedging Example with Geometric Brownian Motion](#delta-hedging-example-with-geometric-brownian-motion)
-      - [Relation to Black-Scholes Delta](#relation-to-black-scholes-delta)
+    - [General Solution (Any value of $n$)](#general-solution-any-value-of-n)
     - [General Case (Multiple Financial Instruments)](#general-case-multiple-financial-instruments)
       - [Convexity and Optimization](#convexity-and-optimization)
       - [Covariance Matrix and Vector](#covariance-matrix-and-vector)
@@ -346,15 +346,119 @@ The approximation of the optimal hedge does not need any knowledge of an underly
 
 #### Delta Hedging Example with Geometric Brownian Motion
 
-Assuming risk-neutral GBM for $S_t$:
-$$S_T = S_0 e^{(r_{0,T} - \frac{1}{2}\sigma_0^2)T + \sigma_0\sqrt{T}W}, \quad W \sim N(0,1)$$
+Assume a contract with payoff $g(S_T)$ at time $T$ depending on the price of an underlying asset $S_T$. The price of the contract at time $0$ is given by the risk-neutral valuation formula:
+
+$$\pi_0 = e^{-r_{0,T}T} \mathbb{E}^{\mathbb{Q}}[g(S_T)]$$
+
+Assuming risk-neutral Geometric Brownian Motion (GBM) for $S_t$:
+
+$$S_T = S_0 e^{\mu_0 T + \sigma_0 \sqrt{T} W}$$
+$$W \sim N(0,1), \quad \mu = r_{0,T} - \frac{1}{2}\sigma_0^2$$
+
+Therefore,
+
+$$S_T = S_0 e^{(r_{0,T} - \frac{1}{2}\sigma_0^2)T + \sigma_0\sqrt{T}W}$$
+
 The contract price at $t=0$ is:
+
 $$\pi_0 = e^{-r_{0,T}T} \int_{-\infty}^{\infty} g\left(S_0 e^{(r_{0,T} - \frac{1}{2}\sigma_0^2)T + \sigma_0\sqrt{T}w}\right) \frac{1}{\sqrt{2\pi}} e^{-w^2/2} dw$$
-If $g(x) = \max(x - K, 0)$, this yields the Black-Scholes formula $C_{\text{BS}}$.
 
-#### Relation to Black-Scholes Delta
+At time $t$ the price of the contract is:
 
-The Black-Scholes Greek $\Delta = \frac{\partial C_{\text{BS}}}{\partial S_0} = h^*$ denotes the shares needed. The risk-free investment is $h_0^* = C_{\text{BS}} - \Delta S_0$.
+```math
+\begin{aligned}
+\pi_t & = e^{-r_{t,T}(T-t)} \mathbb{E}^{\mathbb{Q}}[g(S_T) | S_t] \\\\
+& = e^{-r_{t,T}(T-t)} \int_{-\infty}^{\infty} g\left(S_t e^{(r_{t,T} - \frac{1}{2}\sigma_t^2)(T-t) + \sigma_t\sqrt{T-t}w}\right) \frac{1}{\sqrt{2\pi}} e^{-w^2/2} dw
+\end{aligned}
+```
+
+Therefore, the assumption underlying the delta hedge is:
+
+$$\pi_t \approx f(S_t)$$
+
+where $f$ is a function known at time $0$ and holds oly apprximately if $t$ is close to $0$. Assuming, this the following approxmations hold:
+
+$$r_{t,T} \approx r_{0,T}, \quad \sigma_t \approx \sigma_0$$
+
+The underlying assumptions of the delta hedge are typically only valid for small times $t$ so that frequent re-adjustments of the hedge are required in practice.
+
+If the payoff function $g(x)$ is given by $g(x) = \max(x - K, 0)$ for a European call option with strike $K$:
+
+$$\pi_0 = C_{\text{BS}}(S_0, K, r_{0,T}, \sigma_0, T)$$
+
+where $C_{\text{BS}}$ is the Black-Scholes formula for a European call option.
+
+The Black-Scholes Greek (Delta) $\Delta = \frac{\partial C_{\text{BS}}}{\partial S_0} = h^*$ denotes the shares needed. The risk-free investment is $h_0^* = C_{\text{BS}} - \Delta S_0$.
+
+### General Solution (Any value of $n$)
+
+For the general case, assume that there is a large number $n$ of risk assets $\mathbf{Z} = (Z_1, Z_2, \ldots, Z_n)^T$ available for hedging the liability $L$.
+
+In the single case $n=1$, the calculation for the minimum of $\text{Var}(A - L)$ was straightforward since it was a quadratic function of a single variable $h$ which had a unique minimum.
+
+For higher dimensions, the convexity of the variance in $\mathbf{h}$ still holds, but the calculation of the minimum is more involved as follows.
+
+- The set $\mathbb{C} \subset \mathbb{R}^n$ is called a convex set if for any $\lambda \in [0, 1]$ and any $\mathrm{x}, \mathrm{y} \in \mathbb{C}$, the convex combination $\lambda \mathrm{x} + (1 - \lambda)\mathrm{y} \in \mathbb{C}$ holds true.
+- The function $f: \mathbb{C} \to \mathbb{R}$ is called convex if for any $\lambda \in [0, 1]$ and any $\mathrm{x}, \mathrm{y} \in \mathbb{C}$, the inequality $f(\lambda \mathrm{x} + (1 - \lambda)\mathrm{y}) \leq \lambda f(\mathrm{x}) + (1 - \lambda) f(\mathrm{y})$ holds true.
+  - Both set and function are strictly convex if $<$ holds instead of $\leq$.
+  
+The optimal quadratic hedging portfolio is determined by the conditions when $\mathbb{E}[A - L] = 0$ and $\text{Var}(A - L)$ is minimised. Let $(h_0^*, \mathbf{h}^*)$ denote the optimal portfolio with value $A^* = h_0^* + \mathbf{h}^{*T} \mathbf{Z}$.
+
+By first minimising $\text{Var}(\mathbf{h}^T \mathbf{Z} - L)$. Since $\text{Var}(h_0 + \mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L)$, the variance of the hedging error is:
+
+$$\text{Var}(A-L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z}) + \text{Var}(L) - 2\text{Cov}(\mathbf{h}^T \mathbf{Z}, L)$$
+
+The last term can be rewritten using $\mathbf{h}^T \mathbf{Z} = \sum_{i=1}^n h_i Z_i$ as:
+
+```math
+\begin{aligned}
+\text{Cov}(\mathbf{h}^T \mathbf{Z}, L) & = \text{Cov}\left(\sum_{i=1}^n h_i Z_i, L\right) \\\\
+& = \mathbb{E}\left[\sum_{i=1}^n h_i Z_i L \right] - \mathbb{E}\left[\sum_{i=1}^n h_i Z_i\right] \mathbb{E}[L] \\\\
+& = \sum_{i=1}^n h_i \left( \mathbb{E}[Z_i L] - \mathbb{E}[Z_i] \mathbb{E}[L] \right) \\\\
+& = \sum_{i=1}^n h_i \text{Cov}(Z_i, L) \\\\
+& = \mathbf{h}^T \Sigma_{L, \mathbf{Z}}
+\end{aligned}
+```
+
+Where the covariance vector $\Sigma_{L, \mathbf{Z}}$ contains the covariances of $L$ with $\mathbf{Z}$:
+
+$$\Sigma_{L, \mathbf{Z}} = \begin{pmatrix} \text{Cov}(L, Z_1) \\ \text{Cov}(L, Z_2) \\ \vdots \\ \text{Cov}(L, Z_n) \end{pmatrix}$$
+
+Using the result $\text{Var}(\mathbf{h}^T \mathbf{Z}) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$ where $\Sigma_{\mathbf{Z}}$ is the covariance matrix of $\mathbf{Z}$ containing the convariances of the financial instruments:
+
+$$\Sigma_{\mathbf{Z}} = \begin{pmatrix} \text{Cov}(Z_1, Z_1) & \text{Cov}(Z_1, Z_2) & \dots & \text{Cov}(Z_1, Z_n) \\ \text{Cov}(Z_2, Z_1) & \text{Cov}(Z_2, Z_2) & \dots & \text{Cov}(Z_2, Z_n) \\ \vdots & \vdots & \ddots & \vdots \\ \text{Cov}(Z_n, Z_1) & \text{Cov}(Z_n, Z_2) & \dots & \text{Cov}(Z_n, Z_n) \end{pmatrix}$$
+
+Further, the variance of the hedging error can be written as:
+
+$$\boxed{\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^T \Sigma_{L, \mathbf{Z}}}$$
+
+Writing out the indices explicitly:
+
+$$\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \sum_{i=1}^n \sum_{j=1}^n h_i h_j \text{Cov}(Z_i, Z_j) + \text{Var}(L) - 2 \sum_{i=1}^n h_i \text{Cov}(L, Z_i)$$
+
+The covariance matrix $\Sigma_{\mathbf{Z}}$ is an important quantity which quantifies the correlations among the financial instruments used for hedging. Any covariance matrix $\Sigma_{\mathbf{Z}}$ has the following properties:
+
+1. **Symmetry**: $(\Sigma_{\mathbf{Z}})_{ij} = \text{Cov}(Z_i, Z_j) = \text{Cov}(Z_j, Z_i) = (\Sigma_{\mathbf{Z}})_{ji}$ for all $i, j$.
+2. **Positive Semi-definite**: For any vector $\mathrm{x} \in \mathbb{R}^n$, $\mathrm{x}^T \Sigma_{\mathbf{Z}} \mathrm{x} \geq 0$.
+
+*Proof*:
+
+Define $\bar{Z}_i = E[Z_i]$ and $\bar{\mathbf{Z}}$ as the vector containing the elements $\bar{Z}_i$.
+The covariance can be written as $\text{Cov}(Z_i, Z_j) = E[(Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j)]$.
+
+Thus,
+
+```math
+\begin{aligned}
+\mathrm{x}^T \Sigma_{\mathbf{Z}} \mathrm{x} & = \sum_{i=1}^n \sum_{j=1}^n x_i x_j \text{Cov}(Z_i, Z_j) \\\\
+& = \sum_{i=1}^n \sum_{j=1}^n x_i x_j E[(Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j)] \\\\
+& = E\left[ \sum_{i=1}^n \sum_{j=1}^n x_i x_j (Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j) \right] \\\\
+& = E\left[ \sum_{i=1}^n x_i (Z_i - \bar{Z}_i) \sum_{j=1}^n x_j (Z_j - \bar{Z}_j) \right] \\\\
+& = E\left[ \left( \mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \left( \mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \right] \\\\
+\end{aligned}
+```
+
+The scalar product $\mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$ is a particular random variable, so its square is non-negative. Similarly, defining $Y = \mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$, leads to $\mathrm{x}^T \Sigma_{\mathbf{Z}} \mathrm{x} = E[Y^2] \geq 0$.
 
 ### General Case (Multiple Financial Instruments)
 
