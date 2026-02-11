@@ -16,12 +16,20 @@
     - [Delta Hedging](#delta-hedging)
       - [Delta Hedging Example with Geometric Brownian Motion](#delta-hedging-example-with-geometric-brownian-motion)
     - [General Solution (Any value of $n$)](#general-solution-any-value-of-n)
-    - [General Case (Multiple Financial Instruments)](#general-case-multiple-financial-instruments)
-      - [Convexity and Optimization](#convexity-and-optimization)
-      - [Covariance Matrix and Vector](#covariance-matrix-and-vector)
-      - [Properties of the Covariance Matrix](#properties-of-the-covariance-matrix)
-      - [Optimal Solution for $n$ risky assets](#optimal-solution-for-n-risky-assets)
-      - [Properties of the Optimal Hedging Error](#properties-of-the-optimal-hedging-error)
+      - [Background: Convexity](#background-convexity)
+      - [Problem Setup](#problem-setup)
+      - [Deriving the Variance of Hedging Error](#deriving-the-variance-of-hedging-error)
+      - [The Covariance Matrix](#the-covariance-matrix)
+      - [Variance Formula in Matrix Form](#variance-formula-in-matrix-form)
+      - [Properties of Covariance Matrices](#properties-of-covariance-matrices)
+      - [Finding the Optimal Portfolio](#finding-the-optimal-portfolio)
+      - [Solution in Matrix Form](#solution-in-matrix-form)
+      - [Minimum Variance Achieved](#minimum-variance-achieved)
+    - [Notation Summary](#notation-summary)
+    - [The Complete Optimal Hedging Portfolio](#the-complete-optimal-hedging-portfolio)
+      - [Properties of the Optimal Hedging Portfolio](#properties-of-the-optimal-hedging-portfolio)
+      - [Worst Case: Uncorrelated Assets](#worst-case-uncorrelated-assets)
+      - [The Role of Correlations in Risk Reduction](#the-role-of-correlations-in-risk-reduction)
   - [3. Portfolio Diversification](#3-portfolio-diversification)
     - [Mean-Variance Portfolio Analysis](#mean-variance-portfolio-analysis)
       - [Portfolio Diagrams](#portfolio-diagrams)
@@ -109,24 +117,25 @@ $$ \Delta V = \frac{1}{V(r)} \left(V'(r)\epsilon + \frac{1}{2}V''(r)\epsilon^2 \
 
 - **Effective Duration** $\nu(r)$:
 
-    ```math
-    \begin{aligned}
-    \nu(r) & = -\frac{1}{V(r)} V'(r) \\\\
-    &= -\frac{1}{V(r)} \sum_{i=1}^n C_i i \beta(r)^{i-1} \beta'(r) \\\\
-    &= \frac{1}{V(r)} \sum_{i=1}^n C_i i \beta(r)^{i+1}
-    \end{aligned}
-    ```
+  ```math
+  \begin{aligned}
+  \nu(r) & = -\frac{1}{V(r)} V'(r) \\\\
+  &= -\frac{1}{V(r)} \sum_{i=1}^n C_i i \beta(r)^{i-1} \beta'(r) \\\\
+  &= \frac{1}{V(r)} \sum_{i=1}^n C_i i \beta(r)^{i+1}
+  \end{aligned}
+  ```
 
-    since $\beta'(r) = -\beta(r)^2$
+  since $\beta'(r) = -\beta(r)^2$
+
 - **Convexity** $c(r)$:
 
-    ```math
-    \begin{aligned}
-    c(r) & = \frac{1}{V(r)} V''(r) \\\\
-    & = \frac{1}{V(r)} \frac{d}{dr} \left(-\sum_{i=1}^{n}{C_i i \beta (r)^{i+1}}\right) \\\\
-    & = \frac{1}{V(r)} \sum_{i=1}^n C_i i (i+1) \beta(r)^{i+2}
-    \end{aligned}
-    ```
+  ```math
+  \begin{aligned}
+  c(r) & = \frac{1}{V(r)} V''(r) \\\\
+  & = \frac{1}{V(r)} \frac{d}{dr} \left(-\sum_{i=1}^{n}{C_i i \beta (r)^{i+1}}\right) \\\\
+  & = \frac{1}{V(r)} \sum_{i=1}^n C_i i (i+1) \beta(r)^{i+2}
+  \end{aligned}
+  ```
 
 #### Surplus
 
@@ -147,10 +156,10 @@ For immunisation, we require $S(r + \epsilon) \geq 0$ for small $\epsilon$. This
 
 - For the first term, we need $S(r) = 0$ or $V_A(r) = V_L(r)$.
 - For the second term, we need $S'(r) = 0$ or $V_A'(r) = V_L'(r)$.
-    $$V_A'(r) = V_l'(r) \iff - \frac{1}{V_A(r)} V_A'(r) = - \frac{1}{V_L(r)} V_L'(r) \iff \nu_A(r) = \nu_L(r)$$
+  $$V_A'(r) = V_l'(r) \iff - \frac{1}{V_A(r)} V_A'(r) = - \frac{1}{V_L(r)} V_L'(r) \iff \nu_A(r) = \nu_L(r)$$
   - **The durations of assets and liabilities must be equal.**
 - For the third term, we need $S''(r) \geq 0$ or $V_A''(r) \geq V_L''(r)$.
-    $$V_A''(r) \geq V_L''(r) \iff \frac{1}{V_A(r)} V_A''(r) \geq \frac{1}{V_L(r)} V_L''(r) \iff c_A(r) \geq c_L(r)$$
+  $$V_A''(r) \geq V_L''(r) \iff \frac{1}{V_A(r)} V_A''(r) \geq \frac{1}{V_L(r)} V_L''(r) \iff c_A(r) \geq c_L(r)$$
   - **The convexity of assets must be at least that of liabilities.**
 
 #### Redington's Immunisation Conditions
@@ -292,7 +301,7 @@ The hedging portfolio reduces the risk associated with the liability $L$, measur
 
 ### Delta Hedging
 
-Using  the following assumptions:
+Using the following assumptions:
 
 - That the price of a financial contract is given by a function $f$ of the price of an underlying asset $S_t$ at time $t$
 - The function $f$ is assumed to be known at time $0$ and differentiable
@@ -376,7 +385,7 @@ Therefore, the assumption underlying the delta hedge is:
 
 $$\pi_t \approx f(S_t)$$
 
-where $f$ is a function known at time $0$ and holds oly apprximately if $t$ is close to $0$. Assuming, this the following approxmations hold:
+where $f$ is a function known at time $0$ and holds oly approximately if $t$ is close to $0$. Assuming, this the following approximations hold:
 
 $$r_{t,T} \approx r_{0,T}, \quad \sigma_t \approx \sigma_0$$
 
@@ -398,106 +407,294 @@ In the single case $n=1$, the calculation for the minimum of $\text{Var}(A - L)$
 
 For higher dimensions, the convexity of the variance in $\mathbf{h}$ still holds, but the calculation of the minimum is more involved as follows.
 
-- The set $\mathbb{C} \subset \mathbb{R}^n$ is called a convex set if for any $\lambda \in [0, 1]$ and any $\mathrm{x}, \mathrm{y} \in \mathbb{C}$, the convex combination $\lambda \mathrm{x} + (1 - \lambda)\mathrm{y} \in \mathbb{C}$ holds true.
-- The function $f: \mathbb{C} \to \mathbb{R}$ is called convex if for any $\lambda \in [0, 1]$ and any $\mathrm{x}, \mathrm{y} \in \mathbb{C}$, the inequality $f(\lambda \mathrm{x} + (1 - \lambda)\mathrm{y}) \leq \lambda f(\mathrm{x}) + (1 - \lambda) f(\mathrm{y})$ holds true.
-  - Both set and function are strictly convex if $<$ holds instead of $\leq$.
-  
-The optimal quadratic hedging portfolio is determined by the conditions when $\mathbb{E}[A - L] = 0$ and $\text{Var}(A - L)$ is minimised. Let $(h_0^*, \mathbf{h}^*)$ denote the optimal portfolio with value $A^* = h_0^* + \mathbf{h}^{*T} \mathbf{Z}$.
+#### Background: Convexity
 
-By first minimising $\text{Var}(\mathbf{h}^T \mathbf{Z} - L)$. Since $\text{Var}(h_0 + \mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L)$, the variance of the hedging error is:
+- The set $\mathbb{C} \subset \mathbb{R}^n$ is called a **convex set** if for any $\lambda \in [0, 1]$ and any $\mathbf{x}, \mathbf{y} \in \mathbb{C}$, the convex combination $\lambda \mathbf{x} + (1 - \lambda)\mathbf{y} \in \mathbb{C}$ holds true.
+
+- The function $f: \mathbb{C} \to \mathbb{R}$ is called **convex** if for any $\lambda \in [0, 1]$ and any $\mathbf{x}, \mathbf{y} \in \mathbb{C}$, the inequality
+  $$f(\lambda \mathbf{x} + (1 - \lambda)\mathbf{y}) \leq \lambda f(\mathbf{x}) + (1 - \lambda) f(\mathbf{y})$$
+  holds true.
+- Both set and function are **strictly convex** if $<$ holds instead of $\leq$.
+
+**Key insight**: Since variance is a strictly convex function of $\mathbf{h}$, any local minimum is also a global minimum, which guarantees the uniqueness of the optimal hedging portfolio.
+
+#### Problem Setup
+
+The **optimal quadratic hedging portfolio** is determined by the conditions:
+
+1. $\mathbb{E}[A - L] = 0$ (matching expected values)
+2. $\text{Var}(A - L)$ is minimised
+
+Let $(h_0^*, \mathbf{h}^*)$ denote the optimal portfolio with value $A^* = h_0^* + \mathbf{h}^{*T} \mathbf{Z}$, where:
+
+- $h_0^*$ is the position in the risk-free asset (cash)
+- $\mathbf{h}^* = (h_1^*, h_2^*, \ldots, h_n^*)^T$ are the positions in the $n$ risky assets
+- $\mathbf{Z} = (Z_1, Z_2, \ldots, Z_n)^T$ are the values of the risky assets
+
+#### Deriving the Variance of Hedging Error
+
+We first minimize $\text{Var}(\mathbf{h}^T \mathbf{Z} - L)$ with respect to $\mathbf{h}$. Since $\text{Var}(h_0 + \mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L)$ (adding a constant doesn't affect variance), the variance of the hedging error is:
 
 $$\text{Var}(A-L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z}) + \text{Var}(L) - 2\text{Cov}(\mathbf{h}^T \mathbf{Z}, L)$$
+
+**Expanding the covariance term:**
 
 The last term can be rewritten using $\mathbf{h}^T \mathbf{Z} = \sum_{i=1}^n h_i Z_i$ as:
 
 ```math
 \begin{aligned}
-\text{Cov}(\mathbf{h}^T \mathbf{Z}, L) & = \text{Cov}\left(\sum_{i=1}^n h_i Z_i, L\right) \\\\
-& = \mathbb{E}\left[\sum_{i=1}^n h_i Z_i L \right] - \mathbb{E}\left[\sum_{i=1}^n h_i Z_i\right] \mathbb{E}[L] \\\\
-& = \sum_{i=1}^n h_i \left( \mathbb{E}[Z_i L] - \mathbb{E}[Z_i] \mathbb{E}[L] \right) \\\\
-& = \sum_{i=1}^n h_i \text{Cov}(Z_i, L) \\\\
-& = \mathbf{h}^T \Sigma_{L, \mathbf{Z}}
+\text{Cov}(\mathbf{h}^T \mathbf{Z}, L) & = \text{Cov}\left(\sum_{i=1}^n h_i Z_i, L\right) \\
+& = \mathbb{E}\left[\sum_{i=1}^n h_i Z_i \cdot L \right] - \mathbb{E}\left[\sum_{i=1}^n h_i Z_i\right] \mathbb{E}[L] \\
+& = \sum_{i=1}^n h_i \left( \mathbb{E}[Z_i L] - \mathbb{E}[Z_i] \mathbb{E}[L] \right) \\
+& = \sum_{i=1}^n h_i \text{Cov}(Z_i, L) \\
+& = \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}}
 \end{aligned}
 ```
 
-Where the covariance vector $\Sigma_{L, \mathbf{Z}}$ contains the covariances of $L$ with $\mathbf{Z}$:
+**Note**: Here $\mathbf{\Sigma}_{L, \mathbf{Z}}$ is a **column vector** (dimension $n \times 1$) containing the covariances of $L$ with each asset:
 
-$$\Sigma_{L, \mathbf{Z}} = \begin{pmatrix} \text{Cov}(L, Z_1) \\ \text{Cov}(L, Z_2) \\ \vdots \\ \text{Cov}(L, Z_n) \end{pmatrix}$$
+$$\mathbf{\Sigma}_{L, \mathbf{Z}} = \begin{pmatrix} \text{Cov}(L, Z_1) \\ \text{Cov}(L, Z_2) \\ \vdots \\ \text{Cov}(L, Z_n) \end{pmatrix}$$
 
-Using the result $\text{Var}(\mathbf{h}^T \mathbf{Z}) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$ where $\Sigma_{\mathbf{Z}}$ is the covariance matrix of $\mathbf{Z}$ containing the convariances of the financial instruments:
+This vector tells us how strongly the liability $L$ co-moves with each hedging instrument.
 
-$$\Sigma_{\mathbf{Z}} = \begin{pmatrix} \text{Cov}(Z_1, Z_1) & \text{Cov}(Z_1, Z_2) & \dots & \text{Cov}(Z_1, Z_n) \\ \text{Cov}(Z_2, Z_1) & \text{Cov}(Z_2, Z_2) & \dots & \text{Cov}(Z_2, Z_n) \\ \vdots & \vdots & \ddots & \vdots \\ \text{Cov}(Z_n, Z_1) & \text{Cov}(Z_n, Z_2) & \dots & \text{Cov}(Z_n, Z_n) \end{pmatrix}$$
+#### The Covariance Matrix
 
-Further, the variance of the hedging error can be written as:
+Using the result $\text{Var}(\mathbf{h}^T \mathbf{Z}) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$, where $\Sigma_{\mathbf{Z}}$ is the **covariance matrix** (dimension $n \times n$) of $\mathbf{Z}$ containing the covariances among all pairs of financial instruments:
 
-$$\boxed{\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^T \Sigma_{L, \mathbf{Z}}}$$
+$$
+\Sigma_{\mathbf{Z}} = \begin{pmatrix}
+\text{Var}(Z_1) & \text{Cov}(Z_1, Z_2) & \dots & \text{Cov}(Z_1, Z_n) \\
+\text{Cov}(Z_2, Z_1) & \text{Var}(Z_2) & \dots & \text{Cov}(Z_2, Z_n) \\
+\vdots & \vdots & \ddots & \vdots \\
+\text{Cov}(Z_n, Z_1) & \text{Cov}(Z_n, Z_2) & \dots & \text{Var}(Z_n)
+\end{pmatrix}
+$$
+
+**Note**: The diagonal elements are variances (i.e., $\text{Cov}(Z_i, Z_i) = \text{Var}(Z_i)$), while off-diagonal elements are covariances between different assets.
+
+This matrix captures the entire correlation structure among the hedging instruments—essential information for portfolio construction.
+
+#### Variance Formula in Matrix Form
+
+The variance of the hedging error can now be written compactly as:
+
+$$\boxed{\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}}}$$
+
+**Breaking down the terms**:
+
+- $\mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$ = variance of the hedging portfolio (quadratic form)
+- $\text{Var}(L)$ = variance of the liability (constant)
+- $2 \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}}$ = twice the covariance between portfolio and liability
 
 Writing out the indices explicitly:
 
 $$\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \sum_{i=1}^n \sum_{j=1}^n h_i h_j \text{Cov}(Z_i, Z_j) + \text{Var}(L) - 2 \sum_{i=1}^n h_i \text{Cov}(L, Z_i)$$
 
-The covariance matrix $\Sigma_{\mathbf{Z}}$ is an important quantity which quantifies the correlations among the financial instruments used for hedging. Any covariance matrix $\Sigma_{\mathbf{Z}}$ has the following properties:
+#### Properties of Covariance Matrices
 
-1. **Symmetry**: $(\Sigma_{\mathbf{Z}})_{ij} = \text{Cov}(Z_i, Z_j) = \text{Cov}(Z_j, Z_i) = (\Sigma_{\mathbf{Z}})_{ji}$ for all $i, j$.
-2. **Positive Semi-definite**: For any vector $\mathrm{x} \in \mathbb{R}^n$, $\mathrm{x}^T \Sigma_{\mathbf{Z}} \mathrm{x} \geq 0$.
+The covariance matrix $\Sigma_{\mathbf{Z}}$ is an important quantity which quantifies the correlations among the financial instruments used for hedging. Any covariance matrix has the following properties:
 
-*Proof*:
+**1. Symmetry**:
+$$(\Sigma_{\mathbf{Z}})_{ij} = \text{Cov}(Z_i, Z_j) = \text{Cov}(Z_j, Z_i) = (\Sigma_{\mathbf{Z}})_{ji} \quad \text{for all } i, j$$
 
-Define $\bar{Z}_i = E[Z_i]$ and $\bar{\mathbf{Z}}$ as the vector containing the elements $\bar{Z}_i$.
-The covariance can be written as $\text{Cov}(Z_i, Z_j) = E[(Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j)]$.
+This follows from the definition of covariance.
+
+**2. Positive Semi-definite**:
+For any vector $\mathbf{x} \in \mathbb{R}^n$,
+$$\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} \geq 0$$
+
+This means the quadratic form is always non-negative, which is crucial for the existence of a minimum.
+
+**Proof of positive semi-definiteness**:
+
+Define $\bar{Z}_i = \mathbb{E}[Z_i]$ and $\bar{\mathbf{Z}}$ as the vector containing the elements $\bar{Z}_i$.
+The covariance can be written as $\text{Cov}(Z_i, Z_j) = \mathbb{E}[(Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j)]$.
 
 Thus,
 
 ```math
 \begin{aligned}
-\mathrm{x}^T \Sigma_{\mathbf{Z}} \mathrm{x} & = \sum_{i=1}^n \sum_{j=1}^n x_i x_j \text{Cov}(Z_i, Z_j) \\\\
-& = \sum_{i=1}^n \sum_{j=1}^n x_i x_j E[(Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j)] \\\\
-& = E\left[ \sum_{i=1}^n \sum_{j=1}^n x_i x_j (Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j) \right] \\\\
-& = E\left[ \sum_{i=1}^n x_i (Z_i - \bar{Z}_i) \sum_{j=1}^n x_j (Z_j - \bar{Z}_j) \right] \\\\
-& = E\left[ \left( \mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \left( \mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \right] \\\\
+\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} & = \sum_{i=1}^n \sum_{j=1}^n x_i x_j \text{Cov}(Z_i, Z_j) \\
+& = \sum_{i=1}^n \sum_{j=1}^n x_i x_j \mathbb{E}[(Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j)] \\
+& = \mathbb{E}\left[ \sum_{i=1}^n \sum_{j=1}^n x_i x_j (Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j) \right] \\
+& = \mathbb{E}\left[ \sum_{i=1}^n x_i (Z_i - \bar{Z}_i) \sum_{j=1}^n x_j (Z_j - \bar{Z}_j) \right] \\
+& = \mathbb{E}\left[ \left( \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \left( \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \right] \\
+& = \mathbb{E}\left[ \left( \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right)^2 \right]
 \end{aligned}
 ```
 
-The scalar product $\mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$ is a particular random variable, so its square is non-negative. Similarly, defining $Y = \mathrm{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$, leads to $\mathrm{x}^T \Sigma_{\mathbf{Z}} \mathrm{x} = E[Y^2] \geq 0$.
+The scalar product $\mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$ is a random variable, so its square is non-negative. Defining $Y = \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$, we have $\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} = \mathbb{E}[Y^2] \geq 0$.
 
-### General Case (Multiple Financial Instruments)
+Furthermore, $\mathbb{E}[Y^2] = \text{Var}(Y) + (\mathbb{E}[Y])^2 \geq 0$ since $\mathbb{E}[Y] = 0$.
 
-In higher dimensions, $\text{Var}(\mathbf{h}^T \mathbf{Z} - L)$ is a convex function of $\mathbf{h}$.
+**Important**: If the assets are linearly independent (no redundant assets), then $\Sigma_{\mathbf{Z}}$ is **positive definite** (not just semi-definite), meaning $\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} > 0$ for all $\mathbf{x} \neq \mathbf{0}$, which ensures $\Sigma_{\mathbf{Z}}$ is invertible.
 
-#### Convexity and Optimization
+#### Finding the Optimal Portfolio
 
-A set $K$ is convex if $\lambda x + (1 - \lambda)y \in K$ for $\lambda \in [0, 1]$. A function $f$ is convex if $f(\lambda x + (1 - \lambda)y) \leq \lambda f(x) + (1 - \lambda) f(y)$. The unique extremum of the variance is its global minimum.
+Now we determine the global minimum of $\text{Var}(\mathbf{h}^T \mathbf{Z} - L)$ with respect to $h_1, h_2, \ldots, h_n$ by taking the partial derivatives and setting them equal to zero.
 
-#### Covariance Matrix and Vector
+For the $m$-th variable $h_m$ (where $m = 1, 2, \ldots, n$):
 
-- **Covariance Vector** $\Sigma_{L,\mathbf{Z}}$: Elements are $\text{Cov}(L, Z_i)$.
-- **Covariance Matrix** $\Sigma_{\mathbf{Z}}$: Elements are $\text{Cov}(Z_i, Z_j)$.
-$$\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^T \Sigma_{L,\mathbf{Z}}$$
+```math
+\begin{aligned}
+\frac{\partial}{\partial h_m} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) & = \frac{\partial}{\partial h_m} \left( \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}} \right) \\
+& = \frac{\partial}{\partial h_m} \left( \sum_{i=1}^n \sum_{j=1}^n h_i h_j \text{Cov}(Z_i, Z_j) - 2 \sum_{i=1}^n h_i \text{Cov}(L, Z_i) \right) \\
+& = 2 \sum_{j=1}^n h_j \text{Cov}(Z_m, Z_j) - 2 \text{Cov}(L, Z_m) \\
+& = 0
+\end{aligned}
+```
 
-#### Properties of the Covariance Matrix
+**Why the factor of 2?** The quadratic term $\mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$ is differentiated using the identity:
+$$\frac{\partial}{\partial \mathbf{h}} (\mathbf{h}^T A \mathbf{h}) = (A + A^T)\mathbf{h}$$
+Since $\Sigma_{\mathbf{Z}}$ is symmetric ($\Sigma_{\mathbf{Z}} = \Sigma_{\mathbf{Z}}^T$), this gives $2\Sigma_{\mathbf{Z}}\mathbf{h}$.
 
-1. **Symmetry**: $(\Sigma_{\mathbf{Z}})_{ij} = (\Sigma_{\mathbf{Z}})_{ji}$.
-2. **Positive Semi-definite**: $x^T \Sigma_{\mathbf{Z}} x \geq 0$.
-   *Proof: Let $x^T \Sigma_{\mathbf{Z}} x = E[(x^T(\mathbf{Z} - \bar{\mathbf{Z}}))^2] \geq 0$.*
+This calculation can be verified explicitly for $n=2$:
 
-#### Optimal Solution for $n$ risky assets
+```math
+\begin{aligned}
+\frac{\partial}{\partial h_1} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) & = \frac{\partial}{\partial h_1} \bigg( h_1^2 \text{Cov}(Z_1, Z_1) + h_1 h_2 \text{Cov}(Z_1, Z_2) \\
+& \quad + h_2 h_1 \text{Cov}(Z_2, Z_1) + h_2^2 \text{Cov}(Z_2, Z_2) \\
+& \quad + \text{Var}(L) - 2 h_1 \text{Cov}(L, Z_1) - 2 h_2 \text{Cov}(L, Z_2) \bigg) \\
+& = 2 h_1 \text{Cov}(Z_1, Z_1) + h_2 \text{Cov}(Z_1, Z_2) + h_2 \text{Cov}(Z_2, Z_1) - 2 \text{Cov}(L, Z_1) \\
+& = 2 h_1 \text{Cov}(Z_1, Z_1) + 2 h_2 \text{Cov}(Z_1, Z_2) - 2 \text{Cov}(L, Z_1)
+\end{aligned}
+```
 
-Taking partial derivatives $\frac{\partial}{\partial h_m} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) = 0$:
-$$2 \sum_{j=1}^n h_j \text{Cov}(Z_m, Z_j) - 2 \text{Cov}(L, Z_m) = 0 \implies \Sigma_{\mathbf{Z}}\mathbf{h} - \Sigma_{L,\mathbf{Z}} = 0$$
-The optimal vector $\mathbf{h}^*$:
-$$\mathbf{h}^* = \Sigma_{\mathbf{Z}}^{-1} \Sigma_{L,\mathbf{Z}}$$
-The risk-free position:
-$$h_0^* = E[L] - \mathbf{h}^{*T} E[\mathbf{Z}]$$
+where we used $\text{Cov}(Z_1, Z_2) = \text{Cov}(Z_2, Z_1)$ by symmetry.
 
-#### Properties of the Optimal Hedging Error
+#### Solution in Matrix Form
 
-For the optimal portfolio $A^* = h_0^* + \mathbf{h}^{*T} \mathbf{Z}$:
+Setting all partial derivatives to zero, we obtain the system of equations:
 
-- $E[A^* - L] = 0$
-- $\text{Var}(A^* - L) = \text{Var}(L) - \Sigma_{L,\mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \Sigma_{L,\mathbf{Z}}$
-- $\text{Cov}(A^* - L, Z_k) = 0$ for all $k$ (the error is uncorrelated with hedging instruments).
+```math
+\begin{aligned}
+\frac{\partial}{\partial h_1} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) &= 0 \\
+& \vdots \\
+\frac{\partial}{\partial h_n} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) &= 0
+\end{aligned}
+```
 
----
+In vector-matrix notation, this system can be written compactly as:
+
+$$2\Sigma_{\mathbf{Z}} \mathbf{h} - 2\mathbf{\Sigma}_{L, \mathbf{Z}} = \mathbf{0}$$
+
+or equivalently:
+
+$$\Sigma_{\mathbf{Z}} \mathbf{h} = \mathbf{\Sigma}_{L, \mathbf{Z}}$$
+
+This is a **system of $n$ linear equations in $n$ unknowns**. Multiplying both sides from the left by the inverse of the covariance matrix $\Sigma_{\mathbf{Z}}^{-1}$ (which exists if $\Sigma_{\mathbf{Z}}$ is positive definite), the optimal vector $\mathbf{h}^*$ is given by:
+
+$$\boxed{\mathbf{h}^* = \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}}$$
+
+**Interpretation**:
+
+- The optimal hedge weights $\mathbf{h}^*$ depend on two factors:
+  1. The **inverse covariance matrix** $\Sigma_{\mathbf{Z}}^{-1}$: accounts for correlations among hedging instruments
+  2. The **covariance vector** $\mathbf{\Sigma}_{L, \mathbf{Z}}$: measures how each instrument relates to the liability
+
+- If assets were uncorrelated ($\Sigma_{\mathbf{Z}}$ diagonal), then each $h_i^* = \frac{\text{Cov}(L, Z_i)}{\text{Var}(Z_i)}$, which is the simple regression coefficient.
+
+- With correlations, $\Sigma_{\mathbf{Z}}^{-1}$ adjusts for redundancy and overlap among hedging instruments.
+
+Once $\mathbf{h}^*$ is determined, we set $h_0^*$ to satisfy the first condition $\mathbb{E}[A - L] = 0$:
+
+$$h_0^* = \mathbb{E}[L] - \mathbf{h}^{*T} \mathbb{E}[\mathbf{Z}]$$
+
+This ensures the expected hedging error is zero.
+
+#### Minimum Variance Achieved
+
+Substituting $\mathbf{h}^*$ back into the variance formula, the **minimum variance** is:
+
+$$\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$$
+
+The second term represents the variance reduction achieved through hedging. Perfect hedging (zero variance) occurs when $L$ lies in the span of $\mathbf{Z}$.
+
+### Notation Summary
+
+> **Important Distinction**:
+>
+> - $\mathbf{\Sigma}_{L, \mathbf{Z}}$ (bold) denotes the **covariance vector** (dimension $n \times 1$) containing the covariances of $L$ with each of the financial instruments $Z_1, \ldots, Z_n$.
+> - $\Sigma_{\mathbf{Z}}$ (non-bold) denotes the **covariance matrix** (dimension $n \times n$) containing the covariances among all pairs of financial instruments.
+
+**Dimensions check**:
+
+- $\Sigma_{\mathbf{Z}}$: $n \times n$ matrix
+- $\mathbf{\Sigma}_{L, \mathbf{Z}}$: $n \times 1$ vector
+- $\mathbf{h}^*$: $n \times 1$ vector
+- $\Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$: $(n \times n)(n \times 1) = n \times 1$ ✓
+
+### The Complete Optimal Hedging Portfolio
+
+The formula $\mathbf{h}^* = \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$ gives the solutions for the optimal quadratic hedging positions $h_1^*, h_2^*, \ldots, h_n^*$ in the risky assets.
+
+In the presence of a risk-free asset, the solution for $\mathbf{h}^*$ is the same since $\text{Var}(h_0 + \mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L)$. The contribution $h_0$ allows us to fix the expected hedging error at zero: $\mathbb{E}[h_0^* + \mathbf{h}^{*T} \mathbf{Z} - L] = 0$.
+
+Solving this condition for $h_0^*$ yields:
+
+$$h_0^* = \mathbb{E}[L] - \mathbf{h}^{*T} \mathbb{E}[\mathbf{Z}]$$
+
+Note that $\mathbb{E}[\mathbf{Z}]$ is the column vector containing the entries $\mathbb{E}[Z_i]$:
+
+$$\mathbb{E}[\mathbf{Z}] = \begin{pmatrix} \mathbb{E}[Z_1] \\ \mathbb{E}[Z_2] \\ \vdots \\ \mathbb{E}[Z_n] \end{pmatrix}$$
+
+#### Properties of the Optimal Hedging Portfolio
+
+The optimal hedging portfolio with positions $(h_0^*, \mathbf{h}^*)$ giving portfolio value $A^* = h_0^* + \mathbf{h}^{*T} \mathbf{Z}$ has the following properties:
+
+**1. Zero expected hedging error:**
+$$\mathbb{E}[A^* - L] = 0$$
+
+**2. Minimum variance:**
+$$\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$$
+
+The second term $\mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$ represents the **variance reduction** achieved through optimal hedging. This is always non-negative (since $\Sigma_{\mathbf{Z}}$ is positive semi-definite), so the hedged variance is never worse than the unhedged variance.
+
+**3. Orthogonality condition:**
+
+We can also show that
+$$\text{Cov}(A^* - L, Z_k) = 0 \quad \text{for all } k = 1, 2, \ldots, n$$
+
+This means the **hedging error is uncorrelated with all hedging instruments**. This is the multivariate analogue of the orthogonality principle in regression—the residual is orthogonal to all regressors.
+
+**Proof sketch**: The first-order conditions from $\nabla_{\mathbf{h}} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \mathbf{0}$ at $\mathbf{h}^*$ imply:
+$$\Sigma_{\mathbf{Z}} \mathbf{h}^* = \mathbf{\Sigma}_{L, \mathbf{Z}}$$
+
+This means $\text{Cov}(\mathbf{h}^{*T} \mathbf{Z}, Z_k) = \text{Cov}(L, Z_k)$ for all $k$, which gives:
+$$\text{Cov}(\mathbf{h}^{*T} \mathbf{Z} - L, Z_k) = \text{Cov}(\mathbf{h}^{*T} \mathbf{Z}, Z_k) - \text{Cov}(L, Z_k) = 0$$
+
+#### Worst Case: Uncorrelated Assets
+
+Similar to the case $n = 1$, the worst possible situation is when the hedging instruments are all uncorrelated with the liability. If we have:
+
+$$\text{Cov}(L, Z_k) = 0 \quad \text{for all } k$$
+
+then quadratic hedging does not provide any improvement on the intrinsic risk of the liability, since:
+
+$$h_0^* = \mathbb{E}[L], \quad \mathbf{h}^* = \mathbf{0}$$
+
+and the variance of the hedging error is just:
+
+$$\text{Var}(A^* - L) = \text{Var}(L)$$
+
+**Economic interpretation**: If $\mathbf{\Sigma}_{L, \mathbf{Z}} = \mathbf{0}$ (the liability is uncorrelated with all available hedging instruments), then the optimal strategy is to hold no risky assets ($\mathbf{h}^* = \mathbf{0}$) and invest everything in the risk-free asset ($h_0^* = \mathbb{E}[L]$) to match the expected liability. No variance reduction is possible.
+
+#### The Role of Correlations in Risk Reduction
+
+Comparing the unhedged variance $\text{Var}(L)$ with the optimally hedged variance:
+
+$$\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$$
+
+highlights that **quadratic hedging exploits the correlations** between the liability and the underlying securities in order to reduce the effective risk (variance) of the liability.
+
+These correlations are captured by:
+
+- The **covariance matrix** $\Sigma_{\mathbf{Z}}$: describes how the hedging instruments co-move with each other
+- The **covariance vector** $\mathbf{\Sigma}_{L, \mathbf{Z}}$: describes how each instrument co-moves with the liability
+
+The stronger the correlations (larger entries in $\mathbf{\Sigma}_{L, \mathbf{Z}}$), and the less correlated the instruments are with each other (more diagonal $\Sigma_{\mathbf{Z}}$), the greater the variance reduction achieved.
+
+**Perfect hedging** occurs when $L$ can be perfectly replicated as a linear combination of $\mathbf{Z}$, i.e., when $L = c_0 + \mathbf{c}^T \mathbf{Z}$ for some constants. In this case, $\mathbf{h}^* = \mathbf{c}$ and the minimum variance is zero.
 
 ## 3. Portfolio Diversification
 
@@ -586,13 +783,11 @@ The slope $\frac{\mu_T - r_f}{\sigma_T}$ is the **Sharpe Ratio** of the tangency
 
 #### Efficient Frontiers
 
-| Without Risk-Free Asset              | With Risk-Free Asset                           |
-| ------------------------------------ | ---------------------------------------------- |
-| Hyperbola in $(\sigma, \mu)$-space   | Straight line (CML)                            |
-| Upper branch is efficient            | Line from $(0, r_f)$ tangent to risky frontier |
-| Minimum variance portfolio at vertex | Tangency portfolio is optimal risky portfolio  |
-
----
+| Without Risk-Free Asset | With Risk-Free Asset |
+| | - |
+| Hyperbola in $(\sigma, \mu)$-space | Straight line (CML) |
+| Upper branch is efficient | Line from $(0, r_f)$ tangent to risky frontier |
+| Minimum variance portfolio at vertex | Tangency portfolio is optimal risky portfolio |
 
 ## 4. Maximizing Expected Utility
 
@@ -659,8 +854,6 @@ Maximizing expected utility is equivalent to:
 $$\max_{\mathbf{w}} \left( E[W] - \frac{a}{2}\text{Var}(W) \right)$$
 This is a **mean-variance** problem with risk aversion parameter $a$.
 
----
-
 ## 5. Stochastic Calculus
 
 ### Stochastic Integrals (Itô Integrals)
@@ -721,8 +914,6 @@ $$X_t = X_0 e^{-\kappa t} + \theta(1 - e^{-\kappa t}) + \sigma \int_0^t e^{-\kap
 
 **Stationary Distribution** (as $t \to \infty$):
 $$X_\infty \sim N\left(\theta, \frac{\sigma^2}{2\kappa}\right)$$
-
----
 
 ## 6. Stochastic Interest Rates
 
@@ -800,8 +991,6 @@ $$\alpha(t, T) = \sigma(t, T) \int_t^T \sigma(t, s) \, ds$$
 
 The short rate models (Vasicek, CIR, Hull-White) are special cases of HJM.
 
----
-
 ## 7. Interest Rate Instruments and Derivatives
 
 ### Black-Scholes Framework
@@ -861,8 +1050,6 @@ $$\text{Cap} - \text{Floor} = \text{Swap}$$
 
 - **Payer Swaption**: Right to pay fixed, receive floating
 - **Receiver Swaption**: Right to receive fixed, pay floating
-
----
 
 ## 8. Credit Risk and Credit Derivatives
 
@@ -965,8 +1152,6 @@ where $\Phi_\Sigma$ is the multivariate normal CDF with correlation matrix $\Sig
 - Default correlation affects tranche pricing
 - Higher correlation → higher risk for senior tranches, lower risk for equity tranche
 
----
-
 ## 9. Credit Risk Management and Valuation Adjustment
 
 ### Credit Risk Concepts
@@ -1019,8 +1204,6 @@ $$CVA \approx s_C \cdot EPE \cdot T$$
 
 where $s_C$ is the CDS spread and $EPE$ is the expected positive exposure.
 
----
-
 ## 10. Value at Risk
 
 ### VaR Definition and Properties
@@ -1066,13 +1249,13 @@ where $\phi$ is the standard normal PDF.
 
 **Comparison**:
 
-| Property       | VaR          | Expected Shortfall |
-| -------------- | ------------ | ------------------ |
-| Intuitive      | Yes          | Less so            |
-| Subadditive    | No           | Yes                |
-| Tail risk      | Ignores      | Captures           |
-| Coherent       | No           | Yes                |
-| Regulatory use | Basel II/III | Basel III (FRTB)   |
+| Property | VaR | Expected Shortfall |
+| -- | | |
+| Intuitive | Yes | Less so |
+| Subadditive | No | Yes |
+| Tail risk | Ignores | Captures |
+| Coherent | No | Yes |
+| Regulatory use | Basel II/III | Basel III (FRTB) |
 
 **Fundamental Review of the Trading Book (FRTB)**:
 

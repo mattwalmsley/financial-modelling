@@ -9,32 +9,36 @@
     - [Common Mistakes \& Failures](#common-mistakes--failures)
     - [Strategy Development Workflow](#strategy-development-workflow)
   - [Mechanics of Carry](#mechanics-of-carry)
-    - [1. FX Carry](#1-fx-carry)
-    - [2. Futures Carry (Ageing \& Rolldown)](#2-futures-carry-ageing--rolldown)
+    - [FX Carry](#fx-carry)
+    - [Futures Carry (Ageing \& Rolldown)](#futures-carry-ageing--rolldown)
   - [Statistical Foundations](#statistical-foundations)
     - [Return Distributions (The Four Moments)](#return-distributions-the-four-moments)
     - [The Sharpe Ratio](#the-sharpe-ratio)
-  - [Sources of Alpha: Why Systematic Trading Works](#sources-of-alpha-why-systematic-trading-works)
-    - [1. Efficient Market Hypothesis (EMH) View](#1-efficient-market-hypothesis-emh-view)
-      - [CAPM (Single Factor Model)](#capm-single-factor-model)
-      - [APT (Arbitrage Pricing Theory)](#apt-arbitrage-pricing-theory)
-      - [Carhart 4-Factor Model (Specific APT Implementation)](#carhart-4-factor-model-specific-apt-implementation)
-    - [2. Behavioural Finance View (Prospect Theory)](#2-behavioural-finance-view-prospect-theory)
-    - [3. Pragmatic Participant View](#3-pragmatic-participant-view)
+  - [Efficient Market Hypothesis (EMH)](#efficient-market-hypothesis-emh)
+    - [CAPM (Single Factor Model)](#capm-single-factor-model)
+    - [APT (Arbitrage Pricing Theory)](#apt-arbitrage-pricing-theory)
+    - [Carhart 4-Factor Model (Specific APT Implementation)](#carhart-4-factor-model-specific-apt-implementation)
+    - [Criticisms of EMH](#criticisms-of-emh)
+  - [Behavioural Finance (Prospect Theory)](#behavioural-finance-prospect-theory)
+  - [A Pragmatic Traders View](#a-pragmatic-traders-view)
   - [Systematic Ways to Extract Returns](#systematic-ways-to-extract-returns)
+    - [Other EMH Compatible Sources of Return](#other-emh-compatible-sources-of-return)
+    - [Inefficient Markets](#inefficient-markets)
   - [Strategy Dimensions](#strategy-dimensions)
 
 ## Introduction
 
 ### What is systematic trading?
 
-Making financial decisions using a **preset system of rules**, as opposed to human discretion.
-
-**Three types of trading:**
+Making financial decisions using a **preset system of rules**, as opposed to human discretion. With three broad categories:
 
 1. **Discretionary trading**
 2. **Systematic trading without automation**
 3. **Automated systematic trading**
+
+In practice, most systematic trading is automated, but the key distinction is the use of a **predetermined set of rules** to make trading decisions, which can be executed by either humans or computers.
+
+Some fund manager will use systematic strategies to aid decision making or risk management, but still have a discretionary overlay (e.g., adjusting position sizes based on macro views). This is often called "systematic with discretion" or "quantamental" trading.
 
 ### Why trade systematically?
 
@@ -61,11 +65,11 @@ Making financial decisions using a **preset system of rules**, as opposed to hum
 
 ### Core Strategy Examples
 
-| Strategy                        | Focus                                                  | Characteristics                                                                                   |
-| :------------------------------ | :----------------------------------------------------- | :------------------------------------------------------------------------------------------------ |
-| **Equity Market Neutral (EMN)** | Stock selection via factors (Value, Quality, Momentum) | Market neutral, high diversification, 3-5x leverage, automated execution.                         |
-| **Carry**                       | Interest rate differentials                            | Borrow low-rate, lend high-rate (usually FX). Negative skew risk if currency depreciates.         |
-| **Momentum**                    | Trend following                                        | Directional bets on futures/equities. Positive skew returns. Works best at weeks/months horizons. |
+| Strategy                        | Focus                                                  | Characteristics                                                                                      |
+| :------------------------------ | :----------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
+| **Equity Market Neutral (EMN)** | Stock selection via factors (Value, Quality, Momentum) | Market neutral, high diversification, 3-5x leverage, automated execution, negatively-skewed returns. |
+| **Carry**                       | Interest rate differentials                            | Borrow low-rate, lend high-rate (usually FX). Negative skew risk if currency depreciates.            |
+| **Momentum**                    | Trend following                                        | Directional bets on futures/equities. Positive skew returns. Works best at weeks/months horizons.    |
 
 ### Common Mistakes & Failures
 
@@ -87,7 +91,7 @@ Making financial decisions using a **preset system of rules**, as opposed to hum
 
 Carry is the return earned if prices remain unchanged.
 
-### 1. FX Carry
+### FX Carry
 
 - **Mechanism:** Borrow in a low-interest currency (e.g., JPY), lend/deposit in a high-interest currency (e.g., USD).
 - **Return:** Primarily the interest rate differential.
@@ -95,7 +99,7 @@ Carry is the return earned if prices remain unchanged.
 - **Risk:** Currency appreciation of the funding currency (the one you borrowed) can wipe out interest gains.
 - **Breakeven:** The exchange rate move required to offset the interest gain (e.g., if the differential is 3%, a 3% currency move hits breakeven).
 
-### 2. Futures Carry (Ageing & Rolldown)
+### Futures Carry (Ageing & Rolldown)
 
 - **Term Structure:** Relationship between futures prices and time to delivery.
 - **Convergence:** On expiry, a futures price must equal the **Spot Price**.
@@ -123,15 +127,13 @@ $$\text{Sharpe Ratio} = \frac{\mu - r_f}{\sigma}$$
 - **Limitation:** Doesn't account for skew. A high Sharpe ratio can mask "hidden blow-up risk" (Negative Skew/Peso Problem).
 - The risk-free rate ($r_f$) is often approximated as zero for short-term trading strategies.
 
-## Sources of Alpha: Why Systematic Trading Works
-
-### 1. Efficient Market Hypothesis (EMH) View
+## Efficient Market Hypothesis (EMH)
 
 **Core Premise:** Above-average returns only come from accepting above-average risks. No "free lunches."
 
 > EMH is widely criticized but remains a foundational concept in finance.
 
-#### CAPM (Single Factor Model)
+### CAPM (Single Factor Model)
 
 Returns are compensation for **market risk only** (Beta):
 
@@ -145,7 +147,7 @@ Where:
 
 **Limitation:** Assumes investors can leverage the market portfolio at $R_f$. In reality, leverage constraints mean CAPM doesn't fully explain returns.
 
-#### APT (Arbitrage Pricing Theory)
+### APT (Arbitrage Pricing Theory)
 
 General multi-factor framework: Returns are rewards for exposure to **multiple risk factors** that rational investors dislike.
 
@@ -153,7 +155,9 @@ $$\mathbb{E}[R_i] = \alpha_i + \sum_{j=1}^{K} \beta_{i,j} \mathbb{E}[R_j]$$
 
 Where $R_j$ are factor returns (e.g., Market, Size, Value, Momentum, Carry). Under APT, $\alpha_i = 0$ if markets are efficient.
 
-#### Carhart 4-Factor Model (Specific APT Implementation)
+### Carhart 4-Factor Model (Specific APT Implementation)
+
+This model forms the basis for many equity market neutral strategies. It extends CAPM by adding three additional factors to capture common sources of return:
 
 *Note: All returns below are excess returns (i.e., $R_f$ terms removed for clarity).*
 
@@ -166,31 +170,104 @@ $$\mathbb{E}[R_i] = \alpha_i + \beta_{i,m}\mathbb{E}[R_m] + \beta_{i,s}\mathbb{E
 - $R_{HML}$: **Value** (High Minus Low book-to-market) — Long cheap stocks, short expensive
 - $R_{WML}$: **Momentum** (Winners Minus Losers, "Up-Down") — Long recent winners, short recent losers
 
-### 2. Behavioural Finance View (Prospect Theory)
+### Criticisms of EMH
+
+- Why do risk factors earn a premium?
+  - Small firm premia still exists even after friction & liquidity
+  - Tenous attempts to explain value premium with macroeconomic factors
+  - There is no rational reason why momentum should work
+- How can we explain the price of risk?
+  - Eg for many years the equity premium was too high
+  - Price of other types of risk is even harder to explain
+- The price of risk is not stable over time, and can be affected by structural changes in the market (e.g., regulation, technology).
+- CAPM has poor explanatory power, especially within asset classes
+  - High $\beta$ underperforms low $\beta$.
+  - This persists as exploiting would require buying low $\beta$ and using leverage. Most investors can’t or won’t use leverage.
+  - This is the ‘leverage premium’ or ‘low volatility effect’
+- Numerous anomalies have been identified
+  - Calendar effects
+  - Many of these may have been ‘data mined’
+- Behavioural finance
+  - Explains anomalies in terms of “irrational” behaviour, which can be explained by well known psychological effects
+
+## Behavioural Finance (Prospect Theory)
+
+Low probability events are overweighted.
 
 - Anomalies exist due to deep-rooted human cognitive biases:
   - **Lottery Hook:** Investors overpay for positive skew (small chance of huge gain).
   - **Risk Attitudes:** People are risk-averse regarding gains (locking in profits too early) and risk-seeking regarding losses (holding losing positions too long). This fuels **momentum**.
   - **Overestimation:** Rare events are often overestimated in price (e.g., expensive insurance/options).
 
-### 3. Pragmatic Participant View
+This may also explain why high $\beta$ (or high volatility) stocks are so expensive (and low $\beta$ or low volatility assets can be expected to outperform).
+
+Prospect theory explains both momentum and skew.
+
+## A Pragmatic Traders View
+
+- Explicable returns are better than inexplicable
+- Systematic strategies should harvest risk premium
+- Markets contain irrational investors
+  - Some know they are irrational and don’t care
+    - Central banks
+  - Some don’t know they are irrational
+    - Large funds doing large rebalancing trades
+    - Retail day traders
+- Small, temporary, mispricings do occur; but will be difficult and costly to exploit
 
 - **Irrational/Structural Flows:** Money is made from participants trading for non-profit reasons:
-  - **Central Banks:** Manipulating currency levels (e.g., BoJ keeping JPY low for exports).
-  - **Ignorant/Institutional Rebalancing:** Large funds trading on fixed schedules.
-  - **Government Needs:** Predictable bond issuance (e.g., US Treasury auctions).
+  - Central Banks: Manipulating currency levels (e.g., BoJ keeping JPY low for exports).
+  - Ignorant/Institutional Rebalancing: Large funds trading on fixed schedules.
+  - Government Needs: Predictable bond issuance (e.g., US Treasury auctions).
 - **Micro-Inefficiencies:** Small mispricings that require technology and speed to capture (HFT, Stat Arb).
 
 ## Systematic Ways to Extract Returns
+
+- Systematic strategies require the existence of codified sources of return, that can be systematized and backtested.
+- We can divide the possible sources into:
+  - EMH compatible:
+    - Risk factors, including CAPM
+    - Other EMH compatible sources of return
+  - Sources of return that imply markets are inefficient
 
 | Method                  | Source of Return                                                            |
 | :---------------------- | :-------------------------------------------------------------------------- |
 | **Market Beta**         | Reward for equity/bond market volatility.                                   |
 | **Alternative Factors** | Value, Size, Quality, Momentum, Carry.                                      |
 | **Short Volatility**    | Reward for providing "insurance" (selling options). Strongly negative skew. |
+| **Credit Risk**         | Reward for bearing default risk.                                            |
 | **Liquidity Provision** | Market making; capturing the bid-ask spread.                                |
 | **Arbitrage**           | Spotting mispricings between related assets (relative value).               |
 | **Anomaly Timing**      | Exploiting calendar effects (e.g., January effect).                         |
+
+### Other EMH Compatible Sources of Return
+
+- Betting against b (EMH compatible, not CAPM)
+  - We get rewarded if we can use leverage, or have a high tolerance for risk
+- Paying for speed
+  - High frequency trading is an expensive business; logically we should earn additional returns to compensate
+- Providing liquidity
+  - Market making
+- Taking higher moment risk, skew and kurtosis
+  - Prospect theory suggests investors prefer positive to negative skew
+  - This is borne out by empirical evidence
+  - Buying negative skew should yield positive returns
+
+### Inefficient Markets
+
+- Use factor timing
+  - ‘Wrong’ factor valuation may only be apparent in hindsight
+  - Equilibrium is difficult to measure
+  - Limited number of extreme values in data history
+  - Difficult to call turning points
+- Exploit market anomalies
+  - Beware: many of these may be data mined
+- Pick off irrational counterparties
+  - Either knowing (eg central banks) or ignorant (large, slow moving funds or retail traders)
+  - Knowing irrational traders may change their minds
+  - Ignorant irrational traders may learn from their mistakes
+- Find limited pure arbitrage opportunities
+  - *Example*: certain complex option strategies may provide frequent misvaluations but this requires speed, expertise and complex technology to exploit
 
 ## Strategy Dimensions
 

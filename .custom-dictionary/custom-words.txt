@@ -26,11 +26,13 @@ mathrm
 matplotlib
 Merton
 mispricings
+misvaluations
 numpy
 nvda
 Overbetting
 Overfitting
 Overtrading
+pmatrix
 pyproject
 Quant
 quant_platform
