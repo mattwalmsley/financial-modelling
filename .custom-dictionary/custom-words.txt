@@ -5,13 +5,16 @@ azd
 Backtesting
 bbg
 bicep
+bigg
 binom
 BlackScholes
+boldsymbol
 chord
 convexity
 copilotmd
 Covariance
 csproj
+figsize
 Hubler
 iac
 Immunisation
@@ -19,6 +22,7 @@ Immunization
 infty
 KaTeX
 lambda
+Markowitz
 mathbb
 mathbf
 mathcal
@@ -29,6 +33,7 @@ mispricings
 misvaluations
 numpy
 nvda
+Ornstein
 Overbetting
 Overfitting
 Overtrading
@@ -39,6 +44,11 @@ quant_platform
 QuantLibrary
 Redington
 Schwarz
+Shortselling
 sln
+swaption
+Swaptions
 timeseries
+Uhlenbeck
+Vasicek
 VSCode

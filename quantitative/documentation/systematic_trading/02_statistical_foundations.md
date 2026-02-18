@@ -19,10 +19,11 @@
 
 1. **Mean ($\mu$):** Expected return.
 2. **Variance ($\sigma^2$):** Measure of dispersion/risk.
-3. **Skew ($\gamma$):** Asymmetry of returns.
+3. **Standard Deviation ($\sigma$):** Square root of variance, commonly used as a risk measure.
+4. **Skew ($\gamma$):** Asymmetry of returns.
    - **Negative Skew:** Frequent small gains, rare "catastrophic" losses (e.g., Carry, Stock Markets).
    - **Positive Skew:** Frequent small losses, rare large gains (e.g., Momentum/Trend Following).
-4. **Kurtosis:** "Fat tails" or frequency of extreme events. High kurtosis means more extreme outliers than a Gaussian distribution.
+5. **Kurtosis:** "Fat tails" or frequency of extreme events. High kurtosis means more extreme outliers than a Gaussian distribution.
 
 ## The Sharpe Ratio
 
