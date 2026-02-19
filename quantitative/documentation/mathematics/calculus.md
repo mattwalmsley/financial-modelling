@@ -13,6 +13,26 @@
     - [Integration by Parts](#integration-by-parts)
     - [Integration by Substitution](#integration-by-substitution)
   - [Stochastic Calculus](#stochastic-calculus)
+    - [The Standard Definition of an Integral](#the-standard-definition-of-an-integral)
+    - [Stochastic Integrals (The Itô Integrals)](#stochastic-integrals-the-itô-integrals)
+      - [Stochastic Integral $\\int\_0^t f(s) , dW\_s$](#stochastic-integral-int_0t-fs--dw_s)
+      - [The Distribution of the Random Variable $\\int\_0^t f(s) , dW\_s$](#the-distribution-of-the-random-variable-int_0t-fs--dw_s)
+      - [Stochastic Integrals $\\int\_0^t f(W\_s) , dW\_s$ and $\\int\_0^t f(s, W\_s) , dW\_s$](#stochastic-integrals-int_0t-fw_s--dw_s-and-int_0t-fs-w_s--dw_s)
+    - [The 'Usual' Differential of a Function](#the-usual-differential-of-a-function)
+    - [The Stochastic Case](#the-stochastic-case)
+      - [Itô's Formula for $F(W\_t)$](#itôs-formula-for-fw_t)
+      - [One Useful Corollary of the Itô Formula](#one-useful-corollary-of-the-itô-formula)
+      - [One More Explanation of Itô's Formula](#one-more-explanation-of-itôs-formula)
+      - [Itô's Formula for $F(t, W\_t)$](#itôs-formula-for-ft-w_t)
+      - [The Chain Rule](#the-chain-rule)
+      - [How to Remember the Chain Rule](#how-to-remember-the-chain-rule)
+    - [Stochastic Differential Equations](#stochastic-differential-equations)
+      - [Simple Examples of SDEs](#simple-examples-of-sdes)
+    - [Important Examples of SDEs](#important-examples-of-sdes)
+      - [The SDE for the Price of a Share](#the-sde-for-the-price-of-a-share)
+        - [The First Solution](#the-first-solution)
+        - [The Second Solution](#the-second-solution)
+      - [The Ornstein-Uhlenbeck Process (OUP)](#the-ornstein-uhlenbeck-process-oup)
 
 ## Differentiation
 
@@ -156,873 +176,665 @@ Then, rewriting the integral in terms of $u$:
 \end{aligned}
 ```
 
+
 ## Stochastic Calculus
 
-Stochastic Calculus
+### The Standard Definition of an Integral
 
-4.1     The standard definition of an integral
-                                                     Rb
-Let us recall the standard definition of the integral a f (x)dx, where f : [a, b] → R is a real valued
-function on [a, b]. To define the integral we need the following construction.
+Let us recall the standard definition of the integral $\int_a^b f(x) \, dx$, where $f : [a, b] \to \mathbb{R}$ is a real-valued function on $[a, b]$. To define the integral we need the following construction.
 
-   1. Choose any n − 1 (interior) points from [a, b] such that
+1. Choose any $n - 1$ (interior) points from $[a, b]$ such that $a = x_0 < x_1 < \ldots < x_{n-1} < x_n = b$.
 
-                                     a = x0 < x1 < . . . , xn−1 < xn = b.
-                                  Pn−1
-   2. Consider the integral sum      i=0 f (ξi )∆xi , where ∆xi = xi+1 − xi and ξi ∈ [xi , xi+1 ] (and is
-      arbitrary otherwise).
+2. Consider the integral sum $\sum_{i=0}^{n-1} f(\xi_i) \Delta x_i$, where $\Delta x_i = x_{i+1} - x_i$ and $\xi_i \in [x_i, x_{i+1}]$ (and is arbitrary otherwise).
 
-   3. Set δ = max0≤i≤n−1 ∆xi .
+3. Set $\delta = \max_{0 \le i \le n-1} \Delta x_i$.
 
-   4. Finally, the integral of the function f (x) over [a, b] is, by definition, the limit of the integral
-      sum (if this limit exists):
-                                      Z b                 n−1
-                                                  def
-                                                          X
-                                          f (x)dx = lim        f (ξi )∆xi
-                                        a                   δ→0
-                                                                  i=0
-                                                                                          Pn−1
-Theorem 4.1.1. If f (x) is a continuous function on [a, b], then the limit limδ→0            i=1 f (ξi )∆xi
-exists (and does not depend on the choice of xi , ξi , 0 ≤ i ≤ n).
+4. Finally, the integral of the function $f(x)$ over $[a, b]$ is, by definition, the limit of the integral sum (if this limit exists):
 
+$$\int_a^b f(x) \, dx \overset{\text{def}}{=} \lim_{\delta \to 0} \sum_{i=0}^{n-1} f(\xi_i) \Delta x_i$$
 
-4.2     Stochastic integrals (the Ito integrals)
-Before we define the stochastic integral (also called the Ito integral) we have to recall several
-properties of normal random variables and of the Wiener process which will paly a very important
-role in the study of these integrals.
+**Theorem.** If $f(x)$ is a continuous function on $[a, b]$, then the limit $\lim_{\delta \to 0} \sum_{i=0}^{n-1} f(\xi_i) \Delta x_i$ exists (and does not depend on the choice of $x_i$, $\xi_i$, $0 \le i \le n$).
 
-   1. If Z1 , Z2 , . . . , Zn are independent normal random variables, Zi ∼ N (µi , σi2 ), then
-                                         n
-                                         X                Xn      n
-                                                                  X
-                                                  Zi ∼ N (   µi ,   σi2 ).                           (4.1)
-                                            i=1             i=1     i=1
+### Stochastic Integrals (The Itô Integrals)
 
+Before we define the stochastic integral (also called the Itô integral) we have to recall several properties of normal random variables and of the Wiener process which play a very important role in the study of these integrals.
 
-   2. As usual, we denote by W (t) ≡ Wt the standard Wiener process. By the definition of the
-      Wiener process the following properties hold:
-      1. W (0) = 0
+1. If $Z_1, Z_2, \ldots, Z_n$ are independent normal random variables, $Z_i \sim N(\mu_i, \sigma_i^2)$, then:
 
-                                                       43
-       2. W (t + s) − W (t) ∼ N (0, s) if s > 0.
-       3. Let t0 = 0 < t1 < t2 < ... · · · < tn−1 < tn = t be any points from the interval [0, t]. Set
+$$\sum_{i=1}^{n} Z_i \sim N\left(\sum_{i=1}^{n} \mu_i, \sum_{i=1}^{n} \sigma_i^2\right)$$
 
-                         ∆Wi = W (ti+1 ) − W (ti ), i = 0, 1 . . . , n − 1 and ∆ti = ti+1 − ti .     (4.2)
+2. As usual, we denote by $W(t) \equiv W_t$ the standard Wiener process. By the definition of the Wiener process the following properties hold:
+   1. $W(0) = 0$
+   2. $W(t + s) - W(t) \sim N(0, s)$ if $s > 0$.
+   3. Let $t_0 = 0 < t_1 < t_2 < \cdots < t_{n-1} < t_n = t$ be any points from the interval $[0, t]$. Set $\Delta W_i = W(t_{i+1}) - W(t_i)$, $i = 0, 1, \ldots, n - 1$ and $\Delta t_i = t_{i+1} - t_i$. Then $\Delta W_i$, $i = 0, 1, \ldots, n - 1$ are independent normal random variables, $\Delta W_i \sim N(0, \Delta t_i)$.
 
-       Then ∆Wi , i = 0, 1, ..., n − 1 are independent normal random variables, ∆Wi ∼ N (0, ∆ti ).
+Our goal is to define:
 
-Our goal is to define
-     Rt
-  1. 0 f (s)dWs , where f (s) is a “usual” function (not random). This is a relatively simple case
-     of a stochastic integral.
-     Rt
-  2. 0 f (Ws )dWs - the stochastic integral of a function of a Wiener process which is a somewhat
-     more complicated case.
+1. $\int_0^t f(s) \, dW_s$, where $f(s)$ is a "usual" function (not random). This is a relatively simple case of a stochastic integral.
+2. $\int_0^t f(W_s) \, dW_s$ — the stochastic integral of a function of a Wiener process which is a somewhat more complicated case.
 
-                            Rt
-Stochastic integral          0 f (s)dWs
+#### Stochastic Integral $\int_0^t f(s) \, dW_s$
 
-Definition 4.2.1. Let t0 = 0 < t1 < t2 < · · · < tn = t be a sequence of points in [0, t] and define
-δ = maxi ∆ti . Then
-                               Z t                  n−1
-                                                    X
-                                   f (s)dWs = lim       f (ti )∆Wi                             (4.3)
-                                           0                   δ→0
-                                                                     i=0
+**Definition.** Let $t_0 = 0 < t_1 < t_2 < \cdots < t_n = t$ be a sequence of points in $[0, t]$ and define $\delta = \max_i \Delta t_i$. Then:
+
+$$\int_0^t f(s) \, dW_s = \lim_{\delta \to 0} \sum_{i=0}^{n-1} f(t_i) \Delta W_i$$
 
 if this limit exists.
 
-Theorem 4.2.2. If f (x) is differentiable and f ′ (x) is a continuous function then the limit in (4.3)
-exists.
-
-    Let us consider several simple examples.
-
-Example 4.2.3. f (x) = c (constant), then
-                            Z t                          n−1
-                                                         X                               n−1
-                                                                                         X
-                                  cdWs =       lim             c∆Wi = c       lim              ∆Wi
-                             0             maxi ∆ti →0                     maxi ∆ti →0
-                                                         i=0                             i=0
-
-where as above ∆Wi = W (ti+1 ) − W (ti ). Since
-           n−1
-           X
-                  ∆Wi = (W (t1 ) − W (t0 )) + (W (t2 ) − W (t1 )) + · · · + (W (tn ) − W (tn−1 ))
-            i=0
-                          = W (tn ) − W (t0 ) = W (t)
-                                   Pn−1              Pn−1
-we see that limmaxi ∆ti →0           i=0 ∆Wi =           i=0 ∆Wi = W (t) and therefore
-                                                  Z t
-                                                         cdWs = cW (t).
-                                                     0
-
-Remark 4.2.4. Always remember the identity
-                  n−1
-                  X
-                         (bi+1 − bi ) = (b1 − b0 ) + (b2 − b1 ) + · · · + (bn − bn−1 ) = bn − b0 .
-                   i=0
-
-We use it in the above example with bi = W (ti ).
-
-                                                               44
-Example 4.2.5.                                    (
-                                                   1,              0 ≤ x < 1.5,
-                                          f (x) =
-                                                   −1,             1.5 ≤ x ≤ 2.
-Then
-               Z 2                   Z 1.5          Z 2
-                      f (s)dWs =         f (s)dWs +      f (s)dWs
-                  0                 0                1.5
-                                   Z 1.5        Z 2
-                                 =       dWs −      dWs = W (1.5) − (W (2) − W (1.5))
-                                      0                 1.5
-                                 = 2W (1.5) − W (2)
-         Rb
-We use   a dWs = W (b) − W (a).
-
-    Question What is the distribution of this integral? Denote Y ≡ W (1.5) − (W (2) − W (1.5))?
-    Answer Since W (1.5) ∼ N (0, 1.5), W (2) − W (1.5) ∼ N (0, 0.5) and these random variable-
-sare independent, their difference Y ∼ N (0, 2). (This is a particular case of (4.1). Explain this
-statement.)
-
-Exercise 4.2.6.                                  
-                                                 1,
-                                                                  0 ≤ x < 1,
-                                          f (x) = 2,               1 ≤ x < 1.5,
-                                                 
-                                                  −1.5,            1.5 ≤ x ≤ 3.
-                                                 
-                                R3
-What is the distribution of      0 f (s)dWs ?
-
-                                                                         Rt
-4.2.1     The distribution of the random variable                         0
-                                                                              f (s)dWs
-              Rt
-The integral 0 f (s)dWs is a random variable because it is defined as a limit of a sum of random
-variables.
-Question What is the distribution of this random variable?
-    It is remarkable that this question has a simple answer. Namely, our next theorem states that
-this random variable has a normal distribution and, moreover, it is relatively easy to compute the
-parameters of this distribution. We shall see later that this fact plays a very important role in
-constructing solutions to some it turns out questions arising in financial mathematics.
-                  Rt                 R            
-                                         t
-Theorem 4.2.7. 0 f (s)dWs ∼ N 0, 0 (f (s))2 ds .
-
-Proof. By the definition of a limit,
-                                          Z t                  n−1
-                                                               X
-                                                 f (s)dWs ≃          f (ti )∆Wi
-                                             0                 i=0
-
- Since ∆Wi are independent random variablesand ∆Wi = W (ti+1 )−W (ti ) ∼ N (0, ∆ti ) the random
-variablesf (ti )∆Wi ) also are independent and f (ti )∆Wi ∼ N (0, f (ti )2 ∆ti ).
-    (Note that the last statement makes use of the fact that f (ti ) are not random variables!)
-    Next, due to property (4.1) we conclude that
-                      n−1
-                      X                      n−1
-                                             X                                    n−1
-                                                                                  X
-                            f (ti )∆Wi ∼           N (0, f (ti )2 ∆ti ) = N (0,         f (ti )2 ∆ti ).
-                      i=0                    i=0                                  i=0
-
-                                                              45
-But, by Theorem 4.1.1,
-                                                         n−1
-                                                         X                         Z t
-                                                                    2
-                                                  lim          f (ti ) ∆ti =                f (s)2 ds
-                                         maxi ∆ti →0                                   0
-                                                         i=0
-
-which finishes the proof.
-
-Exercise 4.2.8. Find the distributions of the random variables defined in the examples of the previous
-section.
-                                                  Rt                          Rt
-4.2.2     Stochastic integrals                     0
-                                                     f (Ws )dWs and            0
-                                                                                   f (s, Ws )dWs
-As before, let 0 = t0 < t1 < · · · < tn−1 < tn = t and δ = max0≤i≤n−1 (ti+1 − ti ).
-
-Definition 4.2.9. Let f : R → R be a function. If the limit limδ→0 n−1
-                                                                         P
-                                                                           i=0 f (W (ti ))∆Wi exists,
-then we say that
-                              Z b                   n−1
-                                                    X
-                                   f (Wt )dWt = lim     f (W (ti ))∆Wi .                       (4.4)
-                                             a                   δ→0
-                                                                        i=0
-                       Rb
-Similarly, we define    a f (t, Wt )dWt by
-
-                                 Z b                                   n−1
-                                                                       X
-                                             f (t, Wt )dWt = lim              f (ti , W (ti ))∆Wi ,                                     (4.5)
-                                     a                          δ→0
-                                                                        i=0
-
-if the limit in (4.5) exists.
-
-Theorem 4.2.10. Suppose that the function f : R → R is bounded and continuous. Then the limit
-in (4.4) exists.
-
-Remark 4.2.11. The existence of integrals (4.4) and (4.5) can be proved under much milder
-conditions. However, in this course, we don’t discuss them.
-
-   The just defined integral is of course again a random variable. But unlike in Theorem 4.2.7, it
-may be very difficult to find the distribution of this random variable.
-   We finish this section by stating two properties of these stochastic integrals.
-
-Theorem 4.2.12.
-                             Z b                                        Z b                          
-                        E            f (Wt )dWt              = 0 and E                 f (t, Wt )dWt        =0                          (4.6)
-                                 a                                                 a
-
-
-         Z b                       Z b                                      Z b                                Z b
-                                                         2
-   Var          f (Wt )dWt       =               E[f (Wt ) ]dt and Var                     f (t, Wt )dWt       =         E[f (t, Wt )2 ]dt.
-           a                             a                                         a                                a
-                                                                                                                                        (4.7)
-
-    Explanation
-    First, let us introduce notations which will make our calculation less cumbersome. We set
-Wi ≡ W (ti ) , fi ≡ f (Wi ) , ∆Wi ≡ W (ti+1 ) − W (ti ).
-    Since Wi and ∆Wi are independent, also the random variables fi = f (W (ti )) and ∆Wi are
-independent. Hence
-
-                       E(fi ∆Wi ) = E(fi ) × E(∆Wi ) = 0 because E(∆Wi ) = 0.                                                           (4.8)
-
-                                                                  46
-It is now obvious that
-                                      n−1                       n−1
-                                                        !
-                                      X                         X
-                               E               fi ∆Wi       =         E (fi ∆Wi ) = 0
-                                         i=0                    i=0
-                              R                                           P                        
-                                   b                                             n−1
-and (4.6) follows because E        a f (Wt )dWt         = limδ→0 E               i=0 f (W (ti ))∆Wi       .
-   To explain (4.7), note that if i < j then
-
-           Cov(fi ∆Wi , fj ∆Wj ) = E[fi ∆Wi × fj ∆Wj ] = E[fi ∆Wi fj ] × E(∆Wj ) = 0
-
-where the expectation factorizes because ∆Wj is independent of the other three random variables.
-We thus have that
-                                 n−1
-                                               ! n−1
-                                  X                 X
-                           Var       f (Wi )∆Wi =      Var(fi ∆Wi )                        (4.9)
-                                      i=0                             i=0
-                                   n−1
-                                   X                            n−1
-                                                                X
-                              =          E(fi2 ∆Wi2 ) =               E(fi2 ) × E(∆Wi2 )                      (4.10)
-                                   i=0                          i=0
-                                   n−1
-                                   X
-                              =          E(fi2 ) × ∆ti                                                        (4.11)
-                                   i=0
-                                      Rb           2
-The last sum converges,
-                        as δ → 0, P a E[(f (Wt ) ]dt and
-                                   to                     this implies (4.7) because
-      Rb                               n−1
-Var a f (Wt )dWt = limδ→0 Var          i=0 f (W (ti ))∆Wi .
-
-Remark 4.2.13. 1. In the above computation, we use E[∆Wi2 ] = ti+1 − ti = ∆ti .
-   2. We use the following fact which you are supposed to know from second year probability
-courses: if X1 , ..., Xn are such that Cov(Xi , Xj ) = 0 when i ̸= j then
-                                           n            n
-                                                 !
-                                          X            X
-                                     Var      Xi =        Var(Xi ).
-                                                 i=1              i=1
-
-
-4.3     The ‘usual’ differential of a function
-Suppose F (x) is a function F : R → R and F ′ (x) is continuous.
-Definition 4.3.1. dF (x) = F ′ (x)dx ( here dx is “small” ).
-    Explanation dF (x) is the linear part of the increment ∆F (x) = F (x + ∆x) − F (x). By the
-Taylor formula,
-                                                           1
-                           F (x + dx) = F (x) + F ′ (x)dx + F ′′ (θ)dx2 ,               (4.12)
-                                                           2
-where θ is (unknown) point in (x, x + dx) if dx > 0 and θ ∈ (x + dx, x) if dx < 0.
-    The important fact is that the difference between ∆F (x) = F (x + dx) − F (x) and dF (x) =
- ′
-f (x)dx is much smaller than dx (when dx is a small number). More precisely,
-                                    ∆F (x) − dF (x)
-                                                    → 0 as dx → 0.
-                                          dx
-Indeed, it follows from (4.12) that ∆F (x) − dF (x) = F (x + dx) − F (x) − F ′ (x)dx = 21 F ′′ (θ)dx2
-and hence
-                          ∆F (x) − dF (x)    1
-                                           = F ′′ (θ)dx → 0 as dx → 0.
-                                 dx          2
-
-                                                            47
-                           √                                         1
-Example 4.3.2. F (x) =         x. Then F (1) = 1, F ′ (x) = 12 x− 2 , F ′ (1) = 12 .
-
-                                ∆F (1) = F (1 + dx) − F (1) ≃ F ′ (1)dx.
-
-Since F (x + dx) − F (x) ≃ dF (x), we have
-
-                          F (1 + 0.05) = F (1) + dF (1),         (with dx = 0.05).
-
-That is
-                            √                                     0.05
-                                1 + 0.05 ≃ 1 + dF (1) = 1 +            = 1.025.
-                                                                    2
-      Remark ∆x = dx. Indeed, in this case F (x) = x, F ′ (x) = 1 and ∆F (x) = ∆x = x + dx − x =
-dx.
-
-
-4.4       The stochastic case
-Question What is dF (Wt )? Here F : R → R and Wt is the standard Wiener process.
-
-4.4.1     Ito’s formula for F (Wt )
-Note that if g(x) is a differentiable function, then
-
-                                       dF (g(x)) = F ′ (g(x))g ′ (x)dx                       (4.13)
-
-However
-                                                                 dW (t)
-                                     dF (W (t)) ̸= F ′ (W (t))          dt,
-                                                                  dt
-since the derivative dWdt(t) does not exists.
-    Next, (4.13) can be rewritten as
-
-                        dF (g(x)) = F ′ (g(x))dg(x),        since dg(x) = g ′ (x)dx.         (4.14)
-
-Can we state that
-                                      dF (W (t)) = F ′ (W (t))dW (t)?
-The answer is NO! The correct answer is given by Ito’s lemma.
-
-Lemma 4.4.1. (Ito’s lemma) Let F (x) be a function F : R → R which has two derivatives
-F ′ (x), F ′′ (x) and F ′′ (x) is continuous. Then
-
-                                                           1
-                                  dF (Wt ) = F ′ (Wt )dWt + F ′′ (Wt )dt.                    (4.15)
-                                                           2
-Remark 4.4.2. By definition, dWt ≡ ∆Wt ≡ W (t + dt) − W (t).
-
-      Explanation The main explanation of the Ito formula is due to the following theorem.
-
-Theorem 4.4.3. Suppose that F (x) has two continuous and bounded derivatives: F ′ (x), F ′′ (x).
-Then                                    Z b
-                                                         1 b ′′
-                                                          Z
-                                             ′
-                F (W (b)) − F (W (a)) =     F (Ws )dWs +     F (Ws )ds.                (4.16)
-                                         a               2 a
-
-                                                      48
-   (Note: we shall not prove this theorem but you are supposed know this statement.)
-   Let us now compare (4.16) with the following relation which you have discussed in the Calculus
-courses. Namely, you know of course that
-                                                   Z b
-                                   F (b) − F (a) =     F ′ (x)dx.
-                                                                a
-Moreover, if a function g(x), g : R 7→ R, has a continuous derivative g ′ (x) then
-                          Z b                     Z b
-                                ′       ′
-   F (g(b)) − F (g(a)) =      F (g(x))g (x)dx =       F ′ (g(x))dg(x) (since dg(x) = g ′ (x)dx).
-                             a                              a
-However, (4.16) tells us that
-                                                                    Z b
-                                 F (W (b)) − F (W (a)) ̸=                 F ′ (Wt )dWt .
-                                                                     a
-(And this happens because W ′ (t) does not exist!)
-
-4.4.2    One useful corollary of the Ito formula
-Corollary 4.4.4. Equation (4.16) can be rearranged as follows:
-                  Z b
-                                                             1 b ′′
-                                                               Z
-                      F ′ (Ws )dWs = F (W (b)) − F (W (a)) −     F (Ws )ds.                  (4.17)
-                    a                                        2 a
-                 Rb
-Example 4.4.5. a dWs = Wb − Wa . Here F (x) = x, F (Wt ) = Wt , F ′ (Wt ) = 1. So
-                             Z b                Z b
-                                 F ′ (Ws )dWs =     dWs = Wb − Wa .
-                                     a                  a
-This is a particular case of (4.17).
-Example 4.4.6. F (x) = x2 . We have F ′ (x) = 2x, F ′′ (x) = 2 and so (4.17) now reads
-                Z b
-                                             1 b
-                                               Z
-                                 2       2
-                    2Ws dWs = Wb − Wa −            2ds = Wb2 − Wa2 − (b − a).
-                 a                           2 a
-In particular,                            Z t
-                                                     1     1
-                                             Ws dWs = Wt2 − t.
-                                           0         2     2
-
-                                         IMPORTANT CONCLUSION
-
-We know that, by definition,
-                           Z t                                       n−1
-                                                                     X
-                                     f (Ws )dWs =      lim                  f (Wi )∆Wi .
-                                 0                  maxi ∆ti →0
-                                                                     i=0
-To compute this stochastic integral in terms of the ordinary integral one can do the following:
-   1. Find F (x) such that F ′ (x) = f (x).
-           Rt                                 Rt
-   2. Then 0 f (Ws )dWs = F (Wt ) − F (0) − 12 0 f ′ (Ws )ds.
-This is what we did in the examples considered above.
-Exercise
-       R t4.4.7. Compute the following stochastic integrals:
-             3
-   (a) 0 Ws dWs
-       Rt
-   (b) 0 eWs dWs .
-
-
-                                                       49
-4.4.3    One more explanation of Ito’s formula
-The material of this subsection is not examinable. It is here for those who want to know more. By
-Taylor’s formula,
-                                                    1             1
-                    F (x + dx) − F (x) = F ′ (x)dx + F ′′ (x)dx2 + F (3) (θ)dx3                   (4.18)
-                                                    2             3!
-As usual, θ is not known but this does not matter since we suppose that F (3) (x) = F ′′′ (x) is bounded:
-| F (3) (x) |< Constant. We can use (4.18) (taking into account that W (t + dt) = W (t) + dW (t))
-to obtain
-                                                    1                1
-          F (Wt + dWt ) − F (Wt ) = F ′ (Wt )dWt + F ′′ (Wt )dWt2 + F (3) (θ)(dWt )3 .             (4.19)
-                                                    2                3!
-Note that E(dWt2 ) = E((Wt+dt − Wt )2 ) = dt (by the definition of the Wiener process). Note also
-that E(| dWt |3 ) = c(dt)3/2 , where c is a constant.
-    So Ito’s lemma (see Lemma 4.4.1) does the following: it tells us that we can replace dWt2 in
-(4.19) by dt and we can drop (dWt )3 since the expectation of | dWt |3 is much smaller than dt.
-                                                             q
-Exercise 4.4.8. Compute E(| dWt |3 ). Thus show that c = 2 π2
-                      R∞
-Hint: E(| dWt |3 ) = −∞ | x |3 fdWt (x)dx. It is convenient to write h for dt (that is h = dt) and
-W (t + h) − W (t) for dWt . So
-                                                            1      x2
-                                   fW (t+h)−W (t) (x) = √       e− 2h .
-                                                            2πh
-Setting y = √xh (change of variable), we obtain
-                  Z ∞                             Z ∞
-                           1      −x
-                                     2        1                   2
-                       3
-                      x √       e  2h  dx = √         h3/2 y 3 e−y /2 dy
-                   0       2πh                2π 0
-                                                      Z ∞                  r
-                                                   1              2          2 3/2
-                                          = h3/2 √         y 3 e−y /2 dy =     h
-                                                   2π 0                      π
-                     R∞ 3                   q                     q
-Thus E(| dWt | ) = 2 0 x fdWt (x)dx = 2 π dt . So c = 2 π2 .
-               3                               2 3/2
-
-
-
-4.4.4    Ito’s formula for F (t, Wt )
-Let F (t, x) be a function of t and x, F : R2 → R.
-Lemma 4.4.9. (Ito’s formula for F (t, Wt ))
-                               ∂F (t, Wt ) 1 ∂ 2 F (t, Wt )
-                                                           
-                                                                   ∂F (t, Wt )
-               dF (t, Wt ) =               +           2      dt +             dWt                (4.20)
-                                   ∂t        2 ∂Wt                   ∂Wt
-Remarks 4.4.10.    1. Here and throughout the rest of the course, we assume that all the deriva-
-    tives we need exist, are continuous functions, and have all the properties we may want them
-    to have.
-   2. Even though the notations we use in (4.20) should be easy to understand, here is an additional
-      explanation of their meaning:
-                     ∂F (t, Wt )   ∂F (t, x)            ∂ 2 F (t, Wt )   ∂ 2 F (t, x)
-                                 =           |x=Wt ,                   =              |x=Wt .
-                       ∂Wt           ∂x                     ∂Wt2             ∂x2
-                                                                          2
-Example 4.4.11. F (t, x) = t2 + x2 . We have ∂F       ∂F       ∂ F
-                                             ∂t = 2t, ∂x = 2x, ∂x2 = 2. So
-
-                                 dF (t, Wt ) = (2t + 1)dt + 2Wt dWt .
-
-                                                   50
-4.4.5     The chain rule
-Suppose that Yt is a stochastic process and that
-
-                                      dYt = a(t, Yt )dt + σ(t, Yt )dWt ,                       (4.21)
-
-where a and σ are ”good” functions. Then
-
-                                              1 ∂2F
-                                                                     
-                                          ∂F            ∂F                         ∂F
-                      dF (t, Yt ) =          + σ2  2 +a                   dt + σ       dWt .   (4.22)
-                                          ∂t  2 ∂Yt     ∂Yt                        ∂Yt
-
-Here
-                                             ∂F    ∂F (t, Yt )
-                                                 ≡              ,
-                                              ∂t        ∂t
-                                             ∂F    ∂F (t, Yt )
-                                                 ≡              ,
-                                             ∂Yt       ∂Yt
-                                            ∂2F    ∂ 2 F (t, Yt )
-                                                 ≡                .
-                                            ∂Yt2       ∂Yt2
-
-   Note that Ito’s formula for F (t, Wt ) is a particular case of the Chain rule:
-
-                                                     1 ∂2F
-                                                             
-                                                ∂F                        ∂F
-                           dF (t, Wt ) =           +              dt +        dWt .
-                                                ∂t   2 ∂Wt2               ∂Wt
-
-4.4.6     How to remember (4.22) and similar formulae?
-   1. Know Taylor’s formula up to order 2:
-
-                                  ∂F      ∂F      1 ∂2F 2    ∂2F         1 ∂2F 2
-                    dF (t, x) =      dt +    dx +       dx +      dxdt +       dt .            (4.23)
-                                  ∂t      ∂x      2 ∂x2      ∂x∂t        2 ∂t2
-                  ∂F (t,x) ∂F ∂F (t,x)
-        Here ∂F
-             ∂t ≡   ∂t , ∂x ≡   ∂x , . . .
-
-   2. Use the following formal rules when you replace x by Wt or Yt :
-
-        (a) dWt2 = dt;
-        (b) dtdWt = 0, dt2 = 0.
-
-Example 4.4.12. Replace x in (4.23) by Wt . Then
-
-                               ∂F        ∂F         1 ∂2F
-                  dF (t, Wt ) =   dt +      dWt +            dt + 0 + 0
-                               ∂t       ∂Wt         2 ∂Wt2
-                                 ∂F (t, Wt ) 1 ∂ 2 F (t, Wt )
-                                                             
-                                                                     ∂F (t, Wt )
-                             =              +            2      dt +             dWt
-                                     ∂t       2 ∂Wt                     ∂Wt
-
-which is Ito’s lemma for F (t, Wt ).
-
-Example 4.4.13. Replace x in (4.23) by Yt . Note that, according to the second rule
-
-                           (dYt )2 = a2 dt2 + 2aσdtdWt + σ 2 dWt2 = σ 2 dt.
-
-                                                     51
-Here we use equation (4.21). So
-
-                                      ∂F      ∂F        1 ∂2F
-                         dF (t, Yt ) =   dt +     dYt +       dY 2 + 0 + 0
-                                      ∂t      ∂Yt       2 ∂Yt2 t
-                                      ∂F      ∂F                  1 ∂2F 2
-                                    =    dt +     (adt + σdWt ) +        σ dt         (4.24)
-                                      ∂t      ∂Yt                 2 ∂Yt2
+**Theorem.** If $f(x)$ is differentiable and $f'(x)$ is a continuous function then the limit above exists.
+
+Let us consider several simple examples.
+
+**Example.** $f(x) = c$ (constant), then:
+
+$$\int_0^t c \, dW_s = \lim_{\max_i \Delta t_i \to 0} \sum_{i=0}^{n-1} c \Delta W_i = c \lim_{\max_i \Delta t_i \to 0} \sum_{i=0}^{n-1} \Delta W_i$$
+
+where as above $\Delta W_i = W(t_{i+1}) - W(t_i)$. Since:
+
+```math
+\begin{aligned}
+\sum_{i=0}^{n-1} \Delta W_i &= (W(t_1) - W(t_0)) + (W(t_2) - W(t_1)) + \cdots + (W(t_n) - W(t_{n-1})) \\\\
+&= W(t_n) - W(t_0) = W(t)
+\end{aligned}
+```
+
+we see that $\lim_{\max_i \Delta t_i \to 0} \sum_{i=0}^{n-1} \Delta W_i = W(t)$ and therefore:
+
+$$\int_0^t c \, dW_s = cW(t)$$
+
+**Remark.** Always remember the telescoping identity:
+
+$$\sum_{i=0}^{n-1} (b_{i+1} - b_i) = (b_1 - b_0) + (b_2 - b_1) + \cdots + (b_n - b_{n-1}) = b_n - b_0$$
+
+We use it in the above example with $b_i = W(t_i)$.
+
+**Example.** Consider the piecewise function:
+
+$$f(x) = \begin{cases} 1, & 0 \le x < 1.5 \\\\ -1, & 1.5 \le x \le 2 \end{cases}$$
+
+Then:
+
+```math
+\begin{aligned}
+\int_0^2 f(s) \, dW_s &= \int_0^{1.5} f(s) \, dW_s + \int_{1.5}^2 f(s) \, dW_s \\\\
+&= \int_0^{1.5} dW_s - \int_{1.5}^2 dW_s \\\\
+&= W(1.5) - (W(2) - W(1.5)) \\\\
+&= 2W(1.5) - W(2)
+\end{aligned}
+```
+
+We use $\int_a^b dW_s = W(b) - W(a)$.
+
+*Question:* What is the distribution of this integral? Denote $Y \equiv W(1.5) - (W(2) - W(1.5))$.
+
+*Answer:* Since $W(1.5) \sim N(0, 1.5)$, $W(2) - W(1.5) \sim N(0, 0.5)$ and these random variables are independent, their difference $Y \sim N(0, 2)$.
+
+**Exercise.** Given:
+
+$$f(x) = \begin{cases} 1, & 0 \le x < 1 \\\\ 2, & 1 \le x < 1.5 \\\\ -1.5, & 1.5 \le x \le 3 \end{cases}$$
+
+What is the distribution of $\int_0^3 f(s) \, dW_s$?
+
+#### The Distribution of the Random Variable $\int_0^t f(s) \, dW_s$
+
+The integral $\int_0^t f(s) \, dW_s$ is a random variable because it is defined as a limit of a sum of random variables.
+
+*Question:* What is the distribution of this random variable?
+
+It is remarkable that this question has a simple answer. Namely, our next theorem states that this random variable has a normal distribution and, moreover, it is relatively easy to compute the parameters of this distribution. We shall see later that this fact plays a very important role in constructing solutions to questions arising in financial mathematics.
+
+**Theorem.** $\int_0^t f(s) \, dW_s \sim N\left(0, \int_0^t (f(s))^2 \, ds\right)$
+
+*Proof.* By the definition of a limit:
+
+$$\int_0^t f(s) \, dW_s \approx \sum_{i=0}^{n-1} f(t_i) \Delta W_i$$
+
+Since $\Delta W_i$ are independent random variables and $\Delta W_i = W(t_{i+1}) - W(t_i) \sim N(0, \Delta t_i)$, the random variables $f(t_i) \Delta W_i$ are also independent and $f(t_i) \Delta W_i \sim N(0, f(t_i)^2 \Delta t_i)$.
+
+(Note that the last statement makes use of the fact that $f(t_i)$ are not random variables!)
+
+Next, due to the property of sums of independent normals we conclude that:
+
+$$\sum_{i=0}^{n-1} f(t_i) \Delta W_i \sim N\left(0, \sum_{i=0}^{n-1} f(t_i)^2 \Delta t_i\right)$$
+
+But, by the standard definition of the integral:
+
+$$\lim_{\max_i \Delta t_i \to 0} \sum_{i=0}^{n-1} f(t_i)^2 \Delta t_i = \int_0^t f(s)^2 \, ds$$
+
+which finishes the proof. $\square$
+
+**Exercise.** Find the distributions of the random variables defined in the examples of the previous section.
+
+#### Stochastic Integrals $\int_0^t f(W_s) \, dW_s$ and $\int_0^t f(s, W_s) \, dW_s$
+
+As before, let $0 = t_0 < t_1 < \cdots < t_{n-1} < t_n = t$ and $\delta = \max_{0 \le i \le n-1}(t_{i+1} - t_i)$.
+
+**Definition.** Let $f : \mathbb{R} \to \mathbb{R}$ be a function. If the limit $\lim_{\delta \to 0} \sum_{i=0}^{n-1} f(W(t_i)) \Delta W_i$ exists, then we say that:
+
+$$\int_a^b f(W_t) \, dW_t = \lim_{\delta \to 0} \sum_{i=0}^{n-1} f(W(t_i)) \Delta W_i$$
+
+Similarly, we define $\int_a^b f(t, W_t) \, dW_t$ by:
+
+$$\int_a^b f(t, W_t) \, dW_t = \lim_{\delta \to 0} \sum_{i=0}^{n-1} f(t_i, W(t_i)) \Delta W_i$$
+
+if this limit exists.
+
+**Theorem.** Suppose that the function $f : \mathbb{R} \to \mathbb{R}$ is bounded and continuous. Then the limit above exists.
+
+**Remark.** The existence of these integrals can be proved under much milder conditions. However, we don't discuss them here.
+
+The just defined integral is of course again a random variable. But unlike for $\int_0^t f(s) \, dW_s$, it may be very difficult to find the distribution of this random variable. We finish this section by stating two properties of these stochastic integrals.
+
+**Theorem (Expectation and Variance).**
+
+$$E\left[\int_a^b f(W_t) \, dW_t\right] = 0 \quad \text{and} \quad E\left[\int_a^b f(t, W_t) \, dW_t\right] = 0$$
+
+$$\text{Var}\left(\int_a^b f(W_t) \, dW_t\right) = \int_a^b E[f(W_t)^2] \, dt \quad \text{and} \quad \text{Var}\left(\int_a^b f(t, W_t) \, dW_t\right) = \int_a^b E[f(t, W_t)^2] \, dt$$
+
+*Explanation:* First, let us introduce notations which will make our calculation less cumbersome. We set $W_i \equiv W(t_i)$, $f_i \equiv f(W_i)$, $\Delta W_i \equiv W(t_{i+1}) - W(t_i)$.
+
+Since $W_i$ and $\Delta W_i$ are independent, also the random variables $f_i = f(W(t_i))$ and $\Delta W_i$ are independent. Hence:
+
+$$E(f_i \Delta W_i) = E(f_i) \times E(\Delta W_i) = 0 \quad \text{because } E(\Delta W_i) = 0$$
+
+It is now obvious that:
+
+$$E\left(\sum_{i=0}^{n-1} f_i \Delta W_i\right) = \sum_{i=0}^{n-1} E(f_i \Delta W_i) = 0$$
+
+and the expectation result follows because $E\left[\int_a^b f(W_t) \, dW_t\right] = \lim_{\delta \to 0} E\left[\sum_{i=0}^{n-1} f(W(t_i)) \Delta W_i\right]$.
+
+To explain the variance result, note that if $i < j$ then:
+
+$$\text{Cov}(f_i \Delta W_i, f_j \Delta W_j) = E[f_i \Delta W_i \times f_j \Delta W_j] = E[f_i \Delta W_i f_j] \times E(\Delta W_j) = 0$$
+
+where the expectation factorises because $\Delta W_j$ is independent of the other three random variables. We thus have that:
+
+```math
+\begin{aligned}
+\text{Var}\left(\sum_{i=0}^{n-1} f(W_i) \Delta W_i\right) &= \sum_{i=0}^{n-1} \text{Var}(f_i \Delta W_i) \\\\
+&= \sum_{i=0}^{n-1} E(f_i^2 \Delta W_i^2) = \sum_{i=0}^{n-1} E(f_i^2) \times E(\Delta W_i^2) \\\\
+&= \sum_{i=0}^{n-1} E(f_i^2) \times \Delta t_i
+\end{aligned}
+```
+
+The last sum converges, as $\delta \to 0$, to $\int_a^b E[f(W_t)^2] \, dt$ and this implies the variance result because $\text{Var}\left(\int_a^b f(W_t) \, dW_t\right) = \lim_{\delta \to 0} \text{Var}\left(\sum_{i=0}^{n-1} f(W(t_i)) \Delta W_i\right)$.
+
+**Remarks.**
+
+1. In the above computation, we use $E[\Delta W_i^2] = t_{i+1} - t_i = \Delta t_i$.
+2. We use the following fact: if $X_1, \ldots, X_n$ are such that $\text{Cov}(X_i, X_j) = 0$ when $i \ne j$ then:
+
+$$\text{Var}\left(\sum_{i=1}^{n} X_i\right) = \sum_{i=1}^{n} \text{Var}(X_i)$$
+
+### The 'Usual' Differential of a Function
+
+Suppose $F(x)$ is a function $F : \mathbb{R} \to \mathbb{R}$ and $F'(x)$ is continuous.
+
+**Definition.** $dF(x) = F'(x) \, dx$ (here $dx$ is "small").
+
+*Explanation:* $dF(x)$ is the linear part of the increment $\Delta F(x) = F(x + \Delta x) - F(x)$. By the Taylor formula:
+
+$$F(x + dx) = F(x) + F'(x) \, dx + \frac{1}{2} F''(\theta) \, dx^2$$
+
+where $\theta$ is an (unknown) point in $(x, x + dx)$ if $dx > 0$ and $\theta \in (x + dx, x)$ if $dx < 0$.
+
+The important fact is that the difference between $\Delta F(x) = F(x + dx) - F(x)$ and $dF(x) = F'(x) \, dx$ is much smaller than $dx$ (when $dx$ is a small number). More precisely:
+
+$$\frac{\Delta F(x) - dF(x)}{dx} \to 0 \quad \text{as } dx \to 0$$
+
+Indeed, it follows from the Taylor formula that $\Delta F(x) - dF(x) = F(x + dx) - F(x) - F'(x) \, dx = \frac{1}{2} F''(\theta) \, dx^2$ and hence:
+
+$$\frac{\Delta F(x) - dF(x)}{dx} = \frac{1}{2} F''(\theta) \, dx \to 0 \quad \text{as } dx \to 0$$
+
+**Example.** $F(x) = \sqrt{x}$. Then $F(1) = 1$, $F'(x) = \frac{1}{2} x^{-1/2}$, $F'(1) = \frac{1}{2}$.
+
+$$\Delta F(1) = F(1 + dx) - F(1) \approx F'(1) \, dx$$
+
+Since $F(x + dx) - F(x) \approx dF(x)$, we have $F(1 + 0.05) = F(1) + dF(1)$ (with $dx = 0.05$). That is:
+
+$$\sqrt{1.05} \approx 1 + dF(1) = 1 + \frac{0.05}{2} = 1.025$$
+
+*Remark:* $\Delta x = dx$. Indeed, in this case $F(x) = x$, $F'(x) = 1$ and $\Delta F(x) = \Delta x = x + dx - x = dx$.
+
+### The Stochastic Case
+
+*Question:* What is $dF(W_t)$? Here $F : \mathbb{R} \to \mathbb{R}$ and $W_t$ is the standard Wiener process.
+
+#### Itô's Formula for $F(W_t)$
+
+Note that if $g(x)$ is a differentiable function, then:
+
+$$dF(g(x)) = F'(g(x)) g'(x) \, dx$$
+
+However:
+
+$$dF(W(t)) \ne F'(W(t)) \frac{dW(t)}{dt} \, dt$$
+
+since the derivative $\frac{dW(t)}{dt}$ does not exist.
+
+The equation above can be rewritten as $dF(g(x)) = F'(g(x)) \, dg(x)$, since $dg(x) = g'(x) \, dx$.
+
+Can we state that $dF(W(t)) = F'(W(t)) \, dW(t)$?
+
+The answer is **NO!** The correct answer is given by Itô's lemma.
+
+**Lemma (Itô's Lemma).** Let $F(x)$ be a function $F : \mathbb{R} \to \mathbb{R}$ which has two derivatives $F'(x)$, $F''(x)$ and $F''(x)$ is continuous. Then:
+
+$$dF(W_t) = F'(W_t) \, dW_t + \frac{1}{2} F''(W_t) \, dt$$
+
+**Remark.** By definition, $dW_t \equiv \Delta W_t \equiv W(t + dt) - W(t)$.
+
+*Explanation:* The main explanation of the Itô formula is due to the following theorem.
+
+**Theorem.** Suppose that $F(x)$ has two continuous and bounded derivatives: $F'(x)$, $F''(x)$. Then:
+
+$$F(W(b)) - F(W(a)) = \int_a^b F'(W_s) \, dW_s + \frac{1}{2} \int_a^b F''(W_s) \, ds$$
+
+(Note: we shall not prove this theorem but you are supposed to know this statement.)
+
+Let us now compare this with the following relation from standard calculus. Namely:
+
+$$F(b) - F(a) = \int_a^b F'(x) \, dx$$
+
+Moreover, if a function $g(x)$, $g : \mathbb{R} \to \mathbb{R}$, has a continuous derivative $g'(x)$ then:
+
+$$F(g(b)) - F(g(a)) = \int_a^b F'(g(x)) g'(x) \, dx = \int_a^b F'(g(x)) \, dg(x)$$
+
+However, the Itô formula tells us that:
+
+$$F(W(b)) - F(W(a)) \ne \int_a^b F'(W_t) \, dW_t$$
+
+(And this happens because $W'(t)$ does not exist!)
+
+#### One Useful Corollary of the Itô Formula
+
+**Corollary.** The Itô formula can be rearranged as follows:
+
+$$\int_a^b F'(W_s) \, dW_s = F(W(b)) - F(W(a)) - \frac{1}{2} \int_a^b F''(W_s) \, ds$$
+
+**Example.** $\int_a^b dW_s = W_b - W_a$. Here $F(x) = x$, $F(W_t) = W_t$, $F'(W_t) = 1$. So:
+
+$$\int_a^b F'(W_s) \, dW_s = \int_a^b dW_s = W_b - W_a$$
+
+This is a particular case of the corollary.
+
+**Example.** $F(x) = x^2$. We have $F'(x) = 2x$, $F''(x) = 2$ and so the corollary now reads:
+
+$$\int_a^b 2W_s \, dW_s = W_b^2 - W_a^2 - \frac{1}{2} \int_a^b 2 \, ds = W_b^2 - W_a^2 - (b - a)$$
+
+In particular:
+
+$$\int_0^t W_s \, dW_s = \frac{1}{2} W_t^2 - \frac{1}{2} t$$
+
+> **Important Conclusion**
+>
+> We know that, by definition:
+>
+> $$\int_0^t f(W_s) \, dW_s = \lim_{\max_i \Delta t_i \to 0} \sum_{i=0}^{n-1} f(W_i) \Delta W_i$$
+>
+> To compute this stochastic integral in terms of the ordinary integral one can do the following:
+>
+> 1. Find $F(x)$ such that $F'(x) = f(x)$.
+> 2. Then $\int_0^t f(W_s) \, dW_s = F(W_t) - F(0) - \frac{1}{2} \int_0^t f'(W_s) \, ds$.
+>
+> This is what we did in the examples considered above.
+
+**Exercise.** Compute the following stochastic integrals:
+
+(a) $\int_0^t W_s^3 \, dW_s$
+
+(b) $\int_0^t e^{W_s} \, dW_s$
+
+#### One More Explanation of Itô's Formula
+
+By Taylor's formula:
+
+$$F(x + dx) - F(x) = F'(x) \, dx + \frac{1}{2} F''(x) \, dx^2 + \frac{1}{3!} F^{(3)}(\theta) \, dx^3$$
+
+As usual, $\theta$ is not known but this does not matter since we suppose that $F^{(3)}(x) = F'''(x)$ is bounded: $|F^{(3)}(x)| < \text{Constant}$. We can use this (taking into account that $W(t + dt) = W(t) + dW(t)$) to obtain:
+
+$$F(W_t + dW_t) - F(W_t) = F'(W_t) \, dW_t + \frac{1}{2} F''(W_t) \, dW_t^2 + \frac{1}{3!} F^{(3)}(\theta)(dW_t)^3$$
+
+Note that $E(dW_t^2) = E((W_{t+dt} - W_t)^2) = dt$ (by the definition of the Wiener process). Note also that $E(|dW_t|^3) = c(dt)^{3/2}$, where $c$ is a constant.
+
+So Itô's lemma does the following: it tells us that we can replace $dW_t^2$ by $dt$ and we can drop $(dW_t)^3$ since the expectation of $|dW_t|^3$ is much smaller than $dt$.
+
+**Exercise.** Compute $E(|dW_t|^3)$. Thus show that $c = 2\sqrt{\frac{2}{\pi}}$.
+
+*Hint:* $E(|dW_t|^3) = \int_{-\infty}^{\infty} |x|^3 f_{dW_t}(x) \, dx$. It is convenient to write $h$ for $dt$ (that is $h = dt$) and $W(t + h) - W(t)$ for $dW_t$. So:
+
+$$f_{W(t+h)-W(t)}(x) = \frac{1}{\sqrt{2\pi h}} e^{-\frac{x^2}{2h}}$$
+
+Setting $y = \frac{x}{\sqrt{h}}$ (change of variable), we obtain:
+
+```math
+\begin{aligned}
+\int_0^{\infty} x^3 \frac{1}{\sqrt{2\pi h}} e^{-\frac{x^2}{2h}} \, dx &= \frac{1}{\sqrt{2\pi}} h^{3/2} \int_0^{\infty} y^3 e^{-y^2/2} \, dy \\\\
+&= h^{3/2} \frac{1}{\sqrt{2\pi}} \int_0^{\infty} y^3 e^{-y^2/2} \, dy = \sqrt{\frac{2}{\pi}} h^{3/2}
+\end{aligned}
+```
+
+Thus $E(|dW_t|^3) = 2 \int_0^{\infty} x^3 f_{dW_t}(x) \, dx = 2\sqrt{\frac{2}{\pi}} (dt)^{3/2}$. So $c = 2\sqrt{\frac{2}{\pi}}$.
+
+#### Itô's Formula for $F(t, W_t)$
+
+Let $F(t, x)$ be a function of $t$ and $x$, $F : \mathbb{R}^2 \to \mathbb{R}$.
+
+**Lemma (Itô's Formula for $F(t, W_t)$).**
+
+$$dF(t, W_t) = \left(\frac{\partial F(t, W_t)}{\partial t} + \frac{1}{2} \frac{\partial^2 F(t, W_t)}{\partial W_t^2}\right) dt + \frac{\partial F(t, W_t)}{\partial W_t} \, dW_t$$
+
+**Remarks.**
+
+1. Here and throughout, we assume that all the derivatives we need exist, are continuous functions, and have all the properties we may want them to have.
+2. Even though the notations should be easy to understand, here is an additional explanation of their meaning:
+
+$$\frac{\partial F(t, W_t)}{\partial W_t} = \frac{\partial F(t, x)}{\partial x}\bigg|_{x=W_t}, \qquad \frac{\partial^2 F(t, W_t)}{\partial W_t^2} = \frac{\partial^2 F(t, x)}{\partial x^2}\bigg|_{x=W_t}$$
+
+**Example.** $F(t, x) = t^2 + x^2$. We have $\frac{\partial F}{\partial t} = 2t$, $\frac{\partial F}{\partial x} = 2x$, $\frac{\partial^2 F}{\partial x^2} = 2$. So:
+
+$$dF(t, W_t) = (2t + 1) \, dt + 2W_t \, dW_t$$
+
+#### The Chain Rule
+
+Suppose that $Y_t$ is a stochastic process and that:
+
+$$dY_t = a(t, Y_t) \, dt + \sigma(t, Y_t) \, dW_t$$
+
+where $a$ and $\sigma$ are "good" functions. Then:
+
+$$dF(t, Y_t) = \left(\frac{\partial F}{\partial t} + \frac{1}{2} \sigma^2 \frac{\partial^2 F}{\partial Y_t^2} + a \frac{\partial F}{\partial Y_t}\right) dt + \sigma \frac{\partial F}{\partial Y_t} \, dW_t$$
+
+where $\frac{\partial F}{\partial t} \equiv \frac{\partial F(t, Y_t)}{\partial t}$, $\frac{\partial F}{\partial Y_t} \equiv \frac{\partial F(t, Y_t)}{\partial Y_t}$, $\frac{\partial^2 F}{\partial Y_t^2} \equiv \frac{\partial^2 F(t, Y_t)}{\partial Y_t^2}$.
+
+Note that Itô's formula for $F(t, W_t)$ is a particular case of the chain rule:
+
+$$dF(t, W_t) = \left(\frac{\partial F}{\partial t} + \frac{1}{2} \frac{\partial^2 F}{\partial W_t^2}\right) dt + \frac{\partial F}{\partial W_t} \, dW_t$$
+
+#### How to Remember the Chain Rule
+
+1. Know Taylor's formula up to order 2:
+
+$$dF(t, x) = \frac{\partial F}{\partial t} \, dt + \frac{\partial F}{\partial x} \, dx + \frac{1}{2} \frac{\partial^2 F}{\partial x^2} \, dx^2 + \frac{\partial^2 F}{\partial x \partial t} \, dx \, dt + \frac{1}{2} \frac{\partial^2 F}{\partial t^2} \, dt^2$$
+
+2. Use the following formal rules when you replace $x$ by $W_t$ or $Y_t$:
+   - $dW_t^2 = dt$
+   - $dt \, dW_t = 0$, $dt^2 = 0$
+
+**Example.** Replace $x$ by $W_t$. Then:
+
+```math
+\begin{aligned}
+dF(t, W_t) &= \frac{\partial F}{\partial t} \, dt + \frac{\partial F}{\partial W_t} \, dW_t + \frac{1}{2} \frac{\partial^2 F}{\partial W_t^2} \, dt + 0 + 0 \\\\
+&= \left(\frac{\partial F(t, W_t)}{\partial t} + \frac{1}{2} \frac{\partial^2 F(t, W_t)}{\partial W_t^2}\right) dt + \frac{\partial F(t, W_t)}{\partial W_t} \, dW_t
+\end{aligned}
+```
+
+which is Itô's lemma for $F(t, W_t)$.
+
+**Example.** Replace $x$ by $Y_t$. Note that, according to the second rule:
+
+$$(dY_t)^2 = a^2 \, dt^2 + 2a\sigma \, dt \, dW_t + \sigma^2 \, dW_t^2 = \sigma^2 \, dt$$
+
+Here we use the SDE for $Y_t$. So:
+
+```math
+\begin{aligned}
+dF(t, Y_t) &= \frac{\partial F}{\partial t} \, dt + \frac{\partial F}{\partial Y_t} \, dY_t + \frac{1}{2} \frac{\partial^2 F}{\partial Y_t^2} \, dY_t^2 + 0 + 0 \\\\
+&= \frac{\partial F}{\partial t} \, dt + \frac{\partial F}{\partial Y_t}(a \, dt + \sigma \, dW_t) + \frac{1}{2} \frac{\partial^2 F}{\partial Y_t^2} \sigma^2 \, dt
+\end{aligned}
+```
 
 Hence the chain rule:
-                                                        1 ∂2F 2
-                                                                
-                                            ∂F   ∂F                       ∂F
-                        dF (t, Yt ) =          +     a+        σ   dt + σ     dWt .
-                                            ∂t   ∂Yt    2 ∂Yt2            ∂Yt
 
-Exercise 4.4.14. Compute dF (t, g(Wt )).
+$$dF(t, Y_t) = \left(\frac{\partial F}{\partial t} + \frac{\partial F}{\partial Y_t} a + \frac{1}{2} \frac{\partial^2 F}{\partial Y_t^2} \sigma^2\right) dt + \sigma \frac{\partial F}{\partial Y_t} \, dW_t$$
 
-     Remark The (4.24) above contains two zeros. This is because
+**Exercise.** Compute $dF(t, g(W_t))$.
 
-                            dtdYt = dt · (adt + σdWt ) = 0 and dt2 = 0
+*Remark:* The two zeros above are because $dt \, dY_t = dt \cdot (a \, dt + \sigma \, dW_t) = 0$ and $dt^2 = 0$, so:
 
-So
-                             ∂ 2 F (t, Yt )               ∂ 2 F (t, Yt ) 2
-                                            dtdYt = 0 and               dt = 0
-                                ∂t∂Yt                          ∂t2
+$$\frac{\partial^2 F(t, Y_t)}{\partial t \partial Y_t} \, dt \, dY_t = 0 \quad \text{and} \quad \frac{\partial^2 F(t, Y_t)}{\partial t^2} \, dt^2 = 0$$
 
+### Stochastic Differential Equations
 
+**Definition.** A stochastic differential equation (SDE) is the equation of the form:
 
+$$dY_t = a(t, Y_t) \, dt + \sigma(t, Y_t) \, dW_t$$
 
-                                                       52
-4.5     Stochastic differential equations
-Definition 4.5.1. A stochastic differential equation (SDE) is the equation of the form
+where $a(t, Y_t)$, $\sigma(t, Y_t)$ are given (random) functions and $Y_t = Y(t)$ is an unknown random process.
 
-                                   dYt = a(t, Yt )dt + σ(t, Yt )dWt ,                            (4.25)
+**Definition.** We say that $Y(t)$ is a solution to the SDE with initial value $Y(0)$, if for $t \ge 0$:
 
-where a(t, Yt ), σ(t, Yt ) are given (random) functions and Yt = Y (t) is an unknown random process.
-   Remark We have seen (4.25) before: equation (4.21).
-Definition 4.5.2. We say that Y (t) is a solution to (4.25) with initial value Y (0), if for t ≥ 0
-                                        Z t               Z t
-                       Y (t) = Y (0) +      a(s, Ys )ds +     σ(s, Ys )dWs .                     (4.26)
-                                            0                    0
+$$Y(t) = Y(0) + \int_0^t a(s, Y_s) \, ds + \int_0^t \sigma(s, Y_s) \, dW_s$$
 
-     Terminological remarks
-     Y (t) solving (4.25) is said to be a diffusion process.
-     a(t, Yt ) is called the drift and σ(t, Yt ) is the volatility of the diffusion process.
-     Note that (4.26) is obtained from (4.25) by integrating both parts of (4.25). If σ ≡ 0, then (4.25)
-becomes dYt = a(t, Yt )dt and is equivalent to Yt′ = a(t, Yt )− the ordinary differential equation (but
-still, Y (t) is a random process if a is a random process).
+**Terminological remarks:**
 
-4.5.1    Simple examples of SDEs
-Example 4.5.3. The following relation is the simplest example of a SDE
+- $Y(t)$ solving the SDE is said to be a **diffusion process**.
+- $a(t, Y_t)$ is called the **drift** and $\sigma(t, Y_t)$ is the **volatility** of the diffusion process.
+- The solution is obtained from the SDE by integrating both parts. If $\sigma \equiv 0$, then the SDE becomes $dY_t = a(t, Y_t) \, dt$ and is equivalent to $Y_t' = a(t, Y_t)$ — the ordinary differential equation (but still, $Y(t)$ is a random process if $a$ is a random process).
 
-                                       dYt = dWt , Y (0) = 0.
-                 Rt
-Then Yt = Y (0) + 0 dWs = Wt − W0 = Wt . Thus Yt in this case is the Wiener process.
-Example 4.5.4.
-                                   dYt = µdt + σdWt , Y (0) = 1,
-where µ and σ are constants. Then
-                                                   Z t           Z t
-                                 Y (t) = Y (0) +         µds +         σdWs
-                                                    0             0
+#### Simple Examples of SDEs
 
-and we obtain
-                                        Y (t) = 1 + µt + σWt ,
+**Example.** The following relation is the simplest example of a SDE:
+
+$$dY_t = dW_t, \quad Y(0) = 0$$
+
+Then $Y_t = Y(0) + \int_0^t dW_s = W_t - W_0 = W_t$. Thus $Y_t$ in this case is the Wiener process.
+
+**Example.** Consider:
+
+$$dY_t = \mu \, dt + \sigma \, dW_t, \quad Y(0) = 1$$
+
+where $\mu$ and $\sigma$ are constants. Then:
+
+$$Y(t) = Y(0) + \int_0^t \mu \, ds + \int_0^t \sigma \, dW_s$$
+
+and we obtain:
+
+$$Y(t) = 1 + \mu t + \sigma W_t$$
+
 which is the Brownian motion starting from 1.
-Exercise 4.5.5. dYt = e−t dt + 2tdWt . State the distribution of Yt if Y (0) = −1.
-Exercise 4.5.6. dYt = e−t dt + 2tdWt . Find d(Yt2 ).
 
+**Exercise.** $dY_t = e^{-t} \, dt + 2t \, dW_t$. State the distribution of $Y_t$ if $Y(0) = -1$.
 
-4.6     Important examples of stochastic differential equations
-4.6.1    The stochastic differential equation for the price of a share
-Let S(t) be a random process describing the price of a share. How does the difference between S(t)
-and S(t + dt) behave?
-    A simple model for dS(t) = S(t + dt) − S(t) is
+**Exercise.** $dY_t = e^{-t} \, dt + 2t \, dW_t$. Find $d(Y_t^2)$.
 
-                                  dS(t) = S(t) · adt + S(t) · ξ(dt),                             (4.27)
+### Important Examples of SDEs
 
-                                                   53
-where a is a parameter (usually a > 0) and ξ(dt) is a random ”noise”. The term S(t) · adt
-pushes the price up, while ξ(dt) may be ≥ 0 or < 0. We choose ξ(dt) = σdWt , where Wt is the
-standard Wiener process and σ is a constant (whiich may be negative). Then we obtain the following
-stochastic differential equation (SDE) :
+#### The SDE for the Price of a Share
 
-                                      dS(t) = aS(t)dt + σS(t)dWt                                       (4.28)
+Let $S(t)$ be a random process describing the price of a share. How does the difference between $S(t)$ and $S(t + dt)$ behave?
 
-Assuming that S(0) = S0 is given, how do we solve this SDE?
+A simple model for $dS(t) = S(t + dt) - S(t)$ is:
 
-The first solution to (4.28)
-Theorem 4.6.1. The solution to (4.28) is given by
+$$dS(t) = S(t) \cdot a \, dt + S(t) \cdot \xi(dt)$$
 
-                                                           σ2
-                                          St = S0 e(a− 2 )t+σWt .
+where $a$ is a parameter (usually $a > 0$) and $\xi(dt)$ is a random "noise". The term $S(t) \cdot a \, dt$ pushes the price up, while $\xi(dt)$ may be $\ge 0$ or $< 0$. We choose $\xi(dt) = \sigma \, dW_t$, where $W_t$ is the standard Wiener process and $\sigma$ is a constant (which may be negative). Then we obtain the following stochastic differential equation (SDE):
 
-Proof. Rewrite (4.28) as follows:
+$$dS(t) = aS(t) \, dt + \sigma S(t) \, dW_t$$
 
-                                 dSt
-                                     = adt + σdWt          with S(0) = S0                              (4.29)
-                                 St
+Assuming that $S(0) = S_0$ is given, how do we solve this SDE?
 
-Note that the left hand side of (7.3) resembles the differential d ln S(t) (but in fact it is not equal
-to this differential as will be seen below). So, let us compute d ln S(t) using the chain rule version
-of Ito’s lemma.
-    Recall that the differential of a function F (St ) (which is is good enough, say has two continuous
-derivatives) can be computed as follows:
+##### The First Solution
 
-                                                          1
-                                 dF (St ) = F ′ (St )dSt + F ′′ (St )(dSt )2 .
-                                                          2
+**Theorem.** The solution is given by:
 
-In our case F (x) = ln x and so F ′ (x) = (ln x)′ = x1 , F ′′ (x) = (ln x)′′ = − x12 and (dSt )2 = σ 2 St2 dt.
-Hence
-                         1                        1 1          2 2            σ2
-             d ln(St ) = (aSt dt + σSt dWt ) −           ×  σ   S t dt = (a −    )dt + σdWt .
-                         St                       2 St2                        2
-Remark. We now see that indeed d ln(St ) ̸= adt + σdWt .
-  Integrating both parts of the last display formula, we obtain
-               Z t             Z t                                Z t              Z t
-                                     σ2                                  σ2
-                  d ln(Su ) =   ((a − )du + σdWu ) =                 (a − )du +          σdWu
-                0             0      2                             0     2           0
+$$S_t = S_0 \, e^{(a - \frac{\sigma^2}{2})t + \sigma W_t}$$
 
-and hence
-                                                                σ2
-                                   ln(St ) − ln(S0 ) = (a −        )t + σWt
-                                                                2
-or, equivalently,
-                           St       σ2                                   σ2
-                              = e(a− 2 )t+σWt       and St = S0 e(a− 2 )t+σWt .
-                           S0
+*Proof.* Rewrite the SDE as follows:
 
+$$\frac{dS_t}{S_t} = a \, dt + \sigma \, dW_t \quad \text{with } S(0) = S_0$$
 
-    A random variable distributed as eX , where X ∼ N (µ, σ 2 ) is said to have LogNormal(µ, σ‘2 )
-distribution. Thus, St ∼ LogNormal((a − σ 2 /2t), σ 2 t). The process St is said to be Geometric
-Brownian Motion with drift parameter a and volatility parameter σ. We often denote the drift
-parameter by µ instead of a.
+Note that the left hand side resembles the differential $d \ln S(t)$ (but in fact it is not equal to this differential as will be seen below). So, let us compute $d \ln S(t)$ using the chain rule version of Itô's lemma.
 
-                                                      54
-The second solution to (4.28)
-This approach to solving (4.28) is slightly more difficult than the first one. It can be viewed as a
-useful exercise illustrating one more way in which the Ito formula can be used.
-    Plan: the main steps of the second solution.
-   1. Suppose that S(t) can be found in the form S(t) = f (t, Wt ), where f (t, x) is a function of
-      two variables, t and x.
+Recall that the differential of a function $F(S_t)$ (which has two continuous derivatives) can be computed as follows:
 
-   2. Use Ito’s lemma and substitute S(t) in (4.28) by f (t, Wt ) and dS(t) by df (t, Wt ).
+$$dF(S_t) = F'(S_t) \, dS_t + \frac{1}{2} F''(S_t)(dS_t)^2$$
 
-   3. Then see whether you can find f (t, x).
-                                                             2
-Theorem 4.6.2. f (t, x) = S0 eµt+σx , where µ = a − σ2 and S0 = S(0).
-Proof. Step 1. By Ito’s lemma,
+In our case $F(x) = \ln x$ and so $F'(x) = \frac{1}{x}$, $F''(x) = -\frac{1}{x^2}$ and $(dS_t)^2 = \sigma^2 S_t^2 \, dt$. Hence:
 
-                                 ∂f (t, Wt ) 1 ∂ 2 f (t, Wt )
-                                                             
-                                                                     ∂f (t, Wt )
-                 df (t, Wt ) =              +            2      dt +             dWt           (4.30)
-                                     ∂t       2 ∂Wt                    ∂Wt
+```math
+\begin{aligned}
+d \ln(S_t) &= \frac{1}{S_t}(aS_t \, dt + \sigma S_t \, dW_t) - \frac{1}{2} \frac{1}{S_t^2} \times \sigma^2 S_t^2 \, dt \\\\
+&= \left(a - \frac{\sigma^2}{2}\right) dt + \sigma \, dW_t
+\end{aligned}
+```
 
-Substituting the left side of (4.28) by (4.30) we get
+*Remark.* We now see that indeed $d \ln(S_t) \ne a \, dt + \sigma \, dW_t$.
 
-                                  1 ∂2f
-                                        
-                           ∂f                    ∂f
-                               +           dt +      dWt = af dt + σf dWt ,                    (4.31)
-                            ∂t    2 ∂Wt2        ∂Wt
+Integrating both parts of the last formula, we obtain:
 
-where we write f for f (t, Wt ). Equating the coefficients in front of dWt in both sides of (4.31), we
-get
-                                       ∂f (t, Wt )
-                                                   = σf (t, Wt )                                (4.32)
-                                          ∂Wt
-Rewrite (4.32) as
-                                           fx′ (t, x) = σf (t, x)                              (4.33)
-We use here the notation fx′ = ∂f
-                                ∂x . Fix t, then (4.33) is the simplest linear equation (known to you
-from the course Differential Equations). It has the general solution of the form
+```math
+\begin{aligned}
+\int_0^t d\ln(S_u) &= \int_0^t \left(a - \frac{\sigma^2}{2}\right) du + \int_0^t \sigma \, dW_u
+\end{aligned}
+```
 
-                                            f (t, x) = c(t)eσx .                               (4.34)
+and hence:
 
-Remark: you can check this by substituting this expression into (4.33). Do it!
-    Note that c(t) in (4.34) is an unknown function of t. It remains to find it.
-    Step 2. To find c(t), we shall use another relation which follows from (4.31). Namely, we equate
-the coefficients in front of dt on both sides of (4.31) and get
-                                                1 ′′
-                                    ft′ (t, x) + fxx (t, x) = af (t, x).                       (4.35)
-                                                2
-Next, it follows from (4.34) that
-                                           ft′ (t, x) = c′ (t)eσx                              (4.36)
-                                           ′′
-                                          fxx (t, x) = σ 2 c(t)eσx                             (4.37)
-Substituting (4.36) and (4.37) into (4.35) we get
-                                               1
-                                    c′ (t)eσx + σ 2 c(t)eσx = ac(t)eσx
-                                               2
-and so
-                                                          σ2
-                                          c′ (t) = (a −      )c(t)                             (4.38)
-                                                          2
+$$\ln(S_t) - \ln(S_0) = \left(a - \frac{\sigma^2}{2}\right)t + \sigma W_t$$
 
-                                                    55
-                                                                               σ2
-which is the same type of equation as before. Hence c(t) = c0 e(a− 2 )t , where c0 = c(0). Finally,
-                                                                              σ2
-                             f (t, x) = c0 eµt+σx ,        where µ = a −         .
-                                                                              2
+or, equivalently:
 
+$$\frac{S_t}{S_0} = e^{(a - \frac{\sigma^2}{2})t + \sigma W_t} \quad \text{and} \quad S_t = S_0 \, e^{(a - \frac{\sigma^2}{2})t + \sigma W_t}$$
 
-We have thus proved that S(t) can be found in the form S(t) = f (t, Wt ), namely:
-                                   S(t) = f (t, Wt ) = c0 eµt+σWt .
-Since S(0) = c0 , we get c0 = S0 and finally
-                                         S(t) = S0 eµt+σWt .
-Remarks 4.6.3.      1. We use the following fact: if
-                                                y ′ (x) = αy(x)                               (4.39)
-        then
-                                  y(x) = ceαx ,        where c is a constant.                 (4.40)
+A random variable distributed as $e^X$, where $X \sim N(\mu, \sigma^2)$ is said to have $\text{LogNormal}(\mu, \sigma^2)$ distribution. Thus, $S_t \sim \text{LogNormal}((a - \sigma^2/2)t, \sigma^2 t)$. The process $S_t$ is said to be **Geometric Brownian Motion** with drift parameter $a$ and volatility parameter $\sigma$. We often denote the drift parameter by $\mu$ instead of $a$.
 
-  2. If c in (4.40) depends on, say, t (as in (4.34)) then this means that we are, for some reason,
-     considering a ”family of solutions” with t being the parameter of the family.
-  3. (4.39) and (4.40) were used to solve (4.33) and (4.38). They will be used also in the next
-     example.
+![Wiener Process and Geometric Brownian Motion](../images/wiener_gbm.png)
 
-4.6.2     The Ornstein-Uhlenbeck process (OUP)
-Definition 4.6.4. We say that r(t) is the OUP if
-                                     dr = −a(r − µ)dt + σdWt                                  (4.41)
-where a, µ, σ are the parameters of the model.
-    In our applications, the parameters a, µ, and σ will be positive: a > 0, µ > 0, σ > 0. However,
-the solution that we discuss below is valid for arbitrary values of these parameters.
-    Before solving (4.41), let us consider the case when σ = 0. We then have dr = −a(r − µ)dt,
-and since dr = r′ dt we obtain the following ordinary differential equation:
-                                           r′ = −a(r − µ).                                    (4.42)
-Then (r − µ)′ = −a(r − µ), (as (r − µ)′ = r′ − µ′ = r′ ) and hence
-                              r − µ = ce−at ,     or       r(t) = µ + ce−at .
-It is useful to note that if a > 0 then e−at → 0 as t → ∞ and hence r(t) → µ. Note also that
-r(t) = µ is a solution to (4.42). (See the sketch of the graph of r(t) in the hand-written version of
-these Notes.)
-     If a > 0 then the solution r(t) = µ is the so called stable solution.
-Theorem 4.6.5. Suppose that r(t) is a random process which satisfies the equation
-                                    dr = −a(r − µ)dt + σdWt .
-Then                                                                   Z t
-                                                      −at        −at
-                          r(t) = µ + (r(0) − µ)e            + σe             eas dWs .
-                                                                        0
+##### The Second Solution
 
-                                                      56
-Proof. We shall be looking for a function u(t) such that
+This approach to solving the SDE is slightly more difficult than the first one. It can be viewed as a useful exercise illustrating one more way in which the Itô formula can be used.
 
-                                           r(t) − µ = u(t)e−at                             (4.43)
+*Plan: the main steps of the second solution.*
 
-Then u(t) = eat (r(t) − µ). By Ito’s lemma, we compute
+1. Suppose that $S(t)$ can be found in the form $S(t) = f(t, W_t)$, where $f(t, x)$ is a function of two variables, $t$ and $x$.
+2. Use Itô's lemma and substitute $S(t)$ by $f(t, W_t)$ and $dS(t)$ by $df(t, W_t)$.
+3. Then see whether you can find $f(t, x)$.
 
-                        du(t) = aeat (r − µ)dt + eat dr
-                              = aeat (r − µ)dt + eat (−a(r − µ)dt + σdWt )
-                              = σeat dWt
-        Rt         R t as
-Hence   0 du(s) = σ 0 e dWs , or equivalently,
-                                                        Z t
-                                    u(t) − u(0) = σ           eas dWs                      (4.44)
-                                                         0
+**Theorem.** $f(t, x) = S_0 \, e^{\mu t + \sigma x}$, where $\mu = a - \frac{\sigma^2}{2}$ and $S_0 = S(0)$.
 
-It follows from (4.43) that r(0) − µ = u(0). So (4.44) can be rewritten as
-                                       Z t                        Z t
-                       u(t) = u(0) + σ     eas dWs = r(0) − µ + σ     eas dWs
-                                           0                            0
+*Proof.* **Step 1.** By Itô's lemma:
 
-and we obtain (again due to (4.43)) that
-                                                      Z t         
-                                    −at                     as
-                       r(t) = µ + e       r(0) − µ + σ     e dWs
-                                                        0
-                                                                Z t
-                                    −at           −at       −at
-                            = r(0)e     + µ(1 − e ) + σe            eas dWs
-                                                                 0
-                                                           Z t
-                            = (r(0) − µ)e−at + µ + σe−at       eas dWs
-                                                                  0
+$$df(t, W_t) = \left(\frac{\partial f(t, W_t)}{\partial t} + \frac{1}{2} \frac{\partial^2 f(t, W_t)}{\partial W_t^2}\right) dt + \frac{\partial f(t, W_t)}{\partial W_t} \, dW_t$$
 
+Substituting the left side of the SDE we get:
 
+$$\left(\frac{\partial f}{\partial t} + \frac{1}{2} \frac{\partial^2 f}{\partial W_t^2}\right) dt + \frac{\partial f}{\partial W_t} \, dW_t = af \, dt + \sigma f \, dW_t$$
 
+where we write $f$ for $f(t, W_t)$. Equating the coefficients in front of $dW_t$ on both sides, we get:
 
-Some comments
-  1. The most important step in the proof of this theorem is the “guess” (4.43). There is a good
-     reason for this guess but we shall not discuss it here. However, you are required to know and
-     be able to reproduce the above proof.
+$$\frac{\partial f(t, W_t)}{\partial W_t} = \sigma f(t, W_t)$$
 
-  2. To compute du(t), we use the chain rule. In fact we derive it. Namely, if dr = −a(r − µ)dt +
-     σdWt and u = f (t, r), then
-                                                             1 ′′
-                                       du = ft′ dt + fr′ dr + frr (dr)2 .
-                                                             2
-      In our case u(t) = f (t, r) = eat (r − µ) and therefore
-                                          ∂ at
-                                   ft′ =    (e (r − µ)) = aeat (r − µ),
-                                         ∂t
-                                          ∂ at
-                                   fr′ =     (e (r − µ)) = eat ,
-                                         ∂r
-                                     ′′
-                                   frr  = 0.
+Rewrite this as $f_x'(t, x) = \sigma f(t, x)$. Fix $t$, then this is the simplest linear equation. It has the general solution of the form:
 
-      This explains the second step.
-                                                                            2
-      Remark. We use the notation ft′ = ∂f    ′   ∂f        ′′   ∂ f
-                                        ∂t , fr = ∂r , and frr = ∂r2 .
+$$f(t, x) = c(t) e^{\sigma x}$$
 
+Note that $c(t)$ is an unknown function of $t$. It remains to find it.
 
+**Step 2.** To find $c(t)$, we equate the coefficients in front of $dt$ on both sides and get:
 
-                                                   57
-58
+$$f_t'(t, x) + \frac{1}{2} f_{xx}''(t, x) = af(t, x)$$
+
+Next, it follows from the general solution that $f_t'(t, x) = c'(t) e^{\sigma x}$ and $f_{xx}''(t, x) = \sigma^2 c(t) e^{\sigma x}$. Substituting these we get:
+
+$$c'(t) e^{\sigma x} + \frac{1}{2} \sigma^2 c(t) e^{\sigma x} = a \, c(t) e^{\sigma x}$$
+
+and so:
+
+$$c'(t) = \left(a - \frac{\sigma^2}{2}\right) c(t)$$
+
+which is the same type of equation as before. Hence $c(t) = c_0 \, e^{(a - \frac{\sigma^2}{2})t}$, where $c_0 = c(0)$. Finally:
+
+$$f(t, x) = c_0 \, e^{\mu t + \sigma x}, \quad \text{where } \mu = a - \frac{\sigma^2}{2}$$
+
+We have thus proved that $S(t)$ can be found in the form $S(t) = f(t, W_t)$, namely:
+
+$$S(t) = f(t, W_t) = c_0 \, e^{\mu t + \sigma W_t}$$
+
+Since $S(0) = c_0$, we get $c_0 = S_0$ and finally:
+
+$$S(t) = S_0 \, e^{\mu t + \sigma W_t}$$
+
+**Remarks.**
+
+1. We use the following fact: if $y'(x) = \alpha y(x)$ then $y(x) = c \, e^{\alpha x}$, where $c$ is a constant.
+2. If $c$ depends on $t$ then this means that we are considering a "family of solutions" with $t$ being the parameter of the family.
+
+#### The Ornstein-Uhlenbeck Process (OUP)
+
+**Definition.** We say that $r(t)$ is the OUP if:
+
+$$dr = -a(r - \mu) \, dt + \sigma \, dW_t$$
+
+where $a$, $\mu$, $\sigma$ are the parameters of the model.
+
+In our applications, the parameters $a$, $\mu$, and $\sigma$ will be positive: $a > 0$, $\mu > 0$, $\sigma > 0$. However, the solution that we discuss below is valid for arbitrary values of these parameters.
+
+Before solving the OUP, let us consider the case when $\sigma = 0$. We then have $dr = -a(r - \mu) \, dt$, and since $dr = r' \, dt$ we obtain the following ordinary differential equation:
+
+$$r' = -a(r - \mu)$$
+
+Then $(r - \mu)' = -a(r - \mu)$, (as $(r - \mu)' = r' - \mu' = r'$) and hence:
+
+$$r - \mu = c \, e^{-at}, \quad \text{or} \quad r(t) = \mu + c \, e^{-at}$$
+
+It is useful to note that if $a > 0$ then $e^{-at} \to 0$ as $t \to \infty$ and hence $r(t) \to \mu$. Note also that $r(t) = \mu$ is a solution. If $a > 0$ then the solution $r(t) = \mu$ is the so called **stable solution**.
+
+**Theorem.** Suppose that $r(t)$ is a random process which satisfies the equation $dr = -a(r - \mu) \, dt + \sigma \, dW_t$. Then:
+
+$$r(t) = \mu + (r(0) - \mu) e^{-at} + \sigma e^{-at} \int_0^t e^{as} \, dW_s$$
+
+*Proof.* We shall be looking for a function $u(t)$ such that:
+
+$$r(t) - \mu = u(t) e^{-at}$$
+
+Then $u(t) = e^{at}(r(t) - \mu)$. By Itô's lemma, we compute:
+
+```math
+\begin{aligned}
+du(t) &= a e^{at}(r - \mu) \, dt + e^{at} \, dr \\\\
+&= a e^{at}(r - \mu) \, dt + e^{at}(-a(r - \mu) \, dt + \sigma \, dW_t) \\\\
+&= \sigma e^{at} \, dW_t
+\end{aligned}
+```
+
+Hence $\int_0^t du(s) = \sigma \int_0^t e^{as} \, dW_s$, or equivalently:
+
+$$u(t) - u(0) = \sigma \int_0^t e^{as} \, dW_s$$
+
+It follows that $r(0) - \mu = u(0)$. So this can be rewritten as:
+
+$$u(t) = u(0) + \sigma \int_0^t e^{as} \, dW_s = r(0) - \mu + \sigma \int_0^t e^{as} \, dW_s$$
+
+and we obtain:
+
+```math
+\begin{aligned}
+r(t) &= \mu + e^{-at}\left(r(0) - \mu + \sigma \int_0^t e^{as} \, dW_s\right) \\\\
+&= r(0) e^{-at} + \mu(1 - e^{-at}) + \sigma e^{-at} \int_0^t e^{as} \, dW_s \\\\
+&= (r(0) - \mu) e^{-at} + \mu + \sigma e^{-at} \int_0^t e^{as} \, dW_s
+\end{aligned}
+```
+
+$\square$
+
+**Some comments:**
+
+1. The most important step in the proof is the "guess" $r(t) - \mu = u(t) e^{-at}$. There is a good reason for this guess but we shall not discuss it here. However, you are required to know and be able to reproduce the above proof.
+
+2. To compute $du(t)$, we use the chain rule. Namely, if $dr = -a(r - \mu) \, dt + \sigma \, dW_t$ and $u = f(t, r)$, then:
+
+$$du = f_t' \, dt + f_r' \, dr + \frac{1}{2} f_{rr}''(dr)^2$$
+
+In our case $u(t) = f(t, r) = e^{at}(r - \mu)$ and therefore:
+
+```math
+\begin{aligned}
+f_t' &= \frac{\partial}{\partial t}(e^{at}(r - \mu)) = a e^{at}(r - \mu) \\\\
+f_r' &= \frac{\partial}{\partial r}(e^{at}(r - \mu)) = e^{at} \\\\
+f_{rr}'' &= 0
+\end{aligned}
+```
+
+*Remark.* We use the notation $f_t' = \frac{\partial f}{\partial t}$, $f_r' = \frac{\partial f}{\partial r}$, and $f_{rr}'' = \frac{\partial^2 f}{\partial r^2}$.
