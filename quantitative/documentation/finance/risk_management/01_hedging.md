@@ -201,25 +201,25 @@ Different combination of these assert (or derivative instruments based on these 
 The portfolio value at time $T$ is denoted as $f(\mathbf{Z})$ with linear combinations of financial instruments $\mathbf{Z}$:
 
 $$
-f(\mathbf{Z}) = h_0 + \sum_{i=1}^n h_i Z_i = h_0 + \mathbf{h}^T \mathbf{Z}
+f(\mathbf{Z}) = h_0 + \sum_{i=1}^n h_i Z_i = h_0 + \mathbf{h}^{\intercal} \mathbf{Z}
 $$
 
 where the vector $\mathbf{h} = \begin{pmatrix} h_1 \\ \vdots \\ h_n \end{pmatrix}$ represent the number of units held in each asset.
 
 The entries $h_i$ are in principle integers denoting the amount of units of the $i$th financial instrument in the portfolio; however, in order to simplify the mathematics, $h_i$ is allowed to be a real number.
 
-Expressions of type $a_1 b_1 + a_2 b_2 + \dots + a_n b_n$ can be written as the dot product of two vectors $\mathbf{a}^T \mathbf{b}$.
+Expressions of type $a_1 b_1 + a_2 b_2 + \dots + a_n b_n$ can be written as the dot product of two vectors $\mathbf{a}^{\intercal} \mathbf{b}$.
 
 $$
 \mathbf{a} = \begin{pmatrix} a_1 \\ a_2 \\ \vdots \\ a_n \end{pmatrix}, \quad \mathbf{b} = \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{pmatrix}
 $$
 
 $$
-\mathbf{a}^T  = \begin{pmatrix} a_1 & a_2 & \dots & a_n \end{pmatrix}, \quad \mathbf{b}^T = \begin{pmatrix} b_1 & b_2 & \dots & b_n \end{pmatrix}
+\mathbf{a}^{\intercal}  = \begin{pmatrix} a_1 & a_2 & \dots & a_n \end{pmatrix}, \quad \mathbf{b}^{\intercal} = \begin{pmatrix} b_1 & b_2 & \dots & b_n \end{pmatrix}
 $$
 
 $$
-a_1 b_1 + a_2 b_2 + \dots + a_n b_n = \sum_{i=1}^{n}{a_ib_i} = \mathbf{a}^T \mathbf{b} = \begin{pmatrix} a_1 & a_2 & \dots & a_n \end{pmatrix} \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{pmatrix}
+a_1 b_1 + a_2 b_2 + \dots + a_n b_n = \sum_{i=1}^{n}{a_ib_i} = \mathbf{a}^{\intercal} \mathbf{b} = \begin{pmatrix} a_1 & a_2 & \dots & a_n \end{pmatrix} \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{pmatrix}
 $$
 
 > Note that bold letters denote vectors in this documentation, other texts may use alternative notation such as an arrow above the letter (e.g., $\vec{a}$) or a tilde (e.g., $\tilde{a}$).
@@ -227,13 +227,13 @@ $$
 To satisfy the quadratic hedging objective, the task is to choose $h_0$ and $\mathbf{h}$ such that the constants $h_0, h_1, \ldots, h_n$:
 
 - Satisfy $\mathbb{E}[h_0 + \sum_{i=1}^n{h_i Z_i - L}] = 0$
-- Minimise $\text{Var}(h_0 + \mathbf{h}^T\mathbf{Z} - L)$
+- Minimise $\text{Var}(h_0 + \mathbf{h}^{\intercal}\mathbf{Z} - L)$
 
 The set $(h_0, \mathbf{h})$ specifies the portfolio of financial instruments to use for hedging and $h_0$ is the amount invested in a risk-free asset, e.g. a bank account or government bond.
 
 The positions $h_1, h_2, \ldots, h_n$ are associated with the random variables $Z_1, Z_2, \ldots, Z_n$ representing the values of the risky assets/instruments.
 
-Formally, the solution of minimising the variance $\text{Var}(h_0 + \mathbf{h}^T\mathbf{Z} - L)$ is a standard linear regression of $L$ onto the regressors $Z_1, Z_2, \ldots, Z_n$.
+Formally, the solution of minimising the variance $\text{Var}(h_0 + \mathbf{h}^{\intercal}\mathbf{Z} - L)$ is a standard linear regression of $L$ onto the regressors $Z_1, Z_2, \ldots, Z_n$.
 
 The solution is obtained by first considering the simpler case of $n=1$.
 
@@ -422,7 +422,7 @@ The Black-Scholes Greek (Delta) $\Delta = \frac{\partial C_{\text{BS}}}{\partial
 
 ## General Solution (Any value of $n$)
 
-For the general case, assume that there is a large number $n$ of risk assets $\mathbf{Z} = (Z_1, Z_2, \ldots, Z_n)^T$ available for hedging the liability $L$.
+For the general case, assume that there is a large number $n$ of risk assets $\mathbf{Z} = (Z_1, Z_2, \ldots, Z_n)^{\intercal}$ available for hedging the liability $L$.
 
 In the single case $n=1$, the calculation for the minimum of $\text{Var}(A - L)$ was straightforward since it was a quadratic function of a single variable $h$ which had a unique minimum.
 
@@ -454,28 +454,28 @@ The **optimal quadratic hedging portfolio** is determined by the conditions:
 Let $(h_0^*, \mathbf{h}^*)$ denote the optimal portfolio with value $A^* = h_0^* + \mathbf{h}^{*T} \mathbf{Z}$, where:
 
 - $h_0^*$ is the position in the risk-free asset (cash)
-- $\mathbf{h}^* = (h_1^*, h_2^*, \ldots, h_n^*)^T$ are the positions in the $n$ risky assets
-- $\mathbf{Z} = (Z_1, Z_2, \ldots, Z_n)^T$ are the values of the risky assets
+- $\mathbf{h}^* = (h_1^*, h_2^*, \ldots, h_n^*)^{\intercal}$ are the positions in the $n$ risky assets
+- $\mathbf{Z} = (Z_1, Z_2, \ldots, Z_n)^{\intercal}$ are the values of the risky assets
 
 ### Deriving the Variance of Hedging Error
 
-The first step is to minimize $\text{Var}(\mathbf{h}^T \mathbf{Z} - L)$ with respect to $\mathbf{h}$. Since $\text{Var}(h_0 + \mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L)$ (adding a constant doesn't affect variance), the variance of the hedging error is:
+The first step is to minimize $\text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L)$ with respect to $\mathbf{h}$. Since $\text{Var}(h_0 + \mathbf{h}^{\intercal} \mathbf{Z} - L) = \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L)$ (adding a constant doesn't affect variance), the variance of the hedging error is:
 
 $$
-\text{Var}(A-L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z}) + \text{Var}(L) - 2\text{Cov}(\mathbf{h}^T \mathbf{Z}, L)
+\text{Var}(A-L) = \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) = \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z}) + \text{Var}(L) - 2\text{Cov}(\mathbf{h}^{\intercal} \mathbf{Z}, L)
 $$
 
 **Expanding the covariance term:**
 
-The last term can be rewritten using $\mathbf{h}^T \mathbf{Z} = \sum_{i=1}^n h_i Z_i$ as:
+The last term can be rewritten using $\mathbf{h}^{\intercal} \mathbf{Z} = \sum_{i=1}^n h_i Z_i$ as:
 
 $$
 \begin{aligned}
-\text{Cov}(\mathbf{h}^T \mathbf{Z}, L) & = \text{Cov}\left(\sum_{i=1}^n h_i Z_i, L\right) \\
+\text{Cov}(\mathbf{h}^{\intercal} \mathbf{Z}, L) & = \text{Cov}\left(\sum_{i=1}^n h_i Z_i, L\right) \\
 & = \mathbb{E}\left[\sum_{i=1}^n h_i Z_i \cdot L \right] - \mathbb{E}\left[\sum_{i=1}^n h_i Z_i\right] \mathbb{E}[L] \\
 & = \sum_{i=1}^n h_i \left( \mathbb{E}[Z_i L] - \mathbb{E}[Z_i] \mathbb{E}[L] \right) \\
 & = \sum_{i=1}^n h_i \text{Cov}(Z_i, L) \\
-& = \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}}
+& = \mathbf{h}^{\intercal} \mathbf{\Sigma}_{L, \mathbf{Z}}
 \end{aligned}
 $$
 
@@ -489,7 +489,7 @@ This vector indicates how strongly the liability $L$ co-moves with each hedging 
 
 ### The Covariance Matrix
 
-Using the result $\text{Var}(\mathbf{h}^T \mathbf{Z}) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$, where $\Sigma_{\mathbf{Z}}$ is the **covariance matrix** (dimension $n \times n$) of $\mathbf{Z}$ containing the covariances among all pairs of financial instruments:
+Using the result $\text{Var}(\mathbf{h}^{\intercal} \mathbf{Z}) = \mathbf{h}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{h}$, where $\Sigma_{\mathbf{Z}}$ is the **covariance matrix** (dimension $n \times n$) of $\mathbf{Z}$ containing the covariances among all pairs of financial instruments:
 
 $$
 \Sigma_{\mathbf{Z}} = \begin{pmatrix}
@@ -509,19 +509,19 @@ This matrix captures the entire correlation structure among the hedging instrume
 The variance of the hedging error can now be written compactly as:
 
 $$
-\boxed{\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}}}
+\boxed{\text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) = \mathbf{h}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^{\intercal} \mathbf{\Sigma}_{L, \mathbf{Z}}}
 $$
 
 **Breaking down the terms**:
 
-- $\mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$ = variance of the hedging portfolio (quadratic form)
+- $\mathbf{h}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{h}$ = variance of the hedging portfolio (quadratic form)
 - $\text{Var}(L)$ = variance of the liability (constant)
-- $2 \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}}$ = twice the covariance between portfolio and liability
+- $2 \mathbf{h}^{\intercal} \mathbf{\Sigma}_{L, \mathbf{Z}}$ = twice the covariance between portfolio and liability
 
 Writing out the indices explicitly:
 
 $$
-\text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \sum_{i=1}^n \sum_{j=1}^n h_i h_j \text{Cov}(Z_i, Z_j) + \text{Var}(L) - 2 \sum_{i=1}^n h_i \text{Cov}(L, Z_i)
+\text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) = \sum_{i=1}^n \sum_{j=1}^n h_i h_j \text{Cov}(Z_i, Z_j) + \text{Var}(L) - 2 \sum_{i=1}^n h_i \text{Cov}(L, Z_i)
 $$
 
 ### Properties of Covariance Matrices
@@ -540,7 +540,7 @@ This follows from the definition of covariance.
 For any vector $\mathbf{x} \in \mathbb{R}^n$,
 
 $$
-\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} \geq 0
+\mathbf{x}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{x} \geq 0
 $$
 
 This means the quadratic form is always non-negative, which is crucial for the existence of a minimum.
@@ -554,49 +554,49 @@ Thus,
 
 $$
 \begin{aligned}
-\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} & = \sum_{i=1}^n \sum_{j=1}^n x_i x_j \text{Cov}(Z_i, Z_j) \\
+\mathbf{x}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{x} & = \sum_{i=1}^n \sum_{j=1}^n x_i x_j \text{Cov}(Z_i, Z_j) \\
 & = \sum_{i=1}^n \sum_{j=1}^n x_i x_j \mathbb{E}[(Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j)] \\
 & = \mathbb{E}\left[ \sum_{i=1}^n \sum_{j=1}^n x_i x_j (Z_i - \bar{Z}_i)(Z_j - \bar{Z}_j) \right] \\
 & = \mathbb{E}\left[ \sum_{i=1}^n x_i (Z_i - \bar{Z}_i) \sum_{j=1}^n x_j (Z_j - \bar{Z}_j) \right] \\
-& = \mathbb{E}\left[ \left( \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \left( \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \right] \\
-& = \mathbb{E}\left[ \left( \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}}) \right)^2 \right]
+& = \mathbb{E}\left[ \left( \mathbf{x}^{\intercal} (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \left( \mathbf{x}^{\intercal} (\mathbf{Z} - \bar{\mathbf{Z}}) \right) \right] \\
+& = \mathbb{E}\left[ \left( \mathbf{x}^{\intercal} (\mathbf{Z} - \bar{\mathbf{Z}}) \right)^2 \right]
 \end{aligned}
 $$
 
-The scalar product $\mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$ is a random variable, so its square is non-negative. Defining $Y = \mathbf{x}^T (\mathbf{Z} - \bar{\mathbf{Z}})$, it follows that $\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} = \mathbb{E}[Y^2] \geq 0$.
+The scalar product $\mathbf{x}^{\intercal} (\mathbf{Z} - \bar{\mathbf{Z}})$ is a random variable, so its square is non-negative. Defining $Y = \mathbf{x}^{\intercal} (\mathbf{Z} - \bar{\mathbf{Z}})$, it follows that $\mathbf{x}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{x} = \mathbb{E}[Y^2] \geq 0$.
 
 Furthermore, $\mathbb{E}[Y^2] = \text{Var}(Y) + (\mathbb{E}[Y])^2 \geq 0$ since $\mathbb{E}[Y] = 0$.
 
-**Important**: If the assets are linearly independent (no redundant assets), then $\Sigma_{\mathbf{Z}}$ is **positive definite** (not just semi-definite), meaning $\mathbf{x}^T \Sigma_{\mathbf{Z}} \mathbf{x} > 0$ for all $\mathbf{x} \neq \mathbf{0}$, which ensures $\Sigma_{\mathbf{Z}}$ is invertible.
+**Important**: If the assets are linearly independent (no redundant assets), then $\Sigma_{\mathbf{Z}}$ is **positive definite** (not just semi-definite), meaning $\mathbf{x}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{x} > 0$ for all $\mathbf{x} \neq \mathbf{0}$, which ensures $\Sigma_{\mathbf{Z}}$ is invertible.
 
 ### Finding the Optimal Portfolio
 
-The global minimum of $\text{Var}(\mathbf{h}^T \mathbf{Z} - L)$ is now determined with respect to $h_1, h_2, \ldots, h_n$ by taking the partial derivatives and setting them equal to zero.
+The global minimum of $\text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L)$ is now determined with respect to $h_1, h_2, \ldots, h_n$ by taking the partial derivatives and setting them equal to zero.
 
 For the $m$-th variable $h_m$ (where $m = 1, 2, \ldots, n$):
 
 $$
 \begin{aligned}
-\frac{\partial}{\partial h_m} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) & = \frac{\partial}{\partial h_m} \left( \mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^T \mathbf{\Sigma}_{L, \mathbf{Z}} \right) \\
+\frac{\partial}{\partial h_m} \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) & = \frac{\partial}{\partial h_m} \left( \mathbf{h}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{h} + \text{Var}(L) - 2 \mathbf{h}^{\intercal} \mathbf{\Sigma}_{L, \mathbf{Z}} \right) \\
 & = \frac{\partial}{\partial h_m} \left( \sum_{i=1}^n \sum_{j=1}^n h_i h_j \text{Cov}(Z_i, Z_j) - 2 \sum_{i=1}^n h_i \text{Cov}(L, Z_i) \right) \\
 & = 2 \sum_{j=1}^n h_j \text{Cov}(Z_m, Z_j) - 2 \text{Cov}(L, Z_m) \\
 & = 0
 \end{aligned}
 $$
 
-**Why the factor of 2?** The quadratic term $\mathbf{h}^T \Sigma_{\mathbf{Z}} \mathbf{h}$ is differentiated using the identity:
+**Why the factor of 2?** The quadratic term $\mathbf{h}^{\intercal} \Sigma_{\mathbf{Z}} \mathbf{h}$ is differentiated using the identity:
 
 $$
-\frac{\partial}{\partial \mathbf{h}} (\mathbf{h}^T A \mathbf{h}) = (A + A^T)\mathbf{h}
+\frac{\partial}{\partial \mathbf{h}} (\mathbf{h}^{\intercal} A \mathbf{h}) = (A + A^{\intercal})\mathbf{h}
 $$
 
-Since $\Sigma_{\mathbf{Z}}$ is symmetric ($\Sigma_{\mathbf{Z}} = \Sigma_{\mathbf{Z}}^T$), this gives $2\Sigma_{\mathbf{Z}}\mathbf{h}$.
+Since $\Sigma_{\mathbf{Z}}$ is symmetric ($\Sigma_{\mathbf{Z}} = \Sigma_{\mathbf{Z}}^{\intercal}$), this gives $2\Sigma_{\mathbf{Z}}\mathbf{h}$.
 
 This calculation can be verified explicitly for $n=2$:
 
 $$
 \begin{aligned}
-\frac{\partial}{\partial h_1} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) & = \frac{\partial}{\partial h_1} \bigg( h_1^2 \text{Cov}(Z_1, Z_1) + h_1 h_2 \text{Cov}(Z_1, Z_2) \\
+\frac{\partial}{\partial h_1} \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) & = \frac{\partial}{\partial h_1} \bigg( h_1^2 \text{Cov}(Z_1, Z_1) + h_1 h_2 \text{Cov}(Z_1, Z_2) \\
 & \quad + h_2 h_1 \text{Cov}(Z_2, Z_1) + h_2^2 \text{Cov}(Z_2, Z_2) \\
 & \quad + \text{Var}(L) - 2 h_1 \text{Cov}(L, Z_1) - 2 h_2 \text{Cov}(L, Z_2) \bigg) \\
 & = 2 h_1 \text{Cov}(Z_1, Z_1) + h_2 \text{Cov}(Z_1, Z_2) + h_2 \text{Cov}(Z_2, Z_1) - 2 \text{Cov}(L, Z_1) \\
@@ -612,9 +612,9 @@ Setting all partial derivatives to zero, this yields the system of equations:
 
 $$
 \begin{aligned}
-\frac{\partial}{\partial h_1} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) &= 0 \\
+\frac{\partial}{\partial h_1} \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) &= 0 \\
 & \vdots \\
-\frac{\partial}{\partial h_n} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) &= 0
+\frac{\partial}{\partial h_n} \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) &= 0
 \end{aligned}
 $$
 
@@ -659,7 +659,7 @@ This ensures the expected hedging error is zero.
 Substituting $\mathbf{h}^*$ back into the variance formula, the **minimum variance** is:
 
 $$
-\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}
+\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^{\intercal} \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}
 $$
 
 The second term represents the variance reduction achieved through hedging. Perfect hedging (zero variance) occurs when $L$ lies in the span of $\mathbf{Z}$.
@@ -682,7 +682,7 @@ The second term represents the variance reduction achieved through hedging. Perf
 
 The formula $\mathbf{h}^* = \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$ gives the solutions for the optimal quadratic hedging positions $h_1^*, h_2^*, \ldots, h_n^*$ in the risky assets.
 
-In the presence of a risk-free asset, the solution for $\mathbf{h}^*$ is the same since $\text{Var}(h_0 + \mathbf{h}^T \mathbf{Z} - L) = \text{Var}(\mathbf{h}^T \mathbf{Z} - L)$. The contribution $h_0$ allows fixing the expected hedging error at zero: $\mathbb{E}[h_0^* + \mathbf{h}^{*T} \mathbf{Z} - L] = 0$.
+In the presence of a risk-free asset, the solution for $\mathbf{h}^*$ is the same since $\text{Var}(h_0 + \mathbf{h}^{\intercal} \mathbf{Z} - L) = \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L)$. The contribution $h_0$ allows fixing the expected hedging error at zero: $\mathbb{E}[h_0^* + \mathbf{h}^{*T} \mathbf{Z} - L] = 0$.
 
 Solving this condition for $h_0^*$ yields:
 
@@ -709,10 +709,10 @@ $$
 **2. Minimum variance:**
 
 $$
-\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}
+\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^{\intercal} \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}
 $$
 
-The second term $\mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$ represents the **variance reduction** achieved through optimal hedging. This is always non-negative (since $\Sigma_{\mathbf{Z}}$ is positive semi-definite), so the hedged variance is never worse than the unhedged variance.
+The second term $\mathbf{\Sigma}_{L, \mathbf{Z}}^{\intercal} \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}$ represents the **variance reduction** achieved through optimal hedging. This is always non-negative (since $\Sigma_{\mathbf{Z}}$ is positive semi-definite), so the hedged variance is never worse than the unhedged variance.
 
 **3. Orthogonality condition:**
 
@@ -724,7 +724,7 @@ $$
 
 This means the **hedging error is uncorrelated with all hedging instruments**. This is the multivariate analogue of the orthogonality principle in regression—the residual is orthogonal to all regressors.
 
-**Proof sketch**: The first-order conditions from $\nabla_{\mathbf{h}} \text{Var}(\mathbf{h}^T \mathbf{Z} - L) = \mathbf{0}$ at $\mathbf{h}^*$ imply:
+**Proof sketch**: The first-order conditions from $\nabla_{\mathbf{h}} \text{Var}(\mathbf{h}^{\intercal} \mathbf{Z} - L) = \mathbf{0}$ at $\mathbf{h}^*$ imply:
 
 $$
 \Sigma_{\mathbf{Z}} \mathbf{h}^* = \mathbf{\Sigma}_{L, \mathbf{Z}}
@@ -763,7 +763,7 @@ $$
 Comparing the unhedged variance $\text{Var}(L)$ with the optimally hedged variance:
 
 $$
-\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^T \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}
+\text{Var}(A^* - L) = \text{Var}(L) - \mathbf{\Sigma}_{L, \mathbf{Z}}^{\intercal} \Sigma_{\mathbf{Z}}^{-1} \mathbf{\Sigma}_{L, \mathbf{Z}}
 $$
 
 highlights that **quadratic hedging exploits the correlations** between the liability and the underlying securities in order to reduce the effective risk (variance) of the liability.
@@ -775,5 +775,5 @@ These correlations are captured by:
 
 The stronger the correlations (larger entries in $\mathbf{\Sigma}_{L, \mathbf{Z}}$), and the less correlated the instruments are with each other (more diagonal $\Sigma_{\mathbf{Z}}$), the greater the variance reduction achieved.
 
-**Perfect hedging** occurs when $L$ can be perfectly replicated as a linear combination of $\mathbf{Z}$, i.e., when $L = c_0 + \mathbf{c}^T \mathbf{Z}$ for some constants. In this case, $\mathbf{h}^* = \mathbf{c}$ and the minimum variance is zero.
+**Perfect hedging** occurs when $L$ can be perfectly replicated as a linear combination of $\mathbf{Z}$, i.e., when $L = c_0 + \mathbf{c}^{\intercal} \mathbf{Z}$ for some constants. In this case, $\mathbf{h}^* = \mathbf{c}$ and the minimum variance is zero.
 $$
